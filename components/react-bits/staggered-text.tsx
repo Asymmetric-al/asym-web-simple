@@ -1,5 +1,6 @@
 "use client";
 
+import { useReducedMotion as useAppReducedMotion } from "@/lib/motion";
 import React, {
   useEffect,
   useMemo,
@@ -130,22 +131,8 @@ const StaggeredText = forwardRef<StaggeredTextHandle, StaggeredTextProps>(
 
     const [hasEnteredView, setHasEnteredView] = useState<boolean>(false);
     const [isExiting, setIsExiting] = useState<boolean>(false);
-    const [prefersReducedMotion, setPrefersReducedMotion] =
-      useState<boolean>(false);
-
-    useEffect(() => {
-      if (!respectReducedMotion) return;
-
-      const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-      setPrefersReducedMotion(mediaQuery.matches);
-
-      const handleChange = (e: MediaQueryListEvent) => {
-        setPrefersReducedMotion(e.matches);
-      };
-
-      mediaQuery.addEventListener("change", handleChange);
-      return () => mediaQuery.removeEventListener("change", handleChange);
-    }, [respectReducedMotion]);
+    const systemReducedMotion = useAppReducedMotion();
+    const prefersReducedMotion = respectReducedMotion && systemReducedMotion;
 
     useImperativeHandle(ref, () => ({
       replay: () => {

@@ -77,10 +77,6 @@ export const baseMetadata: Metadata = {
     description: siteMetadata.description,
     images: [siteMetadata.ogImage],
   },
-  icons: {
-    icon: "/icon.svg",
-    apple: "/apple-icon.svg",
-  },
   manifest: "/site.webmanifest",
 };
 
