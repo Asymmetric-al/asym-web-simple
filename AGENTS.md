@@ -23,7 +23,7 @@
 
 - For Next.js feature work, read the version-matched local docs in `.next-docs/` first or use the Next.js MCP. Favor current Next 16 patterns, and preserve server/client boundaries.
 - Use the MCP servers defined in `.mcp.json` before guessing at stack behavior: `next-devtools`, `shadcn`, and `vercel`.
-- Use the project-local skills in `.agents/skills/` when relevant: `next-best-practices`, `next-cache-components`, `next-upgrade`, `shadcn`, `vercel-react-best-practices`, `vercel-composition-patterns`, `web-design-guidelines`, `deploy-to-vercel`, `agent-browser`, and `find-skills`.
+- Use the project-local skills in `.agents/skills/` when relevant: `next-best-practices`, `next-cache-components`, `next-upgrade`, `shadcn`, `vercel-react-best-practices`, `vercel-composition-patterns`, `web-design-guidelines`, `deploy-to-vercel`, `agent-browser`, `find-skills`, `emil-design-eng`, `building-components`, `playwright-explore-website`, `website-structure`, `ui-ux-pro-max`, `frontend-design`, `seo-audit`, `programmatic-seo`, `seo-geo`, `responsive-design`, and `dark-mode-design-expert`.
 - Use `npx vercel` for linking, environment pulls, preview deploys, logs, and production deploys. Keep preview and production flows explicit, and never commit secrets.
 - Keep `.env.local` local-only. It is the right place for values such as `REACTBITS_LICENSE_KEY`.
 
