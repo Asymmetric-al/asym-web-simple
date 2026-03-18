@@ -1,265 +1,192 @@
 "use client";
 
-import { ArrowDownRight, ChevronDown } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
-import { useState, type ReactNode } from "react";
+import { Button, buttonVariants } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { navigationLinks, siteConfig, supportLinks } from "@/lib/config";
+import { cn } from "@/lib/utils";
+import { Menu, MoveRight } from "lucide-react";
+import { motion } from "motion/react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
 
-const menus = {
-  products: [
-    { label: "Analytics", description: "Track your metrics in real-time" },
-    { label: "Automation", description: "Streamline your workflows" },
-    { label: "Integrations", description: "Connect with 100+ tools" },
-    { label: "API", description: "Build custom solutions" },
-  ],
-  resources: [
-    { label: "Documentation", description: "Learn how to get started" },
-    { label: "Blog", description: "Tips and best practices" },
-    { label: "Case Studies", description: "See how others succeed" },
-    { label: "Community", description: "Join the conversation" },
-  ],
-};
+const pageLinks = [...navigationLinks, ...supportLinks];
 
-const ease = [0.23, 1, 0.32, 1] as const;
-
-function HamburgerIcon({ isOpen }: { isOpen: boolean }): ReactNode {
+function BrandLockup({ compact = false }: { compact?: boolean }) {
   return (
-    <div className="w-8 h-4 relative flex flex-col justify-between cursor-pointer">
-      <motion.span
-        className="block h-0.5 w-full bg-foreground origin-center rounded-full"
-        animate={isOpen ? { rotate: 45, y: 4.5 } : { rotate: 0, y: 0 }}
-        transition={{ duration: 0.25, ease }}
-      />
-      <motion.span
-        className="block h-0.5 w-full bg-foreground origin-center rounded-full"
-        animate={isOpen ? { rotate: -45, y: -9.5 } : { rotate: 0, y: 0 }}
-        transition={{ duration: 0.25, ease }}
-      />
-    </div>
-  );
-}
-
-function DesktopDropdown({ 
-  label, 
-  menuKey, 
-  isOpen, 
-  onOpen, 
-  onClose 
-}: { 
-  label: string; 
-  menuKey: keyof typeof menus; 
-  isOpen: boolean; 
-  onOpen: () => void; 
-  onClose: () => void; 
-}): ReactNode {
-  return (
-    <div className="relative" onMouseEnter={onOpen} onMouseLeave={onClose}>
-      <button 
-        className="flex items-center gap-1 px-4 py-2 max-[1200px]:px-3 text-sm font-medium text-foreground/80 hover:text-foreground transition-colors rounded-full hover:bg-foreground/5"
-        aria-expanded={isOpen}
-        aria-haspopup="true"
-      >
-        {label}
-        <ChevronDown className="w-4 h-4" aria-hidden="true" />
-      </button>
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: 8, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 8, scale: 0.96 }}
-            transition={{ duration: 0.2, ease }}
-            className="absolute top-full left-0 pt-2 w-72"
-          >
-            <div className="bg-frame border border-border rounded-2xl shadow-lg overflow-hidden p-2">
-              {menus[menuKey].map((item) => (
-                <a key={item.label} href="#" className="block px-4 py-3 rounded-xl hover:bg-muted transition-colors">
-                  <div className="text-sm font-medium text-foreground">{item.label}</div>
-                  <div className="text-xs text-muted-foreground mt-0.5">{item.description}</div>
-                </a>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
-
-function MobileExpandable({ 
-  label, 
-  menuKey, 
-  isExpanded, 
-  onToggle, 
-  onClose 
-}: { 
-  label: string; 
-  menuKey: keyof typeof menus; 
-  isExpanded: boolean; 
-  onToggle: () => void; 
-  onClose: () => void; 
-}): ReactNode {
-  return (
-    <div className="border-b border-foreground/10">
-      <button
-        className="flex items-center justify-between py-4 w-full text-base font-medium text-foreground"
-        onClick={onToggle}
-        aria-expanded={isExpanded}
-      >
-        {label}
-        <motion.div animate={{ rotate: isExpanded ? 180 : 0 }} transition={{ duration: 0.2 }}>
-          <ChevronDown className="w-5 h-5 text-muted-foreground" aria-hidden="true" />
-        </motion.div>
-      </button>
-      <AnimatePresence>
-        {isExpanded && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="overflow-hidden"
-          >
-            <div className="pb-2 space-y-1">
-              {menus[menuKey].map((item) => (
-                <a
-                  key={item.label}
-                  href="#"
-                  className="block py-2 text-sm text-foreground/80 hover:text-foreground"
-                  onClick={onClose}
-                >
-                  {item.label}
-                </a>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
-
-const CornerSVG = ({ className }: { className: string }) => (
-  <svg className={className} width="50" height="50" viewBox="0 0 50 50" fill="none" aria-hidden="true">
-    <path d="M5.50871e-06 0C-0.00788227 37.3001 8.99616 50.0116 50 50H5.50871e-06V0Z" fill="currentColor" />
-  </svg>
-);
-
-export function Header(): ReactNode {
-  const [activeMenu, setActiveMenu] = useState<string | null>(null);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [mobileExpanded, setMobileExpanded] = useState<string | null>(null);
-
-  const closeMobile = () => setMobileMenuOpen(false);
-  const toggleExpanded = (key: string) => setMobileExpanded(mobileExpanded === key ? null : key);
-
-  return (
-    <motion.header
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5, ease }}
-      className="fixed shadow-2xl/20 rounded-b-4xl top-2.5 left-1/2 -translate-x-1/2 w-full max-w-5xl max-[1200px]:max-w-2xl bg-frame z-9998 max-[850px]:top-0 max-[850px]:left-0 max-[850px]:right-0 max-[850px]:translate-x-0 max-[850px]:w-full max-[850px]:max-w-none max-[850px]:rounded-none max-[850px]:rounded-b-4xl max-[850px]:overflow-hidden"
+    <Link
+      href="/"
+      className="group flex items-center gap-3 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      aria-label={`${siteConfig.name} home`}
     >
-      <div className="h-20 max-[850px]:h-18 flex items-center justify-between px-4 max-[850px]:px-6">
-        <a href="#" className="flex items-center gap-2 ml-4 max-[850px]:ml-0">
-          <div className="w-6 h-6 rounded-full bg-foreground" />
-          <span className="text-lg font-semibold text-foreground leading-0 max-[1200px]:hidden max-[850px]:inline">Circular</span>
-        </a>
-
-        <nav className="flex items-center gap-1 max-[1200px]:gap-0 max-[850px]:hidden">
-          <DesktopDropdown
-            label="Products"
-            menuKey="products"
-            isOpen={activeMenu === "products"}
-            onOpen={() => setActiveMenu("products")}
-            onClose={() => setActiveMenu(null)}
-          />
-          <DesktopDropdown
-            label="Resources"
-            menuKey="resources"
-            isOpen={activeMenu === "resources"}
-            onOpen={() => setActiveMenu("resources")}
-            onClose={() => setActiveMenu(null)}
-          />
-          <a href="#pricing" className="px-4 py-2 max-[1200px]:px-3 text-sm font-medium text-foreground/80 hover:text-foreground transition-colors rounded-full hover:bg-foreground/5">
-            Pricing
-          </a>
-        </nav>
-
-        <div className="flex items-center gap-4 max-[850px]:hidden">
-          <a href="#" className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">
-            Sign in
-          </a>
-          <a href="#" className="group relative inline-flex items-center">
-            <span className="absolute right-0 inset-y-0 w-[calc(100%-1.5rem)] rounded-xl bg-accent" />
-            <span className="relative z-10 px-5 py-3 rounded-xl bg-foreground text-background text-sm font-medium">Try for free</span>
-            <span className="relative -left-px z-10 w-10 h-10 rounded-xl flex items-center justify-center text-black">
-              <ArrowDownRight className="w-4 h-4 transition-transform duration-300 group-hover:-rotate-45" />
-            </span>
-          </a>
-        </div>
-
-        <button
-          className="hidden max-[850px]:flex items-center justify-center w-10 h-10"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={mobileMenuOpen}
-        >
-          <HamburgerIcon isOpen={mobileMenuOpen} />
-        </button>
+      <div className="flex size-11 items-center justify-center rounded-full border border-foreground/10 bg-[linear-gradient(135deg,rgba(221,242,255,0.95),rgba(231,238,225,0.95))] shadow-[0_14px_30px_-20px_rgba(30,58,79,0.45)] transition-transform duration-300 group-hover:-translate-y-0.5">
+        <span className="font-mono text-[0.72rem] font-semibold tracking-[0.24em] text-primary">
+          1→∞
+        </span>
       </div>
+      <div className="flex flex-col">
+        <span className="font-heading text-[1.02rem] font-semibold tracking-[-0.04em] text-foreground">
+          {siteConfig.name}
+        </span>
+        {!compact ? (
+          <span className="font-mono text-[0.7rem] uppercase tracking-[0.28em] text-muted-foreground">
+            {siteConfig.mission}
+          </span>
+        ) : null}
+      </div>
+    </Link>
+  );
+}
 
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease }}
-            className="hidden max-[850px]:block overflow-hidden"
+export function Header() {
+  const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+
+  return (
+    <header className="pointer-events-none fixed inset-x-0 top-0 z-50 pt-4 sm:pt-5">
+      <motion.div
+        initial={{ opacity: 0, y: -18 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className="mx-auto max-w-[80rem] px-4 sm:px-6 lg:px-8"
+      >
+        <div className="pointer-events-auto flex items-center justify-between rounded-[1.75rem] border border-foreground/10 bg-card/80 px-4 py-3 shadow-[0_30px_80px_-50px_rgba(22,33,43,0.55)] backdrop-blur-xl sm:px-5">
+          <BrandLockup />
+
+          <nav
+            className="hidden items-center gap-1 rounded-full border border-foreground/8 bg-background/70 p-1.5 lg:flex"
+            aria-label="Primary navigation"
           >
-            <div className="px-6 pb-4">
-              <nav className="space-y-0">
-                <a href="#" className="flex items-center justify-between py-4 text-base font-medium text-foreground border-b border-foreground/10" onClick={closeMobile}>
-                  Customers
-                </a>
-                <MobileExpandable
-                  label="Products"
-                  menuKey="products"
-                  isExpanded={mobileExpanded === "products"}
-                  onToggle={() => toggleExpanded("products")}
-                  onClose={closeMobile}
-                />
-                <MobileExpandable
-                  label="Resources"
-                  menuKey="resources"
-                  isExpanded={mobileExpanded === "resources"}
-                  onToggle={() => toggleExpanded("resources")}
-                  onClose={closeMobile}
-                />
-                <a href="#pricing" className="flex items-center justify-between py-4 text-base font-medium text-foreground" onClick={closeMobile}>
-                  Pricing
-                </a>
-              </nav>
+            {navigationLinks.map((link) => {
+              const active =
+                pathname === link.href || pathname.startsWith(`${link.href}/`);
 
-              <div className="flex items-center justify-between pt-8 pb-2">
-                <a href="#" className="text-base font-medium text-foreground" onClick={closeMobile}>
-                  Sign in
-                </a>
-                <a href="#" className="group relative inline-flex items-center" onClick={closeMobile}>
-                  <span className="absolute right-0 inset-y-0 w-[calc(100%-1.5rem)] rounded-2xl bg-accent" />
-                  <span className="relative z-10 px-5 py-3 rounded-2xl bg-foreground text-background text-sm font-medium">Try for free</span>
-                  <span className="relative -left-px z-10 w-10 h-10 rounded-2xl flex items-center justify-center text-foreground">
-                    <ArrowDownRight className="w-4 h-4 transition-transform duration-300 group-hover:-rotate-45" />
-                  </span>
-                </a>
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    "rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-all duration-200 hover:bg-foreground/5 hover:text-foreground",
+                    active && "bg-secondary text-secondary-foreground shadow-sm"
+                  )}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+          </nav>
+
+          <div className="hidden items-center gap-2 lg:flex">
+            <Link
+              href={siteConfig.cta.secondary.href}
+              className="rounded-full px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+            >
+              {siteConfig.cta.secondary.label}
+            </Link>
+            <Link
+              href={siteConfig.cta.primary.href}
+              className={cn(
+                buttonVariants({ size: "lg" }),
+                "rounded-full px-5 shadow-[0_20px_48px_-32px_rgba(30,58,79,0.8)]"
+              )}
+            >
+              {siteConfig.cta.primary.label}
+              <MoveRight className="size-4" />
+            </Link>
+          </div>
+
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger
+              className={cn(
+                buttonVariants({ variant: "outline", size: "icon-lg" }),
+                "lg:hidden"
+              )}
+              aria-label="Open menu"
+            >
+              <Menu className="size-5" />
+            </SheetTrigger>
+            <SheetContent
+              side="right"
+              className="w-[88vw] max-w-sm border-l border-foreground/10 bg-card/96 px-0"
+            >
+              <SheetHeader className="border-b border-foreground/8 pb-5">
+                <BrandLockup compact />
+                <SheetTitle className="font-heading text-xl tracking-[-0.04em]">
+                  Clear tools for serious sending work.
+                </SheetTitle>
+                <SheetDescription className="max-w-[28ch] text-sm leading-6">
+                  Navigate the platform, learn the philosophy, or join the
+                  waitlist for early conversations.
+                </SheetDescription>
+              </SheetHeader>
+
+              <div className="flex flex-1 flex-col px-6 py-6">
+                <nav className="space-y-1" aria-label="Mobile navigation">
+                  {pageLinks.map((link) => {
+                    const active =
+                      pathname === link.href ||
+                      pathname.startsWith(`${link.href}/`);
+
+                    return (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        onClick={() => setOpen(false)}
+                        className={cn(
+                          "flex items-center justify-between rounded-2xl px-4 py-3 text-sm font-medium text-foreground transition-colors hover:bg-secondary/80",
+                          active && "bg-secondary text-secondary-foreground"
+                        )}
+                      >
+                        <span>{link.label}</span>
+                        <MoveRight className="size-4 text-muted-foreground" />
+                      </Link>
+                    );
+                  })}
+                </nav>
+
+                <div className="mt-8 rounded-[1.6rem] border border-foreground/10 bg-[linear-gradient(145deg,rgba(232,242,250,0.95),rgba(250,246,239,0.95))] p-5 shadow-[0_24px_55px_-42px_rgba(22,33,43,0.85)]">
+                  <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/70">
+                    Primary next step
+                  </p>
+                  <p className="mt-3 font-heading text-xl font-semibold tracking-[-0.04em] text-foreground">
+                    Join the build community.
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                    Pilot agencies, senior builders, and missions-minded donors
+                    can all start with the same conversation.
+                  </p>
+                  <div className="mt-5 flex flex-col gap-2">
+                    <Link
+                      href={siteConfig.cta.primary.href}
+                      onClick={() => setOpen(false)}
+                      className={cn(buttonVariants({ size: "lg" }), "w-full")}
+                    >
+                      {siteConfig.cta.primary.label}
+                    </Link>
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      onClick={() => {
+                        setOpen(false);
+                        window.location.href = `mailto:${siteConfig.email}`;
+                      }}
+                    >
+                      Email {siteConfig.email}
+                    </Button>
+                  </div>
+                </div>
               </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <CornerSVG className="absolute top-0 -left-12.25 rotate-180 text-frame pointer-events-none max-[850px]:hidden" />
-      <CornerSVG className="absolute top-0 -right-12.25 rotate-90 text-frame pointer-events-none max-[850px]:hidden" />
-    </motion.header>
+            </SheetContent>
+          </Sheet>
+        </div>
+      </motion.div>
+    </header>
   );
 }

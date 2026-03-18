@@ -1,117 +1,105 @@
-"use client";
+import { footerGroups, siteConfig } from "@/lib/config";
+import { buttonVariants } from "@/components/ui/button-variants";
+import { cn } from "@/lib/utils";
+import { ArrowUpRight, MoveRight } from "lucide-react";
+import Link from "next/link";
 
-import { ArrowRight, Mail } from "lucide-react";
-import type { ReactNode } from "react";
-
-const footerLinks = {
-  menu: [
-    { label: "Customers", href: "#" },
-    { label: "Resources", href: "#" },
-    { label: "Careers", href: "#" },
-  ],
-  company: [
-    { label: "Help", href: "#" },
-    { label: "Terms", href: "#" },
-    { label: "Security", href: "#" },
-  ],
-  social: [
-    { label: "X (Twitter)", href: "#" },
-    { label: "LinkedIn", href: "#" },
-  ],
-};
-
-export function Footer(): ReactNode {
+export function Footer() {
   return (
-    <footer className="relative pt-38 mt-24 mx-2.5 max-[850px]:mx-0">
-      <div className="absolute left-1/2 -translate-x-1/2 top-0 w-full max-w-5xl">
-        <div className="relative w-full rounded-3xl overflow-hidden shadow-2xl/15">
-          <div 
-            className="absolute inset-0 bg-center bg-no-repeat brightness-150 blur scale-125"
-            style={{ backgroundImage: 'url(/BG.jpg)', backgroundSize: '150%' }}
-            aria-hidden="true"
-          />
-          
-          <div className="relative z-10 flex flex-col items-center text-center px-12 py-24 max-[850px]:px-6 max-[850px]:py-6 max-[850px]:pt-12">
-            <h2 className="text-6xl max-[850px]:text-3xl text-black font-medium tracking-tight max-w-2xl mb-14 max-[850px]:mb-8">
-              Start building something truly amazing today
-            </h2>
-            
-            <form className="flex items-center w-full max-w-md bg-background rounded-xl p-1.5 shadow-lg max-[850px]:flex-col max-[850px]:p-3 max-[850px]:gap-3 max-[850px]:max-w-none">
-              <div className="flex items-center flex-1 w-full">
-                <Mail className="w-5 h-5 text-muted-foreground ml-3 flex-none max-[850px]:ml-1" aria-hidden="true" />
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  aria-label="Email address"
-                  className="flex-1 px-3 py-2.5 text-sm bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none"
-                />
-              </div>
-              <button
-                type="submit"
-                className="flex items-center justify-center gap-2 px-5 py-2.5 bg-foreground hover:bg-foreground/90 text-background rounded-lg text-sm font-medium transition-colors whitespace-nowrap max-[850px]:w-full max-[850px]:py-3"
+    <footer className="pb-10 pt-10 sm:pb-12">
+      <div className="mx-auto flex max-w-[80rem] flex-col gap-6 px-4 sm:px-6 lg:px-8">
+        <div className="overflow-hidden rounded-[2.25rem] border border-foreground/10 bg-[linear-gradient(135deg,rgba(232,242,250,0.98),rgba(250,246,239,0.98)_45%,rgba(231,238,225,0.92))] p-7 shadow-[0_35px_90px_-58px_rgba(22,33,43,0.7)] sm:p-10">
+          <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
+            <div className="max-w-2xl">
+              <p className="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-primary/70">
+                Join the waitlist
+              </p>
+              <h2 className="mt-4 max-w-[12ch] text-balance font-heading text-[clamp(2.35rem,5vw,4.6rem)] font-semibold leading-[0.95] tracking-[-0.06em] text-foreground">
+                Build with open hands. Deploy with clarity.
+              </h2>
+              <p className="mt-5 max-w-[58ch] text-base leading-7 text-muted-foreground sm:text-lg">
+                We build for the global church. We measure success in impact,
+                not profit. Start a conversation if your agency is ready for a
+                more coherent operating system.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-3 lg:items-end">
+              <Link
+                href={siteConfig.cta.primary.href}
+                className={cn(
+                  buttonVariants({ size: "lg" }),
+                  "w-full justify-center rounded-full px-6 sm:w-auto"
+                )}
               >
-                Join Waitlist
-                <ArrowRight className="w-4 h-4" aria-hidden="true" />
-              </button>
-            </form>
+                {siteConfig.cta.primary.label}
+                <MoveRight className="size-4" />
+              </Link>
+              <Link
+                href={siteConfig.cta.secondary.href}
+                className={cn(
+                  buttonVariants({ variant: "outline", size: "lg" }),
+                  "w-full justify-center rounded-full px-6 sm:w-auto"
+                )}
+              >
+                {siteConfig.cta.secondary.label}
+                <ArrowUpRight className="size-4" />
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="bg-accent rounded-tr-[3rem] rounded-tl-[3rem] pt-96 pb-16 max-[850px]:pt-72">
-        <div className="max-w-5xl mx-auto px-6">
-          <div className="flex items-start justify-between gap-12 max-[850px]:flex-col max-[850px]:gap-10">
-            <a href="#" className="flex items-center gap-2" aria-label="Circular home">
-              <div className="w-8 h-8 rounded-full bg-neutral-900" />
-              <span className="text-xl font-semibold text-neutral-900 leading-0">Circular</span>
-            </a>
+        <div className="rounded-[2.25rem] border border-foreground/10 bg-card/82 p-7 shadow-[0_24px_70px_-54px_rgba(22,33,43,0.7)] backdrop-blur-sm sm:p-10">
+          <div className="grid gap-10 lg:grid-cols-[1.25fr_0.75fr_0.75fr_0.75fr]">
+            <div className="max-w-xl">
+              <p className="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-primary/70">
+                The Manifesto
+              </p>
+              <h3 className="mt-4 font-heading text-2xl font-semibold tracking-[-0.05em] text-foreground sm:text-3xl">
+                WE BUILD FOR THE GLOBAL CHURCH.
+              </h3>
+              <p className="mt-4 text-sm leading-7 text-muted-foreground sm:text-base">
+                Asymmetric.al is a nonprofit project shaping a missions-first
+                operating system for executive, operations, finance, and
+                advancement teams. Soli Deo Gloria.
+              </p>
+            </div>
 
-            <nav className="flex gap-16 max-[850px]:gap-10 max-[850px]:flex-wrap" aria-label="Footer navigation">
-              <div>
-                <h3 className="text-xs font-medium text-neutral-900/50 uppercase tracking-wider mb-4">Menu</h3>
-                <ul className="space-y-2">
-                  {footerLinks.menu.map((link) => (
-                    <li key={link.label}>
-                      <a href={link.href} className="text-sm text-neutral-900 hover:text-neutral-900/70 transition-colors">
+            {footerGroups.map((group) => (
+              <div key={group.title}>
+                <h4 className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-muted-foreground">
+                  {group.title}
+                </h4>
+                <ul className="mt-4 space-y-3">
+                  {group.links.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        className="text-sm text-foreground/84 transition-colors hover:text-foreground"
+                      >
                         {link.label}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>
               </div>
-
-              <div>
-                <h3 className="text-xs font-medium text-neutral-900/50 uppercase tracking-wider mb-4">Company</h3>
-                <ul className="space-y-2">
-                  {footerLinks.company.map((link) => (
-                    <li key={link.label}>
-                      <a href={link.href} className="text-sm text-neutral-900 hover:text-neutral-900/70 transition-colors">
-                        {link.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div>
-                <h3 className="text-xs font-medium text-neutral-900/50 uppercase tracking-wider mb-4">Social</h3>
-                <ul className="space-y-2">
-                  {footerLinks.social.map((link) => (
-                    <li key={link.label}>
-                      <a href={link.href} className="text-sm text-neutral-900 hover:text-neutral-900/70 transition-colors">
-                        {link.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </nav>
+            ))}
           </div>
 
-          <div className="mt-16 pt-6">
-            <p className="text-sm text-neutral-900/50 text-center">
-              © {new Date().getFullYear()} Circular. All rights reserved.
-            </p>
+          <div className="mt-10 flex flex-col gap-5 border-t border-foreground/10 pt-6 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              Operating as a project under {siteConfig.nonprofit}. EIN:{" "}
+              {siteConfig.ein}
+            </div>
+            <div className="flex flex-col gap-1 sm:items-end">
+              <Link
+                href={`mailto:${siteConfig.email}`}
+                className="transition-colors hover:text-foreground"
+              >
+                {siteConfig.email}
+              </Link>
+              <span>Asymmetric.al © 2026</span>
+            </div>
           </div>
         </div>
       </div>

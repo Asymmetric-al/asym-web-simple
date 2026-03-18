@@ -1,80 +1,85 @@
+import { siteConfig } from "@/lib/config";
 import type { Metadata } from "next";
 
-export const siteConfig = {
-  name: "React Bits Pro - SaaS Template",
+export const siteMetadata = {
+  name: siteConfig.name,
   description:
-    "A modern, accessible landing page template built with Next.js, Tailwind CSS, and TypeScript.",
-  url: "https://example.com",
-  ogImage: "/og-image.png",
-  creator: "@yourhandle",
+    "Mission operating system for Christian nonprofit and missions organizations. Built for executive, operations, and advancement teams who need trust, clarity, and modern infrastructure.",
+  url: siteConfig.url,
+  ogImage: "/opengraph-image",
+  creator: siteConfig.name,
   authors: [
     {
-      name: "Your Name",
-      url: "https://example.com",
+      name: siteConfig.name,
+      url: siteConfig.url,
     },
   ],
   keywords: [
-    "landing page",
-    "template",
+    "missions software",
+    "nonprofit SaaS",
+    "Christian missions",
+    "mission operating system",
+    "donor management",
+    "mobilization",
+    "member care",
+    "missions CRM",
     "Next.js",
-    "React",
-    "Tailwind CSS",
-    "TypeScript",
+    "open source",
   ],
 } as const;
 
 export const baseMetadata: Metadata = {
-  metadataBase: new URL(siteConfig.url),
+  metadataBase: new URL(siteMetadata.url),
   title: {
-    default: siteConfig.name,
-    template: `%s | ${siteConfig.name}`,
+    default: siteMetadata.name,
+    template: `%s | ${siteMetadata.name}`,
   },
-  description: siteConfig.description,
-  keywords: [...siteConfig.keywords],
-  authors: [...siteConfig.authors],
-  creator: siteConfig.creator,
-  publisher: siteConfig.name,
+  description: siteMetadata.description,
+  keywords: [...siteMetadata.keywords],
+  authors: [...siteMetadata.authors],
+  creator: siteMetadata.creator,
+  publisher: siteMetadata.name,
+  category: "technology",
+  applicationName: siteMetadata.name,
+  alternates: {
+    canonical: "/",
+  },
   robots: {
     index: true,
     follow: true,
     googleBot: {
       index: true,
       follow: true,
-      "max-video-preview": -1,
       "max-image-preview": "large",
       "max-snippet": -1,
+      "max-video-preview": -1,
     },
-  },
-  alternates: {
-    canonical: "/",
   },
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: siteConfig.url,
-    title: siteConfig.name,
-    description: siteConfig.description,
-    siteName: siteConfig.name,
+    url: siteMetadata.url,
+    title: siteMetadata.name,
+    description: siteMetadata.description,
+    siteName: siteMetadata.name,
     images: [
       {
-        url: siteConfig.ogImage,
+        url: siteMetadata.ogImage,
         width: 1200,
         height: 630,
-        alt: siteConfig.name,
+        alt: siteMetadata.name,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: siteConfig.name,
-    description: siteConfig.description,
-    images: [siteConfig.ogImage],
-    creator: siteConfig.creator,
+    title: siteMetadata.name,
+    description: siteMetadata.description,
+    images: [siteMetadata.ogImage],
   },
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon-16x16.png",
-    apple: "/apple-icon.png",
+    icon: "/icon.svg",
+    apple: "/apple-icon.svg",
   },
   manifest: "/site.webmanifest",
 };
@@ -92,38 +97,41 @@ export function createMetadata({
   image?: string;
   noIndex?: boolean;
 }): Metadata {
-  const url = `${siteConfig.url}${path}`;
-  const ogImage = image ?? siteConfig.ogImage;
+  const canonicalPath = path === "/" ? "/" : path.replace(/\/$/, "");
+  const url = `${siteMetadata.url}${canonicalPath}`;
+  const ogImage = image ?? siteMetadata.ogImage;
 
   return {
     title,
     description,
     alternates: {
-      canonical: path,
+      canonical: canonicalPath,
     },
     openGraph: {
-      title: title ?? siteConfig.name,
-      description: description ?? siteConfig.description,
+      title: title ?? siteMetadata.name,
+      description: description ?? siteMetadata.description,
       url,
       images: [
         {
           url: ogImage,
           width: 1200,
           height: 630,
-          alt: title ?? siteConfig.name,
+          alt: title ?? siteMetadata.name,
         },
       ],
     },
     twitter: {
-      title: title ?? siteConfig.name,
-      description: description ?? siteConfig.description,
+      title: title ?? siteMetadata.name,
+      description: description ?? siteMetadata.description,
       images: [ogImage],
     },
-    ...(noIndex && {
-      robots: {
-        index: false,
-        follow: false,
-      },
-    }),
+    ...(noIndex
+      ? {
+          robots: {
+            index: false,
+            follow: false,
+          },
+        }
+      : {}),
   };
 }
