@@ -1,6 +1,7 @@
 "use client";
 
 import { ReducedMotionProvider } from "@/lib/motion";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { MotionConfig } from "motion/react";
 import { ThemeProvider } from "next-themes";
 import type { ReactNode } from "react";
@@ -15,7 +16,9 @@ export function Providers({ children }: { children: ReactNode }): ReactNode {
       disableTransitionOnChange
     >
       <MotionConfig reducedMotion="user">
-        <ReducedMotionProvider>{children}</ReducedMotionProvider>
+        <TooltipProvider delay={120}>
+          <ReducedMotionProvider>{children}</ReducedMotionProvider>
+        </TooltipProvider>
       </MotionConfig>
     </ThemeProvider>
   );
