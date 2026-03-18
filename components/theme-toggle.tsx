@@ -41,9 +41,9 @@ export function ThemeToggle() {
         <TooltipContent>Change theme</TooltipContent>
       </Tooltip>
       <DropdownMenuContent align="end" className="w-52">
-        <DropdownMenuLabel>Appearance</DropdownMenuLabel>
-        <DropdownMenuSeparator />
         <DropdownMenuGroup>
+          <DropdownMenuLabel>Appearance</DropdownMenuLabel>
+          <DropdownMenuSeparator />
           {themes.map((option) => {
             const Icon = option.icon;
 
