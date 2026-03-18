@@ -1,14 +1,16 @@
 "use client";
 
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button-variants";
 import {
   Sheet,
   SheetContent,
   SheetDescription,
+  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { navigationLinks, siteConfig, supportLinks } from "@/lib/config";
 import { cn } from "@/lib/utils";
 import { Menu, MoveRight } from "lucide-react";
@@ -57,13 +59,15 @@ export function Header() {
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         className="mx-auto max-w-[80rem] px-4 sm:px-6 lg:px-8"
       >
-        <div className="pointer-events-auto flex items-center justify-between rounded-[1.75rem] border border-foreground/10 bg-card/80 px-4 py-3 shadow-[0_30px_80px_-50px_rgba(22,33,43,0.55)] backdrop-blur-xl sm:px-5">
-          <BrandLockup />
+        <div className="pointer-events-auto page-shell-glow surface-panel flex items-center justify-between rounded-[1.85rem] px-4 py-3 sm:px-5">
+          <div className="flex items-center gap-6">
+            <BrandLockup />
+            <p className="hidden max-w-[20ch] text-sm leading-6 text-muted-foreground xl:block">
+              Calm, high-trust software for the operational weight of sending.
+            </p>
+          </div>
 
-          <nav
-            className="hidden items-center gap-1 rounded-full border border-foreground/8 bg-background/70 p-1.5 lg:flex"
-            aria-label="Primary navigation"
-          >
+          <nav className="hidden items-center gap-1 rounded-full bg-background/50 p-1 lg:flex" aria-label="Primary navigation">
             {navigationLinks.map((link) => {
               const active =
                 pathname === link.href || pathname.startsWith(`${link.href}/`);
@@ -72,9 +76,12 @@ export function Header() {
                 <Link
                   key={link.href}
                   href={link.href}
+                  aria-current={active ? "page" : undefined}
                   className={cn(
-                    "rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-all duration-200 hover:bg-foreground/5 hover:text-foreground",
-                    active && "bg-secondary text-secondary-foreground shadow-sm"
+                    "rounded-full px-4 py-2 text-sm font-medium text-muted-foreground",
+                    active
+                      ? "bg-secondary text-secondary-foreground shadow-sm"
+                      : "hover:bg-background/88 hover:text-foreground"
                   )}
                 >
                   {link.label}
@@ -84,40 +91,46 @@ export function Header() {
           </nav>
 
           <div className="hidden items-center gap-2 lg:flex">
+            <ThemeToggle />
             <Link
               href={siteConfig.cta.secondary.href}
-              className="rounded-full px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              className={cn(
+                buttonVariants({ variant: "ghost", size: "sm" }),
+                "px-3.5 text-muted-foreground"
+              )}
             >
               {siteConfig.cta.secondary.label}
             </Link>
             <Link
               href={siteConfig.cta.primary.href}
-              className={cn(
-                buttonVariants({ size: "lg" }),
-                "rounded-full px-5 shadow-[0_20px_48px_-32px_rgba(30,58,79,0.8)]"
-              )}
+              className={cn(buttonVariants({ size: "lg" }), "px-5")}
             >
               {siteConfig.cta.primary.label}
-              <MoveRight className="size-4" />
+              <MoveRight data-icon="inline-end" />
             </Link>
           </div>
 
           <Sheet open={open} onOpenChange={setOpen}>
-            <SheetTrigger
-              className={cn(
-                buttonVariants({ variant: "outline", size: "icon-lg" }),
-                "lg:hidden"
-              )}
-              aria-label="Open menu"
-            >
-              <Menu className="size-5" />
-            </SheetTrigger>
+            <div className="flex items-center gap-2 lg:hidden">
+              <ThemeToggle />
+              <SheetTrigger
+                className={cn(
+                  buttonVariants({ variant: "outline", size: "icon-lg" })
+                )}
+                aria-label="Open menu"
+              >
+                <Menu />
+              </SheetTrigger>
+            </div>
             <SheetContent
               side="right"
               className="w-[88vw] max-w-sm border-l border-foreground/10 bg-card/96 px-0"
             >
               <SheetHeader className="border-b border-foreground/8 pb-5">
-                <BrandLockup compact />
+                <div className="flex items-start justify-between gap-4">
+                  <BrandLockup compact />
+                  <ThemeToggle />
+                </div>
                 <SheetTitle className="font-heading text-xl tracking-[-0.04em]">
                   Clear tools for serious sending work.
                 </SheetTitle>
@@ -128,7 +141,7 @@ export function Header() {
               </SheetHeader>
 
               <div className="flex flex-1 flex-col px-6 py-6">
-                <nav className="space-y-1" aria-label="Mobile navigation">
+                <nav className="flex flex-col gap-1" aria-label="Mobile navigation">
                   {pageLinks.map((link) => {
                     const active =
                       pathname === link.href ||
@@ -151,7 +164,7 @@ export function Header() {
                   })}
                 </nav>
 
-                <div className="mt-8 rounded-[1.6rem] border border-foreground/10 bg-[linear-gradient(145deg,rgba(232,242,250,0.95),rgba(250,246,239,0.95))] p-5 shadow-[0_24px_55px_-42px_rgba(22,33,43,0.85)]">
+                <div className="surface-card mt-8 rounded-[1.75rem] p-5">
                   <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/70">
                     Primary next step
                   </p>
@@ -162,7 +175,7 @@ export function Header() {
                     Pilot agencies, senior builders, and missions-minded donors
                     can all start with the same conversation.
                   </p>
-                  <div className="mt-5 flex flex-col gap-2">
+                  <SheetFooter className="mt-5 p-0">
                     <Link
                       href={siteConfig.cta.primary.href}
                       onClick={() => setOpen(false)}
@@ -170,17 +183,17 @@ export function Header() {
                     >
                       {siteConfig.cta.primary.label}
                     </Link>
-                    <Button
-                      variant="outline"
-                      size="lg"
-                      onClick={() => {
-                        setOpen(false);
-                        window.location.href = `mailto:${siteConfig.email}`;
-                      }}
+                    <Link
+                      href={`mailto:${siteConfig.email}`}
+                      onClick={() => setOpen(false)}
+                      className={cn(
+                        buttonVariants({ variant: "outline", size: "lg" }),
+                        "w-full"
+                      )}
                     >
                       Email {siteConfig.email}
-                    </Button>
-                  </div>
+                    </Link>
+                  </SheetFooter>
                 </div>
               </div>
             </SheetContent>

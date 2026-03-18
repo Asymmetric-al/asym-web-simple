@@ -50,35 +50,57 @@ export function MediaStage({
             ? { duration: 0.01 }
             : { duration: 0.7, ease: [0.22, 1, 0.36, 1] }
         }
-        className="relative overflow-hidden rounded-[2.2rem] border border-foreground/10 bg-secondary/40 shadow-[0_35px_90px_-55px_rgba(22,33,43,0.85)]"
+        className="surface-hero relative overflow-hidden rounded-[2.35rem] p-3 sm:p-4"
       >
-        <Image
-          src={sceneSrc}
-          alt={sceneAlt}
-          width={1440}
-          height={960}
-          priority={priority}
-          className="h-[24rem] w-full object-cover object-center sm:h-[30rem]"
-        />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(22,33,43,0.14))]" />
-        <div className="absolute left-5 top-5 rounded-full border border-white/35 bg-white/70 px-3 py-1 font-mono text-[0.68rem] uppercase tracking-[0.26em] text-primary shadow-sm backdrop-blur-sm">
-          {badge}
+        <div className="relative overflow-hidden rounded-[1.9rem] border border-foreground/10">
+          <Image
+            src={sceneSrc}
+            alt={sceneAlt}
+            width={1440}
+            height={960}
+            priority={priority}
+            className="h-[23rem] w-full object-cover object-center sm:h-[29rem]"
+          />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.1),rgba(22,33,43,0.18))]" />
+          <div className="absolute left-5 top-5 rounded-full border border-white/35 bg-white/74 px-3 py-1 font-mono text-[0.68rem] uppercase tracking-[0.26em] text-primary shadow-sm backdrop-blur-sm">
+            {badge}
+          </div>
+          <div className="absolute bottom-5 left-5 flex flex-wrap gap-2">
+            {["Missions-first", "Observable", "Sovereign by design"].map(
+              (item) => (
+                <span
+                  key={item}
+                  className="rounded-full border border-white/20 bg-foreground/28 px-3 py-1 font-mono text-[0.66rem] uppercase tracking-[0.22em] text-white/88 backdrop-blur-sm"
+                >
+                  {item}
+                </span>
+              )
+            )}
+          </div>
         </div>
       </motion.div>
 
       <motion.div
         {...floatingProps}
-        className="relative -mt-18 ml-auto w-[88%] rounded-[2rem] border border-foreground/10 bg-card/94 p-4 shadow-[0_42px_95px_-58px_rgba(22,33,43,0.9)] backdrop-blur-md sm:-mt-24 sm:w-[82%] sm:p-5"
+        className="surface-panel relative -mt-18 ml-auto w-[88%] rounded-[2rem] p-4 sm:-mt-24 sm:w-[82%] sm:p-5"
       >
         <Image
           src={screenshotSrc}
           alt={screenshotAlt}
           width={1440}
           height={960}
-          className="rounded-[1.35rem] border border-foreground/10 object-cover shadow-[0_18px_45px_-28px_rgba(22,33,43,0.55)]"
+          className="rounded-[1.45rem] border border-foreground/10 object-cover shadow-[0_18px_45px_-28px_rgba(22,33,43,0.55)]"
         />
-        <div className="mt-4 rounded-[1.4rem] bg-secondary/55 px-4 py-3 text-sm leading-6 text-foreground/86">
-          {caption}
+        <div className="mt-4 grid gap-3 rounded-[1.5rem] bg-secondary/56 px-4 py-3 text-sm leading-6 text-foreground/86 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
+          <div>{caption}</div>
+          <div className="flex flex-wrap gap-2 sm:justify-end">
+            <span className="rounded-full border border-foreground/10 bg-background/76 px-3 py-1 font-mono text-[0.68rem] uppercase tracking-[0.2em] text-muted-foreground">
+              Shared source of truth
+            </span>
+            <span className="rounded-full border border-foreground/10 bg-background/76 px-3 py-1 font-mono text-[0.68rem] uppercase tracking-[0.2em] text-muted-foreground">
+              Clear operator surfaces
+            </span>
+          </div>
         </div>
       </motion.div>
     </div>

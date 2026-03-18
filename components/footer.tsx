@@ -8,7 +8,7 @@ export function Footer() {
   return (
     <footer className="pb-10 pt-10 sm:pb-12">
       <div className="mx-auto flex max-w-[80rem] flex-col gap-6 px-4 sm:px-6 lg:px-8">
-        <div className="overflow-hidden rounded-[2.25rem] border border-foreground/10 bg-[linear-gradient(135deg,rgba(232,242,250,0.98),rgba(250,246,239,0.98)_45%,rgba(231,238,225,0.92))] p-7 shadow-[0_35px_90px_-58px_rgba(22,33,43,0.7)] sm:p-10">
+        <div className="page-shell-glow surface-hero overflow-hidden rounded-[2.35rem] p-7 sm:p-10">
           <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
             <div className="max-w-2xl">
               <p className="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-primary/70">
@@ -25,6 +25,11 @@ export function Footer() {
             </div>
 
             <div className="flex flex-col gap-3 lg:items-end">
+              <div className="grid w-full gap-2 rounded-[1.5rem] border border-foreground/10 bg-background/62 p-4 text-sm text-muted-foreground sm:max-w-[22rem]">
+                <span>Open-source foundations</span>
+                <span>Tenant sovereignty by design</span>
+                <span>Nonprofit 501(c)(3) posture</span>
+              </div>
               <Link
                 href={siteConfig.cta.primary.href}
                 className={cn(
@@ -33,7 +38,7 @@ export function Footer() {
                 )}
               >
                 {siteConfig.cta.primary.label}
-                <MoveRight className="size-4" />
+                <MoveRight data-icon="inline-end" />
               </Link>
               <Link
                 href={siteConfig.cta.secondary.href}
@@ -43,13 +48,13 @@ export function Footer() {
                 )}
               >
                 {siteConfig.cta.secondary.label}
-                <ArrowUpRight className="size-4" />
+                <ArrowUpRight data-icon="inline-end" />
               </Link>
             </div>
           </div>
         </div>
 
-        <div className="rounded-[2.25rem] border border-foreground/10 bg-card/82 p-7 shadow-[0_24px_70px_-54px_rgba(22,33,43,0.7)] backdrop-blur-sm sm:p-10">
+        <div className="surface-panel rounded-[2.35rem] p-7 sm:p-10">
           <div className="grid gap-10 lg:grid-cols-[1.25fr_0.75fr_0.75fr_0.75fr]">
             <div className="max-w-xl">
               <p className="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-primary/70">
@@ -70,12 +75,12 @@ export function Footer() {
                 <h4 className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-muted-foreground">
                   {group.title}
                 </h4>
-                <ul className="mt-4 space-y-3">
+                <ul className="mt-4 flex flex-col gap-3">
                   {group.links.map((link) => (
                     <li key={link.href}>
                       <Link
                         href={link.href}
-                        className="text-sm text-foreground/84 transition-colors hover:text-foreground"
+                        className="text-sm text-foreground/84 hover:text-foreground"
                       >
                         {link.label}
                       </Link>
@@ -87,14 +92,14 @@ export function Footer() {
           </div>
 
           <div className="mt-10 flex flex-col gap-5 border-t border-foreground/10 pt-6 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-            <div>
+            <div className="content-measure">
               Operating as a project under {siteConfig.nonprofit}. EIN:{" "}
               {siteConfig.ein}
             </div>
             <div className="flex flex-col gap-1 sm:items-end">
               <Link
                 href={`mailto:${siteConfig.email}`}
-                className="transition-colors hover:text-foreground"
+                className="hover:text-foreground"
               >
                 {siteConfig.email}
               </Link>

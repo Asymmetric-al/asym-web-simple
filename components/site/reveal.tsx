@@ -19,8 +19,8 @@ export function Reveal({
   children,
   className,
   delay = 0,
-  y = 28,
-  scale = 1,
+  y = 20,
+  scale = 0.985,
 }: RevealProps) {
   const prefersReducedMotion = useReducedMotion();
 
@@ -28,11 +28,14 @@ export function Reveal({
     <motion.div
       className={className}
       initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y, scale }}
-      animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
+      whileInView={
+        prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }
+      }
+      viewport={{ once: true, amount: 0.18 }}
       transition={
         prefersReducedMotion
           ? { duration: 0.01 }
-          : { duration: 0.72, delay, ease: easing }
+          : { duration: 0.6, delay, ease: easing }
       }
     >
       {children}
@@ -55,7 +58,8 @@ export function StaggerReveal({
     <motion.div
       className={cn("contents", className)}
       initial="hidden"
-      animate="visible"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.12 }}
       variants={{
         hidden: { opacity: 0 },
         visible: {
@@ -64,7 +68,7 @@ export function StaggerReveal({
             ? { duration: 0.01 }
             : {
                 delayChildren: delay,
-                staggerChildren: 0.08,
+                staggerChildren: 0.06,
               },
         },
       }}
@@ -97,7 +101,7 @@ export function StaggerItem({
       transition={
         prefersReducedMotion
           ? { duration: 0.01 }
-          : { duration: 0.62, ease: easing }
+          : { duration: 0.54, ease: easing }
       }
     >
       {children}
