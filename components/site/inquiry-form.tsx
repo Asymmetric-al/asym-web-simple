@@ -179,10 +179,10 @@ export function InquiryForm({ kind }: { kind: InquiryKind }) {
             </FieldContent>
           </Field>
 
-          <div className="grid gap-3 rounded-[1.5rem] border border-foreground/10 bg-secondary/42 p-4 text-sm leading-6 text-muted-foreground sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
+          <div className="grid gap-3 rounded-[1.5rem] border border-foreground/10 bg-secondary/42 p-4 text-sm leading-6 text-muted-foreground lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
             <div className="flex items-start gap-3">
               <Mail className="mt-1 size-4 shrink-0 text-primary/70" />
-              <div className="flex flex-col gap-1">
+              <div className="min-w-0 flex flex-col gap-1">
                 <p>
                   We will open your email client with a drafted message so the
                   details stay in your control.
@@ -193,7 +193,7 @@ export function InquiryForm({ kind }: { kind: InquiryKind }) {
                     directly to{" "}
                     <Link
                       href={`mailto:${siteConfig.email}`}
-                      className="font-medium text-foreground underline underline-offset-4"
+                      className="link-resilient font-medium text-foreground underline underline-offset-4"
                     >
                       {siteConfig.email}
                     </Link>
@@ -203,14 +203,14 @@ export function InquiryForm({ kind }: { kind: InquiryKind }) {
               </div>
             </div>
 
-            <div className="flex flex-col gap-2 sm:items-end">
+            <div className="min-w-0 flex flex-col gap-2 lg:items-end">
               <Button type="submit" size="lg" className="px-5">
                 {kind === "waitlist"
                   ? "Draft waitlist email"
                   : "Draft contact email"}
                 <ArrowRight data-icon="inline-end" />
               </Button>
-              <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
+              <div className="flex w-full flex-col gap-2 md:w-auto md:flex-row">
                 <Button
                   type="button"
                   variant="outline"
@@ -222,7 +222,7 @@ export function InquiryForm({ kind }: { kind: InquiryKind }) {
                 </Button>
                 <Link
                   href={draftMailto || `mailto:${siteConfig.email}`}
-                  className="inline-flex h-9 items-center justify-center rounded-full px-3 text-sm font-medium text-muted-foreground hover:bg-background/72 hover:text-foreground"
+                  className="link-resilient inline-flex min-h-9 w-full items-center justify-center rounded-full px-3 py-2 text-center text-sm font-medium text-muted-foreground hover:bg-background/72 hover:text-foreground md:w-auto md:max-w-[18rem]"
                 >
                   Open direct email
                 </Link>

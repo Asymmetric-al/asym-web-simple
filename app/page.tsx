@@ -320,7 +320,7 @@ export default function HomePage() {
               <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary-foreground/70">
                 Hiring builders
               </p>
-              <h2 className="mt-4 max-w-[11ch] font-heading text-[clamp(2.3rem,4vw,3.7rem)] font-semibold leading-[0.98] tracking-[-0.06em]">
+              <h2 className="mt-4 max-w-[16ch] font-heading text-[clamp(2.3rem,4vw,3.7rem)] font-semibold leading-[0.98] tracking-[-0.06em]">
                 Write code for the Great Commission.
               </h2>
               <p className="mt-5 max-w-[58ch] text-base leading-7 text-primary-foreground/82">

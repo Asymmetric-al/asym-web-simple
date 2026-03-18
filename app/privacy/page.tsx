@@ -98,7 +98,7 @@ export default function PrivacyPage() {
                 Questions or requests can be sent to{" "}
                 <Link
                   href="mailto:info@asymmetric.al"
-                  className="font-medium text-foreground underline underline-offset-4"
+                  className="link-resilient inline-block max-w-full font-medium text-foreground underline underline-offset-4"
                 >
                   info@asymmetric.al
                 </Link>

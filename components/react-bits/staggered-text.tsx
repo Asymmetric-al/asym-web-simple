@@ -102,6 +102,9 @@ const buildKeyframes = (
   return keyframes;
 };
 
+const insertSoftBreaks = (value: string): string =>
+  value.replace(/([^\s-]{14})(?=[^\s-])/g, "$1\u200b");
+
 const StaggeredText = forwardRef<StaggeredTextHandle, StaggeredTextProps>(
   (
     {
@@ -253,10 +256,10 @@ const StaggeredText = forwardRef<StaggeredTextHandle, StaggeredTextProps>(
           case "chars":
             return row.split("");
           case "lines":
-            return [row];
+            return [insertSoftBreaks(row)];
           case "words":
           default:
-            return row.split(" ");
+            return row.split(" ").map(insertSoftBreaks);
         }
       });
 
@@ -298,7 +301,7 @@ const StaggeredText = forwardRef<StaggeredTextHandle, StaggeredTextProps>(
     return (
       <Wrapper
         ref={rootRef as React.RefObject<HTMLParagraphElement>}
-        className={`staggered-text ${hasMultipleRows || segmentBy === "lines" ? "block" : "flex flex-wrap"} whitespace-pre-wrap ${className}`}
+        className={`staggered-text max-w-full min-w-0 whitespace-pre-wrap ${hasMultipleRows || segmentBy !== "chars" ? "block" : "flex flex-wrap"} ${className}`}
       >
         {rowsSegments.map((rowSegments, rowIndex) => (
           <React.Fragment key={`row-${rowIndex}`}>
@@ -342,7 +345,15 @@ const StaggeredText = forwardRef<StaggeredTextHandle, StaggeredTextProps>(
                       }
                     : {})}
                   style={{
-                    display: segmentBy === "lines" ? "block" : "inline-block",
+                    display:
+                      segmentBy === "lines"
+                        ? "block"
+                        : segmentBy === "chars"
+                          ? "inline-block"
+                          : "inline",
+                    maxWidth: "100%",
+                    overflowWrap: "anywhere",
+                    wordBreak: "break-word",
                     willChange: "transform, filter, opacity",
                   }}
                 >

@@ -168,7 +168,7 @@ export default function JoinPage() {
                   where you see the current system breaking down. We start with
                   honest conversation, not a scripted sales motion.
                 </p>
-                <p className="inline-flex items-center gap-2 rounded-full bg-secondary/55 px-3 py-1.5 font-mono text-[0.72rem] uppercase tracking-[0.24em] text-primary/75">
+                <p className="inline-flex max-w-full items-center gap-2 rounded-full bg-secondary/55 px-3 py-1.5 text-center font-mono text-[0.72rem] uppercase tracking-[0.24em] text-primary/75">
                   Join the waitlist
                   <ArrowUpRight className="size-3.5" />
                 </p>

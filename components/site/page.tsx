@@ -51,14 +51,14 @@ export function PageHero({
       )}
     >
       <Container className="grid gap-10 lg:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)] lg:items-center">
-        <div className="max-w-3xl">
+        <div className="min-w-0 max-w-3xl">
           <Badge
             variant="outline"
             className="h-auto rounded-full border-foreground/10 bg-card/76 px-3 py-1 font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/80"
           >
             {eyebrow}
           </Badge>
-          <div className="mt-6">{title}</div>
+          <div className="min-w-0 mt-6">{title}</div>
           <div className="content-measure mt-6 text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">
             {description}
           </div>
@@ -87,7 +87,7 @@ export function PageHero({
               {meta.map((item) => (
                 <li
                   key={item}
-                  className="rounded-full border border-foreground/10 bg-background/76 px-3 py-1.5 font-mono text-[0.72rem] uppercase tracking-[0.22em] text-muted-foreground shadow-[0_14px_34px_-28px_rgba(22,33,43,0.35)]"
+                  className="text-resilient max-w-full rounded-full border border-foreground/10 bg-background/76 px-3 py-1.5 text-center font-mono text-[0.72rem] uppercase tracking-[0.22em] text-muted-foreground shadow-[0_14px_34px_-28px_rgba(22,33,43,0.35)]"
                 >
                   {item}
                 </li>
@@ -95,7 +95,7 @@ export function PageHero({
             </ul>
           ) : null}
         </div>
-        {children ? <div className="lg:pl-4">{children}</div> : null}
+        {children ? <div className="min-w-0 lg:pl-4">{children}</div> : null}
       </Container>
     </section>
   );
@@ -163,7 +163,7 @@ export function SectionHeader({
         {title}
       </h2>
       {description ? (
-        <div className="mt-4 text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">
+        <div className="content-measure mt-4 text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">
           {description}
         </div>
       ) : null}

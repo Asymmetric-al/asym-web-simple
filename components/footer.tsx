@@ -9,12 +9,12 @@ export function Footer() {
     <footer className="pb-10 pt-10 sm:pb-12">
       <div className="mx-auto flex max-w-[80rem] flex-col gap-6 px-4 sm:px-6 lg:px-8">
         <div className="page-shell-glow surface-hero overflow-hidden rounded-[2.35rem] p-7 sm:p-10">
-          <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
-            <div className="max-w-2xl">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-end">
+            <div className="min-w-0 max-w-2xl">
               <p className="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-primary/70">
                 Join the waitlist
               </p>
-              <h2 className="mt-4 max-w-[12ch] text-balance font-heading text-[clamp(2.35rem,5vw,4.6rem)] font-semibold leading-[0.95] tracking-[-0.06em] text-foreground">
+              <h2 className="mt-4 max-w-[16ch] text-balance font-heading text-[clamp(2.35rem,5vw,4.6rem)] font-semibold leading-[0.95] tracking-[-0.06em] text-foreground">
                 Build with open hands. Deploy with clarity.
               </h2>
               <p className="mt-5 max-w-[58ch] text-base leading-7 text-muted-foreground sm:text-lg">
@@ -24,7 +24,7 @@ export function Footer() {
               </p>
             </div>
 
-            <div className="flex flex-col gap-3 lg:items-end">
+            <div className="min-w-0 flex flex-col gap-3 lg:items-end">
               <div className="grid w-full gap-2 rounded-[1.5rem] border border-foreground/10 bg-background/62 p-4 text-sm text-muted-foreground sm:max-w-[22rem]">
                 <span>Open-source foundations</span>
                 <span>Tenant sovereignty by design</span>
@@ -55,8 +55,8 @@ export function Footer() {
         </div>
 
         <div className="surface-panel rounded-[2.35rem] p-7 sm:p-10">
-          <div className="grid gap-10 lg:grid-cols-[1.25fr_0.75fr_0.75fr_0.75fr]">
-            <div className="max-w-xl">
+          <div className="grid gap-10 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,0.75fr)_minmax(0,0.75fr)_minmax(0,0.75fr)]">
+            <div className="min-w-0 max-w-xl">
               <p className="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-primary/70">
                 The Manifesto
               </p>
@@ -71,7 +71,7 @@ export function Footer() {
             </div>
 
             {footerGroups.map((group) => (
-              <div key={group.title}>
+              <div key={group.title} className="min-w-0">
                 <h4 className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-muted-foreground">
                   {group.title}
                 </h4>
@@ -99,7 +99,7 @@ export function Footer() {
             <div className="flex flex-col gap-1 sm:items-end">
               <Link
                 href={`mailto:${siteConfig.email}`}
-                className="hover:text-foreground"
+                className="link-resilient inline-block w-full max-w-[20rem] text-left hover:text-foreground sm:text-right"
               >
                 {siteConfig.email}
               </Link>

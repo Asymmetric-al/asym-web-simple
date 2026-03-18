@@ -343,7 +343,7 @@ export default function PlatformPage() {
               <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/70">
                 Partnership model
               </p>
-              <h2 className="mt-4 max-w-[12ch] font-heading text-[clamp(2.15rem,4vw,3.45rem)] font-semibold leading-[1] tracking-[-0.06em]">
+              <h2 className="mt-4 max-w-[16ch] font-heading text-[clamp(2.15rem,4vw,3.45rem)] font-semibold leading-[1] tracking-[-0.06em]">
                 Let’s build the future.
               </h2>
               <p className="mt-5 max-w-[58ch] text-base leading-7 text-muted-foreground">

@@ -25,7 +25,7 @@ function BrandLockup({ compact = false }: { compact?: boolean }) {
   return (
     <Link
       href="/"
-      className="group flex items-center gap-3 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      className="group flex min-w-0 items-center gap-3 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
       aria-label={`${siteConfig.name} home`}
     >
       <div className="flex size-11 items-center justify-center rounded-full border border-foreground/10 bg-[linear-gradient(135deg,rgba(221,242,255,0.95),rgba(231,238,225,0.95))] shadow-[0_14px_30px_-20px_rgba(30,58,79,0.45)] transition-transform duration-300 group-hover:-translate-y-0.5">
@@ -33,12 +33,12 @@ function BrandLockup({ compact = false }: { compact?: boolean }) {
           1→∞
         </span>
       </div>
-      <div className="flex flex-col">
-        <span className="font-heading text-[1.02rem] font-semibold tracking-[-0.04em] text-foreground">
+      <div className="flex min-w-0 flex-col">
+        <span className="text-resilient font-heading text-[1.02rem] font-semibold leading-tight tracking-[-0.04em] text-foreground">
           {siteConfig.name}
         </span>
         {!compact ? (
-          <span className="font-mono text-[0.7rem] uppercase tracking-[0.28em] text-muted-foreground">
+          <span className="text-resilient max-w-[13rem] font-mono text-[0.68rem] leading-[1.2] uppercase tracking-[0.22em] text-muted-foreground sm:max-w-[15rem]">
             {siteConfig.mission}
           </span>
         ) : null}
@@ -59,15 +59,15 @@ export function Header() {
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         className="mx-auto max-w-[80rem] px-4 sm:px-6 lg:px-8"
       >
-        <div className="pointer-events-auto page-shell-glow surface-panel flex items-center justify-between rounded-[1.85rem] px-4 py-3 sm:px-5">
-          <div className="flex items-center gap-6">
+        <div className="pointer-events-auto page-shell-glow surface-panel flex items-center justify-between gap-3 rounded-[1.85rem] px-4 py-3 sm:px-5 lg:gap-5">
+          <div className="flex min-w-0 items-center gap-4 lg:gap-6">
             <BrandLockup />
-            <p className="hidden max-w-[20ch] text-sm leading-6 text-muted-foreground xl:block">
+            <p className="text-resilient hidden max-w-[24ch] text-sm leading-6 text-muted-foreground xl:block">
               Calm, high-trust software for the operational weight of sending.
             </p>
           </div>
 
-          <nav className="hidden items-center gap-1 rounded-full bg-background/50 p-1 lg:flex" aria-label="Primary navigation">
+          <nav className="hidden min-w-0 flex-1 items-center justify-center gap-1 rounded-full bg-background/50 p-1 lg:flex" aria-label="Primary navigation">
             {navigationLinks.map((link) => {
               const active =
                 pathname === link.href || pathname.startsWith(`${link.href}/`);
@@ -78,7 +78,7 @@ export function Header() {
                   href={link.href}
                   aria-current={active ? "page" : undefined}
                   className={cn(
-                    "rounded-full px-4 py-2 text-sm font-medium text-muted-foreground",
+                    "min-w-0 max-w-[10rem] rounded-full px-3.5 py-2 text-center text-sm leading-tight font-medium text-muted-foreground",
                     active
                       ? "bg-secondary text-secondary-foreground shadow-sm"
                       : "hover:bg-background/88 hover:text-foreground"
@@ -90,7 +90,7 @@ export function Header() {
             })}
           </nav>
 
-          <div className="hidden items-center gap-2 lg:flex">
+          <div className="hidden shrink-0 items-center gap-2 lg:flex">
             <ThemeToggle />
             <Link
               href={siteConfig.cta.secondary.href}
@@ -153,12 +153,14 @@ export function Header() {
                         href={link.href}
                         onClick={() => setOpen(false)}
                         className={cn(
-                          "flex items-center justify-between rounded-2xl px-4 py-3 text-sm font-medium text-foreground transition-colors hover:bg-secondary/80",
+                          "flex min-w-0 items-center justify-between gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-foreground transition-colors hover:bg-secondary/80",
                           active && "bg-secondary text-secondary-foreground"
                         )}
                       >
-                        <span>{link.label}</span>
-                        <MoveRight className="size-4 text-muted-foreground" />
+                        <span className="text-resilient min-w-0 flex-1 text-left leading-snug">
+                          {link.label}
+                        </span>
+                        <MoveRight className="size-4 shrink-0 text-muted-foreground" />
                       </Link>
                     );
                   })}
@@ -188,7 +190,7 @@ export function Header() {
                       onClick={() => setOpen(false)}
                       className={cn(
                         buttonVariants({ variant: "outline", size: "lg" }),
-                        "w-full"
+                        "w-full break-words"
                       )}
                     >
                       Email {siteConfig.email}

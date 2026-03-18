@@ -99,7 +99,7 @@ export default function TermsPage() {
                 Questions can be directed to{" "}
                 <Link
                   href="mailto:info@asymmetric.al"
-                  className="font-medium text-foreground underline underline-offset-4"
+                  className="link-resilient inline-block max-w-full font-medium text-foreground underline underline-offset-4"
                 >
                   info@asymmetric.al
                 </Link>

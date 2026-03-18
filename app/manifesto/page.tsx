@@ -138,7 +138,7 @@ export default function ManifestoPage() {
               <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/70">
                 Theological bedrock
               </p>
-              <h2 className="mt-4 max-w-[14ch] font-heading text-[clamp(2rem,4vw,3.1rem)] font-semibold leading-[1.02] tracking-[-0.06em]">
+              <h2 className="mt-4 max-w-[18ch] font-heading text-[clamp(2rem,4vw,3.1rem)] font-semibold leading-[1.02] tracking-[-0.06em]">
                 Doctrine is not wallpaper.
               </h2>
               <p className="mt-5 max-w-[58ch] text-base leading-7 text-muted-foreground">

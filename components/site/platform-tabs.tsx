@@ -19,7 +19,7 @@ export function PlatformTabs({ items }: { items: PlatformTabItem[] }) {
     >
       <TabsList
         aria-label="Mission Control modules"
-        className="grid h-auto gap-2 rounded-[1.9rem] border-none bg-transparent p-0 shadow-none"
+        className="grid h-auto min-w-0 gap-2 rounded-[1.9rem] border-none bg-transparent p-0 shadow-none"
       >
         {items.map((item) => (
           <TabsTrigger
@@ -27,14 +27,14 @@ export function PlatformTabs({ items }: { items: PlatformTabItem[] }) {
             value={item.id}
             className="surface-card h-auto min-h-[9rem] justify-start rounded-[1.6rem] px-4 py-4 text-left leading-6 data-active:bg-secondary/88"
           >
-            <div>
-              <p className="font-mono text-[0.68rem] uppercase tracking-[0.24em] text-primary/70">
+            <div className="min-w-0">
+              <p className="text-resilient font-mono text-[0.66rem] leading-[1.35] uppercase tracking-[0.16em] text-primary/70 sm:text-[0.68rem] sm:tracking-[0.2em]">
                 {item.tag}
               </p>
               <p className="mt-2 font-heading text-lg font-semibold tracking-[-0.03em]">
                 {item.title}
               </p>
-              <p className="mt-2 max-w-[32ch] text-sm text-muted-foreground">
+              <p className="text-resilient mt-2 max-w-none text-sm text-muted-foreground">
                 {item.summary}
               </p>
             </div>
@@ -46,7 +46,7 @@ export function PlatformTabs({ items }: { items: PlatformTabItem[] }) {
         <TabsContent key={item.id} value={item.id}>
           <Card className="surface-panel rounded-[1.95rem]">
             <CardHeader>
-              <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/70">
+              <p className="text-resilient font-mono text-[0.68rem] leading-[1.35] uppercase tracking-[0.16em] text-primary/70 sm:tracking-[0.2em]">
                 {item.tag}
               </p>
               <CardTitle className="font-heading text-2xl font-semibold tracking-[-0.05em]">

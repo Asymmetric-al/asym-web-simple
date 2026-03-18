@@ -59,7 +59,7 @@ export default function ContactPage() {
               <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary-foreground/70">
                 Direct line
               </p>
-              <CardTitle className="font-heading text-3xl font-semibold tracking-[-0.05em]">
+              <CardTitle className="link-resilient max-w-full font-heading text-3xl font-semibold tracking-[-0.05em]">
                 info@asymmetric.al
               </CardTitle>
             </CardHeader>
@@ -115,7 +115,7 @@ export default function ContactPage() {
                   Direct email always works:{" "}
                   <Link
                     href="mailto:info@asymmetric.al"
-                    className="font-medium text-foreground underline underline-offset-4"
+                    className="link-resilient inline-block max-w-full font-medium text-foreground underline underline-offset-4"
                   >
                     info@asymmetric.al
                   </Link>
