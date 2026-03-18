@@ -215,9 +215,9 @@ export default function HomePage() {
         </Reveal>
       </PageHero>
 
-      <Section className="pt-0" containerClassName="space-y-10">
+      <Section className="pt-0" containerClassName="flex flex-col gap-10">
         <Reveal>
-          <div className="rounded-[2rem] border border-foreground/10 bg-card/82 p-5 shadow-[0_28px_75px_-54px_rgba(22,33,43,0.8)] backdrop-blur-sm sm:p-6">
+          <div className="surface-panel rounded-[2rem] p-5 sm:p-6">
             <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/75">
               Signals from the build
             </p>
@@ -239,7 +239,7 @@ export default function HomePage() {
       <Section tone="sky">
         <div className="grid gap-6 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-start">
           <Reveal>
-            <div className="rounded-[2.2rem] border border-foreground/10 bg-card/86 p-7 shadow-[0_26px_75px_-56px_rgba(22,33,43,0.8)] backdrop-blur-sm sm:p-9">
+            <div className="surface-panel rounded-[2.2rem] p-7 sm:p-9">
               <SectionHeader
                 eyebrow="Why the name?"
                 title="Simple faithfulness can still create outsized outcomes."
@@ -263,7 +263,7 @@ export default function HomePage() {
             <StaggerReveal>
               {foundations.map((item) => (
                 <StaggerItem key={item.title}>
-                  <Card className="rounded-[1.8rem] border border-foreground/10 bg-card/85 shadow-[0_22px_60px_-50px_rgba(22,33,43,0.75)]">
+                  <Card className="surface-card rounded-[1.8rem]">
                     <CardHeader className="gap-4">
                       <div className="flex size-11 items-center justify-center rounded-2xl bg-secondary text-primary shadow-sm">
                         <item.icon className="size-5" />
@@ -293,7 +293,7 @@ export default function HomePage() {
           <StaggerReveal>
             {capabilities.map((item) => (
               <StaggerItem key={item.title}>
-                <Card className="h-full rounded-[1.8rem] border border-foreground/10 bg-card/82 shadow-[0_22px_60px_-50px_rgba(22,33,43,0.75)]">
+                <Card className="surface-card h-full rounded-[1.8rem]">
                   <CardHeader>
                     <div className="flex size-11 items-center justify-center rounded-2xl bg-accent text-accent-foreground shadow-sm">
                       <item.icon className="size-5" />
@@ -315,7 +315,7 @@ export default function HomePage() {
       <Section tone="accent">
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
           <Reveal>
-            <div className="relative overflow-hidden rounded-[2.2rem] border border-foreground/10 bg-primary px-7 py-8 text-primary-foreground shadow-[0_32px_80px_-54px_rgba(22,33,43,0.78)] sm:px-9 sm:py-10">
+            <div className="page-shell-glow relative overflow-hidden rounded-[2.2rem] border border-foreground/10 bg-primary px-7 py-8 text-primary-foreground shadow-[0_32px_80px_-54px_rgba(22,33,43,0.78)] sm:px-9 sm:py-10">
               <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(221,242,255,0.18),transparent_35%)]" />
               <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary-foreground/70">
                 Hiring builders
@@ -334,17 +334,17 @@ export default function HomePage() {
                   href="/join"
                   className={cn(
                     buttonVariants({ size: "lg", variant: "secondary" }),
-                    "rounded-full px-5"
+                    "px-5"
                   )}
                 >
                   Join the Team
-                  <ArrowRight className="size-4" />
+                  <ArrowRight data-icon="inline-end" />
                 </Link>
                 <Link
                   href="/give"
                   className={cn(
                     buttonVariants({ size: "lg", variant: "outline" }),
-                    "rounded-full border-white/20 bg-white/6 px-5 text-primary-foreground hover:bg-white/10"
+                    "border-white/20 bg-white/6 px-5 text-primary-foreground hover:bg-white/10"
                   )}
                 >
                   Support the Build
@@ -357,7 +357,7 @@ export default function HomePage() {
             <StaggerReveal>
               {buildTracks.map((item) => (
                 <StaggerItem key={item.title}>
-                  <Card className="rounded-[1.8rem] border border-foreground/10 bg-card/84 shadow-[0_22px_60px_-50px_rgba(22,33,43,0.75)]">
+                  <Card className="surface-card rounded-[1.8rem]">
                     <CardHeader>
                       <CardTitle className="font-heading text-xl font-semibold tracking-[-0.04em]">
                         {item.title}

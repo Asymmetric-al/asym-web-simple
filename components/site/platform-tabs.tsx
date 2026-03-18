@@ -19,13 +19,13 @@ export function PlatformTabs({ items }: { items: PlatformTabItem[] }) {
     >
       <TabsList
         aria-label="Mission Control modules"
-        className="grid h-auto gap-2 rounded-[1.75rem] bg-transparent p-0"
+        className="grid h-auto gap-2 rounded-[1.9rem] border-none bg-transparent p-0 shadow-none"
       >
         {items.map((item) => (
           <TabsTrigger
             key={item.id}
             value={item.id}
-            className="h-auto justify-start rounded-[1.5rem] border border-foreground/10 bg-card/75 px-4 py-4 text-left leading-6 data-active:bg-secondary data-active:shadow-sm"
+            className="surface-card h-auto min-h-[9rem] justify-start rounded-[1.6rem] px-4 py-4 text-left leading-6 data-active:bg-secondary/88"
           >
             <div>
               <p className="font-mono text-[0.68rem] uppercase tracking-[0.24em] text-primary/70">
@@ -44,7 +44,7 @@ export function PlatformTabs({ items }: { items: PlatformTabItem[] }) {
 
       {items.map((item) => (
         <TabsContent key={item.id} value={item.id}>
-          <Card className="rounded-[1.85rem] border border-foreground/10 bg-card/88 shadow-[0_24px_60px_-44px_rgba(22,33,43,0.85)]">
+          <Card className="surface-panel rounded-[1.95rem]">
             <CardHeader>
               <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/70">
                 {item.tag}
@@ -53,7 +53,7 @@ export function PlatformTabs({ items }: { items: PlatformTabItem[] }) {
                 {item.title}
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="flex flex-col gap-4">
               <p className="text-base leading-7 text-muted-foreground">
                 {item.summary}
               </p>
@@ -61,7 +61,7 @@ export function PlatformTabs({ items }: { items: PlatformTabItem[] }) {
                 {item.details.map((detail) => (
                   <li
                     key={detail}
-                    className="rounded-[1.35rem] border border-foreground/10 bg-background/70 px-4 py-3 text-sm leading-6 text-foreground/85"
+                    className="rounded-[1.35rem] border border-foreground/10 bg-background/72 px-4 py-3 text-sm leading-6 text-foreground/85"
                   >
                     {detail}
                   </li>

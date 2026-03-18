@@ -77,7 +77,7 @@ export default function JoinPage() {
         meta={["Pilot agencies", "Senior builders", "Open source", "Mission-first", "High agency"]}
       >
         <Reveal>
-          <Card className="rounded-[2rem] border border-foreground/10 bg-primary text-primary-foreground shadow-[0_32px_82px_-56px_rgba(22,33,43,0.82)]">
+          <Card className="page-shell-glow rounded-[2rem] border border-foreground/10 bg-primary text-primary-foreground shadow-[0_32px_82px_-56px_rgba(22,33,43,0.82)]">
             <CardHeader>
               <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary-foreground/70">
                 What joining looks like
@@ -86,7 +86,7 @@ export default function JoinPage() {
                 Real conversations. Clear fit. Shared build.
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3 text-sm leading-7 text-primary-foreground/82">
+            <CardContent className="flex flex-col gap-3 text-sm leading-7 text-primary-foreground/82">
               <p>Pilot agencies shape workflows and migration priorities.</p>
               <p>Builders contribute product, design, and engineering depth.</p>
               <p>Supporters fund the rails that many ministries can share.</p>
@@ -105,7 +105,7 @@ export default function JoinPage() {
           <StaggerReveal>
             {lanes.map((item) => (
               <StaggerItem key={item.title}>
-                <Card className="h-full rounded-[1.85rem] border border-foreground/10 bg-card/84 shadow-[0_22px_60px_-50px_rgba(22,33,43,0.75)]">
+                <Card className="surface-card h-full rounded-[1.85rem]">
                   <CardHeader>
                     <CardTitle className="font-heading text-2xl font-semibold tracking-[-0.05em]">
                       {item.title}
@@ -131,7 +131,7 @@ export default function JoinPage() {
           <StaggerReveal>
             {principles.map((item) => (
               <StaggerItem key={item.title}>
-                <Card className="h-full rounded-[1.8rem] border border-foreground/10 bg-card/84 shadow-[0_22px_60px_-50px_rgba(22,33,43,0.75)]">
+                <Card className="surface-card h-full rounded-[1.8rem]">
                   <CardHeader>
                     <div className="flex size-11 items-center justify-center rounded-2xl bg-secondary text-primary shadow-sm">
                       <item.icon className="size-5" />
@@ -153,7 +153,7 @@ export default function JoinPage() {
       <Section>
         <div className="grid gap-6 lg:grid-cols-[minmax(0,0.86fr)_minmax(0,1.14fr)] lg:items-start">
           <Reveal>
-            <Card className="rounded-[2rem] border border-foreground/10 bg-card/84 shadow-[0_24px_70px_-54px_rgba(22,33,43,0.76)]">
+            <Card className="surface-panel rounded-[2rem]">
               <CardHeader>
                 <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/70">
                   Process
@@ -162,7 +162,7 @@ export default function JoinPage() {
                   Start with context, not a funnel.
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4 text-base leading-7 text-muted-foreground">
+              <CardContent className="flex flex-col gap-4 text-base leading-7 text-muted-foreground">
                 <p>
                   Tell us who you are, what kind of work you want to do, and
                   where you see the current system breaking down. We start with

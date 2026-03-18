@@ -209,7 +209,7 @@ export default function PlatformPage() {
             screenshotAlt="Platform view showing mission control"
             badge="Unified solution"
             caption={
-              <div className="space-y-1">
+              <div className="flex flex-col gap-1">
                 <p className="font-medium text-foreground">
                   Replace the clutter with Mission Control.
                 </p>
@@ -230,7 +230,7 @@ export default function PlatformPage() {
           description="That compromise drains resources and slows deployment. The problem is not just one old system or one missing integration. It is the entire operating model."
         />
         <Reveal className="mt-8">
-          <div className="rounded-[1.8rem] border border-foreground/10 bg-card/86 p-6 shadow-[0_24px_70px_-54px_rgba(22,33,43,0.75)]">
+          <div className="surface-panel rounded-[1.8rem] p-6">
             <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/70">
               System warning
             </p>
@@ -247,7 +247,7 @@ export default function PlatformPage() {
           <StaggerReveal>
             {falseChoiceCards.map((item) => (
               <StaggerItem key={item.title}>
-                <Card className="h-full rounded-[1.85rem] border border-foreground/10 bg-card/86 shadow-[0_22px_60px_-48px_rgba(22,33,43,0.75)]">
+                <Card className="surface-card h-full rounded-[1.85rem]">
                   <CardHeader>
                     <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/70">
                       {item.subhead}
@@ -256,7 +256,7 @@ export default function PlatformPage() {
                       {item.title}
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-5">
+                  <CardContent className="flex flex-col gap-5">
                     <p className="text-base leading-7 text-muted-foreground">
                       {item.description}
                     </p>
@@ -288,7 +288,7 @@ export default function PlatformPage() {
           <StaggerReveal>
             {reasons.map((item) => (
               <StaggerItem key={item.title}>
-                <Card className="h-full rounded-[1.8rem] border border-foreground/10 bg-card/84 shadow-[0_22px_60px_-50px_rgba(22,33,43,0.75)]">
+                <Card className="surface-card h-full rounded-[1.8rem]">
                   <CardHeader>
                     <CardTitle className="font-heading text-xl font-semibold tracking-[-0.04em]">
                       {item.title}
@@ -317,7 +317,7 @@ export default function PlatformPage() {
           <StaggerReveal>
             {supportingModules.map((item) => (
               <StaggerItem key={item.title}>
-                <Card className="h-full rounded-[1.8rem] border border-foreground/10 bg-card/84 shadow-[0_20px_55px_-46px_rgba(22,33,43,0.75)]">
+                <Card className="surface-card h-full rounded-[1.8rem]">
                   <CardHeader>
                     <div className="flex size-11 items-center justify-center rounded-2xl bg-secondary text-primary shadow-sm">
                       <item.icon className="size-5" />
@@ -337,7 +337,7 @@ export default function PlatformPage() {
       </Section>
 
       <Section>
-        <div className="grid gap-6 rounded-[2.2rem] border border-foreground/10 bg-card/84 p-7 shadow-[0_28px_80px_-54px_rgba(22,33,43,0.78)] sm:p-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-end">
+        <div className="surface-panel grid gap-6 rounded-[2.2rem] p-7 sm:p-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-end">
           <Reveal>
             <div>
               <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/70">
@@ -369,11 +369,11 @@ export default function PlatformPage() {
                 href="/contact"
                 className={cn(
                   buttonVariants({ size: "lg" }),
-                  "mt-2 rounded-full px-5"
+                  "mt-2 px-5"
                 )}
               >
                 Start the Conversation
-                <ArrowRight className="size-4" />
+                <ArrowRight data-icon="inline-end" />
               </Link>
             </div>
           </Reveal>

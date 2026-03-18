@@ -41,7 +41,7 @@ export default function StatementOfFaithPage() {
         meta={["Historic Christianity", "Global Fellowship Inc.", "Doctrinal foundation"]}
       >
         <Reveal>
-          <Card className="rounded-[2rem] border border-foreground/10 bg-primary text-primary-foreground shadow-[0_32px_82px_-56px_rgba(22,33,43,0.82)]">
+          <Card className="page-shell-glow rounded-[2rem] border border-foreground/10 bg-primary text-primary-foreground shadow-[0_32px_82px_-56px_rgba(22,33,43,0.82)]">
             <CardHeader>
               <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary-foreground/70">
                 Covering
@@ -63,7 +63,7 @@ export default function StatementOfFaithPage() {
           <StaggerReveal>
             {statements.map((statement, index) => (
               <StaggerItem key={statement}>
-                <Card className="rounded-[1.9rem] border border-foreground/10 bg-card/84 shadow-[0_24px_70px_-54px_rgba(22,33,43,0.76)]">
+                <Card className="surface-panel rounded-[1.9rem]">
                   <CardHeader>
                     <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/70">
                       {String(index + 1).padStart(2, "0")}

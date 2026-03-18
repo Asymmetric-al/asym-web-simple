@@ -80,7 +80,7 @@ export default function ManifestoPage() {
         meta={["Stewardship", "Hyper-focus", "Open hands", "Support-raised staff", "Kingdom logic"]}
       >
         <Reveal>
-          <Card className="rounded-[2rem] border border-foreground/10 bg-primary text-primary-foreground shadow-[0_32px_84px_-58px_rgba(22,33,43,0.82)]">
+          <Card className="page-shell-glow rounded-[2rem] border border-foreground/10 bg-primary text-primary-foreground shadow-[0_32px_84px_-58px_rgba(22,33,43,0.82)]">
             <CardHeader>
               <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary-foreground/70">
                 Guiding phrase
@@ -110,7 +110,7 @@ export default function ManifestoPage() {
           <StaggerReveal>
             {manifestoSections.map((section) => (
               <StaggerItem key={section.label}>
-                <Card className="rounded-[2rem] border border-foreground/10 bg-card/84 shadow-[0_24px_70px_-54px_rgba(22,33,43,0.76)]">
+                <Card className="surface-panel rounded-[2rem]">
                   <CardHeader>
                     <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/70">
                       {section.label}
@@ -134,7 +134,7 @@ export default function ManifestoPage() {
       <Section tone="accent">
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)] lg:items-end">
           <Reveal>
-            <div className="rounded-[2rem] border border-foreground/10 bg-card/82 p-7 shadow-[0_24px_70px_-54px_rgba(22,33,43,0.76)] sm:p-8">
+            <div className="surface-panel rounded-[2rem] p-7 sm:p-8">
               <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/70">
                 Theological bedrock
               </p>
@@ -153,11 +153,11 @@ export default function ManifestoPage() {
               href="/statement-of-faith"
               className={cn(
                 buttonVariants({ size: "lg" }),
-                "w-full rounded-full px-5 sm:w-auto"
+                "w-full px-5 sm:w-auto"
               )}
             >
               Read our Statement of Faith
-              <ArrowRight className="size-4" />
+              <ArrowRight data-icon="inline-end" />
             </Link>
           </Reveal>
         </div>
