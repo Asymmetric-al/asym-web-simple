@@ -110,7 +110,7 @@ export default function GivePage() {
         meta={["Global Fellowship Inc.", "Tax-deductible", "Open source", "Zero profit margin"]}
       >
         <Reveal>
-          <Card className="rounded-[2rem] border border-foreground/10 bg-primary text-primary-foreground shadow-[0_32px_82px_-56px_rgba(22,33,43,0.82)]">
+          <Card className="page-shell-glow rounded-[2rem] border border-foreground/10 bg-primary text-primary-foreground shadow-[0_32px_82px_-56px_rgba(22,33,43,0.82)]">
             <CardHeader>
               <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary-foreground/70">
                 Trust signals
@@ -119,7 +119,7 @@ export default function GivePage() {
                 Capital with a nonprofit posture.
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3 text-sm leading-7 text-primary-foreground/82">
+            <CardContent className="flex flex-col gap-3 text-sm leading-7 text-primary-foreground/82">
               <p>Operating as a project under Global Fellowship Inc.</p>
               <p>EIN 68-0214543</p>
               <p>Open source code and shared rails.</p>
@@ -139,7 +139,7 @@ export default function GivePage() {
           <StaggerReveal>
             {pillars.map((item) => (
               <StaggerItem key={item.title}>
-                <Card className="h-full rounded-[1.8rem] border border-foreground/10 bg-card/84 shadow-[0_22px_60px_-50px_rgba(22,33,43,0.75)]">
+                <Card className="surface-card h-full rounded-[1.8rem]">
                   <CardHeader>
                     <div className="flex size-11 items-center justify-center rounded-2xl bg-secondary text-primary shadow-sm">
                       <item.icon className="size-5" />
@@ -161,14 +161,14 @@ export default function GivePage() {
       <Section tone="sky">
         <div className="grid gap-6 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
           <Reveal>
-            <div className="rounded-[2rem] border border-foreground/10 bg-card/84 p-7 shadow-[0_24px_70px_-54px_rgba(22,33,43,0.76)] sm:p-8">
+            <div className="surface-panel rounded-[2rem] p-7 sm:p-8">
               <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/70">
                 Giving paths
               </p>
               <h2 className="mt-4 font-heading text-[clamp(2rem,4vw,3rem)] font-semibold leading-[1.02] tracking-[-0.06em]">
                 Clean, trust-heavy giving options.
               </h2>
-              <div className="mt-6 space-y-4 text-base leading-7 text-muted-foreground">
+              <div className="mt-6 flex flex-col gap-4 text-base leading-7 text-muted-foreground">
                 <p>
                   Checks payable to “Global Fellowship Inc” with
                   “Asymmetric.al” in the memo can be mailed to PO Box 1, Meadow
@@ -183,11 +183,11 @@ export default function GivePage() {
                   href="mailto:info@asymmetric.al?subject=Asymmetric.al%20giving%20inquiry"
                   className={cn(
                     buttonVariants({ size: "lg" }),
-                    "mt-2 rounded-full px-5"
+                    "mt-2 px-5"
                   )}
                 >
                   Start a Giving Conversation
-                  <ArrowRight className="size-4" />
+                  <ArrowRight data-icon="inline-end" />
                 </Link>
               </div>
             </div>
@@ -195,7 +195,7 @@ export default function GivePage() {
           <Reveal delay={0.08}>
             <Accordion
               defaultValue={["deductible"]}
-              className="rounded-[2rem] border-foreground/10 bg-card/84 shadow-[0_24px_70px_-54px_rgba(22,33,43,0.76)]"
+              className="surface-panel rounded-[2rem] border-foreground/10"
             >
               {faqItems.map((item) => (
                 <AccordionItem key={item.value} value={item.value}>

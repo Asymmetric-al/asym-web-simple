@@ -76,20 +76,20 @@ export default function TermsPage() {
 
       <Section>
         <Reveal>
-          <Card className="rounded-[2rem] border border-foreground/10 bg-card/84 shadow-[0_24px_70px_-54px_rgba(22,33,43,0.76)]">
+          <Card className="surface-panel rounded-[2rem]">
             <CardHeader>
               <CardTitle className="font-heading text-3xl font-semibold tracking-[-0.05em]">
                 Effective as of March 17, 2026
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-8">
+            <CardContent className="flex flex-col gap-8">
               {sections.map((section) => (
-                <div key={section.title} className="space-y-3">
+                <div key={section.title} className="flex flex-col gap-3">
                   <h2 className="font-heading text-2xl font-semibold tracking-[-0.04em] text-foreground">
                     {section.title}
                   </h2>
                   {section.body.map((paragraph) => (
-                    <p key={paragraph} className="max-w-[74ch] text-base leading-7 text-muted-foreground">
+                    <p key={paragraph} className="content-measure text-base leading-7 text-muted-foreground">
                       {paragraph}
                     </p>
                   ))}
@@ -99,7 +99,7 @@ export default function TermsPage() {
                 Questions can be directed to{" "}
                 <Link
                   href="mailto:info@asymmetric.al"
-                  className="font-medium text-foreground underline underline-offset-4"
+                  className="link-resilient inline-block max-w-full font-medium text-foreground underline underline-offset-4"
                 >
                   info@asymmetric.al
                 </Link>

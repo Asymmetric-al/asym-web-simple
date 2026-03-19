@@ -1,10 +1,17 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { siteConfig } from "@/lib/config";
-import { ArrowRight, Mail } from "lucide-react";
+import { ArrowRight, Check, Copy, Mail } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -87,9 +94,21 @@ function buildMailtoLink(kind: InquiryKind, form: FormData): string {
 export function InquiryForm({ kind }: { kind: InquiryKind }) {
   const preset = presets[kind];
   const [hasOpenedEmail, setHasOpenedEmail] = useState(false);
+  const [draftMailto, setDraftMailto] = useState("");
+  const [copied, setCopied] = useState(false);
+
+  async function copyEmailAddress() {
+    try {
+      await navigator.clipboard.writeText(siteConfig.email);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
+  }
 
   return (
-    <div className="rounded-[2rem] border border-foreground/10 bg-card/88 p-6 shadow-[0_28px_80px_-58px_rgba(22,33,43,0.85)] backdrop-blur-sm sm:p-8">
+    <div className="surface-panel rounded-[2rem] p-6 sm:p-8">
       <div className="max-w-2xl">
         <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/70">
           {kind === "waitlist" ? "Join the waitlist" : "Contact"}
@@ -103,63 +122,114 @@ export function InquiryForm({ kind }: { kind: InquiryKind }) {
       </div>
 
       <form
-        className="mt-8 grid gap-4 sm:grid-cols-2"
+        className="mt-8"
         onSubmit={(event) => {
           event.preventDefault();
           const form = new FormData(event.currentTarget);
           const mailto = buildMailtoLink(kind, form);
+          setDraftMailto(mailto);
           setHasOpenedEmail(true);
-          window.location.href = mailto;
+          window.open(mailto, "_self");
         }}
       >
-        {preset.fields.map((field) => (
-          <label key={field.name} className="flex flex-col gap-2 text-sm font-medium text-foreground">
-            <span>{field.label}</span>
-            <Input
-              type={field.type}
-              name={field.name}
-              required={field.required}
-              placeholder={field.label}
-              className="h-11 rounded-[1.15rem] border-foreground/10 bg-background/80"
-            />
-          </label>
-        ))}
-
-        <label className="flex flex-col gap-2 text-sm font-medium text-foreground sm:col-span-2">
-          <span>{preset.textarea.label}</span>
-          <Textarea
-            name={preset.textarea.name}
-            rows={6}
-            placeholder={preset.textarea.placeholder}
-            className="rounded-[1.35rem] border-foreground/10 bg-background/80"
-          />
-        </label>
-
-        <div className="flex flex-col gap-3 sm:col-span-2 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-start gap-3 rounded-[1.25rem] bg-secondary/45 px-4 py-3 text-sm leading-6 text-muted-foreground">
-            <Mail className="mt-1 size-4 shrink-0 text-primary/70" />
-            <div>
-              <p>{preset.helper}</p>
-              {hasOpenedEmail ? (
-                <p className="mt-1">
-                  If nothing opened, send your note directly to{" "}
-                  <Link
-                    href={`mailto:${siteConfig.email}`}
-                    className="font-medium text-foreground underline underline-offset-4"
-                  >
-                    {siteConfig.email}
-                  </Link>
-                  .
-                </p>
-              ) : null}
-            </div>
+        <FieldGroup>
+          <div className="grid gap-4 sm:grid-cols-2">
+            {preset.fields.map((field) => (
+              <Field key={field.name}>
+                <FieldContent>
+                  <FieldLabel htmlFor={`${kind}-${field.name}`}>
+                    {field.label}
+                    {field.required ? (
+                      <span className="text-muted-foreground">*</span>
+                    ) : null}
+                  </FieldLabel>
+                  <Input
+                    id={`${kind}-${field.name}`}
+                    type={field.type}
+                    name={field.name}
+                    required={field.required}
+                    placeholder={field.label}
+                    autoComplete={
+                      field.name === "name"
+                        ? "name"
+                        : field.name === "email"
+                          ? "email"
+                          : field.name === "organization"
+                            ? "organization"
+                            : undefined
+                    }
+                  />
+                </FieldContent>
+              </Field>
+            ))}
           </div>
 
-          <Button type="submit" size="lg" className="rounded-full px-5">
-            {kind === "waitlist" ? "Open waitlist email" : "Open contact email"}
-            <ArrowRight className="size-4" />
-          </Button>
-        </div>
+          <Field>
+            <FieldContent>
+              <FieldLabel htmlFor={`${kind}-${preset.textarea.name}`}>
+                {preset.textarea.label}
+              </FieldLabel>
+              <Textarea
+                id={`${kind}-${preset.textarea.name}`}
+                name={preset.textarea.name}
+                rows={6}
+                placeholder={preset.textarea.placeholder}
+              />
+              <FieldDescription>{preset.helper}</FieldDescription>
+            </FieldContent>
+          </Field>
+
+          <div className="grid gap-3 rounded-[1.5rem] border border-foreground/10 bg-secondary/42 p-4 text-sm leading-6 text-muted-foreground lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+            <div className="flex items-start gap-3">
+              <Mail className="mt-1 size-4 shrink-0 text-primary/70" />
+              <div className="min-w-0 flex flex-col gap-1">
+                <p>
+                  We will open your email client with a drafted message so the
+                  details stay in your control.
+                </p>
+                {hasOpenedEmail ? (
+                  <p>
+                    If nothing opened, use the actions at right or write
+                    directly to{" "}
+                    <Link
+                      href={`mailto:${siteConfig.email}`}
+                      className="link-resilient font-medium text-foreground underline underline-offset-4"
+                    >
+                      {siteConfig.email}
+                    </Link>
+                    .
+                  </p>
+                ) : null}
+              </div>
+            </div>
+
+            <div className="min-w-0 flex flex-col gap-2 lg:items-end">
+              <Button type="submit" size="lg" className="px-5">
+                {kind === "waitlist"
+                  ? "Draft waitlist email"
+                  : "Draft contact email"}
+                <ArrowRight data-icon="inline-end" />
+              </Button>
+              <div className="flex w-full flex-col gap-2 md:w-auto md:flex-row">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={copyEmailAddress}
+                >
+                  {copied ? <Check data-icon="inline-start" /> : <Copy data-icon="inline-start" />}
+                  {copied ? "Copied" : "Copy email"}
+                </Button>
+                <Link
+                  href={draftMailto || `mailto:${siteConfig.email}`}
+                  className="link-resilient inline-flex min-h-9 w-full items-center justify-center rounded-full px-3 py-2 text-center text-sm font-medium text-muted-foreground hover:bg-background/72 hover:text-foreground md:w-auto md:max-w-[18rem]"
+                >
+                  Open direct email
+                </Link>
+              </div>
+            </div>
+          </div>
+        </FieldGroup>
       </form>
     </div>
   );

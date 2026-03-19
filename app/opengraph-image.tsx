@@ -64,16 +64,82 @@ export default function OpengraphImage() {
                   display: "inline-flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  width: "62px",
+                  minWidth: "62px",
                   height: "62px",
                   borderRadius: "999px",
                   background: "linear-gradient(135deg, #DDF2FF, #E7EEE1)",
-                  fontSize: "20px",
-                  fontWeight: 700,
                   color: "#1E3A4F",
+                  padding: "0 14px",
                 }}
               >
-                1→∞
+                <span
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontSize: "21px",
+                      fontWeight: 700,
+                      lineHeight: 1,
+                    }}
+                  >
+                    1
+                  </span>
+                  <span
+                    style={{
+                      position: "relative",
+                      display: "inline-flex",
+                      width: "20px",
+                      height: "10px",
+                    }}
+                  >
+                    <span
+                      style={{
+                        position: "absolute",
+                        top: "4px",
+                        left: 0,
+                        right: "4px",
+                        height: "2px",
+                        background: "#1E3A4F",
+                      }}
+                    />
+                    <span
+                      style={{
+                        position: "absolute",
+                        right: 0,
+                        top: "1px",
+                        width: "6px",
+                        height: "6px",
+                        borderTop: "2px solid #1E3A4F",
+                        borderRight: "2px solid #1E3A4F",
+                        transform: "rotate(45deg)",
+                      }}
+                    />
+                  </span>
+                  <span
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      marginLeft: "-2px",
+                    }}
+                  >
+                    {[0, -5].map((offset) => (
+                      <span
+                        key={offset}
+                        style={{
+                          width: "10px",
+                          height: "8px",
+                          marginLeft: `${offset}px`,
+                          border: "2px solid #1E3A4F",
+                          borderRadius: "999px",
+                        }}
+                      />
+                    ))}
+                  </span>
+                </span>
               </span>
               Mission Operating System
             </div>

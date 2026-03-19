@@ -29,7 +29,11 @@ const monoFont = JetBrains_Mono({
 export const metadata: Metadata = baseMetadata;
 
 export const viewport: Viewport = {
-  themeColor: "#faf6ef",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f6f2ea" },
+    { media: "(prefers-color-scheme: dark)", color: "#0d141a" },
+  ],
+  colorScheme: "light dark",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -41,7 +45,7 @@ export default function RootLayout({
   children: ReactNode;
 }>): ReactNode {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${headingFont.variable} ${bodyFont.variable} ${monoFont.variable} min-h-screen bg-background font-sans text-foreground antialiased`}
       >
@@ -49,11 +53,11 @@ export default function RootLayout({
           <div className="relative flex min-h-screen flex-col overflow-x-clip">
             <div
               aria-hidden="true"
-              className="pointer-events-none fixed inset-x-0 top-0 -z-10 h-[32rem] bg-[radial-gradient(circle_at_top,rgba(221,242,255,0.92),transparent_55%)]"
+              className="pointer-events-none fixed inset-x-0 top-0 -z-10 h-[32rem] bg-[radial-gradient(circle_at_top,var(--glow-primary),transparent_55%)]"
             />
             <div
               aria-hidden="true"
-              className="pointer-events-none fixed inset-y-0 left-[-12rem] -z-10 w-[24rem] bg-[radial-gradient(circle,rgba(231,238,225,0.6),transparent_70%)] blur-2xl"
+              className="pointer-events-none fixed inset-y-0 left-[-12rem] -z-10 w-[24rem] bg-[radial-gradient(circle,var(--glow-accent),transparent_70%)] blur-2xl"
             />
 
             <SkipToContent />
