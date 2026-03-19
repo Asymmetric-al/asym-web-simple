@@ -229,7 +229,7 @@ export default function PlatformPage() {
           title="Agencies have been forced to choose between two failing options."
           description="That compromise drains resources and slows deployment. The problem is not just one old system or one missing integration. It is the entire operating model."
         />
-        <Reveal className="mt-8">
+        <Reveal className="mt-6">
           <div className="rounded-[1.8rem] border border-foreground/10 bg-card/86 p-6 shadow-[0_24px_70px_-54px_rgba(22,33,43,0.75)]">
             <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/70">
               System warning
@@ -243,7 +243,7 @@ export default function PlatformPage() {
             </p>
           </div>
         </Reveal>
-        <div className="mt-8 grid gap-4 lg:grid-cols-2">
+        <div className="mt-6 grid gap-4 lg:grid-cols-2">
           <StaggerReveal>
             {falseChoiceCards.map((item) => (
               <StaggerItem key={item.title}>
@@ -284,7 +284,7 @@ export default function PlatformPage() {
           title="We are not trying to build software for everyone."
           description="We are hyper-focused on the operational realities of sending agencies, because generic tools miss too much of the story."
         />
-        <div className="mt-10 grid gap-4 lg:grid-cols-3">
+        <div className="mt-8 grid gap-4 lg:grid-cols-3">
           <StaggerReveal>
             {reasons.map((item) => (
               <StaggerItem key={item.title}>
@@ -310,10 +310,10 @@ export default function PlatformPage() {
           title="Mission Control"
           description="Replace the clutter with cohesion. Every operational function under one login, sharing one database, without an integration tax."
         />
-        <div className="mt-10">
+        <div className="mt-8">
           <PlatformTabs items={tabs} />
         </div>
-        <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           <StaggerReveal>
             {supportingModules.map((item) => (
               <StaggerItem key={item.title}>

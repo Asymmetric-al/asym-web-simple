@@ -66,6 +66,7 @@ export default function TermsPage() {
     <main id="main-content">
       <PageHero
         eyebrow="Terms of Service"
+        density="legal"
         title={
           <h1 className="text-balance font-heading text-[clamp(2.8rem,5vw,4.5rem)] font-semibold leading-[0.95] tracking-[-0.07em] text-foreground">
             Terms for using this website.
@@ -74,7 +75,7 @@ export default function TermsPage() {
         description="These terms apply to the public website and its communication flows. Product, pilot, donor, and implementation relationships may require additional written agreements."
       />
 
-      <Section>
+      <Section density="legal">
         <Reveal>
           <Card className="rounded-[2rem] border border-foreground/10 bg-card/84 shadow-[0_24px_70px_-54px_rgba(22,33,43,0.76)]">
             <CardHeader>
@@ -82,7 +83,7 @@ export default function TermsPage() {
                 Effective as of March 17, 2026
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-8">
+            <CardContent className="space-y-[var(--space-stack-legal-lg)]">
               {sections.map((section) => (
                 <div key={section.title} className="space-y-3">
                   <h2 className="font-heading text-2xl font-semibold tracking-[-0.04em] text-foreground">

@@ -11,6 +11,8 @@ type Action = {
   variant?: "default" | "outline" | "secondary" | "ghost";
 };
 
+type Density = "marketing" | "legal";
+
 export function Container({
   className,
   ...props
@@ -30,6 +32,7 @@ export function PageHero({
   actions,
   meta,
   children,
+  density = "marketing",
   className,
 }: {
   eyebrow: string;
@@ -38,11 +41,17 @@ export function PageHero({
   actions?: Action[];
   meta?: string[];
   children?: ReactNode;
+  density?: Density;
   className?: string;
 }) {
+  const densityClassName =
+    density === "legal"
+      ? "pb-[var(--space-hero-legal-bottom)] pt-[var(--space-hero-legal-top)]"
+      : "pb-[var(--space-hero-marketing-bottom)] pt-[var(--space-hero-marketing-top)]";
+
   return (
-    <section className={cn("relative overflow-hidden pb-12 pt-32 md:pb-16 md:pt-40", className)}>
-      <Container className="grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-center">
+    <section className={cn("relative overflow-hidden", densityClassName, className)}>
+      <Container className="grid gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-center">
         <div className="max-w-3xl">
           <Badge
             variant="outline"
@@ -95,10 +104,12 @@ export function Section({
   className,
   containerClassName,
   tone = "default",
+  density = "marketing",
   ...props
 }: ComponentProps<"section"> & {
   containerClassName?: string;
   tone?: "default" | "sky" | "accent" | "ink";
+  density?: Density;
 }) {
   const toneClassName =
     tone === "sky"
@@ -109,8 +120,13 @@ export function Section({
           ? "bg-primary text-primary-foreground"
           : "";
 
+  const densityClassName =
+    density === "legal"
+      ? "py-[var(--space-section-legal)]"
+      : "py-[var(--space-section-marketing)]";
+
   return (
-    <section className={cn("py-18 sm:py-22 lg:py-28", toneClassName, className)} {...props}>
+    <section className={cn(densityClassName, toneClassName, className)} {...props}>
       <Container className={containerClassName}>{children}</Container>
     </section>
   );

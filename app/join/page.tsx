@@ -101,7 +101,7 @@ export default function JoinPage() {
           title="There is more than one way to join."
           description="Different people enter the build from different angles. The common thread is a commitment to serious work, visible trust, and service to the global church."
         />
-        <div className="mt-10 grid gap-4 lg:grid-cols-3">
+        <div className="mt-8 grid gap-4 lg:grid-cols-3">
           <StaggerReveal>
             {lanes.map((item) => (
               <StaggerItem key={item.title}>
@@ -127,7 +127,7 @@ export default function JoinPage() {
           title="People and organizations who can carry weight well."
           description="The work is collaborative, but it is not casual. We care about clarity, humility, craftsmanship, and follow-through."
         />
-        <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           <StaggerReveal>
             {principles.map((item) => (
               <StaggerItem key={item.title}>
