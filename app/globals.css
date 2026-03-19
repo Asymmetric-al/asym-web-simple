@@ -34,7 +34,11 @@
   --shadow-strong: 0 38px 100px -62px rgb(22 33 43 / 0.42);
   --page-gradient:
     radial-gradient(circle at top, rgb(221 242 255 / 0.68), transparent 42%),
-    radial-gradient(circle at 82% 12%, rgb(231 238 225 / 0.62), transparent 24%),
+    radial-gradient(
+      circle at 82% 12%,
+      rgb(231 238 225 / 0.62),
+      transparent 24%
+    ),
     linear-gradient(180deg, #fcfbf7 0%, #f6f2ea 45%, #f0ebe0 100%);
   --grid-stroke: rgb(255 255 255 / 0.48);
   --glow-primary: rgb(118 171 207 / 0.18);
@@ -302,14 +306,30 @@ textarea:focus-visible {
   box-shadow: var(--shadow-card);
 }
 
+.surface-interactive {
+  transition:
+    transform 240ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 220ms ease,
+    box-shadow 240ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 220ms ease;
+  transform-origin: center bottom;
+}
+
+.surface-interactive:is(:hover, :focus-within) {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--ring) 24%, var(--border));
+  box-shadow:
+    0 30px 88px -54px rgb(22 33 43 / 0.36),
+    0 16px 40px -30px color-mix(in srgb, var(--glow-primary) 45%, transparent);
+}
+
 .surface-hero {
   border: 1px solid color-mix(in srgb, var(--border) 88%, transparent);
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--surface-1) 92%, transparent),
-      color-mix(in srgb, var(--surface-2) 78%, transparent)
-    );
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--surface-1) 92%, transparent),
+    color-mix(in srgb, var(--surface-2) 78%, transparent)
+  );
   box-shadow: var(--shadow-strong);
   backdrop-filter: blur(22px);
 }
@@ -320,6 +340,26 @@ textarea:focus-visible {
 
 .section-wash-accent {
   background: var(--wash-accent);
+}
+
+.section-divider-accent {
+  position: relative;
+}
+
+.section-divider-accent::after {
+  content: "";
+  position: absolute;
+  inset-inline: 6%;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--glow-primary) 70%, transparent) 26%,
+    color-mix(in srgb, var(--glow-accent) 82%, transparent) 74%,
+    transparent 100%
+  );
+  opacity: 0.78;
 }
 
 .content-measure {
@@ -345,15 +385,49 @@ textarea:focus-visible {
   inset: -1px;
   z-index: -1;
   border-radius: inherit;
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--glow-primary) 85%, transparent),
-      transparent 45%,
-      color-mix(in srgb, var(--glow-accent) 82%, transparent)
-    );
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--glow-primary) 85%, transparent),
+    transparent 45%,
+    color-mix(in srgb, var(--glow-accent) 82%, transparent)
+  );
   opacity: 0.65;
   filter: blur(16px);
+}
+
+.document-shell {
+  position: relative;
+  overflow: hidden;
+}
+
+.document-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 11rem;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at top left, var(--glow-primary), transparent 56%),
+    radial-gradient(circle at top right, var(--glow-accent), transparent 54%);
+  opacity: 0.58;
+}
+
+.document-section {
+  position: relative;
+  display: grid;
+  gap: 0.9rem;
+  padding-block: clamp(1.15rem, 2vw, 1.6rem);
+}
+
+.document-section + .document-section {
+  border-top: 1px solid color-mix(in srgb, var(--border) 92%, transparent);
+}
+
+.document-section[data-tone="accent"] {
+  border-radius: 1.75rem;
+  border-top-color: transparent;
+  background: color-mix(in srgb, var(--secondary) 42%, transparent);
+  padding-inline: clamp(1rem, 2vw, 1.4rem);
 }
 
 .text-resilient {
@@ -365,4 +439,10 @@ textarea:focus-visible {
 .link-resilient {
   overflow-wrap: anywhere;
   word-break: break-all;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .surface-interactive:is(:hover, :focus-within) {
+    transform: none;
+  }
 }

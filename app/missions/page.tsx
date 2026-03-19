@@ -1,12 +1,7 @@
 import { MediaStage } from "@/components/site/media-stage";
 import { PageHero, Section, SectionHeader } from "@/components/site/page";
 import { Reveal, StaggerItem, StaggerReveal } from "@/components/site/reveal";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { createMetadata } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
@@ -93,16 +88,26 @@ export default function MissionsPage() {
       <PageHero
         eyebrow="The Underserved Sector"
         title={
-          <h1 className="text-balance font-heading text-[clamp(3rem,6vw,5.15rem)] font-semibold leading-[0.94] tracking-[-0.07em] text-foreground">
+          <h1 className="font-heading text-foreground text-[clamp(3rem,6vw,5.15rem)] leading-[0.94] font-semibold tracking-[-0.07em] text-balance">
             The frontier deserves world-class tools.
           </h1>
         }
         description="Global missions is the most important work on earth. The tools behind it should not feel like an afterthought. We exist to serve one thing: getting the gospel to people who have never heard the name of Jesus."
         actions={[
           { label: "Start the Conversation", href: "/contact" },
-          { label: "Learn how the platform works", href: "/platform", variant: "outline" },
+          {
+            label: "Learn how the platform works",
+            href: "/platform",
+            variant: "outline",
+          },
         ]}
-        meta={["By missionaries, for missionaries", "Hopeful", "Trusted", "Modern", "Open hands"]}
+        meta={[
+          "By missionaries, for missionaries",
+          "Hopeful",
+          "Trusted",
+          "Modern",
+          "Open hands",
+        ]}
       >
         <Reveal trigger="mount">
           <MediaStage
@@ -112,7 +117,7 @@ export default function MissionsPage() {
             priority
             caption={
               <div className="flex flex-col gap-1">
-                <p className="font-medium text-foreground">
+                <p className="text-foreground font-medium">
                   Close the gap between Silicon Valley innovation and the Great
                   Commission.
                 </p>
@@ -126,22 +131,22 @@ export default function MissionsPage() {
         </Reveal>
       </PageHero>
 
-      <Section tone="sky">
+      <Section tone="sky" className="section-divider-accent">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
           <Reveal>
-            <div className="surface-panel rounded-[2rem] p-7 sm:p-8">
-              <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/70">
+            <div className="page-shell-glow surface-panel surface-interactive rounded-[2rem] p-7 sm:p-8">
+              <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
                 01 // The Focus
               </p>
-              <h2 className="mt-4 font-heading text-[clamp(2rem,4vw,3rem)] font-semibold leading-[1.02] tracking-[-0.06em]">
+              <h2 className="font-heading mt-4 text-[clamp(2rem,4vw,3rem)] leading-[1.02] font-semibold tracking-[-0.06em]">
                 Why we give all our focus to missions agencies.
               </h2>
-              <p className="mt-5 text-base leading-7 text-muted-foreground">
+              <p className="text-muted-foreground mt-5 text-base leading-7">
                 Most software stacks are built for sales teams, memberships, or
                 generic fundraising. Missions does not fit that mold. You are
                 sending people, not shipping products.
               </p>
-              <p className="mt-4 text-base leading-7 text-muted-foreground">
+              <p className="text-muted-foreground mt-4 text-base leading-7">
                 The current leadership of Asymmetric.al felt that gap in
                 missions ourselves. We watched faithful staff spend hours
                 wrestling tools that were never built for their calling. That
@@ -153,14 +158,14 @@ export default function MissionsPage() {
 
           <div className="grid gap-4">
             <Reveal delay={0.06}>
-              <div className="page-shell-glow rounded-[2rem] border border-foreground/10 bg-primary px-7 py-8 text-primary-foreground shadow-[0_28px_70px_-50px_rgba(22,33,43,0.8)]">
-                <p className="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-primary-foreground/70">
+              <div className="page-shell-glow surface-interactive border-foreground/10 bg-primary text-primary-foreground rounded-[2rem] border px-7 py-8 shadow-[0_28px_70px_-50px_rgba(22,33,43,0.8)]">
+                <p className="text-primary-foreground/70 font-mono text-[0.72rem] tracking-[0.3em] uppercase">
                   02 // The Reality
                 </p>
-                <h3 className="mt-4 font-heading text-3xl font-semibold tracking-[-0.05em]">
+                <h3 className="font-heading mt-4 text-3xl font-semibold tracking-[-0.05em]">
                   Sending is different.
                 </h3>
-                <p className="mt-4 max-w-[50ch] text-base leading-7 text-primary-foreground/82">
+                <p className="text-primary-foreground/82 mt-4 max-w-[50ch] text-base leading-7">
                   Because missions is unique, we believe it deserves software
                   born from that world, not adapted to it after the fact.
                 </p>
@@ -170,13 +175,13 @@ export default function MissionsPage() {
               <StaggerReveal>
                 {differencePoints.map((item) => (
                   <StaggerItem key={item.title}>
-                    <Card className="surface-card rounded-[1.7rem]">
+                    <Card className="surface-card surface-interactive rounded-[1.7rem]">
                       <CardHeader>
                         <CardTitle className="font-heading text-xl font-semibold tracking-[-0.04em]">
                           {item.title}
                         </CardTitle>
                       </CardHeader>
-                      <CardContent className="text-sm leading-7 text-muted-foreground">
+                      <CardContent className="text-muted-foreground text-sm leading-7">
                         {item.description}
                       </CardContent>
                     </Card>
@@ -188,26 +193,29 @@ export default function MissionsPage() {
         </div>
       </Section>
 
-      <Section>
+      <Section className="section-divider-accent">
         <SectionHeader
           eyebrow="03 // Our Calling"
           title="We use technology to serve the servants."
           description="Our role is not to be the hero of the story. Our role is to lift the load from the shoulders of the people carrying it."
         />
-        <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-6">
           <StaggerReveal>
-            {audiences.map((item) => (
-              <StaggerItem key={item.title}>
-                <Card className="surface-card h-full rounded-[1.8rem]">
+            {audiences.map((item, index) => (
+              <StaggerItem
+                key={item.title}
+                className={index < 2 ? "xl:col-span-3" : "xl:col-span-2"}
+              >
+                <Card className="surface-card surface-interactive h-full rounded-[1.8rem]">
                   <CardHeader>
-                    <div className="flex size-11 items-center justify-center rounded-2xl bg-secondary text-primary shadow-sm">
+                    <div className="bg-secondary text-primary flex size-11 items-center justify-center rounded-2xl shadow-sm">
                       <item.icon className="size-5" />
                     </div>
                     <CardTitle className="font-heading text-xl font-semibold tracking-[-0.04em]">
                       {item.title}
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="text-sm leading-7 text-muted-foreground">
+                  <CardContent className="text-muted-foreground text-sm leading-7">
                     {item.description}
                   </CardContent>
                 </Card>
@@ -223,17 +231,24 @@ export default function MissionsPage() {
           title="What missions-only focus means in practice."
           description="Because we only build for missions nonprofits, we can shape the whole platform around your world instead of forcing you into someone else's pattern."
         />
-        <div className="mt-8 grid gap-4 lg:grid-cols-5">
+        <div className="mt-8 grid gap-4 lg:grid-cols-6">
           <StaggerReveal>
             {impactPoints.map((point, index) => (
-              <StaggerItem key={point}>
-                <Card className="surface-card h-full rounded-[1.75rem]">
+              <StaggerItem
+                key={point}
+                className={
+                  index === impactPoints.length - 1
+                    ? "lg:col-span-2"
+                    : undefined
+                }
+              >
+                <Card className="surface-card surface-interactive h-full rounded-[1.75rem]">
                   <CardHeader>
-                    <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/70">
+                    <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
                       0{index + 1}
                     </p>
                   </CardHeader>
-                  <CardContent className="pt-0 text-sm leading-7 text-foreground/86">
+                  <CardContent className="text-foreground/86 pt-0 text-sm leading-7">
                     {point}
                   </CardContent>
                 </Card>
@@ -246,20 +261,20 @@ export default function MissionsPage() {
       <Section>
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
           <Reveal>
-            <div className="surface-panel rounded-[2rem] p-7 sm:p-8">
-              <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/70">
+            <div className="page-shell-glow surface-panel surface-interactive rounded-[2rem] p-7 sm:p-8">
+              <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
                 05 // Origin Story
               </p>
-              <h2 className="mt-4 font-heading text-[clamp(2rem,4vw,3rem)] font-semibold leading-[1.02] tracking-[-0.06em]">
+              <h2 className="font-heading mt-4 text-[clamp(2rem,4vw,3rem)] leading-[1.02] font-semibold tracking-[-0.06em]">
                 We felt this pain from the inside.
               </h2>
-              <p className="mt-5 text-base leading-7 text-muted-foreground">
+              <p className="text-muted-foreground mt-5 text-base leading-7">
                 Asymmetric.al started inside a mission organization that wanted
                 to send technologists as missionaries. We expected to build
                 field-facing tools. Instead, we kept running into the same
                 problem: mission staff were drowning in admin.
               </p>
-              <p className="mt-4 text-base leading-7 text-muted-foreground">
+              <p className="text-muted-foreground mt-4 text-base leading-7">
                 Wrestling old donor systems, manual statements, scattered
                 websites, and brittle integrations. The field was waiting, but
                 the back office was underwater. That holy frustration pushed us
@@ -272,39 +287,39 @@ export default function MissionsPage() {
 
           <div className="grid gap-4">
             <Reveal delay={0.08}>
-              <Card className="page-shell-glow rounded-[1.8rem] border border-foreground/10 bg-primary text-primary-foreground shadow-[0_28px_70px_-50px_rgba(22,33,43,0.82)]">
+              <Card className="page-shell-glow surface-interactive border-foreground/10 bg-primary text-primary-foreground rounded-[1.8rem] border shadow-[0_28px_70px_-50px_rgba(22,33,43,0.82)]">
                 <CardHeader>
-                  <p className="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-primary-foreground/70">
+                  <p className="text-primary-foreground/70 font-mono text-[0.72rem] tracking-[0.3em] uppercase">
                     06 // Open Source
                   </p>
                   <CardTitle className="font-heading text-2xl font-semibold tracking-[-0.05em]">
                     Not just a product. A shared build for the global church.
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4 text-sm leading-7 text-primary-foreground/82">
+                <CardContent className="text-primary-foreground/82 space-y-4 text-sm leading-7">
                   <p>
                     Open by design, clear data ownership, and a stack that can
                     be audited and extended by a wider missions tech community.
                   </p>
                   <p>
-                    Agencies can share patterns, flows, and templates instead
-                    of solving the same problems alone.
+                    Agencies can share patterns, flows, and templates instead of
+                    solving the same problems alone.
                   </p>
                 </CardContent>
               </Card>
             </Reveal>
 
             <Reveal delay={0.14}>
-              <Card className="surface-card rounded-[1.8rem]">
+              <Card className="surface-card surface-interactive rounded-[1.8rem]">
                 <CardHeader>
-                  <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/70">
+                  <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
                     07 // Invitation
                   </p>
                   <CardTitle className="font-heading text-2xl font-semibold tracking-[-0.05em]">
                     Let’s talk about your agency.
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4 text-sm leading-7 text-muted-foreground">
+                <CardContent className="text-muted-foreground space-y-4 text-sm leading-7">
                   <p>
                     We would rather build this with a small group of sending
                     agencies who care about the field than ship a finished
@@ -317,10 +332,7 @@ export default function MissionsPage() {
                   </p>
                   <Link
                     href="/join"
-                    className={cn(
-                      buttonVariants({ size: "lg" }),
-                      "mt-2 px-5"
-                    )}
+                    className={cn(buttonVariants({ size: "lg" }), "mt-2 px-5")}
                   >
                     Join the Build Community
                     <ArrowRight data-icon="inline-end" />

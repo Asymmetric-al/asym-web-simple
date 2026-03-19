@@ -24,6 +24,23 @@ function getReducedMotionServerSnapshot(): boolean {
 
 const ReducedMotionContext = createContext<boolean>(false);
 
+export const siteEase = [0.23, 1, 0.32, 1] as const;
+export const siteEaseGentle = [0.22, 1, 0.36, 1] as const;
+export const siteRevealDuration = 0.64;
+export const siteRevealDistance = 24;
+export const siteRevealScale = 0.985;
+export const siteViewportMargin = "-8% 0px -10% 0px";
+export const siteFloatTransition = {
+  duration: 9,
+  repeat: Number.POSITIVE_INFINITY,
+  repeatType: "mirror" as const,
+  ease: "easeInOut" as const,
+};
+export const siteHoverTransition = {
+  duration: 0.24,
+  ease: siteEaseGentle,
+};
+
 export function useReducedMotion(): boolean {
   return useContext(ReducedMotionContext);
 }
@@ -82,8 +99,8 @@ export const reducedMotionVariants: Variants = {
 };
 
 export const defaultTransition = {
-  duration: 0.3,
-  ease: [0.4, 0, 0.2, 1] as const,
+  duration: 0.34,
+  ease: siteEaseGentle,
 };
 
 export const springTransition = {
@@ -91,6 +108,74 @@ export const springTransition = {
   stiffness: 300,
   damping: 30,
 };
+
+export function getReducedMotionTransition(
+  delay = 0
+): NonNullable<MotionProps["transition"]> {
+  return {
+    duration: 0.01,
+    delay,
+  };
+}
+
+export function getRevealStates(
+  prefersReducedMotion: boolean,
+  {
+    y = siteRevealDistance,
+    scale = siteRevealScale,
+    blur = 0,
+  }: {
+    y?: number;
+    scale?: number;
+    blur?: number;
+  } = {}
+): {
+  hidden: Record<string, number | string>;
+  visible: Record<string, number | string>;
+} {
+  if (prefersReducedMotion) {
+    return {
+      hidden: { opacity: 0 },
+      visible: { opacity: 1 },
+    };
+  }
+
+  return {
+    hidden: {
+      opacity: 0,
+      y,
+      scale,
+      ...(blur > 0 ? { filter: `blur(${blur}px)` } : {}),
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      ...(blur > 0 ? { filter: "blur(0px)" } : {}),
+    },
+  };
+}
+
+export function getRevealTransition(
+  prefersReducedMotion: boolean,
+  {
+    delay = 0,
+    duration = siteRevealDuration,
+  }: {
+    delay?: number;
+    duration?: number;
+  } = {}
+): NonNullable<MotionProps["transition"]> {
+  if (prefersReducedMotion) {
+    return getReducedMotionTransition(delay);
+  }
+
+  return {
+    duration,
+    delay,
+    ease: siteEaseGentle,
+  };
+}
 
 type MotionDivProps = {
   variants?: Variants;
@@ -106,7 +191,9 @@ export function MotionDiv({
 }: MotionDivProps): ReactNode {
   const prefersReducedMotion = useReducedMotion();
 
-  const activeVariants = prefersReducedMotion ? reducedMotionVariants : variants;
+  const activeVariants = prefersReducedMotion
+    ? reducedMotionVariants
+    : variants;
   const activeTransition = prefersReducedMotion
     ? { duration: 0.01 }
     : defaultTransition;
@@ -133,7 +220,9 @@ export function MotionSection({
 }: MotionDivProps): ReactNode {
   const prefersReducedMotion = useReducedMotion();
 
-  const activeVariants = prefersReducedMotion ? reducedMotionVariants : variants;
+  const activeVariants = prefersReducedMotion
+    ? reducedMotionVariants
+    : variants;
   const activeTransition = prefersReducedMotion
     ? { duration: 0.01 }
     : defaultTransition;

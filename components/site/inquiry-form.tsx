@@ -108,15 +108,15 @@ export function InquiryForm({ kind }: { kind: InquiryKind }) {
   }
 
   return (
-    <div className="surface-panel rounded-[2rem] p-6 sm:p-8">
+    <div className="page-shell-glow surface-panel surface-interactive rounded-[2rem] p-6 sm:p-8">
       <div className="max-w-2xl">
-        <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/70">
+        <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
           {kind === "waitlist" ? "Join the waitlist" : "Contact"}
         </p>
-        <h2 className="mt-4 font-heading text-3xl font-semibold tracking-[-0.05em] text-foreground sm:text-4xl">
+        <h2 className="font-heading text-foreground mt-4 text-3xl font-semibold tracking-[-0.05em] sm:text-4xl">
           {preset.title}
         </h2>
-        <p className="mt-3 text-base leading-7 text-muted-foreground">
+        <p className="text-muted-foreground mt-3 text-base leading-7">
           {preset.description}
         </p>
       </div>
@@ -179,10 +179,10 @@ export function InquiryForm({ kind }: { kind: InquiryKind }) {
             </FieldContent>
           </Field>
 
-          <div className="grid gap-3 rounded-[1.5rem] border border-foreground/10 bg-secondary/42 p-4 text-sm leading-6 text-muted-foreground lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+          <div className="border-foreground/10 bg-secondary/42 text-muted-foreground grid gap-4 rounded-[1.75rem] border p-4 text-sm leading-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
             <div className="flex items-start gap-3">
-              <Mail className="mt-1 size-4 shrink-0 text-primary/70" />
-              <div className="min-w-0 flex flex-col gap-1">
+              <Mail className="text-primary/70 mt-1 size-4 shrink-0" />
+              <div className="flex min-w-0 flex-col gap-1">
                 <p>
                   We will open your email client with a drafted message so the
                   details stay in your control.
@@ -193,7 +193,7 @@ export function InquiryForm({ kind }: { kind: InquiryKind }) {
                     directly to{" "}
                     <Link
                       href={`mailto:${siteConfig.email}`}
-                      className="link-resilient font-medium text-foreground underline underline-offset-4"
+                      className="link-resilient text-foreground font-medium underline underline-offset-4"
                     >
                       {siteConfig.email}
                     </Link>
@@ -203,7 +203,7 @@ export function InquiryForm({ kind }: { kind: InquiryKind }) {
               </div>
             </div>
 
-            <div className="min-w-0 flex flex-col gap-2 lg:items-end">
+            <div className="flex min-w-0 flex-col gap-2 lg:items-end">
               <Button type="submit" size="lg" className="px-5">
                 {kind === "waitlist"
                   ? "Draft waitlist email"
@@ -217,12 +217,16 @@ export function InquiryForm({ kind }: { kind: InquiryKind }) {
                   size="sm"
                   onClick={copyEmailAddress}
                 >
-                  {copied ? <Check data-icon="inline-start" /> : <Copy data-icon="inline-start" />}
+                  {copied ? (
+                    <Check data-icon="inline-start" />
+                  ) : (
+                    <Copy data-icon="inline-start" />
+                  )}
                   {copied ? "Copied" : "Copy email"}
                 </Button>
                 <Link
                   href={draftMailto || `mailto:${siteConfig.email}`}
-                  className="link-resilient inline-flex min-h-9 w-full items-center justify-center rounded-full px-3 py-2 text-center text-sm font-medium text-muted-foreground hover:bg-background/72 hover:text-foreground md:w-auto md:max-w-[18rem]"
+                  className="link-resilient text-muted-foreground hover:border-foreground/10 hover:bg-background/72 hover:text-foreground inline-flex min-h-9 w-full items-center justify-center rounded-full border border-transparent px-3 py-2 text-center text-sm font-medium transition-[color,background-color,border-color] duration-200 md:w-auto md:max-w-[18rem]"
                 >
                   Open direct email
                 </Link>

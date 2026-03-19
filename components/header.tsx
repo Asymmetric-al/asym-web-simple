@@ -17,7 +17,7 @@ import { Menu, MoveRight } from "lucide-react";
 import { motion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const pageLinks = [...navigationLinks, ...supportLinks];
 
@@ -25,15 +25,15 @@ function BrandLockup({ compact = false }: { compact?: boolean }) {
   return (
     <Link
       href="/"
-      className="group flex min-w-0 items-center gap-3 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      className="group focus-visible:ring-ring focus-visible:ring-offset-background flex min-w-0 items-center gap-3 rounded-full focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
       aria-label={`${siteConfig.name} home`}
     >
-      <div className="flex size-11 items-center justify-center rounded-full border border-foreground/10 bg-[linear-gradient(135deg,rgba(221,242,255,0.95),rgba(231,238,225,0.95))] shadow-[0_14px_30px_-20px_rgba(30,58,79,0.45)] transition-transform duration-300 group-hover:-translate-y-0.5">
-        <span className="font-mono text-[0.72rem] font-semibold tracking-[0.24em] text-primary">
+      <div className="border-foreground/10 flex size-11 items-center justify-center rounded-full border bg-[linear-gradient(135deg,rgba(221,242,255,0.95),rgba(231,238,225,0.95))] shadow-[0_14px_30px_-20px_rgba(30,58,79,0.45)] transition-transform duration-300 group-hover:-translate-y-0.5">
+        <span className="text-primary font-mono text-[0.72rem] font-semibold tracking-[0.24em]">
           1→∞
         </span>
       </div>
-      <span className="text-resilient min-w-0 font-heading text-[1.02rem] font-semibold leading-none tracking-[-0.04em] text-foreground">
+      <span className="text-resilient font-heading text-foreground min-w-0 text-[1.02rem] leading-none font-semibold tracking-[-0.04em]">
         {compact ? siteConfig.shortName : siteConfig.name}
       </span>
     </Link>
@@ -43,6 +43,18 @@ function BrandLockup({ compact = false }: { compact?: boolean }) {
 export function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 18);
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <header className="pointer-events-none fixed inset-x-0 top-0 z-50 pt-4 sm:pt-5">
@@ -52,13 +64,19 @@ export function Header() {
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         className="mx-auto max-w-[80rem] px-4 sm:px-6 lg:px-8"
       >
-        <div className="pointer-events-auto page-shell-glow surface-panel flex items-center justify-between gap-3 rounded-[1.85rem] px-4 py-3 sm:px-5 lg:gap-5">
+        <div
+          className={cn(
+            "page-shell-glow surface-hero surface-interactive pointer-events-auto flex items-center justify-between gap-3 rounded-[1.85rem] px-4 py-3 transition-[padding,background-color,box-shadow] duration-300 sm:px-5 lg:gap-5",
+            scrolled &&
+              "bg-background/82 supports-[backdrop-filter]:bg-background/68 shadow-[0_30px_78px_-50px_rgba(22,33,43,0.48)]"
+          )}
+        >
           <div className="flex min-w-0 shrink-0 items-center gap-4">
             <BrandLockup />
           </div>
 
           <nav
-            className="hidden min-w-0 flex-1 items-center justify-center gap-1 rounded-full bg-background/50 p-1 xl:flex"
+            className="bg-background/52 hidden min-w-0 flex-1 items-center justify-center gap-1 rounded-full p-1.5 backdrop-blur-sm xl:flex"
             aria-label="Primary navigation"
           >
             {navigationLinks.map((link) => {
@@ -71,10 +89,10 @@ export function Header() {
                   href={link.href}
                   aria-current={active ? "page" : undefined}
                   className={cn(
-                    "min-w-0 max-w-[9.5rem] rounded-full px-3.5 py-2 text-center text-sm leading-[1.2] font-medium text-pretty text-muted-foreground",
+                    "text-muted-foreground max-w-[9.5rem] min-w-0 rounded-full px-3.5 py-2 text-center text-sm leading-[1.2] font-medium text-pretty transition-[background-color,color,transform] duration-200",
                     active
                       ? "bg-secondary text-secondary-foreground shadow-sm"
-                      : "hover:bg-background/88 hover:text-foreground"
+                      : "hover:bg-background/88 hover:text-foreground hover:-translate-y-0.5"
                   )}
                 >
                   {link.label}
@@ -89,14 +107,17 @@ export function Header() {
               href={siteConfig.cta.secondary.href}
               className={cn(
                 buttonVariants({ variant: "ghost", size: "sm" }),
-                "hidden max-w-[10rem] px-3.5 text-muted-foreground 2xl:inline-flex"
+                "text-muted-foreground hidden max-w-[10rem] px-3.5 2xl:inline-flex"
               )}
             >
               {siteConfig.cta.secondary.label}
             </Link>
             <Link
               href={siteConfig.cta.primary.href}
-              className={cn(buttonVariants({ size: "lg" }), "max-w-[11rem] px-5")}
+              className={cn(
+                buttonVariants({ size: "lg" }),
+                "max-w-[11rem] px-5"
+              )}
             >
               {siteConfig.cta.primary.label}
               <MoveRight data-icon="inline-end" />
@@ -117,9 +138,9 @@ export function Header() {
             </div>
             <SheetContent
               side="right"
-              className="w-[88vw] max-w-sm border-l border-foreground/10 bg-card/96 px-0"
+              className="border-foreground/10 bg-card/96 w-[88vw] max-w-sm border-l px-0"
             >
-              <SheetHeader className="border-b border-foreground/8 pb-5">
+              <SheetHeader className="border-foreground/8 border-b pb-5">
                 <div className="flex items-start justify-between gap-4">
                   <BrandLockup compact />
                   <ThemeToggle />
@@ -134,7 +155,10 @@ export function Header() {
               </SheetHeader>
 
               <div className="flex flex-1 flex-col px-6 py-6">
-                <nav className="flex flex-col gap-1" aria-label="Mobile navigation">
+                <nav
+                  className="flex flex-col gap-1"
+                  aria-label="Mobile navigation"
+                >
                   {pageLinks.map((link) => {
                     const active =
                       pathname === link.href ||
@@ -146,27 +170,27 @@ export function Header() {
                         href={link.href}
                         onClick={() => setOpen(false)}
                         className={cn(
-                          "flex min-w-0 items-center justify-between gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-foreground transition-colors hover:bg-secondary/80",
+                          "text-foreground hover:bg-secondary/80 flex min-w-0 items-center justify-between gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition-colors",
                           active && "bg-secondary text-secondary-foreground"
                         )}
                       >
                         <span className="text-resilient min-w-0 flex-1 text-left leading-snug">
                           {link.label}
                         </span>
-                        <MoveRight className="size-4 shrink-0 text-muted-foreground" />
+                        <MoveRight className="text-muted-foreground size-4 shrink-0" />
                       </Link>
                     );
                   })}
                 </nav>
 
-                <div className="surface-card mt-8 rounded-[1.75rem] p-5">
-                  <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/70">
+                <div className="surface-card surface-interactive mt-8 rounded-[1.75rem] p-5">
+                  <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
                     Primary next step
                   </p>
-                  <p className="mt-3 font-heading text-xl font-semibold tracking-[-0.04em] text-foreground">
+                  <p className="font-heading text-foreground mt-3 text-xl font-semibold tracking-[-0.04em]">
                     Join the build community.
                   </p>
-                  <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                  <p className="text-muted-foreground mt-2 text-sm leading-6">
                     Pilot agencies, senior builders, and missions-minded donors
                     can all start with the same conversation.
                   </p>

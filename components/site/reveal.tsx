@@ -1,6 +1,12 @@
 "use client";
 
-import { useReducedMotion } from "@/lib/motion";
+import {
+  getRevealStates,
+  getRevealTransition,
+  siteRevealScale,
+  siteViewportMargin,
+  useReducedMotion,
+} from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
 import {
@@ -11,47 +17,48 @@ import {
   type ReactNode,
 } from "react";
 
-const easing = [0.22, 1, 0.36, 1] as const;
-
 type RevealProps = {
   children: ReactNode;
-  className?: string;
+  className?: string | undefined;
   delay?: number;
   y?: number;
   scale?: number;
+  blur?: number;
   trigger?: "inView" | "mount";
   amount?: number;
+  margin?: string | undefined;
 };
 
 export function Reveal({
   children,
   className,
   delay = 0,
-  y = 20,
-  scale = 0.985,
+  y = 24,
+  scale = siteRevealScale,
+  blur = 0,
   trigger = "inView",
-  amount = 0.06,
+  amount = 0.16,
+  margin = siteViewportMargin,
 }: RevealProps) {
   const prefersReducedMotion = useReducedMotion();
-  const initial = prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y, scale };
-  const animate = prefersReducedMotion
-    ? { opacity: 1 }
-    : { opacity: 1, y: 0, scale: 1 };
-  const transition = prefersReducedMotion
-    ? { duration: 0.01 }
-    : { duration: 0.6, delay, ease: easing };
+  const { hidden, visible } = getRevealStates(prefersReducedMotion, {
+    y,
+    scale,
+    blur,
+  });
+  const transition = getRevealTransition(prefersReducedMotion, { delay });
 
   return (
     <motion.div
       className={className}
-      initial={initial}
+      initial={hidden}
       {...(trigger === "mount"
         ? {
-            animate,
+            animate: visible,
           }
         : {
-            whileInView: animate,
-            viewport: { once: true, amount },
+            whileInView: visible,
+            viewport: { once: true, amount, margin },
           })}
       transition={transition}
     >
@@ -64,13 +71,15 @@ export function StaggerReveal({
   children,
   className,
   delay = 0,
-  amount = 0.18,
+  amount = 0.16,
+  margin = siteViewportMargin,
   step = 0.06,
 }: {
   children: ReactNode;
-  className?: string;
+  className?: string | undefined;
   delay?: number;
   amount?: number;
+  margin?: string | undefined;
   step?: number;
 }) {
   const items = Children.map(children, (child, index) => {
@@ -83,24 +92,22 @@ export function StaggerReveal({
       staggerStep: step,
       staggerDelay: delay,
       viewportAmount: amount,
+      viewportMargin: margin,
     });
   });
 
-  return (
-    <div className={cn("contents", className)}>
-      {items}
-    </div>
-  );
+  return <div className={cn("contents", className)}>{items}</div>;
 }
 
 type StaggerItemProps = {
   children: ReactNode;
-  className?: string;
+  className?: string | undefined;
   delay?: number;
   staggerIndex?: number;
   staggerStep?: number;
   staggerDelay?: number;
   viewportAmount?: number;
+  viewportMargin?: string | undefined;
 };
 
 export function StaggerItem({
@@ -110,31 +117,22 @@ export function StaggerItem({
   staggerIndex = 0,
   staggerStep = 0.06,
   staggerDelay = 0,
-  viewportAmount = 0.18,
+  viewportAmount = 0.16,
+  viewportMargin = siteViewportMargin,
 }: StaggerItemProps) {
   const prefersReducedMotion = useReducedMotion();
-  const hidden = prefersReducedMotion
-    ? { opacity: 0 }
-    : { opacity: 0, y: 20, scale: 0.985 };
-  const visible = prefersReducedMotion
-    ? { opacity: 1 }
-    : { opacity: 1, y: 0, scale: 1 };
+  const { hidden, visible } = getRevealStates(prefersReducedMotion);
 
   return (
     <motion.div
       className={className}
       initial={hidden}
       whileInView={visible}
-      viewport={{ once: true, amount: viewportAmount }}
-      transition={
-        prefersReducedMotion
-          ? { duration: 0.01 }
-          : {
-              duration: 0.54,
-              delay: delay + staggerDelay + staggerIndex * staggerStep,
-              ease: easing,
-            }
-      }
+      viewport={{ once: true, amount: viewportAmount, margin: viewportMargin }}
+      transition={getRevealTransition(prefersReducedMotion, {
+        delay: delay + staggerDelay + staggerIndex * staggerStep,
+        duration: 0.54,
+      })}
     >
       {children}
     </motion.div>

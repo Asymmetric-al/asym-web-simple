@@ -1,6 +1,4 @@
-import { PageHero, Section } from "@/components/site/page";
-import { Reveal } from "@/components/site/reveal";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { DocumentPage, DocumentSection } from "@/components/site/document-page";
 import { createMetadata } from "@/lib/metadata";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -62,53 +60,44 @@ export const metadata: Metadata = createMetadata({
 
 export default function PrivacyPage() {
   return (
-    <main id="main-content">
-      <PageHero
-        eyebrow="Privacy Policy"
-        density="legal"
-        title={
-          <h1 className="text-balance font-heading text-[clamp(2.8rem,5vw,4.5rem)] font-semibold leading-[0.95] tracking-[-0.07em] text-foreground">
-            Privacy and stewardship of information.
-          </h1>
-        }
-        description="We aim to be clear, proportionate, and respectful in how we handle information. This page applies to the public website and communications initiated from it."
-      />
-
-      <Section density="legal">
-        <Reveal trigger="mount">
-          <Card className="surface-panel rounded-[2rem]">
-            <CardHeader>
-              <CardTitle className="font-heading text-3xl font-semibold tracking-[-0.05em]">
-                Effective as of March 17, 2026
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-[var(--space-stack-legal-lg)]">
-              {sections.map((section) => (
-                <div key={section.title} className="flex flex-col gap-3">
-                  <h2 className="font-heading text-2xl font-semibold tracking-[-0.04em] text-foreground">
-                    {section.title}
-                  </h2>
-                  {section.body.map((paragraph) => (
-                    <p key={paragraph} className="content-measure text-base leading-7 text-muted-foreground">
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
-              ))}
-              <p className="text-base leading-7 text-muted-foreground">
-                Questions or requests can be sent to{" "}
-                <Link
-                  href="mailto:info@asymmetric.al"
-                  className="link-resilient inline-block max-w-full font-medium text-foreground underline underline-offset-4"
-                >
-                  info@asymmetric.al
-                </Link>
-                .
-              </p>
-            </CardContent>
-          </Card>
-        </Reveal>
-      </Section>
-    </main>
+    <DocumentPage
+      eyebrow="Privacy Policy"
+      title={
+        <h1 className="font-heading text-foreground text-[clamp(2.8rem,5vw,4.5rem)] leading-[0.95] font-semibold tracking-[-0.07em] text-balance">
+          Privacy and stewardship of information.
+        </h1>
+      }
+      description="We aim to be clear, proportionate, and respectful in how we handle information. This page applies to the public website and communications initiated from it."
+      heading="Effective as of March 17, 2026"
+      heroMeta={[
+        "Website inquiries",
+        "Operational logs",
+        "Stewardship-minded retention",
+      ]}
+      footer={
+        <>
+          Questions or requests can be sent to{" "}
+          <Link
+            href="mailto:info@asymmetric.al"
+            className="link-resilient text-foreground inline-block max-w-full font-medium underline underline-offset-4"
+          >
+            info@asymmetric.al
+          </Link>
+          .
+        </>
+      }
+    >
+      {sections.map((section, index) => (
+        <DocumentSection
+          key={section.title}
+          title={section.title}
+          tone={index === 0 ? "accent" : "default"}
+        >
+          {section.body.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+        </DocumentSection>
+      ))}
+    </DocumentPage>
   );
 }

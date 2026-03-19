@@ -1,13 +1,11 @@
 import { MediaStage } from "@/components/site/media-stage";
 import { PageHero, Section, SectionHeader } from "@/components/site/page";
-import { PlatformTabs, type PlatformTabItem } from "@/components/site/platform-tabs";
-import { Reveal, StaggerItem, StaggerReveal } from "@/components/site/reveal";
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+  PlatformTabs,
+  type PlatformTabItem,
+} from "@/components/site/platform-tabs";
+import { Reveal, StaggerItem, StaggerReveal } from "@/components/site/reveal";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { createMetadata } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
@@ -28,7 +26,11 @@ const falseChoiceCards = [
   {
     title: "The DIY Trap",
     subhead: "The Generic Stack",
-    failures: ["Data silos", "Broken automation links", "High subscription fees"],
+    failures: [
+      "Data silos",
+      "Broken automation links",
+      "High subscription fees",
+    ],
     description:
       "Salesforce, Mailchimp, QuickBooks, spreadsheets, and site builders create a brittle operating model with no shared source of truth.",
   },
@@ -192,7 +194,7 @@ export default function PlatformPage() {
       <PageHero
         eyebrow="Mission Operating System"
         title={
-          <h1 className="text-balance font-heading text-[clamp(3rem,6vw,5.2rem)] font-semibold leading-[0.93] tracking-[-0.07em] text-foreground">
+          <h1 className="font-heading text-foreground text-[clamp(3rem,6vw,5.2rem)] leading-[0.93] font-semibold tracking-[-0.07em] text-balance">
             One Surface. Total Clarity.
           </h1>
         }
@@ -201,7 +203,12 @@ export default function PlatformPage() {
           { label: "System Architecture", href: "/specs", variant: "outline" },
           { label: "Role Views", href: "/missions" },
         ]}
-        meta={["One login", "Shared database", "Open-source foundations", "Continuous deployment"]}
+        meta={[
+          "One login",
+          "Shared database",
+          "Open-source foundations",
+          "Continuous deployment",
+        ]}
       >
         <Reveal trigger="mount">
           <MediaStage
@@ -211,7 +218,7 @@ export default function PlatformPage() {
             priority
             caption={
               <div className="flex flex-col gap-1">
-                <p className="font-medium text-foreground">
+                <p className="text-foreground font-medium">
                   Replace the clutter with Mission Control.
                 </p>
                 <p className="text-muted-foreground">
@@ -224,22 +231,22 @@ export default function PlatformPage() {
         </Reveal>
       </PageHero>
 
-      <Section tone="sky">
+      <Section tone="sky" className="section-divider-accent">
         <SectionHeader
           eyebrow="The False Choice"
           title="Agencies have been forced to choose between two failing options."
           description="That compromise drains resources and slows deployment. The problem is not just one old system or one missing integration. It is the entire operating model."
         />
         <Reveal className="mt-6">
-          <div className="rounded-[1.8rem] border border-foreground/10 bg-card/86 p-6 shadow-[0_24px_70px_-54px_rgba(22,33,43,0.75)]">
-            <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/70">
+          <div className="page-shell-glow surface-panel surface-interactive rounded-[1.8rem] p-6">
+            <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
               System warning
             </p>
-            <p className="mt-3 max-w-[62ch] font-heading text-[clamp(1.35rem,2.4vw,2rem)] font-semibold leading-[1.15] tracking-[-0.04em] text-foreground">
+            <p className="font-heading text-foreground mt-3 max-w-[62ch] text-[clamp(1.35rem,2.4vw,2rem)] leading-[1.15] font-semibold tracking-[-0.04em]">
               “Our ops, mobilization, and finance teams are spending more time
               managing our tools than we are supporting our missionaries.”
             </p>
-            <p className="mt-3 text-sm text-muted-foreground">
+            <p className="text-muted-foreground mt-3 text-sm">
               Common agency feedback
             </p>
           </div>
@@ -248,9 +255,9 @@ export default function PlatformPage() {
           <StaggerReveal>
             {falseChoiceCards.map((item) => (
               <StaggerItem key={item.title}>
-                <Card className="surface-card h-full rounded-[1.85rem]">
+                <Card className="surface-card surface-interactive h-full rounded-[1.85rem]">
                   <CardHeader>
-                    <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/70">
+                    <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
                       {item.subhead}
                     </p>
                     <CardTitle className="font-heading text-2xl font-semibold tracking-[-0.05em]">
@@ -258,14 +265,14 @@ export default function PlatformPage() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="flex flex-col gap-5">
-                    <p className="text-base leading-7 text-muted-foreground">
+                    <p className="text-muted-foreground text-base leading-7">
                       {item.description}
                     </p>
                     <ul className="grid gap-3">
                       {item.failures.map((failure) => (
                         <li
                           key={failure}
-                          className="rounded-[1.2rem] border border-foreground/10 bg-background/70 px-4 py-3 text-sm font-medium text-foreground/86"
+                          className="border-foreground/10 bg-background/70 text-foreground/86 rounded-[1.2rem] border px-4 py-3 text-sm font-medium"
                         >
                           {failure}
                         </li>
@@ -279,7 +286,7 @@ export default function PlatformPage() {
         </div>
       </Section>
 
-      <Section>
+      <Section className="section-divider-accent">
         <SectionHeader
           eyebrow="Why we focus here"
           title="We are not trying to build software for everyone."
@@ -289,13 +296,13 @@ export default function PlatformPage() {
           <StaggerReveal>
             {reasons.map((item) => (
               <StaggerItem key={item.title}>
-                <Card className="surface-card h-full rounded-[1.8rem]">
+                <Card className="surface-card surface-interactive h-full rounded-[1.8rem]">
                   <CardHeader>
                     <CardTitle className="font-heading text-xl font-semibold tracking-[-0.04em]">
                       {item.title}
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="text-sm leading-7 text-muted-foreground">
+                  <CardContent className="text-muted-foreground text-sm leading-7">
                     {item.description}
                   </CardContent>
                 </Card>
@@ -314,20 +321,29 @@ export default function PlatformPage() {
         <div className="mt-8">
           <PlatformTabs items={tabs} />
         </div>
-        <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-6">
           <StaggerReveal>
-            {supportingModules.map((item) => (
-              <StaggerItem key={item.title}>
-                <Card className="surface-card h-full rounded-[1.8rem]">
+            {supportingModules.map((item, index) => (
+              <StaggerItem
+                key={item.title}
+                className={cn(
+                  index === supportingModules.length - 1
+                    ? "md:col-span-2 xl:col-span-6"
+                    : index < 2
+                      ? "xl:col-span-3"
+                      : "xl:col-span-2"
+                )}
+              >
+                <Card className="surface-card surface-interactive h-full rounded-[1.8rem]">
                   <CardHeader>
-                    <div className="flex size-11 items-center justify-center rounded-2xl bg-secondary text-primary shadow-sm">
+                    <div className="bg-secondary text-primary flex size-11 items-center justify-center rounded-2xl shadow-sm">
                       <item.icon className="size-5" />
                     </div>
                     <CardTitle className="font-heading text-xl font-semibold tracking-[-0.04em]">
                       {item.title}
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="text-sm leading-7 text-muted-foreground">
+                  <CardContent className="text-muted-foreground text-sm leading-7">
                     {item.description}
                   </CardContent>
                 </Card>
@@ -338,16 +354,16 @@ export default function PlatformPage() {
       </Section>
 
       <Section>
-        <div className="surface-panel grid gap-6 rounded-[2.2rem] p-7 sm:p-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-end">
+        <div className="page-shell-glow surface-panel surface-interactive grid gap-6 rounded-[2.2rem] p-7 sm:p-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-end">
           <Reveal>
             <div>
-              <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/70">
+              <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
                 Partnership model
               </p>
-              <h2 className="mt-4 max-w-[16ch] font-heading text-[clamp(2.15rem,4vw,3.45rem)] font-semibold leading-[1] tracking-[-0.06em]">
+              <h2 className="font-heading mt-4 max-w-[16ch] text-[clamp(2.15rem,4vw,3.45rem)] leading-[1] font-semibold tracking-[-0.06em]">
                 Let’s build the future.
               </h2>
-              <p className="mt-5 max-w-[58ch] text-base leading-7 text-muted-foreground">
+              <p className="text-muted-foreground mt-5 max-w-[58ch] text-base leading-7">
                 We are looking for agencies that are tired of the status quo.
                 Early access, migration support, and open-source contribution
                 are part of the model from the start.
@@ -356,22 +372,21 @@ export default function PlatformPage() {
           </Reveal>
           <Reveal delay={0.08}>
             <div className="grid gap-3">
-              {["Early Access Program", "Data Migration Support", "Open Source Contribution"].map(
-                (item) => (
-                  <div
-                    key={item}
-                    className="rounded-[1.35rem] border border-foreground/10 bg-secondary/55 px-4 py-4 text-sm font-medium text-foreground"
-                  >
-                    {item}
-                  </div>
-                )
-              )}
+              {[
+                "Early Access Program",
+                "Data Migration Support",
+                "Open Source Contribution",
+              ].map((item) => (
+                <div
+                  key={item}
+                  className="border-foreground/10 bg-secondary/55 text-foreground hover:bg-secondary/74 rounded-[1.35rem] border px-4 py-4 text-sm font-medium transition-colors duration-200"
+                >
+                  {item}
+                </div>
+              ))}
               <Link
                 href="/contact"
-                className={cn(
-                  buttonVariants({ size: "lg" }),
-                  "mt-2 px-5"
-                )}
+                className={cn(buttonVariants({ size: "lg" }), "mt-2 px-5")}
               >
                 Start the Conversation
                 <ArrowRight data-icon="inline-end" />
