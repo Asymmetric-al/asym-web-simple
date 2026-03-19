@@ -23,9 +23,17 @@
 
 - For Next.js feature work, read the version-matched local docs in `.next-docs/` first or use the Next.js MCP. Favor current Next 16 patterns, and preserve server/client boundaries.
 - Use the MCP servers defined in `.mcp.json` before guessing at stack behavior: `next-devtools`, `shadcn`, and `vercel`.
-- Use the project-local skills in `.agents/skills/` when relevant: `next-best-practices`, `next-cache-components`, `next-upgrade`, `shadcn`, `vercel-react-best-practices`, `vercel-composition-patterns`, `web-design-guidelines`, `deploy-to-vercel`, `agent-browser`, `find-skills`, `emil-design-eng`, `building-components`, `playwright-explore-website`, `website-structure`, `ui-ux-pro-max`, `frontend-design`, `seo-audit`, `programmatic-seo`, `seo-geo`, `responsive-design`, and `dark-mode-design-expert`.
+- Use the project-local skills in `.agents/skills/` when relevant: `next-best-practices`, `next-cache-components`, `next-upgrade`, `shadcn`, `vercel-react-best-practices`, `vercel-composition-patterns`, `web-design-guidelines`, `deploy-to-vercel`, `agent-browser`, `find-skills`, `emil-design-eng`, `building-components`, `playwright-explore-website`, `website-structure`, `ui-ux-pro-max`, `frontend-design`, `seo-audit`, `programmatic-seo`, `seo-geo`, `responsive-design`, `dark-mode-design-expert`, and `payload`.
 - Use `npx vercel` for linking, environment pulls, preview deploys, logs, and production deploys. Keep preview and production flows explicit, and never commit secrets.
 - Keep `.env.local` local-only. It is the right place for values such as `REACTBITS_LICENSE_KEY`.
+
+## Payload CMS
+
+- Use the `payload` skill in `.agents/skills/payload/` when working on any Payload-related task: collections, fields, hooks, access control, queries, database adapters, jobs, custom endpoints, localization, or plugins.
+- Read `SKILL.md` in the skill directory first for a quick-reference table and essential patterns, then follow links to the reference files (`FIELDS.md`, `COLLECTIONS.md`, `HOOKS.md`, `ACCESS-CONTROL.md`, `QUERIES.md`, `ADAPTERS.md`, `ADVANCED.md`, `ENDPOINTS.md`, `PLUGIN-DEVELOPMENT.md`) for deeper detail.
+- Always set `overrideAccess: false` when operating Local API on behalf of a user — the default bypasses all access control.
+- Thread `req` through nested operations in hooks to maintain transaction atomicity.
+- Use `req.context` flags to prevent infinite hook loops.
 
 ## Cursor Cloud specific instructions
 
