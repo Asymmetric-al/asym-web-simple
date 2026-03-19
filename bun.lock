@@ -35,6 +35,9 @@
     },
   },
   "trustedDependencies": [
+    "esbuild",
+    "msw",
+    "sharp",
     "unrs-resolver",
   ],
   "overrides": {
