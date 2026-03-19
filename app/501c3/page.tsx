@@ -1,6 +1,4 @@
-import { PageHero, Section } from "@/components/site/page";
-import { Reveal } from "@/components/site/reveal";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { DocumentPage, DocumentSection } from "@/components/site/document-page";
 import { createMetadata } from "@/lib/metadata";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -37,51 +35,42 @@ export const metadata: Metadata = createMetadata({
 
 export default function DisclosurePage() {
   return (
-    <main id="main-content">
-      <PageHero
-        eyebrow="501(c)(3) Disclosure"
-        density="legal"
-        title={
-          <h1 className="text-balance font-heading text-[clamp(2.8rem,5vw,4.5rem)] font-semibold leading-[0.95] tracking-[-0.07em] text-foreground">
-            Nonprofit covering and donation treatment.
-          </h1>
-        }
-        description="Asymmetric.al is not a stand-alone tax entity. It operates under the legal and financial covering of Global Fellowship Inc."
-      />
-
-      <Section density="legal">
-        <Reveal trigger="mount">
-          <Card className="surface-panel rounded-[2rem]">
-            <CardHeader>
-              <CardTitle className="font-heading text-3xl font-semibold tracking-[-0.05em]">
-                Global Fellowship Inc. EIN 68-0214543
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-[var(--space-stack-legal-lg)]">
-              {disclosures.map((section) => (
-                <div key={section.title} className="flex flex-col gap-3">
-                  <h2 className="font-heading text-2xl font-semibold tracking-[-0.04em] text-foreground">
-                    {section.title}
-                  </h2>
-                  <p className="content-measure text-base leading-7 text-muted-foreground">
-                    {section.body}
-                  </p>
-                </div>
-              ))}
-              <p className="text-base leading-7 text-muted-foreground">
-                Questions can be directed to{" "}
-                <Link
-                  href="mailto:info@asymmetric.al"
-                  className="link-resilient inline-block max-w-full font-medium text-foreground underline underline-offset-4"
-                >
-                  info@asymmetric.al
-                </Link>
-                .
-              </p>
-            </CardContent>
-          </Card>
-        </Reveal>
-      </Section>
-    </main>
+    <DocumentPage
+      eyebrow="501(c)(3) Disclosure"
+      title={
+        <h1 className="font-heading text-foreground text-[clamp(2.8rem,5vw,4.5rem)] leading-[0.95] font-semibold tracking-[-0.07em] text-balance">
+          Nonprofit covering and donation treatment.
+        </h1>
+      }
+      description="Asymmetric.al is not a stand-alone tax entity. It operates under the legal and financial covering of Global Fellowship Inc."
+      heading="Global Fellowship Inc. EIN 68-0214543"
+      heroMeta={[
+        "Nonprofit covering",
+        "Board oversight",
+        "Tax-deductible giving",
+      ]}
+      footer={
+        <>
+          Questions can be directed to{" "}
+          <Link
+            href="mailto:info@asymmetric.al"
+            className="link-resilient text-foreground inline-block max-w-full font-medium underline underline-offset-4"
+          >
+            info@asymmetric.al
+          </Link>
+          .
+        </>
+      }
+    >
+      {disclosures.map((section, index) => (
+        <DocumentSection
+          key={section.title}
+          title={section.title}
+          tone={index === 0 ? "accent" : "default"}
+        >
+          <p>{section.body}</p>
+        </DocumentSection>
+      ))}
+    </DocumentPage>
   );
 }

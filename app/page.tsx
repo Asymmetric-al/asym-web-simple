@@ -2,13 +2,9 @@ import StaggeredText from "@/components/react-bits/staggered-text";
 import { MediaStage } from "@/components/site/media-stage";
 import { PageHero, Section, SectionHeader } from "@/components/site/page";
 import { Reveal, StaggerItem, StaggerReveal } from "@/components/site/reveal";
+import { ScrollThesis } from "@/components/site/scroll-thesis";
 import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { createMetadata } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
@@ -176,9 +172,9 @@ export default function HomePage() {
               delay={55}
               duration={0.72}
               blur={false}
-              className="font-heading text-[clamp(3.2rem,7vw,6rem)] font-semibold leading-[0.92] tracking-[-0.07em] text-foreground"
+              className="font-heading text-foreground text-[clamp(3.2rem,7vw,6rem)] leading-[0.92] font-semibold tracking-[-0.07em]"
             />
-            <p className="mt-4 max-w-[18ch] font-heading text-[clamp(1.15rem,2.2vw,1.6rem)] font-medium tracking-[-0.04em] text-primary/78">
+            <p className="font-heading text-primary/78 mt-4 max-w-[18ch] text-[clamp(1.15rem,2.2vw,1.6rem)] font-medium tracking-[-0.04em]">
               Less admin. More ministry.
             </p>
           </div>
@@ -202,8 +198,8 @@ export default function HomePage() {
             badge="Mission Control"
             priority
             caption={
-              <div className="space-y-1">
-                <p className="font-medium text-foreground">
+              <div className="flex flex-col gap-1">
+                <p className="text-foreground font-medium">
                   One surface for finance, mobilization, and care.
                 </p>
                 <p className="text-muted-foreground">
@@ -216,10 +212,10 @@ export default function HomePage() {
         </Reveal>
       </PageHero>
 
-      <Section className="pt-0" containerClassName="space-y-8">
+      <Section className="pt-0" containerClassName="flex flex-col gap-8">
         <Reveal>
-          <div className="surface-panel rounded-[2rem] p-5 sm:p-6">
-            <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/75">
+          <div className="page-shell-glow surface-panel surface-interactive rounded-[2rem] p-5 sm:p-6">
+            <p className="text-primary/75 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
               Signals from the build
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
@@ -227,7 +223,7 @@ export default function HomePage() {
                 <Badge
                   key={line}
                   variant="outline"
-                  className="h-auto rounded-full border-foreground/10 bg-background/78 px-3 py-1.5 font-mono text-[0.7rem] uppercase tracking-[0.22em] text-muted-foreground"
+                  className="border-foreground/10 bg-background/78 text-muted-foreground h-auto rounded-full px-3 py-1.5 font-mono text-[0.7rem] tracking-[0.22em] uppercase"
                 >
                   {line}
                 </Badge>
@@ -237,23 +233,28 @@ export default function HomePage() {
         </Reveal>
       </Section>
 
-      <Section tone="sky">
+      <ScrollThesis
+        eyebrow="Operational thesis"
+        text="A missions-first operating system should bring finance, mobilization, donor support, communications, and web operations into one calm, trustworthy surface."
+      />
+
+      <Section tone="sky" className="section-divider-accent">
         <div className="grid gap-6 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-start">
           <Reveal>
-            <div className="surface-panel rounded-[2.2rem] p-7 sm:p-9">
+            <div className="page-shell-glow surface-panel surface-interactive rounded-[2.2rem] p-7 sm:p-9">
               <SectionHeader
                 eyebrow="Why the name?"
                 title="Simple faithfulness can still create outsized outcomes."
                 description="Good tools let simple actions create larger outcomes. We believe God multiplies faithfulness. If God is in it, little becomes much."
               />
-              <div className="mt-8 rounded-[1.9rem] bg-primary px-6 py-8 text-primary-foreground sm:px-8">
-                <p className="font-mono text-[0.7rem] uppercase tracking-[0.3em] text-primary-foreground/70">
+              <div className="bg-primary text-primary-foreground mt-8 rounded-[1.9rem] px-6 py-8 sm:px-8">
+                <p className="text-primary-foreground/70 font-mono text-[0.7rem] tracking-[0.3em] uppercase">
                   Visual line
                 </p>
-                <div className="mt-3 font-heading text-[clamp(3.25rem,8vw,6rem)] font-semibold leading-none tracking-[-0.08em]">
+                <div className="font-heading mt-3 text-[clamp(3.25rem,8vw,6rem)] leading-none font-semibold tracking-[-0.08em]">
                   1 → ∞
                 </div>
-                <p className="mt-4 max-w-[24ch] text-base leading-7 text-primary-foreground/82">
+                <p className="text-primary-foreground/82 mt-4 max-w-[24ch] text-base leading-7">
                   Simple Faithfulness → Exponential Impact
                 </p>
               </div>
@@ -264,16 +265,16 @@ export default function HomePage() {
             <StaggerReveal>
               {foundations.map((item) => (
                 <StaggerItem key={item.title}>
-                  <Card className="surface-card rounded-[1.8rem]">
+                  <Card className="surface-card surface-interactive rounded-[1.8rem]">
                     <CardHeader className="gap-4">
-                      <div className="flex size-11 items-center justify-center rounded-2xl bg-secondary text-primary shadow-sm">
+                      <div className="bg-secondary text-primary flex size-11 items-center justify-center rounded-2xl shadow-sm">
                         <item.icon className="size-5" />
                       </div>
                       <CardTitle className="font-heading text-2xl font-semibold tracking-[-0.05em]">
                         {item.title}
                       </CardTitle>
                     </CardHeader>
-                    <CardContent className="text-base leading-7 text-muted-foreground">
+                    <CardContent className="text-muted-foreground text-base leading-7">
                       {item.description}
                     </CardContent>
                   </Card>
@@ -284,26 +285,35 @@ export default function HomePage() {
         </div>
       </Section>
 
-      <Section>
+      <Section className="section-divider-accent">
         <SectionHeader
           eyebrow="System Capabilities"
           title="Infrastructure as stewardship."
           description="We do not look for ways to extract rent from your basic needs. We build digital rails for high-trust organizations to operate with sovereignty and speed."
         />
-        <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-6">
           <StaggerReveal>
-            {capabilities.map((item) => (
-              <StaggerItem key={item.title}>
-                <Card className="surface-card h-full rounded-[1.8rem]">
+            {capabilities.map((item, index) => (
+              <StaggerItem
+                key={item.title}
+                className={cn(
+                  index < 2
+                    ? "xl:col-span-3"
+                    : index === capabilities.length - 2
+                      ? "xl:col-span-4"
+                      : "xl:col-span-2"
+                )}
+              >
+                <Card className="surface-card surface-interactive h-full rounded-[1.8rem]">
                   <CardHeader>
-                    <div className="flex size-11 items-center justify-center rounded-2xl bg-accent text-accent-foreground shadow-sm">
+                    <div className="bg-accent text-accent-foreground flex size-11 items-center justify-center rounded-2xl shadow-sm">
                       <item.icon className="size-5" />
                     </div>
                     <CardTitle className="font-heading text-xl font-semibold tracking-[-0.04em]">
                       {item.title}
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="text-sm leading-7 text-muted-foreground">
+                  <CardContent className="text-muted-foreground text-sm leading-7">
                     {item.description}
                   </CardContent>
                 </Card>
@@ -316,15 +326,15 @@ export default function HomePage() {
       <Section tone="accent">
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
           <Reveal>
-            <div className="page-shell-glow relative overflow-hidden rounded-[2.2rem] border border-foreground/10 bg-primary px-7 py-8 text-primary-foreground shadow-[0_32px_80px_-54px_rgba(22,33,43,0.78)] sm:px-9 sm:py-10">
+            <div className="page-shell-glow surface-interactive border-foreground/10 bg-primary text-primary-foreground relative overflow-hidden rounded-[2.2rem] border px-7 py-8 shadow-[0_32px_80px_-54px_rgba(22,33,43,0.78)] sm:px-9 sm:py-10">
               <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(221,242,255,0.18),transparent_35%)]" />
-              <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary-foreground/70">
+              <p className="text-primary-foreground/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
                 Hiring builders
               </p>
-              <h2 className="mt-4 max-w-[16ch] font-heading text-[clamp(2.3rem,4vw,3.7rem)] font-semibold leading-[0.98] tracking-[-0.06em]">
+              <h2 className="font-heading mt-4 max-w-[16ch] text-[clamp(2.3rem,4vw,3.7rem)] leading-[0.98] font-semibold tracking-[-0.06em]">
                 Write code for the Great Commission.
               </h2>
-              <p className="mt-5 max-w-[58ch] text-base leading-7 text-primary-foreground/82">
+              <p className="text-primary-foreground/82 mt-5 max-w-[58ch] text-base leading-7">
                 We are looking for high-agency senior engineers, designers, and
                 problem solvers who want to use their craft for a higher
                 purpose. Join the core team or contribute to the open source
@@ -345,7 +355,7 @@ export default function HomePage() {
                   href="/give"
                   className={cn(
                     buttonVariants({ size: "lg", variant: "outline" }),
-                    "border-white/20 bg-white/6 px-5 text-primary-foreground hover:bg-white/10"
+                    "text-primary-foreground border-white/20 bg-white/6 px-5 hover:bg-white/10"
                   )}
                 >
                   Support the Build
@@ -358,13 +368,13 @@ export default function HomePage() {
             <StaggerReveal>
               {buildTracks.map((item) => (
                 <StaggerItem key={item.title}>
-                  <Card className="surface-card rounded-[1.8rem]">
+                  <Card className="surface-card surface-interactive rounded-[1.8rem]">
                     <CardHeader>
                       <CardTitle className="font-heading text-xl font-semibold tracking-[-0.04em]">
                         {item.title}
                       </CardTitle>
                     </CardHeader>
-                    <CardContent className="text-sm leading-7 text-muted-foreground">
+                    <CardContent className="text-muted-foreground text-sm leading-7">
                       {item.description}
                     </CardContent>
                   </Card>

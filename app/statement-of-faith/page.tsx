@@ -1,11 +1,5 @@
-import { PageHero, Section } from "@/components/site/page";
-import { Reveal, StaggerItem, StaggerReveal } from "@/components/site/reveal";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { DocumentPage, DocumentSection } from "@/components/site/document-page";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { createMetadata } from "@/lib/metadata";
 import type { Metadata } from "next";
 
@@ -29,58 +23,48 @@ export const metadata: Metadata = createMetadata({
 
 export default function StatementOfFaithPage() {
   return (
-    <main id="main-content">
-      <PageHero
-        eyebrow="Doctrinal Foundation"
-        title={
-          <h1 className="text-balance font-heading text-[clamp(3rem,6vw,4.8rem)] font-semibold leading-[0.94] tracking-[-0.07em] text-foreground">
-            Statement of Faith.
-          </h1>
-        }
-        description="The theological bedrock upon which we build. Asymmetric.al is a project of Global Fellowship Inc., standing on the historic Christian faith."
-        meta={["Historic Christianity", "Global Fellowship Inc.", "Doctrinal foundation"]}
-      >
-        <Reveal trigger="mount">
-          <Card className="page-shell-glow rounded-[2rem] border border-foreground/10 bg-primary text-primary-foreground shadow-[0_32px_82px_-56px_rgba(22,33,43,0.82)]">
+    <DocumentPage
+      eyebrow="Doctrinal Foundation"
+      title={
+        <h1 className="font-heading text-foreground text-[clamp(3rem,6vw,4.8rem)] leading-[0.94] font-semibold tracking-[-0.07em] text-balance">
+          Statement of Faith.
+        </h1>
+      }
+      description="The theological bedrock upon which we build. Asymmetric.al is a project of Global Fellowship Inc., standing on the historic Christian faith."
+      heading="Global Fellowship Inc."
+      heroMeta={[
+        "Historic Christianity",
+        "Doctrinal accountability",
+        "Project under Christian covering",
+      ]}
+    >
+      <DocumentSection title="Covering" tone="accent">
+        <p>
+          We operate under Christian governance and doctrinal accountability,
+          not as an isolated brand with detached spiritual language.
+        </p>
+      </DocumentSection>
+
+      <div className="grid gap-4 pt-4">
+        {statements.map((statement, index) => (
+          <Card
+            key={statement}
+            className="surface-card surface-interactive rounded-[1.9rem]"
+          >
             <CardHeader>
-              <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary-foreground/70">
-                Covering
+              <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
+                {String(index + 1).padStart(2, "0")}
               </p>
-              <CardTitle className="font-heading text-3xl font-semibold tracking-[-0.05em]">
-                Global Fellowship Inc.
+              <CardTitle className="font-heading text-xl font-semibold tracking-[-0.04em]">
+                Article {index + 1}
               </CardTitle>
             </CardHeader>
-            <CardContent className="text-sm leading-7 text-primary-foreground/82">
-              We operate under Christian governance and doctrinal accountability,
-              not as an isolated brand with detached spiritual language.
+            <CardContent className="text-muted-foreground text-base leading-7">
+              {statement}
             </CardContent>
           </Card>
-        </Reveal>
-      </PageHero>
-
-      <Section>
-        <div className="grid gap-4">
-          <StaggerReveal>
-            {statements.map((statement, index) => (
-              <StaggerItem key={statement}>
-                <Card className="surface-panel rounded-[1.9rem]">
-                  <CardHeader>
-                    <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/70">
-                      {String(index + 1).padStart(2, "0")}
-                    </p>
-                    <CardTitle className="font-heading text-xl font-semibold tracking-[-0.04em]">
-                      Article {index + 1}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="text-base leading-7 text-muted-foreground">
-                    {statement}
-                  </CardContent>
-                </Card>
-              </StaggerItem>
-            ))}
-          </StaggerReveal>
-        </div>
-      </Section>
-    </main>
+        ))}
+      </div>
+    </DocumentPage>
   );
 }

@@ -6,16 +6,17 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { createMetadata } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
-import { ArrowRight, HandCoins, HeartHandshake, Scale, Shield } from "lucide-react";
+import {
+  ArrowRight,
+  HandCoins,
+  HeartHandshake,
+  Scale,
+  Shield,
+} from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -98,28 +99,37 @@ export default function GivePage() {
       <PageHero
         eyebrow="Nonprofit 501(c)(3)"
         title={
-          <h1 className="text-balance font-heading text-[clamp(3rem,6vw,5rem)] font-semibold leading-[0.94] tracking-[-0.07em] text-foreground">
+          <h1 className="font-heading text-foreground text-[clamp(3rem,6vw,5rem)] leading-[0.94] font-semibold tracking-[-0.07em] text-balance">
             Fuel the tool that serves the servants.
           </h1>
         }
         description="Your capital builds the digital rails for the next generation of missions. We operate with zero profit margin to maximize mission velocity."
         actions={[
           { label: "Email Giving Team", href: "/contact" },
-          { label: "Read 501(c)(3) Disclosure", href: "/501c3", variant: "outline" },
+          {
+            label: "Read 501(c)(3) Disclosure",
+            href: "/501c3",
+            variant: "outline",
+          },
         ]}
-        meta={["Global Fellowship Inc.", "Tax-deductible", "Open source", "Zero profit margin"]}
+        meta={[
+          "Global Fellowship Inc.",
+          "Tax-deductible",
+          "Open source",
+          "Zero profit margin",
+        ]}
       >
         <Reveal trigger="mount">
-          <Card className="page-shell-glow rounded-[2rem] border border-foreground/10 bg-primary text-primary-foreground shadow-[0_32px_82px_-56px_rgba(22,33,43,0.82)]">
+          <Card className="page-shell-glow surface-interactive border-foreground/10 bg-primary text-primary-foreground rounded-[2rem] border shadow-[0_32px_82px_-56px_rgba(22,33,43,0.82)]">
             <CardHeader>
-              <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary-foreground/70">
+              <p className="text-primary-foreground/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
                 Trust signals
               </p>
               <CardTitle className="font-heading text-3xl font-semibold tracking-[-0.05em]">
                 Capital with a nonprofit posture.
               </CardTitle>
             </CardHeader>
-            <CardContent className="flex flex-col gap-3 text-sm leading-7 text-primary-foreground/82">
+            <CardContent className="text-primary-foreground/82 flex flex-col gap-3 text-sm leading-7">
               <p>Operating as a project under Global Fellowship Inc.</p>
               <p>EIN 68-0214543</p>
               <p>Open source code and shared rails.</p>
@@ -129,7 +139,7 @@ export default function GivePage() {
         </Reveal>
       </PageHero>
 
-      <Section>
+      <Section className="section-divider-accent">
         <SectionHeader
           eyebrow="Why give"
           title="The build is designed for multiplication."
@@ -139,16 +149,16 @@ export default function GivePage() {
           <StaggerReveal>
             {pillars.map((item) => (
               <StaggerItem key={item.title}>
-                <Card className="surface-card h-full rounded-[1.8rem]">
+                <Card className="surface-card surface-interactive h-full rounded-[1.8rem]">
                   <CardHeader>
-                    <div className="flex size-11 items-center justify-center rounded-2xl bg-secondary text-primary shadow-sm">
+                    <div className="bg-secondary text-primary flex size-11 items-center justify-center rounded-2xl shadow-sm">
                       <item.icon className="size-5" />
                     </div>
                     <CardTitle className="font-heading text-xl font-semibold tracking-[-0.04em]">
                       {item.title}
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="text-sm leading-7 text-muted-foreground">
+                  <CardContent className="text-muted-foreground text-sm leading-7">
                     {item.description}
                   </CardContent>
                 </Card>
@@ -161,18 +171,17 @@ export default function GivePage() {
       <Section tone="sky">
         <div className="grid gap-6 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
           <Reveal>
-            <div className="surface-panel rounded-[2rem] p-7 sm:p-8">
-              <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/70">
+            <div className="page-shell-glow surface-panel surface-interactive rounded-[2rem] p-7 sm:p-8">
+              <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
                 Giving paths
               </p>
-              <h2 className="mt-4 font-heading text-[clamp(2rem,4vw,3rem)] font-semibold leading-[1.02] tracking-[-0.06em]">
+              <h2 className="font-heading mt-4 text-[clamp(2rem,4vw,3rem)] leading-[1.02] font-semibold tracking-[-0.06em]">
                 Clean, trust-heavy giving options.
               </h2>
-              <div className="mt-6 flex flex-col gap-4 text-base leading-7 text-muted-foreground">
+              <div className="text-muted-foreground mt-6 flex flex-col gap-4 text-base leading-7">
                 <p>
-                  Checks payable to “Global Fellowship Inc” with
-                  “Asymmetric.al” in the memo can be mailed to PO Box 1, Meadow
-                  Vista, CA 95722.
+                  Checks payable to “Global Fellowship Inc” with “Asymmetric.al”
+                  in the memo can be mailed to PO Box 1, Meadow Vista, CA 95722.
                 </p>
                 <p>
                   Email info@asymmetric.al for donor-advised fund support, wire
@@ -181,10 +190,7 @@ export default function GivePage() {
                 </p>
                 <Link
                   href="mailto:info@asymmetric.al?subject=Asymmetric.al%20giving%20inquiry"
-                  className={cn(
-                    buttonVariants({ size: "lg" }),
-                    "mt-2 px-5"
-                  )}
+                  className={cn(buttonVariants({ size: "lg" }), "mt-2 px-5")}
                 >
                   Start a Giving Conversation
                   <ArrowRight data-icon="inline-end" />
@@ -195,14 +201,14 @@ export default function GivePage() {
           <Reveal delay={0.08}>
             <Accordion
               defaultValue={["deductible"]}
-              className="surface-panel rounded-[2rem] border-foreground/10"
+              className="surface-panel surface-interactive border-foreground/10 rounded-[2rem]"
             >
               {faqItems.map((item) => (
                 <AccordionItem key={item.value} value={item.value}>
                   <AccordionTrigger className="px-5 py-5 text-base font-semibold sm:px-6">
                     {item.question}
                   </AccordionTrigger>
-                  <AccordionContent className="px-5 text-sm leading-7 text-muted-foreground sm:px-6">
+                  <AccordionContent className="text-muted-foreground px-5 text-sm leading-7 sm:px-6">
                     {item.answer}
                   </AccordionContent>
                 </AccordionItem>

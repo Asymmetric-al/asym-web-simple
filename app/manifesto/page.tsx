@@ -1,11 +1,6 @@
 import { PageHero, Section } from "@/components/site/page";
 import { Reveal, StaggerItem, StaggerReveal } from "@/components/site/reveal";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { createMetadata } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
@@ -72,24 +67,30 @@ export default function ManifestoPage() {
       <PageHero
         eyebrow="The Philosophy // v1.0"
         title={
-          <h1 className="text-balance font-heading text-[clamp(3rem,6vw,5.15rem)] font-semibold leading-[0.94] tracking-[-0.07em] text-foreground">
+          <h1 className="font-heading text-foreground text-[clamp(3rem,6vw,5.15rem)] leading-[0.94] font-semibold tracking-[-0.07em] text-balance">
             Small Inputs. Exponential Outputs.
           </h1>
         }
         description="The underlying logic of Asymmetric.al. How we think about software, stewardship, and the scale of the Great Commission."
-        meta={["Stewardship", "Hyper-focus", "Open hands", "Support-raised staff", "Kingdom logic"]}
+        meta={[
+          "Stewardship",
+          "Hyper-focus",
+          "Open hands",
+          "Support-raised staff",
+          "Kingdom logic",
+        ]}
       >
         <Reveal trigger="mount">
-          <Card className="page-shell-glow rounded-[2rem] border border-foreground/10 bg-primary text-primary-foreground shadow-[0_32px_84px_-58px_rgba(22,33,43,0.82)]">
+          <Card className="page-shell-glow border-foreground/10 bg-primary text-primary-foreground rounded-[2rem] border shadow-[0_32px_84px_-58px_rgba(22,33,43,0.82)]">
             <CardHeader>
-              <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary-foreground/70">
+              <p className="text-primary-foreground/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
                 Guiding phrase
               </p>
               <CardTitle className="font-heading text-3xl font-semibold tracking-[-0.05em]">
                 Minimize Clicks. Maximize Ministry.
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4 text-sm leading-7 text-primary-foreground/82">
+            <CardContent className="text-primary-foreground/82 space-y-4 text-sm leading-7">
               <p>
                 The site and product should feel like clear sky, open ground,
                 and precise software. Warmth without sentimentality. Beauty with
@@ -105,21 +106,26 @@ export default function ManifestoPage() {
         </Reveal>
       </PageHero>
 
-      <Section>
+      <Section className="section-divider-accent">
         <div className="grid gap-4">
           <StaggerReveal>
-            {manifestoSections.map((section) => (
+            {manifestoSections.map((section, index) => (
               <StaggerItem key={section.label}>
-                <Card className="surface-panel rounded-[2rem]">
+                <Card
+                  className={cn(
+                    "surface-panel surface-interactive rounded-[2rem]",
+                    index % 2 === 1 && "bg-secondary/24"
+                  )}
+                >
                   <CardHeader>
-                    <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/70">
+                    <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
                       {section.label}
                     </p>
-                    <CardTitle className="max-w-[18ch] font-heading text-[clamp(1.9rem,3.6vw,2.8rem)] font-semibold leading-[1.02] tracking-[-0.05em]">
+                    <CardTitle className="font-heading max-w-[18ch] text-[clamp(1.9rem,3.6vw,2.8rem)] leading-[1.02] font-semibold tracking-[-0.05em]">
                       {section.title}
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="grid gap-4 text-base leading-7 text-muted-foreground lg:max-w-[75ch]">
+                  <CardContent className="text-muted-foreground grid gap-4 text-base leading-7 lg:max-w-[75ch]">
                     {section.paragraphs.map((paragraph) => (
                       <p key={paragraph}>{paragraph}</p>
                     ))}
@@ -134,14 +140,14 @@ export default function ManifestoPage() {
       <Section tone="accent">
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)] lg:items-end">
           <Reveal>
-            <div className="surface-panel rounded-[2rem] p-7 sm:p-8">
-              <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/70">
+            <div className="page-shell-glow surface-panel surface-interactive rounded-[2rem] p-7 sm:p-8">
+              <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
                 Theological bedrock
               </p>
-              <h2 className="mt-4 max-w-[18ch] font-heading text-[clamp(2rem,4vw,3.1rem)] font-semibold leading-[1.02] tracking-[-0.06em]">
+              <h2 className="font-heading mt-4 max-w-[18ch] text-[clamp(2rem,4vw,3.1rem)] leading-[1.02] font-semibold tracking-[-0.06em]">
                 Doctrine is not wallpaper.
               </h2>
-              <p className="mt-5 max-w-[58ch] text-base leading-7 text-muted-foreground">
+              <p className="text-muted-foreground mt-5 max-w-[58ch] text-base leading-7">
                 Our Christian conviction is not decorative language added after
                 the fact. It shapes the posture of the organization and the
                 purpose of the work.
