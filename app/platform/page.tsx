@@ -203,11 +203,12 @@ export default function PlatformPage() {
         ]}
         meta={["One login", "Shared database", "Open-source foundations", "Continuous deployment"]}
       >
-        <Reveal>
+        <Reveal trigger="mount">
           <MediaStage
             sceneAlt="Bright open landscape behind the product"
             screenshotAlt="Platform view showing mission control"
             badge="Unified solution"
+            priority
             caption={
               <div className="flex flex-col gap-1">
                 <p className="font-medium text-foreground">

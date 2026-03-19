@@ -79,7 +79,7 @@ export default function ManifestoPage() {
         description="The underlying logic of Asymmetric.al. How we think about software, stewardship, and the scale of the Great Commission."
         meta={["Stewardship", "Hyper-focus", "Open hands", "Support-raised staff", "Kingdom logic"]}
       >
-        <Reveal>
+        <Reveal trigger="mount">
           <Card className="page-shell-glow rounded-[2rem] border border-foreground/10 bg-primary text-primary-foreground shadow-[0_32px_84px_-58px_rgba(22,33,43,0.82)]">
             <CardHeader>
               <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary-foreground/70">

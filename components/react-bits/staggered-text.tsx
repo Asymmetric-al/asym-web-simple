@@ -24,6 +24,7 @@ export interface StaggeredTextProps {
   text: string;
   className?: string;
   as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "span";
+  trigger?: "inView" | "mount";
 
   /** How to split the text visually and for staggering */
   segmentBy?: SegmentBy;
@@ -111,6 +112,7 @@ const StaggeredText = forwardRef<StaggeredTextHandle, StaggeredTextProps>(
       text,
       className = "",
       as = "p",
+      trigger = "inView",
       segmentBy = "words",
       separator,
       delay = 80,
@@ -151,6 +153,13 @@ const StaggeredText = forwardRef<StaggeredTextHandle, StaggeredTextProps>(
     }));
 
     useEffect(() => {
+      if (trigger === "mount") {
+        setHasEnteredView(true);
+      }
+    }, [trigger]);
+
+    useEffect(() => {
+      if (trigger !== "inView") return;
       if (!rootRef.current) return;
 
       const observer = new IntersectionObserver(
@@ -174,7 +183,7 @@ const StaggeredText = forwardRef<StaggeredTextHandle, StaggeredTextProps>(
       observer.observe(rootRef.current);
 
       return () => observer.disconnect();
-    }, [threshold, rootMargin, exitOnScrollOut, hasEnteredView]);
+    }, [threshold, rootMargin, exitOnScrollOut, hasEnteredView, trigger]);
 
     const defaultFrom = useMemo<MotionStyle>(() => {
       const base: MotionStyle = {
@@ -364,7 +373,7 @@ const StaggeredText = forwardRef<StaggeredTextHandle, StaggeredTextProps>(
                     : segment}
                   {segmentBy === "words" &&
                     rowSegIndex < rowSegments.length - 1 &&
-                    "\u00A0"}
+                    " "}
                 </motion.span>
               );
             })}

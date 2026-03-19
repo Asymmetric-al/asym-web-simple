@@ -109,7 +109,7 @@ export default function GivePage() {
         ]}
         meta={["Global Fellowship Inc.", "Tax-deductible", "Open source", "Zero profit margin"]}
       >
-        <Reveal>
+        <Reveal trigger="mount">
           <Card className="page-shell-glow rounded-[2rem] border border-foreground/10 bg-primary text-primary-foreground shadow-[0_32px_82px_-56px_rgba(22,33,43,0.82)]">
             <CardHeader>
               <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary-foreground/70">

@@ -58,7 +58,7 @@ export function Header() {
           </div>
 
           <nav
-            className="hidden items-center gap-1 rounded-full bg-background/50 p-1 lg:flex"
+            className="hidden min-w-0 flex-1 items-center justify-center gap-1 rounded-full bg-background/50 p-1 xl:flex"
             aria-label="Primary navigation"
           >
             {navigationLinks.map((link) => {
@@ -71,7 +71,7 @@ export function Header() {
                   href={link.href}
                   aria-current={active ? "page" : undefined}
                   className={cn(
-                    "rounded-full px-3.5 py-2 text-center text-sm leading-tight font-medium whitespace-nowrap text-muted-foreground",
+                    "min-w-0 max-w-[9.5rem] rounded-full px-3.5 py-2 text-center text-sm leading-[1.2] font-medium text-pretty text-muted-foreground",
                     active
                       ? "bg-secondary text-secondary-foreground shadow-sm"
                       : "hover:bg-background/88 hover:text-foreground"
@@ -83,20 +83,20 @@ export function Header() {
             })}
           </nav>
 
-          <div className="hidden shrink-0 items-center gap-2 lg:flex">
+          <div className="hidden min-w-0 shrink items-center justify-end gap-2 xl:flex">
             <ThemeToggle />
             <Link
               href={siteConfig.cta.secondary.href}
               className={cn(
                 buttonVariants({ variant: "ghost", size: "sm" }),
-                "px-3.5 text-muted-foreground"
+                "hidden max-w-[10rem] px-3.5 text-muted-foreground 2xl:inline-flex"
               )}
             >
               {siteConfig.cta.secondary.label}
             </Link>
             <Link
               href={siteConfig.cta.primary.href}
-              className={cn(buttonVariants({ size: "lg" }), "px-5")}
+              className={cn(buttonVariants({ size: "lg" }), "max-w-[11rem] px-5")}
             >
               {siteConfig.cta.primary.label}
               <MoveRight data-icon="inline-end" />
@@ -104,7 +104,7 @@ export function Header() {
           </div>
 
           <Sheet open={open} onOpenChange={setOpen}>
-            <div className="flex items-center gap-2 lg:hidden">
+            <div className="flex items-center gap-2 xl:hidden">
               <ThemeToggle />
               <SheetTrigger
                 className={cn(

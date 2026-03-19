@@ -1,7 +1,7 @@
 import { cva, type VariantProps } from "class-variance-authority";
 
 export const buttonVariants = cva(
-  "group/button inline-flex max-w-full min-w-0 shrink-0 items-center justify-center gap-2 rounded-full border border-transparent bg-clip-padding text-center text-sm font-medium whitespace-normal transition-[color,background-color,border-color,box-shadow,transform] duration-200 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/45 active:scale-[0.985] disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-[3px] aria-invalid:ring-destructive/20 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:self-center [&_svg:not([class*='size-'])]:size-4",
+  "group/button inline-flex max-w-full min-w-0 items-center justify-center gap-2 rounded-full border border-transparent bg-clip-padding text-center text-sm font-medium whitespace-normal text-pretty transition-[color,background-color,border-color,box-shadow,transform] duration-200 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/45 active:scale-[0.985] disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-[3px] aria-invalid:ring-destructive/20 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:self-center [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
@@ -23,10 +23,10 @@ export const buttonVariants = cva(
         xs: "min-h-7 px-2.5 py-1 text-xs leading-[1.15] [&_svg:not([class*='size-'])]:size-3",
         sm: "min-h-9 px-3.5 py-2 leading-[1.15]",
         lg: "min-h-11 px-5 py-2.5 text-[0.95rem] leading-[1.15]",
-        icon: "size-10",
-        "icon-xs": "size-6 [&_svg:not([class*='size-'])]:size-3",
-        "icon-sm": "size-9",
-        "icon-lg": "size-11",
+        icon: "size-10 shrink-0",
+        "icon-xs": "size-6 shrink-0 [&_svg:not([class*='size-'])]:size-3",
+        "icon-sm": "size-9 shrink-0",
+        "icon-lg": "size-11 shrink-0",
       },
     },
     defaultVariants: {

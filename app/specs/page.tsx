@@ -107,7 +107,7 @@ export default function SpecsPage() {
         description="We do not hide our choices. We build on best-in-class open source technologies and proven cloud primitives because stewardship includes technical durability."
         meta={["Open source", "Portable", "Observable", "Secure", "Vercel-friendly"]}
       >
-        <Reveal>
+        <Reveal trigger="mount">
           <div className="page-shell-glow rounded-[2rem] border border-foreground/10 bg-primary px-6 py-7 text-primary-foreground shadow-[0_32px_80px_-56px_rgba(22,33,43,0.8)] sm:px-8 sm:py-9">
             <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary-foreground/70">
               Engine room

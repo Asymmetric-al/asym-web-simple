@@ -59,6 +59,7 @@ export function MediaStage({
             width={1440}
             height={960}
             priority={priority}
+            sizes="(min-width: 1024px) 42vw, 100vw"
             className="h-[23rem] w-full object-cover object-center sm:h-[29rem]"
           />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.1),rgba(22,33,43,0.18))]" />
@@ -89,6 +90,8 @@ export function MediaStage({
           alt={screenshotAlt}
           width={1440}
           height={960}
+          priority={priority}
+          sizes="(min-width: 1024px) 34vw, (min-width: 640px) 82vw, 88vw"
           className="rounded-[1.45rem] border border-foreground/10 object-cover shadow-[0_18px_45px_-28px_rgba(22,33,43,0.55)]"
         />
         <div className="mt-4 flex flex-col gap-3 rounded-[1.5rem] bg-secondary/56 px-4 py-3 text-sm leading-6 text-foreground/86">

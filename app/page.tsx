@@ -171,6 +171,7 @@ export default function HomePage() {
             <StaggeredText
               as="h1"
               text="Run the Work In One Place"
+              trigger="mount"
               segmentBy="words"
               delay={55}
               duration={0.72}
@@ -194,7 +195,7 @@ export default function HomePage() {
           "Nonprofit 501(c)(3)",
         ]}
       >
-        <Reveal>
+        <Reveal trigger="mount">
           <MediaStage
             sceneAlt="Open landscape representing the broad horizon of missions work"
             screenshotAlt="Asymmetric mission control interface preview"

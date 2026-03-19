@@ -104,11 +104,12 @@ export default function MissionsPage() {
         ]}
         meta={["By missionaries, for missionaries", "Hopeful", "Trusted", "Modern", "Open hands"]}
       >
-        <Reveal>
+        <Reveal trigger="mount">
           <MediaStage
             sceneAlt="Mission landscape under an open sky"
             screenshotAlt="Mission-facing software overlay"
             badge="Why missions"
+            priority
             caption={
               <div className="flex flex-col gap-1">
                 <p className="font-medium text-foreground">

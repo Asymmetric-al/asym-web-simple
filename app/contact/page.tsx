@@ -53,7 +53,7 @@ export default function ContactPage() {
         description="Tell us who you are, what kind of conversation you need, and enough context to route it well. We would rather have a real exchange than a noisy inbox."
         meta={["info@asymmetric.al", "Agency fit", "Giving", "Builder interest"]}
       >
-        <Reveal>
+        <Reveal trigger="mount">
           <Card className="page-shell-glow rounded-[2rem] border border-foreground/10 bg-primary text-primary-foreground shadow-[0_32px_82px_-56px_rgba(22,33,43,0.82)]">
             <CardHeader>
               <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary-foreground/70">

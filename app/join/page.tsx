@@ -76,7 +76,7 @@ export default function JoinPage() {
         description="We are building with pilot agencies, experienced builders, and donors who understand that good infrastructure can create disproportionate ministry leverage."
         meta={["Pilot agencies", "Senior builders", "Open source", "Mission-first", "High agency"]}
       >
-        <Reveal>
+        <Reveal trigger="mount">
           <Card className="page-shell-glow rounded-[2rem] border border-foreground/10 bg-primary text-primary-foreground shadow-[0_32px_82px_-56px_rgba(22,33,43,0.82)]">
             <CardHeader>
               <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary-foreground/70">

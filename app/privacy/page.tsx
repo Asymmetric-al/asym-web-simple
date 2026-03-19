@@ -75,7 +75,7 @@ export default function PrivacyPage() {
       />
 
       <Section density="legal">
-        <Reveal>
+        <Reveal trigger="mount">
           <Card className="surface-panel rounded-[2rem]">
             <CardHeader>
               <CardTitle className="font-heading text-3xl font-semibold tracking-[-0.05em]">
