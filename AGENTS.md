@@ -23,6 +23,25 @@
 
 - For Next.js feature work, read the version-matched local docs in `.next-docs/` first or use the Next.js MCP. Favor current Next 16 patterns, and preserve server/client boundaries.
 - Use the MCP servers defined in `.mcp.json` before guessing at stack behavior: `next-devtools`, `shadcn`, and `vercel`.
-- Use the project-local skills in `.agents/skills/` when relevant: `next-best-practices`, `next-cache-components`, `next-upgrade`, `shadcn`, `vercel-react-best-practices`, `vercel-composition-patterns`, `web-design-guidelines`, `deploy-to-vercel`, `agent-browser`, and `find-skills`.
+- Use the project-local skills in `.agents/skills/` when relevant: `next-best-practices`, `next-cache-components`, `next-upgrade`, `shadcn`, `vercel-react-best-practices`, `vercel-composition-patterns`, `web-design-guidelines`, `deploy-to-vercel`, `agent-browser`, `find-skills`, `emil-design-eng`, `building-components`, `playwright-explore-website`, `website-structure`, `ui-ux-pro-max`, `frontend-design`, `seo-audit`, `programmatic-seo`, `seo-geo`, `responsive-design`, and `dark-mode-design-expert`.
 - Use `npx vercel` for linking, environment pulls, preview deploys, logs, and production deploys. Keep preview and production flows explicit, and never commit secrets.
 - Keep `.env.local` local-only. It is the right place for values such as `REACTBITS_LICENSE_KEY`.
+
+## Cursor Cloud specific instructions
+
+This is a purely static Next.js 16 marketing site with no backend, database, or external runtime services. The only process needed for development is the Next.js dev server.
+
+### Quick reference
+
+| Task | Command |
+|------|---------|
+| Dev server | `npm run dev` (port 3000) |
+| Lint | `npm run lint` |
+| Type check | `npm run typecheck` |
+| Build | `npm run build` |
+
+- Node.js 22 and npm 10+ are required (matches the lockfile).
+- There is no test suite in this repo; `npm run lint` and `npm run typecheck` are the primary correctness checks.
+- The dev server uses Turbopack by default and starts on port 3000. Add `--hostname 0.0.0.0` if you need to access it from outside localhost.
+- No `.env` file is required to run the site. `REACTBITS_LICENSE_KEY` and `SHADCNBLOCKS_API_KEY` are only needed when installing new UI components via the `shadcn` CLI, not at runtime.
+- Dark mode is wired via `next-themes` but there is currently no visible theme toggle in the UI; dark mode can be tested by adding the `dark` class to `<html>` in devtools or via `next-themes` `forcedTheme`.
