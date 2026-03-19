@@ -91,9 +91,9 @@ export function MediaStage({
           height={960}
           className="rounded-[1.45rem] border border-foreground/10 object-cover shadow-[0_18px_45px_-28px_rgba(22,33,43,0.55)]"
         />
-        <div className="mt-4 grid gap-3 rounded-[1.5rem] bg-secondary/56 px-4 py-3 text-sm leading-6 text-foreground/86 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
-          <div>{caption}</div>
-          <div className="flex flex-wrap gap-2 sm:justify-end">
+        <div className="mt-4 flex flex-col gap-3 rounded-[1.5rem] bg-secondary/56 px-4 py-3 text-sm leading-6 text-foreground/86">
+          <div className="min-w-0">{caption}</div>
+          <div className="flex flex-wrap gap-2">
             <span className="rounded-full border border-foreground/10 bg-background/76 px-3 py-1 font-mono text-[0.68rem] uppercase tracking-[0.2em] text-muted-foreground">
               Shared source of truth
             </span>

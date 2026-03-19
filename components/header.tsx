@@ -62,12 +62,12 @@ export function Header() {
         <div className="pointer-events-auto page-shell-glow surface-panel flex items-center justify-between gap-3 rounded-[1.85rem] px-4 py-3 sm:px-5 lg:gap-5">
           <div className="flex min-w-0 items-center gap-4 lg:gap-6">
             <BrandLockup />
-            <p className="text-resilient hidden max-w-[24ch] text-sm leading-6 text-muted-foreground xl:block">
+            <p className="text-resilient hidden max-w-[24ch] text-sm leading-6 text-muted-foreground 2xl:block">
               Calm, high-trust software for the operational weight of sending.
             </p>
           </div>
 
-          <nav className="hidden min-w-0 flex-1 items-center justify-center gap-1 rounded-full bg-background/50 p-1 lg:flex" aria-label="Primary navigation">
+          <nav className="hidden shrink-0 items-center gap-1 rounded-full bg-background/50 p-1 lg:flex" aria-label="Primary navigation">
             {navigationLinks.map((link) => {
               const active =
                 pathname === link.href || pathname.startsWith(`${link.href}/`);
@@ -78,7 +78,7 @@ export function Header() {
                   href={link.href}
                   aria-current={active ? "page" : undefined}
                   className={cn(
-                    "min-w-0 max-w-[10rem] rounded-full px-3.5 py-2 text-center text-sm leading-tight font-medium text-muted-foreground",
+                    "rounded-full px-3.5 py-2 text-center text-sm leading-tight font-medium whitespace-nowrap text-muted-foreground",
                     active
                       ? "bg-secondary text-secondary-foreground shadow-sm"
                       : "hover:bg-background/88 hover:text-foreground"
