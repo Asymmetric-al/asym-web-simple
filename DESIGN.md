@@ -1,7 +1,7 @@
 # Design System: Asymmetric.al
 
 **Project:** Asymmetric.al — Mission Operating System marketing site  
-**Stack:** Next.js 16 · Tailwind v4 · shadcn/ui `base-maia` · `@base-ui/react` · `motion/react`  
+**Stack:** Next.js 16 · Tailwind v4 · shadcn/ui `base-maia` · `@base-ui/react` · `motion/react` · `experimental.viewTransition` enabled in `next.config.ts` for cross-route transitions where supported  
 **Source of truth for tokens:** `app/globals.css` · `lib/config.ts`  
 **No Stitch project ID** — this document was synthesized directly from the codebase and running UI.
 
@@ -241,8 +241,9 @@ The radius system is consistently very generous — all cards feel gently rounde
 - Subtle shadow: `0 14px 34px -28px rgba(22,33,43,0.35)`
 
 **Inline image overlay pills** (on `MediaStage` hero image):
-- Top-left badge: `border-white/35 bg-white/74 backdrop-blur-sm` — frosted glass white
-- Bottom-left tags: `border-white/20 bg-foreground/28 backdrop-blur-sm text-white/88` — dark translucent
+- Top-left badge: `border-white/45 bg-white/82 backdrop-blur-sm` — stronger contrast on photo
+- Top-right label: `border-white/32 bg-foreground/38 backdrop-blur-sm text-white/95`
+- Bottom-left tags: `border-white/30 bg-foreground/40 backdrop-blur-sm text-white/95` — dark translucent
 
 ---
 
@@ -252,7 +253,7 @@ The header is a **fixed floating pill** — it does not span the full width. It 
 
 **Shell:** `surface-hero` + `page-shell-glow` + `rounded-[1.85rem]`. The most elevated surface on the page.
 
-**Entrance animation:** Slides down from `-18px` with `opacity: 0 → 1` over `500ms` using `[0.22, 1, 0.36, 1]` easing on mount.
+**Entrance animation:** Slides down from `-12px` with `opacity: 0 → 1` over `~360ms` using `[0.22, 1, 0.36, 1]` easing on mount; skipped when `prefers-reduced-motion: reduce`.
 
 **Brand lockup:**
 - Circular monogram: `size-11 rounded-full border border-foreground/10` with diagonal gradient fill `linear-gradient(135deg, rgba(221,242,255,0.95), rgba(231,238,225,0.95))`
@@ -272,7 +273,7 @@ The header is a **fixed floating pill** — it does not span the full width. It 
 - Ghost link for secondary CTA (`text-muted-foreground`)
 - Primary CTA button (`size="lg"`) with `MoveRight` icon
 
-**Mobile:** The full nav collapses behind a `Sheet` (right-side drawer) triggered by a `Menu` icon button.
+**Mobile:** The full nav collapses behind a `Sheet` (right-side drawer) triggered by a `Menu` icon button. Closing the sheet returns focus to the menu trigger for keyboard users.
 - Sheet width: `w-[88vw] max-w-sm`
 - Background: `bg-card/96 border-l border-foreground/10`
 - Nav links: `rounded-2xl px-4 py-3` with `MoveRight` icon at right
@@ -300,8 +301,9 @@ The header is a **fixed floating pill** — it does not span the full width. It 
 **Form Layout (`InquiryForm`):**
 - Container: `surface-panel rounded-[2rem] p-6 sm:p-8`
 - Fields arranged in `grid gap-4 sm:grid-cols-2`
-- Submit / action area: `grid rounded-[1.5rem] border border-foreground/10 bg-secondary/42 p-4` — a contained action box
-- Info panel within action box uses `border border-foreground/10 bg-secondary/42` — light secondary wash
+- Submit / action area: `grid rounded-[1.75rem] border border-foreground/10 bg-secondary/42 p-4` — a contained action box
+- Email handoff region: `role="region"` + `role="status"` / `aria-live="polite"` announces draft handoff; first focusable line uses `tabIndex={-1}` after submit
+- Copy control: visually labeled “Copied”; screen readers get `aria-live="polite"` confirmation via a visually hidden span
 
 ---
 
@@ -312,7 +314,8 @@ The page hero uses a **two-column grid** at `lg` breakpoint: `grid-cols-[minmax(
 **Left column (text):**
 - Eyebrow badge (see badge spec above)
 - `mt-6` gap to H1
-- H1 uses `StaggeredText` for word-by-word reveal on mount
+- H1 uses `StaggeredText` for word-by-word reveal on mount (gentle cubic easing, ~38ms stagger, compact vertical travel — not linear)
+- Other pages: `PageHero` wraps `title` in `HeroReveal` (mount-only fade+rise) unless `revealTitle={false}` (e.g. home hero with `StaggeredText`)
 - Subtitle: `font-heading font-medium tracking-[-0.04em] text-primary/78`
 - Description paragraph: `content-measure mt-6 text-base leading-7 text-muted-foreground`
 - CTA buttons: `mt-8 flex flex-col gap-3 sm:flex-row`
@@ -511,9 +514,11 @@ The design reads as **deliberately airy**. This is not accidental padding — it
 
 ### Scroll Behavior
 
-- Smooth scroll via Lenis (`duration: 1.2`, `easing: [0.83, 0, 0.17, 1]`)
+- Smooth scroll via Lenis (`duration: 0.88`, exponential-style `easing` in `smooth-scroll.tsx`)
 - `scroll-padding-top: 7rem` on `html` to account for the fixed floating nav
 - `SmoothScroll` respects `prefers-reduced-motion` — if reduced motion is preferred, Lenis is not initialized
+- Long-form marketing routes (`/manifesto`, `/platform`, `/specs`, `/missions`, `/join`, `/give`): thin fixed `ReadingProgress` bar (`bg-primary/50`, transform `scaleX`) — hidden when reduced motion is preferred
+- **Scroll thesis** block: on narrow viewports (`max-width: 767px`), word emphasis uses **opacity only** (no blur/scale) to limit scroll-linked cost
 
 ---
 
@@ -546,10 +551,11 @@ Use these descriptions when prompting or generating new UI for this site:
 - Atmospheric: "page-shell-glow — diagonal ambient glow halo as pseudo-element"
 
 ### Motion Language
-- Scroll reveals: "Fade up with gentle scale (0.985→1), cubic easing [0.22,1,0.36,1], 600ms"
-- Stagger: "0.06s between children"
+- Scroll reveals: "Fade up with gentle scale (~0.985→1), cubic easing [0.22,1,0.36,1], ~320ms default"
+- Stagger: "~0.042–0.048s between related children; keep groups small"
+- `surface-interactive`: "150ms ease-off when hover ends; 0ms on hover-in (instant lift)"
 - Hero float: "9-second gentle vertical bob (y: 0→-10→0, mirror repeat)"
-- Nav entrance: "500ms slide-down from -18px on mount"
+- Nav entrance: "~360ms slide-down from -12px on mount"
 - All motion: "Always gracefully disabled when `prefers-reduced-motion: reduce` is set"
 
 ### Reusable Prompt Fragments
