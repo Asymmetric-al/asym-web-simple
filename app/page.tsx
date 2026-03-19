@@ -215,7 +215,7 @@ export default function HomePage() {
         </Reveal>
       </PageHero>
 
-      <Section className="pt-0" containerClassName="flex flex-col gap-10">
+      <Section className="pt-0" containerClassName="space-y-8">
         <Reveal>
           <div className="surface-panel rounded-[2rem] p-5 sm:p-6">
             <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/75">
@@ -289,7 +289,7 @@ export default function HomePage() {
           title="Infrastructure as stewardship."
           description="We do not look for ways to extract rent from your basic needs. We build digital rails for high-trust organizations to operate with sovereignty and speed."
         />
-        <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           <StaggerReveal>
             {capabilities.map((item) => (
               <StaggerItem key={item.title}>

@@ -40,6 +40,7 @@ export default function DisclosurePage() {
     <main id="main-content">
       <PageHero
         eyebrow="501(c)(3) Disclosure"
+        density="legal"
         title={
           <h1 className="text-balance font-heading text-[clamp(2.8rem,5vw,4.5rem)] font-semibold leading-[0.95] tracking-[-0.07em] text-foreground">
             Nonprofit covering and donation treatment.
@@ -48,7 +49,7 @@ export default function DisclosurePage() {
         description="Asymmetric.al is not a stand-alone tax entity. It operates under the legal and financial covering of Global Fellowship Inc."
       />
 
-      <Section>
+      <Section density="legal">
         <Reveal>
           <Card className="surface-panel rounded-[2rem]">
             <CardHeader>
@@ -56,7 +57,7 @@ export default function DisclosurePage() {
                 Global Fellowship Inc. EIN 68-0214543
               </CardTitle>
             </CardHeader>
-            <CardContent className="flex flex-col gap-8">
+            <CardContent className="space-y-[var(--space-stack-legal-lg)]">
               {disclosures.map((section) => (
                 <div key={section.title} className="flex flex-col gap-3">
                   <h2 className="font-heading text-2xl font-semibold tracking-[-0.04em] text-foreground">

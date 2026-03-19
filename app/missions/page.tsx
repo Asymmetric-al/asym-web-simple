@@ -193,7 +193,7 @@ export default function MissionsPage() {
           title="We use technology to serve the servants."
           description="Our role is not to be the hero of the story. Our role is to lift the load from the shoulders of the people carrying it."
         />
-        <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           <StaggerReveal>
             {audiences.map((item) => (
               <StaggerItem key={item.title}>
@@ -222,7 +222,7 @@ export default function MissionsPage() {
           title="What missions-only focus means in practice."
           description="Because we only build for missions nonprofits, we can shape the whole platform around your world instead of forcing you into someone else's pattern."
         />
-        <div className="mt-10 grid gap-4 lg:grid-cols-5">
+        <div className="mt-8 grid gap-4 lg:grid-cols-5">
           <StaggerReveal>
             {impactPoints.map((point, index) => (
               <StaggerItem key={point}>

@@ -137,7 +137,7 @@ export default function SpecsPage() {
           title="Built on open foundations and cloud primitives that can survive the long haul."
           description="These choices are practical, portable, and legible to serious engineering teams. Nothing here depends on proprietary magic."
         />
-        <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           <StaggerReveal>
             {layers.map((item) => (
               <StaggerItem key={item.title}>
@@ -166,7 +166,7 @@ export default function SpecsPage() {
           title="Strong operational expectations, not vague aspirations."
           description="The system should feel fast, stay available, and be observable enough to trust when the stakes are real."
         />
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           <StaggerReveal>
             {targets.map((item) => (
               <StaggerItem key={item.label}>

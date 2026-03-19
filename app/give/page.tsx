@@ -135,7 +135,7 @@ export default function GivePage() {
           title="The build is designed for multiplication."
           description="One well-built system can remove drag for many agencies at once. That is why we think this work is worth funding."
         />
-        <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           <StaggerReveal>
             {pillars.map((item) => (
               <StaggerItem key={item.title}>

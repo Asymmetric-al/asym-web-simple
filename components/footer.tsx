@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export function Footer() {
   return (
-    <footer className="pb-10 pt-10 sm:pb-12">
+    <footer className="pb-10 pt-6 sm:pb-12 sm:pt-8">
       <div className="mx-auto flex max-w-[80rem] flex-col gap-6 px-4 sm:px-6 lg:px-8">
         <div className="page-shell-glow surface-hero overflow-hidden rounded-[2.35rem] p-7 sm:p-10">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-end">

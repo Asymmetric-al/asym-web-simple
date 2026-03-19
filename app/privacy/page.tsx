@@ -65,6 +65,7 @@ export default function PrivacyPage() {
     <main id="main-content">
       <PageHero
         eyebrow="Privacy Policy"
+        density="legal"
         title={
           <h1 className="text-balance font-heading text-[clamp(2.8rem,5vw,4.5rem)] font-semibold leading-[0.95] tracking-[-0.07em] text-foreground">
             Privacy and stewardship of information.
@@ -73,7 +74,7 @@ export default function PrivacyPage() {
         description="We aim to be clear, proportionate, and respectful in how we handle information. This page applies to the public website and communications initiated from it."
       />
 
-      <Section>
+      <Section density="legal">
         <Reveal>
           <Card className="surface-panel rounded-[2rem]">
             <CardHeader>
@@ -81,7 +82,7 @@ export default function PrivacyPage() {
                 Effective as of March 17, 2026
               </CardTitle>
             </CardHeader>
-            <CardContent className="flex flex-col gap-8">
+            <CardContent className="space-y-[var(--space-stack-legal-lg)]">
               {sections.map((section) => (
                 <div key={section.title} className="flex flex-col gap-3">
                   <h2 className="font-heading text-2xl font-semibold tracking-[-0.04em] text-foreground">
