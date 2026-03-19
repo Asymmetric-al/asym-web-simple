@@ -33,16 +33,9 @@ function BrandLockup({ compact = false }: { compact?: boolean }) {
           1→∞
         </span>
       </div>
-      <div className="flex min-w-0 flex-col">
-        <span className="text-resilient font-heading text-[1.02rem] font-semibold leading-tight tracking-[-0.04em] text-foreground">
-          {siteConfig.name}
-        </span>
-        {!compact ? (
-          <span className="text-resilient max-w-[13rem] font-mono text-[0.68rem] leading-[1.2] uppercase tracking-[0.22em] text-muted-foreground sm:max-w-[15rem]">
-            {siteConfig.mission}
-          </span>
-        ) : null}
-      </div>
+      <span className="text-resilient min-w-0 font-heading text-[1.02rem] font-semibold leading-none tracking-[-0.04em] text-foreground">
+        {compact ? siteConfig.shortName : siteConfig.name}
+      </span>
     </Link>
   );
 }
@@ -60,14 +53,14 @@ export function Header() {
         className="mx-auto max-w-[80rem] px-4 sm:px-6 lg:px-8"
       >
         <div className="pointer-events-auto page-shell-glow surface-panel flex items-center justify-between gap-3 rounded-[1.85rem] px-4 py-3 sm:px-5 lg:gap-5">
-          <div className="flex min-w-0 items-center gap-4 lg:gap-6">
+          <div className="flex min-w-0 shrink-0 items-center gap-4">
             <BrandLockup />
-            <p className="text-resilient hidden max-w-[24ch] text-sm leading-6 text-muted-foreground 2xl:block">
-              Calm, high-trust software for the operational weight of sending.
-            </p>
           </div>
 
-          <nav className="hidden shrink-0 items-center gap-1 rounded-full bg-background/50 p-1 lg:flex" aria-label="Primary navigation">
+          <nav
+            className="hidden items-center gap-1 rounded-full bg-background/50 p-1 lg:flex"
+            aria-label="Primary navigation"
+          >
             {navigationLinks.map((link) => {
               const active =
                 pathname === link.href || pathname.startsWith(`${link.href}/`);
@@ -132,11 +125,11 @@ export function Header() {
                   <ThemeToggle />
                 </div>
                 <SheetTitle className="font-heading text-xl tracking-[-0.04em]">
-                  Clear tools for serious sending work.
+                  Mission operating system
                 </SheetTitle>
                 <SheetDescription className="max-w-[28ch] text-sm leading-6">
-                  Navigate the platform, learn the philosophy, or join the
-                  waitlist for early conversations.
+                  Navigate the platform, learn the philosophy, or start a
+                  conversation.
                 </SheetDescription>
               </SheetHeader>
 
