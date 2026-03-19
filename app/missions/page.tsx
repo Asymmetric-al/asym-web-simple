@@ -110,7 +110,7 @@ export default function MissionsPage() {
             screenshotAlt="Mission-facing software overlay"
             badge="Why missions"
             caption={
-              <div className="space-y-1">
+              <div className="flex flex-col gap-1">
                 <p className="font-medium text-foreground">
                   Close the gap between Silicon Valley innovation and the Great
                   Commission.
@@ -128,7 +128,7 @@ export default function MissionsPage() {
       <Section tone="sky">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
           <Reveal>
-            <div className="rounded-[2rem] border border-foreground/10 bg-card/84 p-7 shadow-[0_24px_70px_-54px_rgba(22,33,43,0.78)] sm:p-8">
+            <div className="surface-panel rounded-[2rem] p-7 sm:p-8">
               <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/70">
                 01 // The Focus
               </p>
@@ -152,7 +152,7 @@ export default function MissionsPage() {
 
           <div className="grid gap-4">
             <Reveal delay={0.06}>
-              <div className="rounded-[2rem] border border-foreground/10 bg-primary px-7 py-8 text-primary-foreground shadow-[0_28px_70px_-50px_rgba(22,33,43,0.8)]">
+              <div className="page-shell-glow rounded-[2rem] border border-foreground/10 bg-primary px-7 py-8 text-primary-foreground shadow-[0_28px_70px_-50px_rgba(22,33,43,0.8)]">
                 <p className="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-primary-foreground/70">
                   02 // The Reality
                 </p>
@@ -169,7 +169,7 @@ export default function MissionsPage() {
               <StaggerReveal>
                 {differencePoints.map((item) => (
                   <StaggerItem key={item.title}>
-                    <Card className="rounded-[1.7rem] border border-foreground/10 bg-card/82 shadow-[0_20px_55px_-46px_rgba(22,33,43,0.72)]">
+                    <Card className="surface-card rounded-[1.7rem]">
                       <CardHeader>
                         <CardTitle className="font-heading text-xl font-semibold tracking-[-0.04em]">
                           {item.title}
@@ -197,7 +197,7 @@ export default function MissionsPage() {
           <StaggerReveal>
             {audiences.map((item) => (
               <StaggerItem key={item.title}>
-                <Card className="h-full rounded-[1.8rem] border border-foreground/10 bg-card/84 shadow-[0_22px_60px_-50px_rgba(22,33,43,0.75)]">
+                <Card className="surface-card h-full rounded-[1.8rem]">
                   <CardHeader>
                     <div className="flex size-11 items-center justify-center rounded-2xl bg-secondary text-primary shadow-sm">
                       <item.icon className="size-5" />
@@ -226,7 +226,7 @@ export default function MissionsPage() {
           <StaggerReveal>
             {impactPoints.map((point, index) => (
               <StaggerItem key={point}>
-                <Card className="h-full rounded-[1.75rem] border border-foreground/10 bg-card/82 shadow-[0_20px_55px_-46px_rgba(22,33,43,0.72)]">
+                <Card className="surface-card h-full rounded-[1.75rem]">
                   <CardHeader>
                     <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/70">
                       0{index + 1}
@@ -245,7 +245,7 @@ export default function MissionsPage() {
       <Section>
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
           <Reveal>
-            <div className="rounded-[2rem] border border-foreground/10 bg-card/84 p-7 shadow-[0_24px_70px_-54px_rgba(22,33,43,0.78)] sm:p-8">
+            <div className="surface-panel rounded-[2rem] p-7 sm:p-8">
               <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/70">
                 05 // Origin Story
               </p>
@@ -271,7 +271,7 @@ export default function MissionsPage() {
 
           <div className="grid gap-4">
             <Reveal delay={0.08}>
-              <Card className="rounded-[1.8rem] border border-foreground/10 bg-primary text-primary-foreground shadow-[0_28px_70px_-50px_rgba(22,33,43,0.82)]">
+              <Card className="page-shell-glow rounded-[1.8rem] border border-foreground/10 bg-primary text-primary-foreground shadow-[0_28px_70px_-50px_rgba(22,33,43,0.82)]">
                 <CardHeader>
                   <p className="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-primary-foreground/70">
                     06 // Open Source
@@ -294,7 +294,7 @@ export default function MissionsPage() {
             </Reveal>
 
             <Reveal delay={0.14}>
-              <Card className="rounded-[1.8rem] border border-foreground/10 bg-card/84 shadow-[0_22px_60px_-50px_rgba(22,33,43,0.75)]">
+              <Card className="surface-card rounded-[1.8rem]">
                 <CardHeader>
                   <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/70">
                     07 // Invitation
@@ -318,11 +318,11 @@ export default function MissionsPage() {
                     href="/join"
                     className={cn(
                       buttonVariants({ size: "lg" }),
-                      "mt-2 rounded-full px-5"
+                      "mt-2 px-5"
                     )}
                   >
                     Join the Build Community
-                    <ArrowRight className="size-4" />
+                    <ArrowRight data-icon="inline-end" />
                   </Link>
                 </CardContent>
               </Card>

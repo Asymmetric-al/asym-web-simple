@@ -108,7 +108,7 @@ export default function SpecsPage() {
         meta={["Open source", "Portable", "Observable", "Secure", "Vercel-friendly"]}
       >
         <Reveal>
-          <div className="rounded-[2rem] border border-foreground/10 bg-primary px-6 py-7 text-primary-foreground shadow-[0_32px_80px_-56px_rgba(22,33,43,0.8)] sm:px-8 sm:py-9">
+          <div className="page-shell-glow rounded-[2rem] border border-foreground/10 bg-primary px-6 py-7 text-primary-foreground shadow-[0_32px_80px_-56px_rgba(22,33,43,0.8)] sm:px-8 sm:py-9">
             <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary-foreground/70">
               Engine room
             </p>
@@ -141,7 +141,7 @@ export default function SpecsPage() {
           <StaggerReveal>
             {layers.map((item) => (
               <StaggerItem key={item.title}>
-                <Card className="h-full rounded-[1.8rem] border border-foreground/10 bg-card/84 shadow-[0_22px_60px_-50px_rgba(22,33,43,0.75)]">
+                <Card className="surface-card h-full rounded-[1.8rem]">
                   <CardHeader>
                     <div className="flex size-11 items-center justify-center rounded-2xl bg-secondary text-primary shadow-sm">
                       <item.icon className="size-5" />
@@ -170,7 +170,7 @@ export default function SpecsPage() {
           <StaggerReveal>
             {targets.map((item) => (
               <StaggerItem key={item.label}>
-                <Card className="rounded-[1.7rem] border border-foreground/10 bg-card/85 shadow-[0_20px_55px_-46px_rgba(22,33,43,0.72)]">
+                <Card className="surface-card rounded-[1.7rem]">
                   <CardHeader>
                     <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/70">
                       {item.label}
@@ -189,7 +189,7 @@ export default function SpecsPage() {
       <Section>
         <div className="grid gap-6 lg:grid-cols-[minmax(0,0.86fr)_minmax(0,1.14fr)]">
           <Reveal>
-            <div className="rounded-[2rem] border border-foreground/10 bg-card/84 p-7 shadow-[0_24px_70px_-54px_rgba(22,33,43,0.78)] sm:p-8">
+            <div className="surface-panel rounded-[2rem] p-7 sm:p-8">
               <p className="font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/70">
                 Release posture
               </p>
@@ -205,7 +205,7 @@ export default function SpecsPage() {
             </div>
           </Reveal>
           <Reveal delay={0.08}>
-            <Card className="rounded-[2rem] border border-foreground/10 bg-primary text-primary-foreground shadow-[0_30px_78px_-52px_rgba(22,33,43,0.84)]">
+            <Card className="page-shell-glow rounded-[2rem] border border-foreground/10 bg-primary text-primary-foreground shadow-[0_30px_78px_-52px_rgba(22,33,43,0.84)]">
               <CardHeader>
                 <p className="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-primary-foreground/70">
                   Release gates
