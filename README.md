@@ -1,200 +1,154 @@
-# SaaS Landing Page Template
+# Asymmetric.al
 
-A premium, production-ready Next.js 16+ landing page template designed for SaaS products, startups, and digital products. Features modern animations, dark mode, full accessibility, and a beautiful design system.
+The production website for **Asym** — a unified mission operating system for Christian sending agencies. Built in the open because the organizations we serve deserve to see the architecture.
 
-## ✨ Highlights
+> *Simple faithfulness can still create outsized outcomes.* — 1 → ∞
 
-- 🎨 **Premium Design** - Modern, polished UI with attention to every detail
-- 🌙 **Dark Mode** - Seamless light/dark theme switching
-- ⚡ **Blazing Fast** - Optimized for Core Web Vitals
-- 📱 **Fully Responsive** - Looks great on all devices
-- ♿ **Accessible** - WCAG 2.1 AA compliant
-- 🔧 **Easy to Customize** - Centralized configuration file
+## What this is
 
-## Features
+[Asymmetric.al](https://asymmetric.al) is the public-facing site for the Asym platform: a mission operating system purpose-built for modern sending agencies. It replaces the fragmented DIY stack — Salesforce, Mailchimp, QuickBooks, spreadsheets, and site builders — with a single, coherent surface for finance, mobilization, donor support, communications, and web operations.
 
-- ✅ **Next.js 16+** with App Router
-- ✅ **TypeScript** (strict mode)
-- ✅ **Tailwind CSS v4** with design tokens
-- ✅ **Smooth Scrolling** via Lenis
-- ✅ **Motion** via motion/react with reduced-motion support
-- ✅ **SEO Ready** - metadata, Open Graph, Twitter cards
-- ✅ **Accessibility** - skip links, focus rings, ARIA labels
-- ✅ **Edge Compatible** - deploy anywhere
+Operated as a project under **Global Fellowship Inc.**, a 501(c)(3) nonprofit (EIN 68-0214543) based in Meadow Vista, California. Our staff raise support like the missionaries we serve.
 
-## 🚀 Quick Start
+This repository is the production website. The platform it describes is also being built in the open on the same principle.
 
-### 1. Install dependencies
+## Stack
 
-```bash
-npm install
-```
+- **Next.js 16** — App Router, React Server Components, Turbopack dev
+- **React 19**
+- **TypeScript** — strict mode throughout
+- **Tailwind CSS v4** — custom design tokens via CSS variables
+- **shadcn/ui** — `base-maia` style, Base UI primitives for custom components
+- **Lenis** — smooth scroll
+- **motion/react** — animations with reduced-motion support
+- **next-themes** — dark mode
+- **Lucide React** — icons
 
-### 2. Start development server
+## Pages
 
-```bash
-npm run dev
-```
+| Route | Description |
+|---|---|
+| `/` | Home — mission, philosophy, system capabilities |
+| `/platform` | Platform overview — Mission Control modules |
+| `/missions` | Role views for sending agency teams |
+| `/specs` | Tech architecture, performance targets, release gates |
+| `/manifesto` | Philosophy, design principles, organizational posture |
+| `/join` | Pilot agencies, builders, and build supporters |
+| `/give` | Support the build |
+| `/contact` | General inquiry |
+| `/statement-of-faith` | Theological foundation |
+| `/privacy` | Privacy policy |
+| `/terms` | Terms of service |
+| `/501c3` | 501(c)(3) disclosure |
 
-Open [http://localhost:3000](http://localhost:3000)
-
-### 3. Customize your site
-
-Edit `lib/config.ts` to update all text, links, and settings in one place.
-
-## 📁 Project Structure
+## Project Structure
 
 ```
 ├── app/
-│   ├── globals.css        # Design tokens & theme colors
-│   ├── layout.tsx         # Root layout with providers
-│   ├── page.tsx           # Landing page
-│   └── ...
+│   ├── globals.css           # Design tokens, theme colors, surface variables
+│   ├── layout.tsx            # Root layout with providers and metadata
+│   ├── page.tsx              # Home page
+│   ├── platform/page.tsx     # Platform and module overview
+│   ├── missions/page.tsx     # Role views by team function
+│   ├── specs/page.tsx        # Technical architecture
+│   ├── manifesto/page.tsx    # Philosophy and organizational posture
+│   └── ...                   # All other routes
 ├── components/
-│   ├── hero.tsx           # Hero section with parallax
-│   ├── features-bento.tsx # Bento grid features
-│   ├── testimonials.tsx   # Auto-rotating testimonials
-│   ├── how-it-works.tsx   # Steps with scroll progress
-│   ├── pricing.tsx        # 3-tier pricing cards
-│   ├── faq.tsx            # Accordion FAQ
-│   ├── footer.tsx         # CTA card + footer links
-│   └── ...
+│   ├── header.tsx            # Site header with navigation
+│   ├── footer.tsx            # Footer with link groups
+│   ├── site/
+│   │   ├── page.tsx          # PageHero, Section, SectionHeader
+│   │   ├── media-stage.tsx   # Hero media display
+│   │   ├── platform-tabs.tsx # Platform module tab interface
+│   │   ├── inquiry-form.tsx  # Contact and waitlist forms
+│   │   └── reveal.tsx        # Scroll-driven reveal animations
+│   ├── react-bits/           # Motion and animation components
+│   └── ui/                   # shadcn/ui component library
 ├── lib/
-│   ├── config.ts          # ⭐ EDIT THIS - All site config
-│   ├── metadata.ts        # SEO utilities
-│   └── motion.tsx         # Motion components
+│   ├── config.ts             # ⭐ Site-wide config — edit here first
+│   ├── metadata.ts           # SEO and Open Graph utilities
+│   ├── motion.tsx            # Shared motion primitives
+│   └── utils.ts              # Utility functions
 └── public/
-    ├── BG.jpg             # Hero background
-    ├── dashboardmock.png  # Product screenshot
-    └── mock-logos/        # Company logos
+    ├── BG.jpg                # Hero background
+    ├── dashboardmock.png     # Platform screenshot
+    └── mock-logos/           # Placeholder organization logos
 ```
 
-## 🎨 Customization Guide
+## Getting Started
 
-### Step 1: Update Site Configuration
+**Requirements:** Node.js 22+, npm 10+
 
-Edit `lib/config.ts` - this is your **single source of truth** for all text content:
-
-```ts
-export const siteConfig = {
-  name: "Your Brand",
-  tagline: "Your Tagline",
-  description: "Your description",
-  // ...
-};
-
-export const heroConfig = {
-  headline: {
-    line1: "Your Headline",
-    line2: "Second Line",
-    accent: "Accent Word",
-  },
-  // ...
-};
+```bash
+npm install
+npm run dev
 ```
 
-### Step 2: Update Theme Colors
+Open [http://localhost:3000](http://localhost:3000).
 
-Edit `app/globals.css` to change your brand colors:
+No `.env` file is required to run the site locally.
 
-```css
-:root {
-  --accent: #a8d946;        /* Your primary brand color */
-  --background: #f5f5f5;    /* Light mode background */
-  --foreground: #0a0a0a;    /* Light mode text */
-  /* ... */
-}
+## Scripts
 
-.dark {
-  --background: #141414;    /* Dark mode background */
-  --foreground: #fafafa;    /* Dark mode text */
-  /* ... */
-}
-```
+| Command | Description |
+|---|---|
+| `npm run dev` | Start dev server (Turbopack, port 3000) |
+| `npm run build` | Production build |
+| `npm run start` | Start production server |
+| `npm run lint` | Run ESLint |
+| `npm run typecheck` | Run TypeScript checks |
+| `npm run format` | Format with Prettier |
 
-### Step 3: Replace Assets
+`npm run lint` and `npm run typecheck` are the primary correctness checks — there is no dedicated test suite.
 
-| File | Purpose | Dimensions |
-|------|---------|------------|
-| `public/BG.jpg` | Hero background | 1920×1080+ |
-| `public/dashboardmock.png` | Product screenshot | 1920×1080 |
-| `public/mock-logos/*.svg` | Company logos | ~120×40 |
-| `app/icon.svg` | Favicon | 32×32 |
-| `app/apple-icon.svg` | Apple touch icon | 180×180 |
+## Configuration
 
-### Step 4: Toggle Features
+**`lib/config.ts`** is the single source of truth for site-wide content: name, URL, email, CTAs, navigation links, and footer groups.
 
-In `lib/config.ts`, enable/disable features:
+**`app/globals.css`** holds all design tokens: brand colors, surface variables, typography scale, and dark/light mode values.
 
-```ts
-export const features = {
-  smoothScroll: true,      // Lenis smooth scrolling
-  testimonialAutoplay: true, // Auto-rotate testimonials
-  parallaxHero: true,      // Mouse parallax on hero
-  blurInHeadline: true,    // Scroll blur animation
-};
-```
+## The Platform (what this site describes)
 
-## 🎯 Section Components
+Asym replaces the fragmented agency stack with Mission Control: one login, one shared database, one operating surface.
 
-Each section is a standalone component you can customize or remove:
+**Core modules:**
+- **Partners CRM** — Missions-built on Twenty CRM. Tracks churches, households, designations, and relationship history.
+- **Contributions Hub** — Live transaction visibility, Stripe-native processing, reconciliation automation.
+- **Web Studio** — Headless Next.js + Directus CMS so agencies control their sites without change-order lock-in.
+- **Email Studio** — Branded receipts, password resets, and campaign emails with full ownership.
+- **Statements Studio** — Year-end tax documents and receipt packs generated automatically.
+- **Mobilize** — Visual workflow orchestration from candidate interest to field deployment via Zapier.
 
-| Component | Description |
-|-----------|-------------|
-| `Hero` | Full-width hero with parallax background, headline, CTA |
-| `BlurInHeadline` | Scroll-driven text reveal animation |
-| `FeaturesBento` | Bento grid with phone mockups and stats |
-| `Testimonials` | Auto-rotating testimonials with avatars |
-| `HowItWorks` | Sticky sidebar + scrolling steps |
-| `Pricing` | 3-tier pricing cards with popular highlight |
-| `FAQ` | Accordion with smooth animations |
-| `Footer` | CTA email capture + link columns |
+**Supporting modules:** Donor Support Hub (Chatwoot CE), Sign Studio (Documenso CE), Report Studio, Automations, Member Care, Events & Gatherings.
 
-## 📱 Responsive Breakpoints
+**Full stack:** TypeScript · Next.js · NestJS · PostgreSQL · Redis · Twenty CRM · Directus · Chatwoot CE · Documenso CE · Supabase Auth · Stripe · SendGrid · Zapier · Inngest · Vercel · OpenTelemetry
 
-The template uses custom breakpoints for precise control:
+## Contributing
 
-- `max-[1200px]` - Tablet landscape
-- `max-[850px]` - Tablet portrait / Mobile
-- `sm:` / `md:` / `lg:` - Standard Tailwind breakpoints
+This project is open source as part of Asym's commitment to tenant sovereignty and transparent architecture. We welcome engineers, designers, and systems thinkers who want to use their craft for the Great Commission.
 
-## ♿ Accessibility Features
+- Review open issues before starting new work
+- Follow the existing `app/`, `components/`, and `lib/` placement patterns
+- Keep `lib/config.ts` as the content configuration source of truth
+- Run `npm run lint` and `npm run typecheck` before submitting a PR
+- Preserve server/client component boundaries — avoid broad refactors to client components without a clear reason
 
-- Skip-to-content link
-- Proper heading hierarchy (h1 → h2 → h3)
-- ARIA labels on all interactive elements
-- Keyboard navigation support
-- Focus visible rings
-- Reduced motion support
-- Screen reader announcements for dynamic content
+## Deployment
 
-## 🚀 Deployment
-
-The template is Edge-compatible and works with:
-
-- **Vercel** (recommended)
-- **Netlify**
-- **Cloudflare Pages**
-- Any static hosting
+Deployed to Vercel. Production deploys trigger from `main`.
 
 ```bash
 npm run build
 ```
 
-## 📜 Scripts
+Compatible with Vercel, Netlify, Cloudflare Pages, and any Node.js-compatible host.
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Build for production |
-| `npm run start` | Start production server |
-| `npm run lint` | Run ESLint |
-| `npm run typecheck` | Run TypeScript checks |
+## License
 
-## 📄 License
-
-This template is licensed for use in commercial projects. You may not resell or redistribute the template itself.
+See [LICENSE](./LICENSE). This repository includes React Bits Pro components under a commercial license — see that file for permitted use terms.
 
 ---
 
-Built with ❤️ using Next.js, Tailwind CSS, and Motion
+**Minimize Clicks. Maximize Ministry.**
+
+[asymmetric.al](https://asymmetric.al) · [info@asymmetric.al](mailto:info@asymmetric.al) · [Global Fellowship Inc.](https://asymmetric.al/501c3)
