@@ -1,5 +1,6 @@
 "use client";
 
+import { ReadingProgress } from "@/components/site/reading-progress";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import { UiReadyMarker } from "@/components/ui-ready-marker";
 import { ReducedMotionProvider } from "@/lib/motion";
@@ -21,7 +22,10 @@ export function Providers({ children }: { children: ReactNode }): ReactNode {
         <TooltipProvider delay={120}>
           <ReducedMotionProvider>
             <UiReadyMarker />
-            <SmoothScroll>{children}</SmoothScroll>
+            <SmoothScroll>
+              {children}
+              <ReadingProgress />
+            </SmoothScroll>
           </ReducedMotionProvider>
         </TooltipProvider>
       </MotionConfig>

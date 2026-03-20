@@ -12,12 +12,13 @@ import {
 } from "@/components/ui/sheet";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { navigationLinks, siteConfig, supportLinks } from "@/lib/config";
+import { useReducedMotion } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import { Menu, MoveRight } from "lucide-react";
 import { motion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const pageLinks = [...navigationLinks, ...supportLinks];
 
@@ -44,6 +45,8 @@ export function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const menuTriggerRef = useRef<HTMLButtonElement | null>(null);
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -59,9 +62,15 @@ export function Header() {
   return (
     <header className="pointer-events-none fixed inset-x-0 top-0 z-50 pt-4 sm:pt-5">
       <motion.div
-        initial={{ opacity: 0, y: -18 }}
+        initial={
+          prefersReducedMotion ? false : { opacity: 0, y: -12 }
+        }
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        transition={
+          prefersReducedMotion
+            ? { duration: 0.01 }
+            : { duration: 0.36, ease: [0.22, 1, 0.36, 1] }
+        }
         className="mx-auto max-w-[80rem] px-4 sm:px-6 lg:px-8"
       >
         <div
@@ -124,10 +133,21 @@ export function Header() {
             </Link>
           </div>
 
-          <Sheet open={open} onOpenChange={setOpen}>
+          <Sheet
+            open={open}
+            onOpenChange={(next) => {
+              setOpen(next);
+              if (!next) {
+                requestAnimationFrame(() => {
+                  menuTriggerRef.current?.focus();
+                });
+              }
+            }}
+          >
             <div className="flex items-center gap-2 xl:hidden">
               <ThemeToggle />
               <SheetTrigger
+                ref={menuTriggerRef}
                 className={cn(
                   buttonVariants({ variant: "outline", size: "icon-lg" })
                 )}

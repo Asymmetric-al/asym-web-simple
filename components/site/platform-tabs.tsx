@@ -58,7 +58,7 @@ export function PlatformTabs({ items }: { items: PlatformTabItem[] }) {
                 initial={
                   prefersReducedMotion
                     ? { opacity: 0 }
-                    : { opacity: 0, y: 20, scale: 0.99 }
+                    : { opacity: 0, y: 10, scale: 0.992 }
                 }
                 animate={
                   prefersReducedMotion
@@ -68,10 +68,10 @@ export function PlatformTabs({ items }: { items: PlatformTabItem[] }) {
                 exit={
                   prefersReducedMotion
                     ? { opacity: 0 }
-                    : { opacity: 0, y: -12, scale: 0.99 }
+                    : { opacity: 0, y: -6, scale: 0.992 }
                 }
                 transition={getRevealTransition(prefersReducedMotion, {
-                  duration: 0.42,
+                  duration: 0.26,
                 })}
               >
                 <Card className="surface-panel surface-interactive rounded-[1.95rem]">

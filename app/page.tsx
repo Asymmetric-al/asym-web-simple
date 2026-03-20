@@ -161,6 +161,7 @@ export default function HomePage() {
         }}
       />
       <PageHero
+        revealTitle={false}
         eyebrow="Mission Operating System"
         title={
           <div>
@@ -169,8 +170,6 @@ export default function HomePage() {
               text="Run the Work In One Place"
               trigger="mount"
               segmentBy="words"
-              delay={55}
-              duration={0.72}
               blur={false}
               className="font-heading text-foreground text-[clamp(3.2rem,7vw,6rem)] leading-[0.92] font-semibold tracking-[-0.07em]"
             />
@@ -181,8 +180,12 @@ export default function HomePage() {
         }
         description="The unified platform for the modern missions agency. Bring finance, mobilization, donor support, communications, and web operations under one calm, trustworthy surface."
         actions={[
-          { label: "Request a Call", href: "/contact", variant: "outline" },
-          { label: "See the Platform", href: "/platform" },
+          { label: "Join Waitlist", href: "/join" },
+          {
+            label: "Request a Call",
+            href: "/contact",
+            variant: "outline",
+          },
         ]}
         meta={[
           "Unified operating system",
@@ -286,13 +289,15 @@ export default function HomePage() {
       </Section>
 
       <Section className="section-divider-accent">
-        <SectionHeader
-          eyebrow="System Capabilities"
-          title="Infrastructure as stewardship."
-          description="We do not look for ways to extract rent from your basic needs. We build digital rails for high-trust organizations to operate with sovereignty and speed."
-        />
-        <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-6">
-          <StaggerReveal>
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-6">
+          <StaggerReveal step={0.042}>
+            <StaggerItem className="col-span-full">
+              <SectionHeader
+                eyebrow="System Capabilities"
+                title="Infrastructure as stewardship."
+                description="We do not look for ways to extract rent from your basic needs. We build digital rails for high-trust organizations to operate with sovereignty and speed."
+              />
+            </StaggerItem>
             {capabilities.map((item, index) => (
               <StaggerItem
                 key={item.title}
