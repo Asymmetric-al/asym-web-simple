@@ -1,12 +1,24 @@
+import { timingSafeEqual } from "crypto";
 import { revalidatePath, revalidateTag } from "next/cache";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-export async function POST(request: NextRequest): Promise<NextResponse> {
-  const authHeader = request.headers.get("authorization");
-  const expectedToken = `Bearer ${process.env.REVALIDATION_SECRET}`;
+function safeEqual(a: string, b: string): boolean {
+  try {
+    const ab = Buffer.from(a);
+    const bb = Buffer.from(b);
+    if (ab.length !== bb.length) return false;
+    return timingSafeEqual(ab, bb);
+  } catch {
+    return false;
+  }
+}
 
-  if (authHeader !== expectedToken) {
+export async function POST(request: NextRequest): Promise<NextResponse> {
+  const authHeader = request.headers.get("authorization") ?? "";
+  const expectedToken = `Bearer ${process.env.REVALIDATION_SECRET ?? ""}`;
+
+  if (!safeEqual(authHeader, expectedToken)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
