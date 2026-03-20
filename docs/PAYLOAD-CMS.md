@@ -22,9 +22,23 @@ What *is* integrated:
 | **`app/api/draft/route.ts`** | Enables Next.js **draft mode** when `secret` query param matches `PAYLOAD_DRAFT_SECRET` (for future preview). |
 | **`app/api/revalidate/route.ts`** | **On-demand revalidation**: `POST` with `Authorization: Bearer ${REVALIDATION_SECRET}` and JSON `{ "path": "/..." }` or `{ "tag": "..." }`. |
 | **`app/api/disable-draft/route.ts`** | Disables draft mode (supporting route for preview flows). |
-| **`lib/env.ts`** | `validateEnv()` for strict checks; `env` object for non-throwing reads (used where appropriate). |
+| **`lib/env.ts`** | `validateEnv()` throws if core vars are missing (for optional use in server entrypoints); `env` object for non-throwing reads. **Nothing calls `validateEnv()` automatically today** — API routes use `process.env` directly so `next build` and static marketing pages work without a database. |
 
 Collections and globals in `payload.config.ts` are **stubbed with TODOs** for Phase 2 (Pages, Media, Globals for site settings / nav / SEO defaults, etc.).
+
+## `/api` routing: this app vs Payload
+
+Next.js matches **more specific** `app/api/...` routes first; everything else under `/api/*` falls through to Payload’s catch-all.
+
+| Path | Implemented in |
+|------|----------------|
+| `POST /api/contact` | `app/api/contact/route.ts` (Resend; not Payload) |
+| `GET /api/draft`, `GET /api/disable-draft` | `app/api/draft`, `app/api/disable-draft` (Next draft mode) |
+| `POST /api/revalidate` | `app/api/revalidate/route.ts` (on-demand ISR) |
+| `GET/POST /api/graphql`, playground | `app/(payload)/api/graphql/...` |
+| Other `/api/...` | `app/(payload)/api/[...slug]/route.ts` (Payload REST) |
+
+The `(payload)` segment is a **route group** only; it does **not** add `/payload` to public URLs.
 
 ## Environment variables
 
@@ -34,7 +48,7 @@ Collections and globals in `payload.config.ts` are **stubbed with TODOs** for Ph
 | `PAYLOAD_SECRET` | Payload auth / sessions | Long random string; **never commit**. |
 | `PAYLOAD_DRAFT_SECRET` | `/api/draft` preview links | Shared secret in preview URLs. |
 | `REVALIDATION_SECRET` | `/api/revalidate` | Bearer token for ISR/webhook-style revalidation. |
-| `RESEND_API_KEY` | `/api/contact` (Resend) | Validated in `validateEnv()` when you call it from server entrypoints. |
+| `RESEND_API_KEY` | `/api/contact` (Resend) | Required at runtime for the contact form to send mail; optional for `next build` / browsing. |
 | `BLOB_READ_WRITE_TOKEN` | Vercel Blob (media plugin) | Needed when the `media` collection is enabled in the Blob plugin. |
 | `NEXT_PUBLIC_SITE_URL` | Canonical URLs | Defaults to `https://asymmetric.al` in `lib/env.ts`. |
 
@@ -76,7 +90,18 @@ Copy **`.env.example`** to `.env.local` and fill values (`.env.local` is gitigno
 - [ ] Wire **preview** URLs using `/api/draft` + draft mode in preview routes.
 - [ ] Call **`/api/revalidate`** from Payload hooks or webhooks on publish.
 
+## Operational verification (marketing site)
+
+These checks confirm the **public marketing app** is healthy; they do **not** require Postgres or Payload secrets:
+
+- `npm run lint` — ESLint
+- `npm run typecheck` — TypeScript (use a clean `.next` if you see stale route-type errors: `rm -rf .next`)
+- `npm run build` — production build (should complete without Payload “invalid admin user collection” errors)
+- `npx playwright test tests/e2e/smoke.spec.ts --project=chromium` — run against `next start` on port **3001** (see `playwright.config.ts`), or rely on `webServer` in CI
+
+**Payload admin (`/admin`)** still needs a working `DATABASE_URI`, `PAYLOAD_SECRET`, and a migrated schema before login and CRUD are usable.
+
 ## References
 
-- [Payload + Next.js](https://payloadcms.com/docs/getting-started/installation) (official)
+- [Payload: Installation](https://payloadcms.com/docs/getting-started/installation) (official; Payload 3 targets **Node 20.9+** and supported Next.js versions — this repo uses **Next 16.2** and **Node 22**)
 - Project agent skill: `.agents/skills/payload/SKILL.md` and `reference/*`
