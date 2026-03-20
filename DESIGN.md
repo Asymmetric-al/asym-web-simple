@@ -307,9 +307,11 @@ The header is a **fixed floating pill** — it does not span the full width. It 
 
 ---
 
-### Hero Section (`PageHero`)
+### Hero Section (`PageHero` and home `HomePageHero`)
 
-The page hero uses a **two-column grid** at `lg` breakpoint: `grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]` — slightly left-weighted.
+**Homepage (`HomePageHero`):** A **full-bleed cinematic hero** aligned with the React Bits SaaS template language — `BG.jpg` fills the viewport behind copy as an absolute layer (`Image` `fill`, `object-cover`, slight scale), with **inset rounded canvas** on large viewports (`lg:inset-x-3 lg:top-3 lg:rounded-b-[2.35rem]`). Readability uses a **layered scrim**: parchment-to-clear vertical gradient (`from-background/90` → `to-background/60`, dark-mode variants), a **fine 5px mesh overlay** (`mix-blend-overlay`) echoing the artwork’s digital grain, a **diagonal wash** (`from-accent/30` → `to-primary/20`), and a **soft radial glow** from `--glow-primary`. Headline block is **centered** at `lg` (`max-w-4xl`, `text-center`; left-aligned on narrow viewports). The **primary CTA** uses a **split control**: Sage Green Mist accent bar behind the label (`absolute` `bg-accent` with `right-[2.75rem]`) plus a **pill primary** label and attached **icon disc** with `ArrowDownRight` (hover rotates −45°). Below, **`HeroProductPreview`** shows `dashboardmock.png` inside `surface-panel` with a **bottom fade mask** (`linear-gradient` mask to transparent ~54%) like the template’s dashboard reveal. **Site chrome:** fixed **quarter-round SVG corners** (`SiteChrome`, z-index 38) mirror the template’s corner brackets without replacing the floating nav pill.
+
+**Inner pages (`PageHero`):** A **two-column grid** at `lg` breakpoint: `grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]` — slightly left-weighted.
 
 **Left column (text):**
 - Eyebrow badge (see badge spec above)
@@ -322,7 +324,7 @@ The page hero uses a **two-column grid** at `lg` breakpoint: `grid-cols-[minmax(
 - Meta pills row: `mt-8 flex flex-wrap gap-2.5`
 
 **Right column:**
-- Contains `MediaStage` on the home page
+- Contains `MediaStage` on inner marketing pages that use a side-by-side hero
 - `lg:pl-4` padding offset
 
 **Hero spacing:**
