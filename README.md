@@ -23,6 +23,7 @@ This repository is the production website. The platform it describes is also bei
 - **motion/react** — animations with reduced-motion support
 - **next-themes** — dark mode
 - **Lucide React** — icons
+- **Payload CMS 3** — admin at `/admin`, Postgres + Lexical + Vercel Blob plugin (see [docs/PAYLOAD-CMS.md](./docs/PAYLOAD-CMS.md))
 
 ## Pages
 
@@ -40,39 +41,37 @@ This repository is the production website. The platform it describes is also bei
 | `/privacy` | Privacy policy |
 | `/terms` | Terms of service |
 | `/501c3` | 501(c)(3) disclosure |
+| `/admin` | Payload CMS admin (requires env + database) |
+
+Visual design tokens and language live in **`DESIGN.md`**. Payload wiring is documented in **`docs/PAYLOAD-CMS.md`**.
 
 ## Project Structure
 
 ```
 ├── app/
+│   ├── (app)/                # Marketing routes (URLs unchanged: /, /contact, …)
+│   │   ├── layout.tsx        # Header, footer, SiteChrome, background glows
+│   │   ├── page.tsx          # Home
+│   │   └── …/page.tsx        # Other public pages
+│   ├── (payload)/            # Payload admin + REST/GraphQL under /admin, /api/*
+│   ├── api/                  # App routes: contact, draft, revalidate, …
 │   ├── globals.css           # Design tokens, theme colors, surface variables
-│   ├── layout.tsx            # Root layout with providers and metadata
-│   ├── page.tsx              # Home page
-│   ├── platform/page.tsx     # Platform and module overview
-│   ├── missions/page.tsx     # Role views by team function
-│   ├── specs/page.tsx        # Technical architecture
-│   ├── manifesto/page.tsx    # Philosophy and organizational posture
-│   └── ...                   # All other routes
+│   └── layout.tsx            # Root: fonts, providers, analytics
 ├── components/
-│   ├── header.tsx            # Site header with navigation
-│   ├── footer.tsx            # Footer with link groups
-│   ├── site/
-│   │   ├── page.tsx          # PageHero, Section, SectionHeader
-│   │   ├── media-stage.tsx   # Hero media display
-│   │   ├── platform-tabs.tsx # Platform module tab interface
-│   │   ├── inquiry-form.tsx  # Contact and waitlist forms
-│   │   └── reveal.tsx        # Scroll-driven reveal animations
-│   ├── react-bits/           # Motion and animation components
-│   └── ui/                   # shadcn/ui component library
+│   ├── header.tsx / footer.tsx
+│   ├── site/                 # Page sections, hero, forms, motion
+│   ├── react-bits/
+│   └── ui/                   # shadcn/ui
 ├── lib/
-│   ├── config.ts             # ⭐ Site-wide config — edit here first
-│   ├── metadata.ts           # SEO and Open Graph utilities
-│   ├── motion.tsx            # Shared motion primitives
-│   └── utils.ts              # Utility functions
-└── public/
-    ├── BG.jpg                # Hero background
-    ├── dashboardmock.png     # Platform screenshot
-    └── mock-logos/           # Placeholder organization logos
+│   ├── config.ts             # ⭐ Site-wide content (Phase 1); adapter in lib/content/
+│   ├── content/              # getSiteGlobal, nav, footer — swap to Payload in Phase 2
+│   ├── env.ts                # Environment validation helpers
+│   ├── metadata.ts
+│   └── …
+├── docs/
+│   └── PAYLOAD-CMS.md        # Payload integration guide
+├── payload.config.ts         # Payload buildConfig
+└── public/                   # Static assets
 ```
 
 ## Getting Started
@@ -86,7 +85,7 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-No `.env` file is required to run the site locally.
+**Marketing site only:** no `.env` is required to run `dev` / `build`. **Payload admin** (`/admin`) and **contact email** need variables from `.env.example` → `.env.local`.
 
 ## Scripts
 
@@ -98,8 +97,11 @@ No `.env` file is required to run the site locally.
 | `npm run lint` | Run ESLint |
 | `npm run typecheck` | Run TypeScript checks |
 | `npm run format` | Format with Prettier |
+| `npm run qa:smoke` | Playwright smoke tests (requires dev server or see `playwright.config.ts`) |
+| `npm run generate:types` | Payload: regenerate `payload-types.ts` from config |
+| `npm run generate:importmap` | Payload: regenerate admin import map |
 
-`npm run lint` and `npm run typecheck` are the primary correctness checks — there is no dedicated test suite.
+`npm run lint` and `npm run typecheck` are the primary static checks; Playwright covers key UX flows (`tests/e2e/`, `tests/a11y/`, `tests/visual/`).
 
 ## Configuration
 
