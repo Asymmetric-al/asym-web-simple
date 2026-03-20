@@ -1,3 +1,4 @@
+import { withPayload } from "@payloadcms/next/withPayload";
 import type { NextConfig } from "next";
 import createBundleAnalyzer from "@next/bundle-analyzer";
 
@@ -19,6 +20,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "deifkwefumgah.cloudfront.net",
       },
+      {
+        protocol: "https",
+        hostname: "*.public.blob.vercel-storage.com",
+      },
     ],
   },
   productionBrowserSourceMaps: false,
@@ -27,4 +32,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withBundleAnalyzer(nextConfig);
+export default withPayload(withBundleAnalyzer(nextConfig));

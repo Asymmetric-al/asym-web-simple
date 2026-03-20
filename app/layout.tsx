@@ -1,7 +1,4 @@
-import { Footer } from "@/components/footer";
-import { Header } from "@/components/header";
 import { Providers } from "@/components/providers";
-import { SiteChrome } from "@/components/site/site-chrome";
 import { SkipToContent } from "@/components/skip-to-content";
 import { baseMetadata } from "@/lib/metadata";
 import { Analytics } from "@vercel/analytics/next";
@@ -53,22 +50,8 @@ export default function RootLayout({
         className={`${headingFont.variable} ${bodyFont.variable} ${monoFont.variable} bg-background text-foreground min-h-screen font-sans antialiased`}
       >
         <Providers>
-          <div className="relative flex min-h-screen flex-col overflow-x-clip">
-            <div
-              aria-hidden="true"
-              className="pointer-events-none fixed inset-x-0 top-0 -z-10 h-[32rem] bg-[radial-gradient(circle_at_top,var(--glow-primary),transparent_55%)]"
-            />
-            <div
-              aria-hidden="true"
-              className="pointer-events-none fixed inset-y-0 left-[-12rem] -z-10 w-[24rem] bg-[radial-gradient(circle,var(--glow-accent),transparent_70%)] blur-2xl"
-            />
-
-            <SiteChrome />
-            <SkipToContent />
-            <Header />
-            {children}
-            <Footer />
-          </div>
+          <SkipToContent />
+          {children}
           <Analytics />
           <SpeedInsights />
         </Providers>
