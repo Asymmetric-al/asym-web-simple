@@ -1,6 +1,9 @@
 "use client";
 
-import { useReducedMotion as useAppReducedMotion } from "@/lib/motion";
+import {
+  siteEaseGentle,
+  useReducedMotion as useAppReducedMotion,
+} from "@/lib/motion";
 import React, {
   useEffect,
   useMemo,
@@ -115,9 +118,9 @@ const StaggeredText = forwardRef<StaggeredTextHandle, StaggeredTextProps>(
       trigger = "inView",
       segmentBy = "words",
       separator,
-      delay = 80,
-      duration = 0.6,
-      easing = (t: number) => t,
+      delay = 48,
+      duration = 0.38,
+      easing = siteEaseGentle,
       threshold = 0.1,
       rootMargin = "0px",
       direction = "top",
@@ -191,9 +194,9 @@ const StaggeredText = forwardRef<StaggeredTextHandle, StaggeredTextProps>(
       };
 
       if (direction === "top" || direction === "bottom") {
-        base.y = direction === "top" ? -40 : 40;
+        base.y = direction === "top" ? -14 : 14;
       } else {
-        base.x = direction === "left" ? -40 : 40;
+        base.x = direction === "left" ? -14 : 14;
       }
 
       if (blur) {
@@ -363,7 +366,6 @@ const StaggeredText = forwardRef<StaggeredTextHandle, StaggeredTextProps>(
                     maxWidth: "100%",
                     overflowWrap: "anywhere",
                     wordBreak: "break-word",
-                    willChange: "transform, filter, opacity",
                   }}
                 >
                   {segmentBy === "chars"

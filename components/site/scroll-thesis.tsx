@@ -1,9 +1,25 @@
 "use client";
 
 import { siteRevealScale, useReducedMotion } from "@/lib/motion";
-import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import { useEffect, useRef, useState } from "react";
+import { cn } from "@/lib/utils";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+
+const easeWord = "cubic-bezier(0.22, 1, 0.36, 1)";
+
+function subscribeNarrow(callback: () => void): () => void {
+  const mq = window.matchMedia("(max-width: 767px)");
+  mq.addEventListener("change", callback);
+  return () => mq.removeEventListener("change", callback);
+}
+
+function narrowSnapshot(): boolean {
+  return window.matchMedia("(max-width: 767px)").matches;
+}
+
+function narrowServerSnapshot(): boolean {
+  return false;
+}
 
 export function ScrollThesis({
   eyebrow,
@@ -15,9 +31,17 @@ export function ScrollThesis({
   className?: string | undefined;
 }) {
   const prefersReducedMotion = useReducedMotion();
+  const narrowLayout = useSyncExternalStore(
+    subscribeNarrow,
+    narrowSnapshot,
+    narrowServerSnapshot
+  );
   const containerRef = useRef<HTMLDivElement>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const words = text.split(" ");
+
+  const liteWordMotion =
+    narrowLayout && !prefersReducedMotion ? true : false;
 
   useEffect(() => {
     if (prefersReducedMotion) return;
@@ -81,10 +105,21 @@ export function ScrollThesis({
               const opacity = prefersReducedMotion
                 ? 1
                 : 0.18 + wordProgress * 0.82;
-              const blur = prefersReducedMotion ? 0 : (1 - wordProgress) * 7;
-              const scale = prefersReducedMotion
-                ? 1
-                : siteRevealScale + wordProgress * (1 - siteRevealScale);
+              const blur =
+                prefersReducedMotion || liteWordMotion
+                  ? 0
+                  : (1 - wordProgress) * 7;
+              const scale =
+                prefersReducedMotion || liteWordMotion
+                  ? 1
+                  : siteRevealScale + wordProgress * (1 - siteRevealScale);
+
+              const transitionStyle =
+                prefersReducedMotion
+                  ? undefined
+                  : liteWordMotion
+                    ? `opacity 90ms ${easeWord}`
+                    : `opacity 90ms ${easeWord}, filter 90ms ${easeWord}, transform 90ms ${easeWord}`;
 
               return (
                 <span
@@ -92,11 +127,9 @@ export function ScrollThesis({
                   className="mr-2 inline-block sm:mr-3"
                   style={{
                     opacity,
-                    filter: `blur(${blur}px)`,
-                    transform: `scale(${scale})`,
-                    transition: prefersReducedMotion
-                      ? undefined
-                      : "opacity 85ms linear, filter 85ms linear, transform 85ms linear",
+                    filter: blur > 0 ? `blur(${blur}px)` : "none",
+                    transform: scale !== 1 ? `scale(${scale})` : "none",
+                    transition: transitionStyle,
                   }}
                 >
                   {word}

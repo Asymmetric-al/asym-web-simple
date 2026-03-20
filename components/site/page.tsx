@@ -1,3 +1,4 @@
+import { HeroReveal } from "@/components/site/hero-reveal";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { cn } from "@/lib/utils";
@@ -37,6 +38,7 @@ export function PageHero({
   children,
   density = "marketing",
   className,
+  revealTitle = true,
 }: {
   eyebrow: string;
   title: ReactNode;
@@ -46,6 +48,8 @@ export function PageHero({
   children?: ReactNode;
   density?: Density;
   className?: string;
+  /** When true, wraps `title` in a subtle mount reveal (skip if title already animates, e.g. StaggeredText). */
+  revealTitle?: boolean;
 }) {
   const densityClassName =
     density === "legal"
@@ -62,7 +66,9 @@ export function PageHero({
           >
             {eyebrow}
           </Badge>
-          <div className="min-w-0 mt-6">{title}</div>
+          <div className="min-w-0 mt-6">
+            {revealTitle ? <HeroReveal>{title}</HeroReveal> : title}
+          </div>
           <div className="content-measure mt-6 text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">
             {description}
           </div>

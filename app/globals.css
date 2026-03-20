@@ -308,14 +308,15 @@ textarea:focus-visible {
 
 .surface-interactive {
   transition:
-    transform 240ms cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 220ms ease,
-    box-shadow 240ms cubic-bezier(0.22, 1, 0.36, 1),
-    background-color 220ms ease;
+    transform 150ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 150ms ease,
+    box-shadow 150ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 150ms ease;
   transform-origin: center bottom;
 }
 
 .surface-interactive:is(:hover, :focus-within) {
+  transition-duration: 0ms;
   transform: translateY(-3px);
   border-color: color-mix(in srgb, var(--ring) 24%, var(--border));
   box-shadow:
