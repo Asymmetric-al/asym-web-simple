@@ -153,7 +153,7 @@ export default function HomePage() {
   };
 
   return (
-    <main id="main-content">
+    <main id="main-content" tabIndex={-1}>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

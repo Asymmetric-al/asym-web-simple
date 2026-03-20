@@ -37,7 +37,7 @@ export const metadata: Metadata = createMetadata({
 
 export default function ContactPage() {
   return (
-    <main id="main-content">
+    <main id="main-content" tabIndex={-1}>
       <PageHero
         eyebrow="Contact"
         title={

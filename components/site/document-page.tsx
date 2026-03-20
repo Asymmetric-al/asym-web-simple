@@ -22,7 +22,7 @@ export function DocumentPage({
   heroMeta?: string[];
 }) {
   return (
-    <main id="main-content">
+    <main id="main-content" tabIndex={-1}>
       <PageHero
         eyebrow={eyebrow}
         density="legal"
