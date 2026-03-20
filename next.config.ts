@@ -1,7 +1,15 @@
 import { withPayload } from "@payloadcms/next/withPayload";
 import type { NextConfig } from "next";
+import createBundleAnalyzer from "@next/bundle-analyzer";
+
+const withBundleAnalyzer = createBundleAnalyzer({
+  enabled: process.env.ANALYZE === "true",
+});
 
 const nextConfig: NextConfig = {
+  experimental: {
+    viewTransition: true,
+  },
   images: {
     remotePatterns: [
       {
@@ -24,4 +32,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withPayload(nextConfig);
+export default withPayload(withBundleAnalyzer(nextConfig));

@@ -11,9 +11,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { siteConfig } from "@/lib/config";
+import { cn } from "@/lib/utils";
 import { ArrowRight, Check, Copy, Mail } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 type InquiryKind = "waitlist" | "contact";
 
@@ -96,6 +97,7 @@ export function InquiryForm({ kind }: { kind: InquiryKind }) {
   const [hasOpenedEmail, setHasOpenedEmail] = useState(false);
   const [draftMailto, setDraftMailto] = useState("");
   const [copied, setCopied] = useState(false);
+  const mailtoStatusRef = useRef<HTMLParagraphElement | null>(null);
 
   async function copyEmailAddress() {
     try {
@@ -109,6 +111,10 @@ export function InquiryForm({ kind }: { kind: InquiryKind }) {
 
   return (
     <div className="page-shell-glow surface-panel surface-interactive rounded-[2rem] p-6 sm:p-8">
+      <span className="sr-only" aria-live="polite">
+        {copied ? "Email address copied to clipboard." : ""}
+      </span>
+
       <div className="max-w-2xl">
         <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
           {kind === "waitlist" ? "Join the waitlist" : "Contact"}
@@ -123,6 +129,7 @@ export function InquiryForm({ kind }: { kind: InquiryKind }) {
 
       <form
         className="mt-8"
+        aria-label={kind === "waitlist" ? "Waitlist inquiry" : "Contact inquiry"}
         onSubmit={(event) => {
           event.preventDefault();
           const form = new FormData(event.currentTarget);
@@ -130,6 +137,9 @@ export function InquiryForm({ kind }: { kind: InquiryKind }) {
           setDraftMailto(mailto);
           setHasOpenedEmail(true);
           window.open(mailto, "_self");
+          requestAnimationFrame(() => {
+            mailtoStatusRef.current?.focus();
+          });
         }}
       >
         <FieldGroup>
@@ -179,27 +189,49 @@ export function InquiryForm({ kind }: { kind: InquiryKind }) {
             </FieldContent>
           </Field>
 
-          <div className="border-foreground/10 bg-secondary/42 text-muted-foreground grid gap-4 rounded-[1.75rem] border p-4 text-sm leading-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+          <div
+            className="border-foreground/10 bg-secondary/42 text-muted-foreground grid gap-4 rounded-[1.75rem] border p-4 text-sm leading-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center"
+            role="region"
+            aria-label="Email handoff"
+          >
             <div className="flex items-start gap-3">
-              <Mail className="text-primary/70 mt-1 size-4 shrink-0" />
-              <div className="flex min-w-0 flex-col gap-1">
-                <p>
-                  We will open your email client with a drafted message so the
-                  details stay in your control.
-                </p>
-                {hasOpenedEmail ? (
+              <Mail className="text-primary/70 mt-1 size-4 shrink-0" aria-hidden />
+              <div
+                className="flex min-w-0 flex-col gap-2"
+                role="status"
+                aria-live="polite"
+                aria-atomic="true"
+              >
+                {!hasOpenedEmail ? (
                   <p>
-                    If nothing opened, use the actions at right or write
-                    directly to{" "}
-                    <Link
-                      href={`mailto:${siteConfig.email}`}
-                      className="link-resilient text-foreground font-medium underline underline-offset-4"
-                    >
-                      {siteConfig.email}
-                    </Link>
-                    .
+                    We will open your email client with a drafted message so the
+                    details stay in your control.
                   </p>
-                ) : null}
+                ) : (
+                  <>
+                    <p
+                      ref={mailtoStatusRef}
+                      tabIndex={-1}
+                      className={cn(
+                        "text-foreground font-medium outline-none",
+                        "rounded-[0.35rem] focus-visible:ring-[3px] focus-visible:ring-ring/45"
+                      )}
+                    >
+                      Draft handed off — finish the message in your email app.
+                    </p>
+                    <p>
+                      If nothing opened, use the actions at right or write
+                      directly to{" "}
+                      <Link
+                        href={`mailto:${siteConfig.email}`}
+                        className="link-resilient text-foreground font-medium underline underline-offset-4"
+                      >
+                        {siteConfig.email}
+                      </Link>
+                      .
+                    </p>
+                  </>
+                )}
               </div>
             </div>
 

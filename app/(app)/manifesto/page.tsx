@@ -63,7 +63,7 @@ export const metadata: Metadata = createMetadata({
 
 export default function ManifestoPage() {
   return (
-    <main id="main-content">
+    <main id="main-content" tabIndex={-1}>
       <PageHero
         eyebrow="The Philosophy // v1.0"
         title={

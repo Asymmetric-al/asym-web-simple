@@ -1,5 +1,6 @@
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
+import { SiteChrome } from "@/components/site/site-chrome";
 import type { ReactNode } from "react";
 
 export default function AppLayout({
@@ -18,6 +19,7 @@ export default function AppLayout({
         className="pointer-events-none fixed inset-y-0 left-[-12rem] -z-10 w-[24rem] bg-[radial-gradient(circle,var(--glow-accent),transparent_70%)] blur-2xl"
       />
 
+      <SiteChrome />
       <Header />
       {children}
       <Footer />

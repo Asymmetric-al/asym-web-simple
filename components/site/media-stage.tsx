@@ -40,8 +40,8 @@ export function MediaStage({
         transition: siteFloatTransition,
       };
   const heroStates = getRevealStates(prefersReducedMotion, {
-    y: 26,
-    scale: 0.98,
+    y: 12,
+    scale: 0.99,
   });
 
   return (
@@ -58,7 +58,7 @@ export function MediaStage({
             }
           : {})}
         transition={getRevealTransition(prefersReducedMotion, {
-          duration: 0.7,
+          duration: 0.34,
         })}
         className="surface-hero surface-interactive relative overflow-hidden rounded-[2.35rem] p-3 sm:p-4"
       >
@@ -73,10 +73,10 @@ export function MediaStage({
             className="h-[23rem] w-full object-cover object-center sm:h-[29rem]"
           />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.1),rgba(22,33,43,0.18))]" />
-          <div className="text-primary absolute top-5 left-5 rounded-full border border-white/35 bg-white/74 px-3 py-1 font-mono text-[0.68rem] tracking-[0.26em] uppercase shadow-sm backdrop-blur-sm">
+          <div className="text-primary absolute top-5 left-5 rounded-full border border-white/45 bg-white/82 px-3 py-1 font-mono text-[0.68rem] tracking-[0.26em] uppercase shadow-sm backdrop-blur-sm">
             {badge}
           </div>
-          <div className="bg-foreground/24 absolute top-5 right-5 rounded-full border border-white/20 px-3 py-1 font-mono text-[0.64rem] tracking-[0.22em] text-white/90 uppercase backdrop-blur-sm">
+          <div className="bg-foreground/38 absolute top-5 right-5 rounded-full border border-white/32 px-3 py-1 font-mono text-[0.64rem] tracking-[0.22em] text-white/95 uppercase backdrop-blur-sm">
             Calm operator UX
           </div>
           <div className="absolute bottom-5 left-5 flex flex-wrap gap-2">
@@ -84,7 +84,7 @@ export function MediaStage({
               (item) => (
                 <span
                   key={item}
-                  className="bg-foreground/28 rounded-full border border-white/20 px-3 py-1 font-mono text-[0.66rem] tracking-[0.22em] text-white/88 uppercase backdrop-blur-sm"
+                  className="bg-foreground/40 rounded-full border border-white/30 px-3 py-1 font-mono text-[0.66rem] tracking-[0.22em] text-white/95 uppercase backdrop-blur-sm"
                 >
                   {item}
                 </span>
@@ -103,7 +103,6 @@ export function MediaStage({
           alt={screenshotAlt}
           width={1440}
           height={960}
-          priority={priority}
           sizes="(min-width: 1024px) 34vw, (min-width: 640px) 82vw, 88vw"
           className="border-foreground/10 rounded-[1.45rem] border object-cover shadow-[0_18px_45px_-28px_rgba(22,33,43,0.55)]"
         />

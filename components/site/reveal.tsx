@@ -3,6 +3,8 @@
 import {
   getRevealStates,
   getRevealTransition,
+  siteRevealDuration,
+  siteRevealDistance,
   siteRevealScale,
   siteViewportMargin,
   useReducedMotion,
@@ -33,7 +35,7 @@ export function Reveal({
   children,
   className,
   delay = 0,
-  y = 24,
+  y = siteRevealDistance,
   scale = siteRevealScale,
   blur = 0,
   trigger = "inView",
@@ -73,7 +75,7 @@ export function StaggerReveal({
   delay = 0,
   amount = 0.16,
   margin = siteViewportMargin,
-  step = 0.06,
+  step = 0.045,
 }: {
   children: ReactNode;
   className?: string | undefined;
@@ -115,7 +117,7 @@ export function StaggerItem({
   className,
   delay = 0,
   staggerIndex = 0,
-  staggerStep = 0.06,
+  staggerStep = 0.045,
   staggerDelay = 0,
   viewportAmount = 0.16,
   viewportMargin = siteViewportMargin,
@@ -131,7 +133,7 @@ export function StaggerItem({
       viewport={{ once: true, amount: viewportAmount, margin: viewportMargin }}
       transition={getRevealTransition(prefersReducedMotion, {
         delay: delay + staggerDelay + staggerIndex * staggerStep,
-        duration: 0.54,
+        duration: siteRevealDuration,
       })}
     >
       {children}

@@ -1,6 +1,7 @@
 import StaggeredText from "@/components/react-bits/staggered-text";
-import { MediaStage } from "@/components/site/media-stage";
-import { PageHero, Section, SectionHeader } from "@/components/site/page";
+import { HeroProductPreview } from "@/components/site/hero-product-preview";
+import { HomePageHero } from "@/components/site/home-page-hero";
+import { Section, SectionHeader } from "@/components/site/page";
 import { Reveal, StaggerItem, StaggerReveal } from "@/components/site/reveal";
 import { ScrollThesis } from "@/components/site/scroll-thesis";
 import { Badge } from "@/components/ui/badge";
@@ -153,15 +154,14 @@ export default function HomePage() {
   };
 
   return (
-    <main id="main-content">
+    <main id="main-content" tabIndex={-1}>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(organizationStructuredData),
         }}
       />
-      <PageHero
-        revealTitle={false}
+      <HomePageHero
         eyebrow="Mission Operating System"
         title={
           <div>
@@ -171,12 +171,15 @@ export default function HomePage() {
               trigger="mount"
               segmentBy="words"
               blur={false}
-              className="font-heading text-foreground text-[clamp(3.2rem,7vw,6rem)] leading-[0.92] font-semibold tracking-[-0.07em]"
+              className="font-heading text-foreground text-[clamp(3.25rem,8.5vw,6.5rem)] leading-[0.9] font-semibold tracking-[-0.07em]"
             />
-            <p className="font-heading text-primary/78 mt-4 max-w-[18ch] text-[clamp(1.15rem,2.2vw,1.6rem)] font-medium tracking-[-0.04em]">
-              Less admin. More ministry.
-            </p>
           </div>
+        }
+        subtitle={
+          <p className="font-heading text-primary/80 mx-auto max-w-xl text-[clamp(1.15rem,2.4vw,1.65rem)] font-medium tracking-[-0.04em] max-lg:mx-0">
+            Less admin. More{" "}
+            <span className="text-primary italic">ministry.</span>
+          </p>
         }
         description="The unified platform for the modern missions agency. Bring finance, mobilization, donor support, communications, and web operations under one calm, trustworthy surface."
         actions={[
@@ -195,25 +198,32 @@ export default function HomePage() {
         ]}
       >
         <Reveal trigger="mount">
-          <MediaStage
-            sceneAlt="Open landscape representing the broad horizon of missions work"
+          <HeroProductPreview
             screenshotAlt="Asymmetric mission control interface preview"
-            badge="Mission Control"
-            priority
             caption={
-              <div className="flex flex-col gap-1">
-                <p className="text-foreground font-medium">
-                  One surface for finance, mobilization, and care.
-                </p>
-                <p className="text-muted-foreground">
-                  Calm software, visible trust, and clearer action for the teams
-                  stewarding the work.
-                </p>
+              <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-1">
+                  <p className="text-foreground font-medium">
+                    One surface for finance, mobilization, and care.
+                  </p>
+                  <p className="text-muted-foreground">
+                    Calm software, visible trust, and clearer action for the
+                    teams stewarding the work.
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <span className="border-foreground/10 bg-background/76 text-muted-foreground rounded-full border px-3 py-1 font-mono text-[0.68rem] tracking-[0.2em] uppercase">
+                    Shared source of truth
+                  </span>
+                  <span className="border-foreground/10 bg-background/76 text-muted-foreground rounded-full border px-3 py-1 font-mono text-[0.68rem] tracking-[0.2em] uppercase">
+                    Clear operator surfaces
+                  </span>
+                </div>
               </div>
             }
           />
         </Reveal>
-      </PageHero>
+      </HomePageHero>
 
       <Section className="pt-0" containerClassName="flex flex-col gap-8">
         <Reveal>

@@ -26,8 +26,8 @@ const ReducedMotionContext = createContext<boolean>(false);
 
 export const siteEase = [0.23, 1, 0.32, 1] as const;
 export const siteEaseGentle = [0.22, 1, 0.36, 1] as const;
-export const siteRevealDuration = 0.64;
-export const siteRevealDistance = 24;
+export const siteRevealDuration = 0.32;
+export const siteRevealDistance = 10;
 export const siteRevealScale = 0.985;
 export const siteViewportMargin = "-8% 0px -10% 0px";
 export const siteFloatTransition = {
@@ -69,12 +69,12 @@ export const fadeIn: Variants = {
 };
 
 export const fadeInUp: Variants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 10 },
   visible: { opacity: 1, y: 0 },
 };
 
 export const fadeInDown: Variants = {
-  hidden: { opacity: 0, y: -20 },
+  hidden: { opacity: 0, y: -10 },
   visible: { opacity: 1, y: 0 },
 };
 
@@ -88,7 +88,7 @@ export const staggerContainer: Variants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1,
+      staggerChildren: 0.048,
     },
   },
 };
@@ -99,7 +99,7 @@ export const reducedMotionVariants: Variants = {
 };
 
 export const defaultTransition = {
-  duration: 0.34,
+  duration: 0.28,
   ease: siteEaseGentle,
 };
 
