@@ -2,17 +2,29 @@ import { postgresAdapter } from "@payloadcms/db-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
 import path from "path";
+import type { CollectionConfig } from "payload";
 import { buildConfig } from "payload";
 import { fileURLToPath } from "url";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
+/** Auth collection for Payload admin (`admin.user` must match slug). */
+const users: CollectionConfig = {
+  slug: "users",
+  auth: true,
+  admin: {
+    useAsTitle: "email",
+  },
+  fields: [],
+};
+
 export default buildConfig({
   admin: {
-    user: "users",
+    user: users.slug,
   },
   collections: [
+    users,
     // TODO Phase 2: Add collections
     // - Pages (slug, hero, sections, metadata, draft/publish)
     // - Media (file, alt, caption, sizes)
