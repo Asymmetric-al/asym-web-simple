@@ -93,7 +93,7 @@ export const metadata: Metadata = createMetadata({
 
 export default function SpecsPage() {
   return (
-    <main id="main-content">
+    <main id="main-content" tabIndex={-1}>
       <PageHero
         eyebrow="System Normal | Tech Manifest v2.1.0"
         title={

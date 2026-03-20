@@ -84,7 +84,7 @@ export const metadata: Metadata = createMetadata({
 
 export default function MissionsPage() {
   return (
-    <main id="main-content">
+    <main id="main-content" tabIndex={-1}>
       <PageHero
         eyebrow="The Underserved Sector"
         title={

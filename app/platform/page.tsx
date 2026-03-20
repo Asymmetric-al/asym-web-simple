@@ -190,7 +190,7 @@ export const metadata: Metadata = createMetadata({
 
 export default function PlatformPage() {
   return (
-    <main id="main-content">
+    <main id="main-content" tabIndex={-1}>
       <PageHero
         eyebrow="Mission Operating System"
         title={

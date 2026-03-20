@@ -3,6 +3,8 @@ import { Header } from "@/components/header";
 import { Providers } from "@/components/providers";
 import { SkipToContent } from "@/components/skip-to-content";
 import { baseMetadata } from "@/lib/metadata";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import type { ReactNode } from "react";
@@ -47,7 +49,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${headingFont.variable} ${bodyFont.variable} ${monoFont.variable} min-h-screen bg-background font-sans text-foreground antialiased`}
+        className={`${headingFont.variable} ${bodyFont.variable} ${monoFont.variable} bg-background text-foreground min-h-screen font-sans antialiased`}
       >
         <Providers>
           <div className="relative flex min-h-screen flex-col overflow-x-clip">
@@ -65,6 +67,8 @@ export default function RootLayout({
             {children}
             <Footer />
           </div>
+          <Analytics />
+          <SpeedInsights />
         </Providers>
       </body>
     </html>

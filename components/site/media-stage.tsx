@@ -103,7 +103,6 @@ export function MediaStage({
           alt={screenshotAlt}
           width={1440}
           height={960}
-          priority={priority}
           sizes="(min-width: 1024px) 34vw, (min-width: 640px) 82vw, 88vw"
           className="border-foreground/10 rounded-[1.45rem] border object-cover shadow-[0_18px_45px_-28px_rgba(22,33,43,0.55)]"
         />

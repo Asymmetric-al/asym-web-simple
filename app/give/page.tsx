@@ -95,7 +95,7 @@ export const metadata: Metadata = createMetadata({
 
 export default function GivePage() {
   return (
-    <main id="main-content">
+    <main id="main-content" tabIndex={-1}>
       <PageHero
         eyebrow="Nonprofit 501(c)(3)"
         title={

@@ -27,14 +27,50 @@ export function SmoothScroll({ children }: { children: ReactNode }): ReactNode {
     const lenis = new Lenis(LENIS_OPTIONS);
     let rafId = 0;
 
+    function stopRaf(): void {
+      if (!rafId) return;
+      cancelAnimationFrame(rafId);
+      rafId = 0;
+    }
+
     function raf(time: number): void {
       lenis.raf(time);
       rafId = requestAnimationFrame(raf);
     }
 
-    rafId = requestAnimationFrame(raf);
+    function startRaf(): void {
+      if (rafId) return;
+      rafId = requestAnimationFrame(raf);
+    }
+
+    function handleVisibilityChange(): void {
+      if (document.visibilityState === "hidden") {
+        stopRaf();
+        return;
+      }
+
+      lenis.resize();
+      startRaf();
+    }
+
+    function handleResize(): void {
+      lenis.resize();
+    }
+
+    startRaf();
 
     function handleAnchorClick(event: MouseEvent): void {
+      if (
+        event.defaultPrevented ||
+        event.button !== 0 ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey
+      ) {
+        return;
+      }
+
       const target = event.target as HTMLElement;
       const anchor = target.closest('a[href^="#"]');
       if (!anchor) return;
@@ -46,14 +82,29 @@ export function SmoothScroll({ children }: { children: ReactNode }): ReactNode {
       if (!element) return;
 
       event.preventDefault();
-      lenis.scrollTo(element as HTMLElement, { offset: -96 });
+      const focusTarget = element as HTMLElement;
+
+      if (window.location.hash !== href) {
+        window.history.pushState(null, "", href);
+      }
+
+      lenis.scrollTo(focusTarget, {
+        offset: -96,
+        onComplete: () => {
+          focusTarget.focus({ preventScroll: true });
+        },
+      });
     }
 
     document.addEventListener("click", handleAnchorClick);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("resize", handleResize, { passive: true });
 
     return () => {
       document.removeEventListener("click", handleAnchorClick);
-      cancelAnimationFrame(rafId);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("resize", handleResize);
+      stopRaf();
       lenis.destroy();
     };
   }, []);
