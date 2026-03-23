@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { createMetadata } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Users, ShieldCheck } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -36,22 +36,6 @@ const manifestoSections = [
       "Your time is one of the most valuable resources in the Great Commission. By removing administrative friction, we protect capacity to fund ministry, support missionaries, and advance the Gospel.",
     ],
   },
-  {
-    label: "04 // The Staffing Model",
-    title: "By missionaries, for missionaries.",
-    paragraphs: [
-      "Our core staff raise support just like the missionaries we serve. We do this because the work is ministry. We also retain paid development staff to ensure professional delivery and technical seriousness.",
-      "Operating as a project under Global Fellowship Inc. means governance, accountability, and financial oversight are part of the structure, not an afterthought. Covering matters. Oversight matters. Stewardship matters.",
-    ],
-  },
-  {
-    label: "05 // Our Posture",
-    title: "We operate with open hands.",
-    paragraphs: [
-      "We do not lock you in. We acknowledge limits. We build open source. Trust must remain visible in the architecture, the product, and the business model.",
-      "Our aim is not to make agencies dependent on us. It is to help the global church operate with healthier, more durable digital rails that can outlast a single vendor, a single funding season, or a single product cycle.",
-    ],
-  },
 ] as const;
 
 export const metadata: Metadata = createMetadata({
@@ -65,13 +49,14 @@ export default function ManifestoPage() {
   return (
     <main id="main-content" tabIndex={-1}>
       <PageHero
-        eyebrow="The Philosophy // v1.0"
+        eyebrow="THE PHILOSOPHY // V1.0"
         title={
           <h1 className="font-heading text-foreground text-[clamp(3rem,6vw,5.15rem)] leading-[0.94] font-semibold tracking-[-0.07em] text-balance">
-            Small Inputs. Exponential Outputs.
+            Small Inputs.<br />
+            Exponential Outputs.
           </h1>
         }
-        description="The underlying logic of Asymmetric.al. How we think about software, stewardship, and the scale of the Great Commission."
+        description="The underlying logic of Asymmetric.al. How we think about software, stewardship, and the scale of the Great Commission. We operate on a logic of asymmetry: simple faithfulness that produces mountain-moving outcomes. This mirrors the Kingdom principle found in Matthew 20:26."
         meta={[
           "Stewardship",
           "Hyper-focus",
@@ -135,6 +120,112 @@ export default function ManifestoPage() {
             ))}
           </StaggerReveal>
         </div>
+      </Section>
+
+      <div className="bg-secondary/30 border-l-2 border-primary/50 my-12 mx-8 pl-8 py-8 rounded-r-sm">
+        <p className="font-display text-2xl md:text-3xl text-foreground italic leading-relaxed text-balance">
+          "Consider the mustard seed—how God multiplies the smallest unit into the largest capacity."
+        </p>
+      </div>
+
+      <Section className="border-b border-border bg-card">
+        <Reveal>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-start">
+            <div className="lg:col-span-7 order-2 lg:order-1 lg:pt-8">
+              <div className="bg-background shadow-xl border border-border rounded-sm p-6">
+                <div className="font-mono text-[10px] text-primary uppercase tracking-widest mb-6">
+                  STAFFING ARCHITECTURE
+                </div>
+                <div className="flex flex-col gap-8">
+                  <div className="flex items-start gap-6">
+                    <div className="p-3 bg-secondary rounded-sm border border-border text-primary shrink-0">
+                      <Users size={24} />
+                    </div>
+                    <div>
+                      <h4 className="text-xl font-bold font-display text-foreground mb-2">Support Raised Staff</h4>
+                      <p className="text-muted-foreground font-light leading-relaxed text-balance">
+                        Our core staff raise support just like the missionaries we serve. We do this because the work <em>is</em> ministry. We also retain paid development staff to ensure professional delivery.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="h-px w-full bg-border" />
+                  <div className="flex items-start gap-6">
+                    <div className="p-3 bg-secondary rounded-sm border border-border text-foreground shrink-0">
+                      <ShieldCheck size={24} />
+                    </div>
+                    <div>
+                      <h4 className="text-xl font-bold font-display text-foreground mb-2">Governance & Covering</h4>
+                      <p className="text-muted-foreground font-light leading-relaxed text-balance">
+                        Operating as a project under Global Fellowship Inc. (501c3), we are accountable to a board of directors and strict financial oversight.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="lg:col-span-5 order-1 lg:order-2 lg:sticky lg:top-32 flex flex-col lg:items-end lg:text-right self-start">
+              <div className="flex flex-col gap-6">
+                <div className="inline-flex items-center gap-3 px-3 py-1.5 border border-border bg-secondary/50 rounded-sm w-fit backdrop-blur-md">
+                  <span className="font-mono text-[10px] text-primary uppercase tracking-widest">04 // The Staffing Model</span>
+                </div>
+                <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-foreground tracking-tighter leading-[0.9] text-balance text-right">
+                  By Missionaries,<br />For Missionaries.
+                </h2>
+              </div>
+            </div>
+          </div>
+        </Reveal>
+      </Section>
+
+      <Section className="bg-background relative overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-10 pointer-events-none z-0">
+          <div className="w-64 h-64 rounded-full bg-primary/20 blur-3xl" />
+        </div>
+
+        <Reveal>
+          <div className="relative z-10 max-w-4xl mx-auto text-center">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 border border-border bg-secondary/50 rounded-sm text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-8 backdrop-blur-md">
+              <span className="text-success">✦</span>
+              <span>05 // Our Values</span>
+            </div>
+            
+            <h2 className="text-4xl md:text-6xl font-display font-medium text-foreground leading-tight mb-12 text-balance">
+              We operate with open hands. <br/>
+              <span className="text-muted-foreground">We do not lock you in. We acknowledge limits. We build open source.</span>
+            </h2>
+
+            <div className="mb-20">
+              <Link
+                href="/statement-of-faith"
+                className="inline-flex items-center gap-3 px-6 py-3 border border-border hover:border-foreground text-xs font-mono uppercase tracking-widest text-muted-foreground hover:text-foreground transition-all group bg-card rounded-sm"
+              >
+                Read our Statement of Faith <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+
+            <div className="max-w-md mx-auto">
+              <div className="bg-card border-border p-1 rounded-sm">
+                <div className="bg-background p-8 flex flex-col items-center gap-6 rounded-sm">
+                  <div className="w-16 h-16 rounded-full border border-border bg-secondary/50 flex items-center justify-center">
+                    <span className="text-2xl font-bold text-muted-foreground">✝</span>
+                  </div>
+                  <div>
+                    <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-[0.2em] mb-2">
+                      Digitally Signed
+                    </p>
+                    <span className="text-2xl font-display font-bold text-foreground tracking-tight">
+                      The Maintainers
+                    </span>
+                  </div>
+                  <div className="w-full pt-6 border-t border-border flex justify-between text-[10px] font-mono text-muted-foreground uppercase tracking-widest">
+                    <span>Asymmetric.al</span>
+                    <span>EST. 2024</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Reveal>
       </Section>
 
       <Section tone="accent">

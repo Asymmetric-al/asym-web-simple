@@ -14,53 +14,86 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import type { Metadata } from "next";
+import Link from "next/link";
 
 const layers = [
   {
     title: "Layer 01 — Languages & Core",
-    description:
-      "TypeScript, JavaScript, React, Next.js, Node.js, NestJS, GraphQL, TanStack",
+    description: "TypeScript, JavaScript, React, Next.js, Node.js, NestJS, GraphQL, TanStack",
+    links: [
+      { label: "TypeScript", url: "https://github.com/microsoft/TypeScript" },
+      { label: "React", url: "https://github.com/facebook/react" },
+      { label: "Next.js", url: "https://nextjs.org/" },
+      { label: "Node.js", url: "https://github.com/nodejs" },
+    ],
     icon: FileCode2,
   },
   {
     title: "Layer 02 — Data Persistence",
-    description:
-      "PostgreSQL, MySQL, Redis, TanStack DB, pgvector, TanStack Query, TanStack Table",
+    description: "PostgreSQL, MySQL, Redis, TanStack DB, pgvector, TanStack Query, TanStack Table",
+    links: [
+      { label: "PostgreSQL", url: "https://www.postgresql.org/" },
+      { label: "Redis", url: "https://github.com/redis/redis/" },
+      { label: "TanStack Query", url: "https://tanstack.com/query/latest" },
+    ],
     icon: Database,
   },
   {
     title: "Layer 03 — Mission Control Modules",
     description: "Twenty CRM, Documenso CE, Chatwoot CE",
+    links: [
+      { label: "Twenty CRM", url: "https://github.com/twentyhq/twenty" },
+      { label: "Documenso CE", url: "https://github.com/documenso/documenso" },
+      { label: "Chatwoot CE", url: "https://github.com/chatwoot/chatwoot" },
+    ],
     icon: Layers3,
   },
   {
     title: "Layer 04 — Content Engine",
     description: "Directus",
+    links: [{ label: "Directus", url: "https://directus.io/" }],
     icon: Blocks,
   },
   {
     title: "Layer 05 — Infrastructure & Ops",
     description: "Vercel, AWS, Docker, GitHub, Sentry, OpenTelemetry",
+    links: [
+      { label: "Supabase", url: "https://supabase.com/" },
+      { label: "GitHub", url: "https://github.com/" },
+      { label: "Sentry", url: "https://github.com/getsentry/sentry" },
+    ],
     icon: Globe2,
   },
   {
     title: "Layer 06 — Identity & Security",
     description: "Supabase Authentication",
+    links: [{ label: "Supabase Auth", url: "https://supabase.com/docs/guides/auth" }],
     icon: Fingerprint,
   },
   {
     title: "Layer 07 — Integrations & Async",
     description: "Stripe, SendGrid, Zapier, Inngest, BullMQ",
+    links: [
+      { label: "Stripe", url: "https://stripe.com/" },
+      { label: "SendGrid", url: "https://sendgrid.com/" },
+      { label: "Zapier", url: "https://zapier.com/" },
+    ],
     icon: Activity,
   },
   {
     title: "Layer 08 — Interface & Design",
     description: "shadcn/ui, Recharts, Figma",
+    links: [
+      { label: "shadcn/ui", url: "https://ui.shadcn.com/" },
+      { label: "Recharts", url: "https://recharts.org/" },
+      { label: "Figma", url: "https://www.figma.com/" },
+    ],
     icon: ShieldCheck,
   },
   {
     title: "Layer 09 — Intelligence",
     description: "OpenAI",
+    links: [{ label: "OpenAI", url: "https://openai.com/" }],
     icon: Bot,
   },
 ] as const;
@@ -95,13 +128,13 @@ export default function SpecsPage() {
   return (
     <main id="main-content" tabIndex={-1}>
       <PageHero
-        eyebrow="System Normal | Tech Manifest v2.1.0"
+        eyebrow="System Normal | TECH MANIFEST v2.1.0"
         title={
           <h1 className="font-heading text-foreground text-[clamp(3rem,6vw,5.15rem)] leading-[0.94] font-semibold tracking-[-0.07em] text-balance">
-            The Architecture.
+            Transparent Architecture.
           </h1>
         }
-        description="We do not hide our choices. We build on best-in-class open source technologies and proven cloud primitives because stewardship includes technical durability."
+        description="We don't hide our choices. We build on a foundation of best-in-class open source technologies and proven cloud primitives. This is the engine room of Asymmetric.al."
         meta={[
           "Open source",
           "Portable",
@@ -140,20 +173,11 @@ export default function SpecsPage() {
           title="Built on open foundations and cloud primitives that can survive the long haul."
           description="These choices are practical, portable, and legible to serious engineering teams. Nothing here depends on proprietary magic."
         />
-        <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-6">
+        <div className="mt-8 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           <StaggerReveal>
-            {layers.map((item, index) => (
-              <StaggerItem
-                key={item.title}
-                className={
-                  index < 3
-                    ? "xl:col-span-2"
-                    : index < 5
-                      ? "xl:col-span-3"
-                      : "xl:col-span-2"
-                }
-              >
-                <Card className="surface-card surface-interactive h-full rounded-[1.8rem]">
+            {layers.map((item) => (
+              <StaggerItem key={item.title}>
+                <Card className="surface-card surface-interactive h-full rounded-[1.8rem] transition-all duration-300 hover:border-foreground/20">
                   <CardHeader>
                     <div className="bg-secondary text-primary flex size-11 items-center justify-center rounded-2xl shadow-sm">
                       <item.icon className="size-5" />
@@ -163,7 +187,21 @@ export default function SpecsPage() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="text-muted-foreground text-sm leading-7">
-                    {item.description}
+                    <p>{item.description}</p>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {item.links.map((link) => (
+                        <Link
+                          key={link.label}
+                          href={link.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-[10px] font-mono text-muted-foreground bg-secondary/50 border border-border rounded-sm hover:text-foreground hover:border-foreground/20 hover:bg-secondary transition-all group/tag"
+                        >
+                          {link.label}
+                          <span className="opacity-0 group-hover/tag:opacity-100 transition-opacity">→</span>
+                        </Link>
+                      ))}
+                    </div>
                   </CardContent>
                 </Card>
               </StaggerItem>
@@ -178,11 +216,11 @@ export default function SpecsPage() {
           title="Strong operational expectations, not vague aspirations."
           description="The system should feel fast, stay available, and be observable enough to trust when the stakes are real."
         />
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="mt-8 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           <StaggerReveal>
             {targets.map((item) => (
               <StaggerItem key={item.label}>
-                <Card className="surface-card surface-interactive rounded-[1.7rem]">
+                <Card className="surface-card surface-interactive rounded-[1.7rem] border-border hover:border-foreground/20 transition-colors">
                   <CardHeader>
                     <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
                       {item.label}
