@@ -1,11 +1,11 @@
+"use client";
+
 import { PageHero, Section, SectionHeader } from "@/components/site/page";
 import { Reveal, StaggerItem, StaggerReveal } from "@/components/site/reveal";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { buttonVariants } from "@/components/ui/button-variants";
-import { createMetadata } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
-import { ArrowRight, Code, Globe, Heart, Users, GitPullRequest, BookOpen, Zap, Terminal } from "lucide-react";
-import type { Metadata } from "next";
+import { ArrowRight, Code, Globe, Heart, Users, GitPullRequest, BookOpen, Zap } from "lucide-react";
 import Link from "next/link";
 
 const pathways = [
@@ -106,12 +106,6 @@ const roles = [
     description: "Translate complex operational workflows into intuitive interfaces. You will maintain our design system and work directly with missionaries to understand their friction points.",
   },
 ] as const;
-
-export const metadata: Metadata = createMetadata({
-  title: "Join the Build",
-  description: "Join the Asymmetric.al build as a pilot agency, missions-minded builder, or supporter of shared nonprofit infrastructure.",
-  path: "/join",
-});
 
 export default function JoinPage() {
   const scrollToRoles = (e: React.MouseEvent) => {

@@ -227,38 +227,6 @@ export default function ManifestoPage() {
           </div>
         </Reveal>
       </Section>
-
-      <Section tone="accent">
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)] lg:items-end">
-          <Reveal>
-            <div className="page-shell-glow surface-panel surface-interactive rounded-[2rem] p-7 sm:p-8">
-              <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
-                Theological bedrock
-              </p>
-              <h2 className="font-heading mt-4 max-w-[18ch] text-[clamp(2rem,4vw,3.1rem)] leading-[1.02] font-semibold tracking-[-0.06em]">
-                Doctrine is not wallpaper.
-              </h2>
-              <p className="text-muted-foreground mt-5 max-w-[58ch] text-base leading-7">
-                Our Christian conviction is not decorative language added after
-                the fact. It shapes the posture of the organization and the
-                purpose of the work.
-              </p>
-            </div>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <Link
-              href="/statement-of-faith"
-              className={cn(
-                buttonVariants({ size: "lg" }),
-                "w-full px-5 sm:w-auto"
-              )}
-            >
-              Read our Statement of Faith
-              <ArrowRight data-icon="inline-end" />
-            </Link>
-          </Reveal>
-        </div>
-      </Section>
     </main>
   );
 }
