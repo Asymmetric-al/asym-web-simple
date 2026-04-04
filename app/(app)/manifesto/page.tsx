@@ -1,7 +1,6 @@
 import { PageHero, Section } from "@/components/site/page";
 import { Reveal, StaggerItem, StaggerReveal } from "@/components/site/reveal";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { buttonVariants } from "@/components/ui/button-variants";
 import { createMetadata } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
 import { ArrowRight, Users, ShieldCheck } from "lucide-react";
@@ -122,9 +121,9 @@ export default function ManifestoPage() {
         </div>
       </Section>
 
-      <div className="bg-secondary/30 border-l-2 border-primary/50 my-12 mx-8 pl-8 py-8 rounded-r-sm">
-        <p className="font-display text-2xl md:text-3xl text-foreground italic leading-relaxed text-balance">
-          "Consider the mustard seed—how God multiplies the smallest unit into the largest capacity."
+      <div className="mx-4 my-12 rounded-[1.85rem] border border-border bg-secondary/30 px-6 py-8 sm:mx-8 sm:px-8">
+        <p className="font-heading text-2xl font-medium tracking-[-0.04em] text-foreground italic leading-relaxed text-balance md:text-3xl">
+          &ldquo;Consider the mustard seed, how God multiplies the smallest unit into the largest capacity.&rdquo;
         </p>
       </div>
 
@@ -132,7 +131,7 @@ export default function ManifestoPage() {
         <Reveal>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-start">
             <div className="lg:col-span-7 order-2 lg:order-1 lg:pt-8">
-              <div className="bg-background shadow-xl border border-border rounded-sm p-6">
+              <div className="surface-panel rounded-[1.85rem] border border-border p-6 shadow-[var(--shadow-card)]">
                 <div className="font-mono text-[10px] text-primary uppercase tracking-widest mb-6">
                   STAFFING ARCHITECTURE
                 </div>
@@ -142,7 +141,9 @@ export default function ManifestoPage() {
                       <Users size={24} />
                     </div>
                     <div>
-                      <h4 className="text-xl font-bold font-display text-foreground mb-2">Support Raised Staff</h4>
+                      <h4 className="font-heading mb-2 text-xl font-semibold tracking-[-0.04em] text-foreground">
+                        Support Raised Staff
+                      </h4>
                       <p className="text-muted-foreground font-light leading-relaxed text-balance">
                         Our core staff raise support just like the missionaries we serve. We do this because the work <em>is</em> ministry. We also retain paid development staff to ensure professional delivery.
                       </p>
@@ -154,7 +155,9 @@ export default function ManifestoPage() {
                       <ShieldCheck size={24} />
                     </div>
                     <div>
-                      <h4 className="text-xl font-bold font-display text-foreground mb-2">Governance & Covering</h4>
+                      <h4 className="font-heading mb-2 text-xl font-semibold tracking-[-0.04em] text-foreground">
+                        Governance & Covering
+                      </h4>
                       <p className="text-muted-foreground font-light leading-relaxed text-balance">
                         Operating as a project under Global Fellowship Inc. (501c3), we are accountable to a board of directors and strict financial oversight.
                       </p>
@@ -168,8 +171,10 @@ export default function ManifestoPage() {
                 <div className="inline-flex items-center gap-3 px-3 py-1.5 border border-border bg-secondary/50 rounded-sm w-fit backdrop-blur-md">
                   <span className="font-mono text-[10px] text-primary uppercase tracking-widest">04 // The Staffing Model</span>
                 </div>
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-foreground tracking-tighter leading-[0.9] text-balance text-right">
-                  By Missionaries,<br />For Missionaries.
+                <h2 className="font-heading text-4xl font-semibold tracking-[-0.06em] text-foreground leading-[0.9] text-balance text-right md:text-5xl lg:text-6xl">
+                  By Missionaries,
+                  <br />
+                  For Missionaries.
                 </h2>
               </div>
             </div>
@@ -185,12 +190,13 @@ export default function ManifestoPage() {
         <Reveal>
           <div className="relative z-10 max-w-4xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 border border-border bg-secondary/50 rounded-sm text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-8 backdrop-blur-md">
-              <span className="text-success">✦</span>
+              <span className="text-primary/80">✦</span>
               <span>05 // Our Values</span>
             </div>
-            
-            <h2 className="text-4xl md:text-6xl font-display font-medium text-foreground leading-tight mb-12 text-balance">
-              We operate with open hands. <br/>
+
+            <h2 className="font-heading mb-12 text-4xl font-semibold tracking-[-0.06em] text-foreground leading-tight text-balance md:text-6xl">
+              We operate with open hands.
+              <br />
               <span className="text-muted-foreground">We do not lock you in. We acknowledge limits. We build open source.</span>
             </h2>
 
@@ -204,8 +210,8 @@ export default function ManifestoPage() {
             </div>
 
             <div className="max-w-md mx-auto">
-              <div className="bg-card border-border p-1 rounded-sm">
-                <div className="bg-background p-8 flex flex-col items-center gap-6 rounded-sm">
+              <div className="rounded-[1.6rem] border border-border bg-card p-1">
+                <div className="rounded-[1.4rem] bg-background p-8 flex flex-col items-center gap-6">
                   <div className="w-16 h-16 rounded-full border border-border bg-secondary/50 flex items-center justify-center">
                     <span className="text-2xl font-bold text-muted-foreground">✝</span>
                   </div>
@@ -213,7 +219,7 @@ export default function ManifestoPage() {
                     <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-[0.2em] mb-2">
                       Digitally Signed
                     </p>
-                    <span className="text-2xl font-display font-bold text-foreground tracking-tight">
+                    <span className="font-heading text-2xl font-semibold tracking-[-0.05em] text-foreground">
                       The Maintainers
                     </span>
                   </div>

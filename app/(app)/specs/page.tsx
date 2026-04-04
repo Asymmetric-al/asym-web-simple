@@ -58,7 +58,9 @@ const layers = [
     title: "Layer 05 — Infrastructure & Ops",
     description: "Vercel, AWS, Docker, GitHub, Sentry, OpenTelemetry",
     links: [
-      { label: "Supabase", url: "https://supabase.com/" },
+      { label: "Vercel", url: "https://vercel.com/" },
+      { label: "AWS", url: "https://aws.amazon.com/" },
+      { label: "Docker", url: "https://www.docker.com/" },
       { label: "GitHub", url: "https://github.com/" },
       { label: "Sentry", url: "https://github.com/getsentry/sentry" },
     ],
@@ -195,10 +197,10 @@ export default function SpecsPage() {
                           href={link.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-[10px] font-mono text-muted-foreground bg-secondary/50 border border-border rounded-sm hover:text-foreground hover:border-foreground/20 hover:bg-secondary transition-all group/tag"
+                          className="group/tag inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary/50 px-2.5 py-1.5 font-mono text-[10px] text-muted-foreground transition-all hover:border-foreground/20 hover:bg-secondary hover:text-foreground"
                         >
                           {link.label}
-                          <span className="opacity-0 group-hover/tag:opacity-100 transition-opacity">→</span>
+                          <span className="opacity-0 transition-opacity group-hover/tag:opacity-100">→</span>
                         </Link>
                       ))}
                     </div>
