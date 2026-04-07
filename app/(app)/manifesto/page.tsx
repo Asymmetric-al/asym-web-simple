@@ -218,8 +218,11 @@ export default function ManifestoPage() {
                     <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-[0.2em] mb-2">
                       Signed
                     </p>
-                    <span className="font-heading text-2xl font-semibold tracking-[-0.05em] text-foreground">
+                    <span className="font-heading flex flex-col gap-1 text-2xl font-semibold tracking-[-0.05em] text-foreground">
                       The Maintainers
+                      <span className="text-muted-foreground text-sm font-medium tracking-normal">
+                        Cobmojo &amp; II-ricky-bobby-II
+                      </span>
                     </span>
                   </div>
                   <div className="w-full pt-6 border-t border-border flex justify-between text-[10px] font-mono text-muted-foreground uppercase tracking-widest">
