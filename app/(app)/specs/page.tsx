@@ -50,8 +50,8 @@ const layers = [
   },
   {
     title: "Layer 04 — Content Engine",
-    description: "Directus",
-    links: [{ label: "Directus", url: "https://directus.io/" }],
+    description: "Payload CMS",
+    links: [{ label: "Payload CMS", url: "https://payloadcms.com/" }],
     icon: Blocks,
   },
   {
