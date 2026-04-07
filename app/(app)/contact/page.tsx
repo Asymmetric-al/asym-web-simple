@@ -95,11 +95,8 @@ export default function ContactPage() {
                 info@asymmetric.al
               </CardTitle>
             </CardHeader>
-            <CardContent className="text-primary-foreground/82 space-y-3 text-sm leading-7">
+            <CardContent className="text-primary-foreground/82 text-sm leading-7">
               <p>Start with a direct email if you already know the path you need.</p>
-              <p className="font-mono text-[0.72rem] uppercase tracking-[0.22em] text-primary-foreground/72">
-                Response time: ~24hrs
-              </p>
             </CardContent>
           </Card>
         </Reveal>
