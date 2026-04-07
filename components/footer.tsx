@@ -60,10 +60,23 @@ export function Footer() {
               <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.3em] uppercase">
                 Philosophy
               </p>
-              <h3 className="font-heading text-foreground mt-4 text-2xl font-semibold tracking-[-0.05em] sm:text-3xl">
-                WE BUILD FOR THE GLOBAL CHURCH.
+              <h3 className="font-heading mt-5 flex flex-col items-start font-bold uppercase tracking-[-0.05em]">
+                <span className="text-foreground text-xl leading-[1.15] sm:text-2xl md:text-3xl">
+                  We build for the <span className="text-muted-foreground">global church.</span>
+                </span>
+                <span className="text-foreground text-xl leading-[1.15] sm:text-2xl md:text-3xl">
+                  We measure success in
+                </span>
+                <span className="mt-1 flex flex-col">
+                  <span className="text-foreground text-[clamp(3.5rem,7vw,5.5rem)] leading-[0.8] tracking-[-0.07em]">
+                    Impact,
+                  </span>
+                  <span className="text-muted-foreground self-end text-xl leading-[1.15] sm:text-2xl md:text-3xl">
+                    Not profit.
+                  </span>
+                </span>
               </h3>
-              <p className="text-muted-foreground mt-4 text-sm leading-7 sm:text-base">
+              <p className="text-muted-foreground mt-6 text-sm leading-7 sm:text-base">
                 Asymmetric.al is a nonprofit project shaping a missions-first
                 operating system for executive, operations, finance, and
                 advancement teams. Soli Deo Gloria.
