@@ -13,7 +13,7 @@ export const siteConfig = {
   cta: {
     primary: {
       label: "Join Waitlist",
-      href: "/join",
+      href: "/contact",
     },
     secondary: {
       label: "Request a Call",
