@@ -4,6 +4,7 @@ import { HomePageHero } from "@/components/site/home-page-hero";
 import { Section, SectionHeader } from "@/components/site/page";
 import { Reveal, StaggerItem, StaggerReveal } from "@/components/site/reveal";
 import { ScrollThesis } from "@/components/site/scroll-thesis";
+import { SiteLogoMark } from "@/components/site/site-logo-mark";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { buttonVariants } from "@/components/ui/button-variants";
@@ -262,10 +263,10 @@ export default function HomePage() {
               />
               <div className="bg-primary text-primary-foreground mt-8 rounded-[1.9rem] px-6 py-8 sm:px-8">
                 <p className="text-primary-foreground/70 font-mono text-[0.7rem] tracking-[0.3em] uppercase">
-                  Visual line
+                  Mark
                 </p>
-                <div className="font-heading mt-3 text-[clamp(3.25rem,8vw,6rem)] leading-none font-semibold tracking-[-0.08em]">
-                  1 → ∞
+                <div className="text-primary-foreground mt-3 flex justify-start">
+                  <SiteLogoMark className="size-[clamp(4.5rem,14vw,7.5rem)]" />
                 </div>
                 <p className="text-primary-foreground/82 mt-4 max-w-[24ch] text-base leading-7">
                   Simple Faithfulness → Exponential Impact

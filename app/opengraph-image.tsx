@@ -72,74 +72,21 @@ export default function OpengraphImage() {
                   padding: "0 14px",
                 }}
               >
-                <span
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "8px",
-                  }}
+                <svg
+                  width="28"
+                  height="28"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden
                 >
-                  <span
-                    style={{
-                      fontSize: "21px",
-                      fontWeight: 700,
-                      lineHeight: 1,
-                    }}
-                  >
-                    1
-                  </span>
-                  <span
-                    style={{
-                      position: "relative",
-                      display: "inline-flex",
-                      width: "20px",
-                      height: "10px",
-                    }}
-                  >
-                    <span
-                      style={{
-                        position: "absolute",
-                        top: "4px",
-                        left: 0,
-                        right: "4px",
-                        height: "2px",
-                        background: "#1E3A4F",
-                      }}
-                    />
-                    <span
-                      style={{
-                        position: "absolute",
-                        right: 0,
-                        top: "1px",
-                        width: "6px",
-                        height: "6px",
-                        borderTop: "2px solid #1E3A4F",
-                        borderRight: "2px solid #1E3A4F",
-                        transform: "rotate(45deg)",
-                      }}
-                    />
-                  </span>
-                  <span
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      marginLeft: "-2px",
-                    }}
-                  >
-                    {[0, -5].map((offset) => (
-                      <span
-                        key={offset}
-                        style={{
-                          width: "10px",
-                          height: "8px",
-                          marginLeft: `${offset}px`,
-                          border: "2px solid #1E3A4F",
-                          borderRadius: "999px",
-                        }}
-                      />
-                    ))}
-                  </span>
-                </span>
+                  <path
+                    d="M6 19L11 5M18 19L12.5 5M8.5 13.5h7"
+                    stroke="#1E3A4F"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </span>
               Mission Operating System
             </div>

@@ -218,7 +218,7 @@ The site has three distinct surface treatments that convey elevation:
 - Medium cards and tab triggers: `rounded-[1.8rem]` = 28.8px
 - Section containers within panels: `rounded-[1.9rem]` – `rounded-[2.2rem]`
 - Small pill elements (badges, inputs, buttons): `rounded-full`
-- "Why the name" visual block (deep navy `1→∞`): `rounded-[1.9rem]`
+- "Why the name" brand mark block (deep navy asymmetric “A” SVG): `rounded-[1.9rem]`
 
 The radius system is consistently very generous — all cards feel gently rounded, never sharp.
 

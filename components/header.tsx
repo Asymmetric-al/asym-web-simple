@@ -19,6 +19,7 @@ import { motion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { SiteLogoMark } from "@/components/site/site-logo-mark";
 
 const pageLinks = [...navigationLinks, ...supportLinks];
 
@@ -30,9 +31,7 @@ function BrandLockup({ compact = false }: { compact?: boolean }) {
       aria-label={`${siteConfig.name} home`}
     >
       <div className="border-foreground/10 flex size-11 items-center justify-center rounded-full border bg-[linear-gradient(135deg,rgba(221,242,255,0.95),rgba(231,238,225,0.95))] shadow-[0_14px_30px_-20px_rgba(30,58,79,0.45)] transition-transform duration-300 group-hover:-translate-y-0.5">
-        <span className="text-primary font-mono text-[0.72rem] font-semibold tracking-[0.24em]">
-          1→∞
-        </span>
+        <SiteLogoMark className="text-primary size-[1.35rem]" />
       </div>
       <span className="text-resilient font-heading text-foreground min-w-0 text-[1.02rem] leading-none font-semibold tracking-[-0.04em]">
         {compact ? siteConfig.shortName : siteConfig.name}
