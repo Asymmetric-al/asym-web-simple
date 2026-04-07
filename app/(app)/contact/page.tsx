@@ -69,7 +69,6 @@ export default function ContactPage() {
   return (
     <main id="main-content" tabIndex={-1}>
       <PageHero
-        eyebrow="OPEN CHANNEL"
         title={
           <h1 className="font-heading text-foreground text-[clamp(3rem,6vw,5rem)] leading-[0.92] font-semibold tracking-[-0.07em] text-balance">
             Start the
