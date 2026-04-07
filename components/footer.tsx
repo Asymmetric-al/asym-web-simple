@@ -58,7 +58,7 @@ export function Footer() {
           <div className="grid gap-10 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,0.75fr)_minmax(0,0.75fr)_minmax(0,0.75fr)]">
             <div className="max-w-xl min-w-0">
               <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.3em] uppercase">
-                The Manifesto
+                Philosophy
               </p>
               <h3 className="font-heading text-foreground mt-4 text-2xl font-semibold tracking-[-0.05em] sm:text-3xl">
                 WE BUILD FOR THE GLOBAL CHURCH.

@@ -38,7 +38,7 @@ const manifestoSections = [
 ] as const;
 
 export const metadata: Metadata = createMetadata({
-  title: "Manifesto",
+  title: "Philosophy",
   description:
     "The underlying logic of Asymmetric.al: software, stewardship, hyper-focus, and the Kingdom logic behind small inputs and exponential outputs.",
   path: "/manifesto",

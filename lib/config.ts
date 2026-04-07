@@ -26,7 +26,7 @@ export const navigationLinks = [
   { label: "Platform", href: "/platform" },
   { label: "Missions", href: "/missions" },
   { label: "Specs", href: "/specs" },
-  { label: "Manifesto", href: "/manifesto" },
+  { label: "Philosophy", href: "/manifesto" },
   { label: "Give", href: "/give" },
 ] as const;
 
