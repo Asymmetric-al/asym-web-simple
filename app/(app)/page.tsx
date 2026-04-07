@@ -36,7 +36,6 @@ const heroLines = [
   "Small Inputs, Exponential Outputs",
   "By Missionaries, For Missionaries",
   "Nonprofit 501(c)(3)",
-  "Secure Data Stewardship",
   "No Vendor Lock-in",
 ];
 
