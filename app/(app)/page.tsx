@@ -55,7 +55,7 @@ const foundations = [
   {
     title: "Open Foundations",
     description:
-      "Built on proven open-source standards like Next.js and Directus. Extensible by design. Safe for the long haul.",
+      "Built on proven open-source standards like Next.js and Payload CMS. Extensible by design. Safe for the long haul.",
     icon: Blocks,
   },
 ] as const;
@@ -64,7 +64,7 @@ const capabilities = [
   {
     title: "Sovereign Web Architecture",
     description:
-      "Headless Directus CMS with Next.js gives agencies a portable website stack they actually own.",
+      "Headless Payload CMS with Next.js gives agencies a portable website stack they actually own.",
     icon: Globe,
   },
   {

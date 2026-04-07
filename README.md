@@ -116,14 +116,14 @@ Asym replaces the fragmented agency stack with Mission Control: one login, one s
 **Core modules:**
 - **Partners CRM** — Missions-built on Twenty CRM. Tracks churches, households, designations, and relationship history.
 - **Contributions Hub** — Live transaction visibility, Stripe-native processing, reconciliation automation.
-- **Web Studio** — Headless Next.js + Directus CMS so agencies control their sites without change-order lock-in.
+- **Web Studio** — Headless Next.js + Payload CMS so agencies control their sites without change-order lock-in.
 - **Email Studio** — Branded receipts, password resets, and campaign emails with full ownership.
 - **Statements Studio** — Year-end tax documents and receipt packs generated automatically.
 - **Mobilize** — Visual workflow orchestration from candidate interest to field deployment via Zapier.
 
 **Supporting modules:** Donor Support Hub (Chatwoot CE), Sign Studio (Documenso CE), Report Studio, Automations, Member Care, Events & Gatherings.
 
-**Full stack:** TypeScript · Next.js · NestJS · PostgreSQL · Redis · Twenty CRM · Directus · Chatwoot CE · Documenso CE · Supabase Auth · Stripe · SendGrid · Zapier · Inngest · Vercel · OpenTelemetry
+**Full stack:** TypeScript · Next.js · NestJS · PostgreSQL · Redis · Twenty CRM · Payload CMS · Chatwoot CE · Documenso CE · Supabase Auth · Stripe · Resend · Zapier · Inngest · Vercel · OpenTelemetry
 
 ## Contributing
 
