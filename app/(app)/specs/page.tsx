@@ -97,8 +97,11 @@ const layers = [
   },
   {
     title: "Layer 09 — Intelligence",
-    description: "OpenAI",
-    links: [{ label: "OpenAI", url: "https://openai.com/" }],
+    description: "OpenAI Codex, Cursor",
+    links: [
+      { label: "OpenAI Codex", url: "https://openai.com/" },
+      { label: "Cursor", url: "https://cursor.com/" },
+    ],
     icon: Bot,
   },
 ] as const;
