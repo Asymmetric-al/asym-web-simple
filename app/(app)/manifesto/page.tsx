@@ -61,7 +61,6 @@ export default function ManifestoPage() {
           "Hyper-focus",
           "Open hands",
           "Support-raised staff",
-          "Kingdom logic",
         ]}
       >
         <Reveal trigger="mount">
