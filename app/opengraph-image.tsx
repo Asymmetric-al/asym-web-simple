@@ -106,7 +106,7 @@ export default function OpengraphImage() {
               }}
             >
               {[
-                "Open source core",
+                "Always open source",
                 "Tenant sovereignty",
                 "Nonprofit 501(c)(3)",
               ].map((item) => (

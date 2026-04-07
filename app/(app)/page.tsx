@@ -190,7 +190,7 @@ export default function HomePage() {
         ]}
         meta={[
           "Unified operating system",
-          "Open source core",
+          "Always open source",
           "Tenant sovereignty",
           "Nonprofit 501(c)(3)",
         ]}
