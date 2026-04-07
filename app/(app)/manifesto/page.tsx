@@ -216,7 +216,7 @@ export default function ManifestoPage() {
                   </div>
                   <div>
                     <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-[0.2em] mb-2">
-                      Digitally Signed
+                      Signed
                     </p>
                     <span className="font-heading text-2xl font-semibold tracking-[-0.05em] text-foreground">
                       The Maintainers
