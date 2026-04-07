@@ -75,7 +75,10 @@ const layers = [
     description: "Stripe, Resend, Zapier, Inngest, BullMQ",
     links: [
       { label: "Stripe", url: "https://stripe.com/" },
-      { label: "Resend", url: "https://resend.com/" },
+      {
+        label: "Resend",
+        url: "https://resend.com/docs/dashboard/emails/introduction",
+      },
       { label: "Zapier", url: "https://zapier.com/" },
     ],
     icon: Activity,
