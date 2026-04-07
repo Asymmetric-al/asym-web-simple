@@ -1,3 +1,7 @@
+import {
+  GIVE_PAGE_METADATA_SOURCE,
+  isValidCheckoutSessionId,
+} from "@/lib/stripe-giving";
 import { getAppBaseUrl, getStripe } from "@/lib/stripe-server";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
@@ -24,7 +28,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   }
 
   const sessionId = typeof body.sessionId === "string" ? body.sessionId.trim() : "";
-  if (!sessionId.startsWith("cs_")) {
+  if (!isValidCheckoutSessionId(sessionId)) {
     return NextResponse.json({ error: "A valid checkout session is required." }, { status: 422 });
   }
 
@@ -44,6 +48,31 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     if (!customerId) {
       return NextResponse.json(
         { error: "No customer record for this session. Use the email from your Stripe receipt to contact us." },
+        { status: 422 },
+      );
+    }
+
+    const source = session.metadata?.source;
+    if (source !== GIVE_PAGE_METADATA_SOURCE) {
+      return NextResponse.json(
+        { error: "This session is not eligible for the donor portal from here." },
+        { status: 403 },
+      );
+    }
+
+    if (session.status !== "complete") {
+      return NextResponse.json(
+        { error: "Checkout is not complete yet. Finish payment first, then return to this page." },
+        { status: 409 },
+      );
+    }
+
+    if (session.mode !== "subscription") {
+      return NextResponse.json(
+        {
+          error:
+            "The donor portal applies to monthly gifts. For one-time gifts, use your Stripe receipt or email info@asymmetric.al.",
+        },
         { status: 422 },
       );
     }

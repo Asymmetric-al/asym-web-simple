@@ -1,3 +1,4 @@
+import { normalizeOptionalDonorEmail } from "@/lib/stripe-giving";
 import {
   donationSessionMetadata,
   getAppBaseUrl,
@@ -38,6 +39,22 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
 
+  if (body.mode !== "subscription" && body.mode !== "payment") {
+    return NextResponse.json({ error: "Invalid checkout mode." }, { status: 422 });
+  }
+
+  const donorEmail = normalizeOptionalDonorEmail(body.customerEmail);
+  if (
+    typeof body.customerEmail === "string" &&
+    body.customerEmail.trim() !== "" &&
+    !donorEmail
+  ) {
+    return NextResponse.json(
+      { error: "Enter a valid email address, or omit it." },
+      { status: 422 },
+    );
+  }
+
   const baseUrl = getAppBaseUrl();
   const returnUrl = `${baseUrl}/give/success?session_id={CHECKOUT_SESSION_ID}`;
 
@@ -75,9 +92,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         );
       }
 
-      const trimmedEmail =
-        typeof body.customerEmail === "string" ? body.customerEmail.trim() : "";
-
       const session = await stripe.checkout.sessions.create({
         mode: "subscription",
         ui_mode: "embedded_page",
@@ -88,7 +102,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
           metadata: { ...metadata },
         },
         custom_text: customText,
-        ...(trimmedEmail ? { customer_email: trimmedEmail } : {}),
+        ...(donorEmail ? { customer_email: donorEmail } : {}),
       });
 
       if (!session.client_secret) {
@@ -116,9 +130,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    const paymentEmail =
-      typeof body.customerEmail === "string" ? body.customerEmail.trim() : "";
-
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       ui_mode: "embedded_page",
@@ -142,7 +153,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         metadata: { ...metadata },
       },
       custom_text: customText,
-      ...(paymentEmail ? { customer_email: paymentEmail } : {}),
+      ...(donorEmail ? { customer_email: donorEmail } : {}),
     });
 
     if (!session.client_secret) {

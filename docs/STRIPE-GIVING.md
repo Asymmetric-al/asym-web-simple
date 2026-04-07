@@ -34,6 +34,10 @@ One-time gifts use **`price_data`** in code (no extra Dashboard products require
 
 The success page calls the API to create a **Billing Portal session** so donors can manage recurring support.
 
+**Security:** The billing-portal API only accepts real Checkout Session ids (`cs_test_…` / `cs_live_…`), verifies `metadata.source === give_page`, requires `status === complete`, and only allows portal creation when the session `mode` is `subscription`. One-time donors see guidance to use their receipt or email instead.
+
+**Webhooks:** Optional Resend notifications run only for events tied to `give_page` metadata (`checkout.session.completed`, subscription lifecycle, and `invoice.paid` after confirming the subscription originated from this flow). A Resend failure is logged but still returns `200` to Stripe so events are not retried indefinitely.
+
 ## 4. Webhook
 
 1. [Developers → Webhooks](https://dashboard.stripe.com/webhooks) → **Add endpoint**.

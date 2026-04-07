@@ -7,9 +7,12 @@ import { useState } from "react";
 export function DonationSuccessActions({
   sessionId,
   stripeConfigured,
+  portalEligible,
 }: {
   sessionId: string | null;
   stripeConfigured: boolean;
+  /** Server-verified: completed give_page subscription checkout */
+  portalEligible: boolean;
 }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -41,11 +44,12 @@ export function DonationSuccessActions({
     return null;
   }
 
-  if (!sessionId) {
+  if (!sessionId || !portalEligible) {
     return (
       <p className="text-muted-foreground text-sm leading-7">
-        If you need to manage a recurring gift, email info@asymmetric.al with the
-        email you used at checkout.
+        {sessionId && !portalEligible
+          ? "If you gave monthly, use the link in your Stripe receipt email to manage your subscription, or contact info@asymmetric.al."
+          : "If you need to manage a recurring gift, email info@asymmetric.al with the email you used at checkout."}
       </p>
     );
   }

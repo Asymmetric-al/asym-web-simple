@@ -4,6 +4,11 @@ import { Reveal } from "@/components/site/reveal";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { createMetadata } from "@/lib/metadata";
+import {
+  GIVE_PAGE_METADATA_SOURCE,
+  isValidCheckoutSessionId,
+} from "@/lib/stripe-giving";
+import { getStripe } from "@/lib/stripe-server";
 import { cn } from "@/lib/utils";
 import { Heart } from "lucide-react";
 import type { Metadata } from "next";
@@ -22,12 +27,25 @@ export default async function GiveSuccessPage({
   searchParams: Promise<{ session_id?: string }>;
 }) {
   const params = await searchParams;
-  const sessionId =
-    typeof params.session_id === "string" && params.session_id.startsWith("cs_")
-      ? params.session_id
-      : null;
+  const rawSessionId =
+    typeof params.session_id === "string" ? params.session_id.trim() : "";
+  const sessionId = isValidCheckoutSessionId(rawSessionId) ? rawSessionId : null;
 
   const stripeConfigured = Boolean(process.env.STRIPE_SECRET_KEY);
+
+  let portalEligible = false;
+  if (sessionId && stripeConfigured) {
+    try {
+      const stripe = getStripe();
+      const session = await stripe.checkout.sessions.retrieve(sessionId);
+      portalEligible =
+        session.status === "complete" &&
+        session.metadata?.source === GIVE_PAGE_METADATA_SOURCE &&
+        session.mode === "subscription";
+    } catch {
+      portalEligible = false;
+    }
+  }
 
   return (
     <main id="main-content" tabIndex={-1}>
@@ -93,6 +111,7 @@ export default async function GiveSuccessPage({
                 <DonationSuccessActions
                   sessionId={sessionId}
                   stripeConfigured={stripeConfigured}
+                  portalEligible={portalEligible}
                 />
               </div>
             </div>

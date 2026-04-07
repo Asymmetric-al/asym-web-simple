@@ -1,4 +1,5 @@
 import type { RecurringTier } from "@/lib/donation-tiers";
+import { GIVE_PAGE_METADATA_SOURCE } from "@/lib/stripe-giving";
 import Stripe from "stripe";
 
 export { ONE_TIME_AMOUNTS_CENTS, type RecurringTier } from "@/lib/donation-tiers";
@@ -35,7 +36,7 @@ export function getRecurringPriceId(tier: RecurringTier): string | undefined {
 }
 
 export const donationSessionMetadata = {
-  source: "give_page",
+  source: GIVE_PAGE_METADATA_SOURCE,
   tax_org: "Global Fellowship Inc.",
   ein: "68-0214543",
 } as const;
