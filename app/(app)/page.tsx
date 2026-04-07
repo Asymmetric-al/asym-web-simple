@@ -28,7 +28,6 @@ import Link from "next/link";
 import { siteConfig } from "@/lib/config";
 
 const heroLines = [
-  "Unified Operating System",
   "Accelerating the Great Commission",
   "Open Source Core",
   "Soli Deo Gloria",
