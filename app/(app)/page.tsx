@@ -116,7 +116,7 @@ const buildTracks = [
     title: "For sending agencies",
     description:
       "Early access, migration support, and a direct line into the product roadmap while the system is still being shaped.",
-    href: "/contact",
+    href: "/missions",
   },
   {
     title: "For builders",
