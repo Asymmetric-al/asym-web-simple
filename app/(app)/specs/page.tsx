@@ -72,10 +72,10 @@ const layers = [
   },
   {
     title: "Layer 07 — Integrations & Async",
-    description: "Stripe, SendGrid, Zapier, Inngest, BullMQ",
+    description: "Stripe, Resend, Zapier, Inngest, BullMQ",
     links: [
       { label: "Stripe", url: "https://stripe.com/" },
-      { label: "SendGrid", url: "https://sendgrid.com/" },
+      { label: "Resend", url: "https://resend.com/" },
       { label: "Zapier", url: "https://zapier.com/" },
     ],
     icon: Activity,
