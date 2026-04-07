@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { createMetadata } from "@/lib/metadata";
 import {
   Activity,
+  ArrowUpRight,
   Blocks,
   Bot,
   Database,
@@ -195,10 +196,12 @@ export default function SpecsPage() {
                           href={link.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="group/tag inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary/50 px-2.5 py-1.5 font-mono text-[10px] text-muted-foreground transition-all hover:border-foreground/20 hover:bg-secondary hover:text-foreground"
+                          className="group/tag inline-flex items-center overflow-hidden rounded-full border border-border bg-secondary/50 px-2.5 py-1.5 font-mono text-[10px] text-muted-foreground transition-all duration-300 hover:border-foreground/20 hover:bg-secondary hover:text-foreground"
                         >
-                          {link.label}
-                          <span className="opacity-0 transition-opacity group-hover/tag:opacity-100">→</span>
+                          <span className="transition-transform duration-300 group-hover/tag:-translate-x-0.5">
+                            {link.label}
+                          </span>
+                          <ArrowUpRight className="-mr-3 ml-0 size-3 -translate-x-2 opacity-0 transition-all duration-300 group-hover/tag:mr-0 group-hover/tag:ml-1 group-hover/tag:translate-x-0 group-hover/tag:opacity-100" />
                         </Link>
                       ))}
                     </div>
