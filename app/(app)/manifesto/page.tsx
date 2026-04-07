@@ -59,7 +59,7 @@ export default function ManifestoPage() {
         meta={[
           "Stewardship",
           "Hyper-focus",
-          "Open hands",
+          "Kingdom-minded",
           "Support-raised staff",
         ]}
       >
