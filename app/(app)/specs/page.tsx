@@ -143,7 +143,6 @@ export default function SpecsPage() {
           "Portable",
           "Observable",
           "Secure",
-          "Vercel-friendly",
         ]}
       >
         <Reveal trigger="mount">
