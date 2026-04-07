@@ -170,7 +170,6 @@ export default function SpecsPage() {
 
       <Section className="section-divider-accent">
         <SectionHeader
-          eyebrow="Layered stack"
           title="Built on open foundations and cloud primitives that can survive the long haul."
           description="These choices are practical, portable, and legible to serious engineering teams. Nothing here depends on proprietary magic."
         />
