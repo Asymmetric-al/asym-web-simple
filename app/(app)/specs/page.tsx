@@ -131,7 +131,6 @@ export default function SpecsPage() {
   return (
     <main id="main-content" tabIndex={-1}>
       <PageHero
-        eyebrow="System Normal | TECH MANIFEST v2.1.0"
         title={
           <h1 className="font-heading text-foreground text-[clamp(3rem,6vw,5.15rem)] leading-[0.94] font-semibold tracking-[-0.07em] text-balance">
             Transparent Architecture.
