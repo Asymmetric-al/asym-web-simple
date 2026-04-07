@@ -71,7 +71,7 @@ export function Footer() {
                   <span className="text-foreground text-[clamp(3.5rem,7vw,5.5rem)] leading-[0.8] tracking-[-0.07em]">
                     Impact,
                   </span>
-                  <span className="text-muted-foreground self-end text-xl leading-[1.15] sm:text-2xl md:text-3xl">
+                  <span className="text-muted-foreground mt-1.5 self-end text-xl leading-[1.15] sm:mt-2 sm:text-2xl md:text-3xl">
                     Not profit.
                   </span>
                 </span>
