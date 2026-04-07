@@ -184,10 +184,10 @@ export default function HomePage() {
         }
         description="The unified platform for the modern missions agency. Bring finance, mobilization, donor support, communications, and web operations under one calm, trustworthy surface."
         actions={[
-          { label: "Join Waitlist", href: "/join" },
+          { label: siteConfig.cta.primary.label, href: siteConfig.cta.primary.href },
           {
-            label: "Request a Call",
-            href: "/contact",
+            label: siteConfig.cta.secondary.label,
+            href: siteConfig.cta.secondary.href,
             variant: "outline",
           },
         ]}
