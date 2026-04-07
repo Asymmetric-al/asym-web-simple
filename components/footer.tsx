@@ -2,7 +2,7 @@ import { footerGroups, siteConfig } from "@/lib/config";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { SiteLogoMark } from "@/components/site/site-logo-mark";
 import { cn } from "@/lib/utils";
-import { ArrowUpRight, MoveRight } from "lucide-react";
+import { ArrowUpRight, Github, MoveRight } from "lucide-react";
 import Link from "next/link";
 
 export function Footer() {
@@ -108,13 +108,24 @@ export function Footer() {
               Operating as a project under {siteConfig.nonprofit} EIN:{" "}
               {siteConfig.ein}
             </div>
-            <div className="flex flex-col gap-1.5 sm:items-end">
-              <Link
-                href={`mailto:${siteConfig.email}`}
-                className="link-resilient text-foreground hover:text-primary font-mono text-[0.72rem] tracking-[0.2em] uppercase transition-colors sm:text-right"
-              >
-                {siteConfig.email}
-              </Link>
+            <div className="flex flex-col gap-2 sm:items-end">
+              <div className="flex items-center gap-3">
+                <Link
+                  href={`mailto:${siteConfig.email}`}
+                  className="link-resilient text-foreground hover:text-primary font-mono text-[0.72rem] tracking-[0.2em] uppercase transition-colors sm:text-right"
+                >
+                  {siteConfig.email}
+                </Link>
+                <Link
+                  href="https://github.com/Asymmetric-al"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-foreground/80 hover:text-primary transition-colors"
+                  aria-label="GitHub"
+                >
+                  <Github className="size-[1.1rem]" />
+                </Link>
+              </div>
               <span className="font-mono text-[0.72rem] tracking-[0.15em] uppercase opacity-70">
                 Asymmetric.al © {new Date().getFullYear()}
               </span>
