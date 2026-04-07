@@ -116,16 +116,19 @@ const buildTracks = [
     title: "For sending agencies",
     description:
       "Early access, migration support, and a direct line into the product roadmap while the system is still being shaped.",
+    href: "/contact",
   },
   {
     title: "For builders",
     description:
       "High-agency engineers, designers, and systems thinkers who want to use their craft in service of the Great Commission.",
+    href: "/join",
   },
   {
     title: "For donors",
     description:
       "Capital that funds shared rails for many ministries at once instead of trapping each organization inside its own tool debt.",
+    href: "/give",
   },
 ] as const;
 
@@ -381,16 +384,19 @@ export default function HomePage() {
             <StaggerReveal>
               {buildTracks.map((item) => (
                 <StaggerItem key={item.title}>
-                  <Card className="surface-card surface-interactive rounded-[1.8rem]">
-                    <CardHeader>
-                      <CardTitle className="font-heading text-xl font-semibold tracking-[-0.04em]">
-                        {item.title}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="text-muted-foreground text-sm leading-7">
-                      {item.description}
-                    </CardContent>
-                  </Card>
+                  <Link href={item.href} className="group block h-full outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-[1.8rem]">
+                    <Card className="surface-card surface-interactive h-full rounded-[1.8rem] transition-colors group-hover:border-foreground/20">
+                      <CardHeader>
+                        <CardTitle className="font-heading flex items-center justify-between text-xl font-semibold tracking-[-0.04em]">
+                          {item.title}
+                          <ArrowRight className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-foreground" />
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="text-muted-foreground text-sm leading-7">
+                        {item.description}
+                      </CardContent>
+                    </Card>
+                  </Link>
                 </StaggerItem>
               ))}
             </StaggerReveal>
