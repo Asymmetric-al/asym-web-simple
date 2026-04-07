@@ -1,8 +1,10 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { buttonVariants } from "@/components/ui/button-variants";
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetDescription,
   SheetFooter,
@@ -14,7 +16,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { navigationLinks, siteConfig, supportLinks } from "@/lib/config";
 import { useReducedMotion } from "@/lib/motion";
 import { cn } from "@/lib/utils";
-import { Menu, MoveRight } from "lucide-react";
+import { Menu, MoveRight, X } from "lucide-react";
 import { motion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -157,12 +159,28 @@ export function Header() {
             </div>
             <SheetContent
               side="right"
+              showCloseButton={false}
               className="border-foreground/10 bg-card/96 w-[88vw] max-w-sm border-l px-0"
             >
               <SheetHeader className="border-foreground/8 border-b pb-5">
-                <div className="flex items-start justify-between gap-4">
+                <div className="flex items-start justify-between gap-3">
                   <BrandLockup compact />
-                  <ThemeToggle />
+                  <div className="flex shrink-0 items-center gap-2">
+                    <ThemeToggle />
+                    <SheetClose
+                      render={
+                        <Button
+                          variant="ghost"
+                          size="icon-sm"
+                          className="shrink-0"
+                          aria-label="Close menu"
+                        />
+                      }
+                    >
+                      <X className="size-4" />
+                      <span className="sr-only">Close</span>
+                    </SheetClose>
+                  </div>
                 </div>
                 <SheetTitle className="font-heading text-xl tracking-[-0.04em]">
                   Mission operating system
