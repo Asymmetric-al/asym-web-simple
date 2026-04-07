@@ -103,7 +103,6 @@ const layers = [
 ] as const;
 
 const targets = [
-  { label: "Edge Protocol", value: "HTTP/3 + QUIC" },
   { label: "API Read Latency", value: "< 150ms (p50)" },
   { label: "API Write Latency", value: "< 600ms (p95)" },
   { label: "Core Web Vitals", value: "75th % Pass" },
