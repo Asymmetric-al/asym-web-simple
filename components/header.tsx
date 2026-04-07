@@ -222,7 +222,7 @@ export function Header() {
 
                 <div className="surface-card surface-interactive mt-8 rounded-[1.75rem] p-5">
                   <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
-                    Primary next step
+                    Next steps
                   </p>
                   <p className="font-heading text-foreground mt-3 text-xl font-semibold tracking-[-0.04em]">
                     Join the build community.
