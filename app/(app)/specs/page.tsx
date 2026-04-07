@@ -31,7 +31,7 @@ const layers = [
   },
   {
     title: "Layer 02 — Data Persistence",
-    description: "PostgreSQL, MySQL, Redis, TanStack DB, pgvector, TanStack Query, TanStack Table",
+    description: "PostgreSQL, Redis, TanStack DB, pgvector, TanStack Query, TanStack Table",
     links: [
       { label: "PostgreSQL", url: "https://www.postgresql.org/" },
       { label: "Redis", url: "https://github.com/redis/redis/" },
