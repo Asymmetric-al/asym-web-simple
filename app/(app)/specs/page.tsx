@@ -57,9 +57,10 @@ const layers = [
   },
   {
     title: "Layer 05 — Infrastructure & Ops",
-    description: "Vercel, GitHub, Sentry, OpenTelemetry",
+    description: "Vercel, Supabase, GitHub, Sentry, OpenTelemetry",
     links: [
       { label: "Vercel", url: "https://vercel.com/" },
+      { label: "Supabase", url: "https://supabase.com/" },
       { label: "GitHub", url: "https://github.com/" },
       { label: "Sentry", url: "https://github.com/getsentry/sentry" },
     ],
