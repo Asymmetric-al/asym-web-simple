@@ -82,7 +82,6 @@ export default function ContactPage() {
           "info@asymmetric.al",
           "General inquiry",
           "Builder support",
-          "Global HQ",
         ]}
       >
         <Reveal trigger="mount">
