@@ -302,8 +302,8 @@ export default function HomePage() {
             <StaggerItem className="col-span-full">
               <SectionHeader
                 eyebrow="System Capabilities"
-                title="Infrastructure as stewardship."
-                description="We do not look for ways to extract rent from your basic needs. We build digital rails for high-trust organizations to operate with sovereignty and speed."
+                title="Built to serve your mission."
+                description="We don't trap you in expensive subscriptions. We build solid, fast tools that put you in control of your own data."
               />
             </StaggerItem>
             {capabilities.map((item, index) => (
