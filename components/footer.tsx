@@ -57,9 +57,6 @@ export function Footer() {
         <div className="surface-panel surface-interactive rounded-[2.35rem] p-7 sm:p-10">
           <div className="grid gap-10 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,0.75fr)_minmax(0,0.75fr)_minmax(0,0.75fr)]">
             <div className="max-w-xl min-w-0">
-              <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.3em] uppercase">
-                Philosophy
-              </p>
               <h3 className="font-heading mt-5 flex flex-col items-start font-bold uppercase tracking-[-0.05em]">
                 <span className="text-foreground text-xl leading-[1.15] sm:text-2xl md:text-3xl">
                   We build for the <span className="text-muted-foreground">global church.</span>
