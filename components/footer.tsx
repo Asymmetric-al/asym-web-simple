@@ -103,7 +103,7 @@ export function Footer() {
 
           <div className="border-foreground/10 text-muted-foreground mt-10 flex flex-col gap-5 border-t pt-6 text-sm sm:flex-row sm:items-center sm:justify-between">
             <div className="content-measure">
-              Operating as a project under {siteConfig.nonprofit}. EIN:{" "}
+              Operating as a project under {siteConfig.nonprofit} EIN:{" "}
               {siteConfig.ein}
             </div>
             <div className="flex flex-col gap-1 sm:items-end">
