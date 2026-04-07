@@ -123,7 +123,7 @@ Asym replaces the fragmented agency stack with Mission Control: one login, one s
 
 **Supporting modules:** Donor Support Hub (Chatwoot CE), Sign Studio (Documenso CE), Report Studio, Automations, Member Care, Events & Gatherings.
 
-**Full stack:** TypeScript · Next.js · NestJS · PostgreSQL · Redis · Twenty CRM · Payload CMS · Chatwoot CE · Documenso CE · Supabase Auth · Stripe · Resend · Zapier · Inngest · Vercel · OpenTelemetry
+**Full stack:** TypeScript · React · Next.js · Bun · PostgreSQL · Redis · Twenty CRM · Payload CMS · Chatwoot CE · Documenso CE · Supabase Auth · Stripe · Resend · Zapier · Inngest · Vercel · OpenTelemetry
 
 ## Contributing
 

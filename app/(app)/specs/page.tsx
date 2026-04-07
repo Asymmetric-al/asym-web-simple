@@ -20,12 +20,12 @@ import Link from "next/link";
 const layers = [
   {
     title: "Layer 01 — Languages & Core",
-    description: "TypeScript, JavaScript, React, Next.js, Node.js, NestJS, GraphQL, TanStack",
+    description: "TypeScript, React, Next.js, Bun, GraphQL, TanStack",
     links: [
       { label: "TypeScript", url: "https://github.com/microsoft/TypeScript" },
       { label: "React", url: "https://github.com/facebook/react" },
       { label: "Next.js", url: "https://nextjs.org/" },
-      { label: "Node.js", url: "https://github.com/nodejs" },
+      { label: "Bun", url: "https://bun.sh/" },
     ],
     icon: FileCode2,
   },
