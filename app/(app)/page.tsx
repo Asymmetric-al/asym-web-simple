@@ -29,7 +29,7 @@ import { siteConfig } from "@/lib/config";
 
 const heroLines = [
   "Accelerating the Great Commission",
-  "Open Source Core",
+  "Always Open Source",
   "Soli Deo Gloria",
   "Zero Admin Drag",
   "Tenant Sovereignty Architecture",
