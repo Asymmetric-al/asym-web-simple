@@ -20,7 +20,7 @@ export default function NotFound() {
           { label: "Go home", href: "/" },
           { label: "Contact us", href: "/contact", variant: "outline" },
         ]}
-        meta={["Warm parchment shell", "No dead ends", "Mission-first UX"]}
+        meta={["No dead ends", "Mission-first UX"]}
       />
 
       <Section density="legal" className="pt-0">
