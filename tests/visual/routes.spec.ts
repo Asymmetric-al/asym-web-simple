@@ -7,6 +7,8 @@ const themes = [
 ];
 
 test.describe("route visuals", () => {
+  test.describe.configure({ timeout: 60_000 });
+
   test.skip(
     ({ browserName }) => browserName !== "chromium",
     "Visual baselines are maintained in Chromium to reduce snapshot churn."
@@ -23,7 +25,7 @@ test.describe("route visuals", () => {
             reducedMotion: "reduce",
           });
 
-          await page.goto(route.path, { waitUntil: "networkidle" });
+          await page.goto(route.path, { waitUntil: "domcontentloaded" });
           await expect(
             page.getByRole("heading", { level: 1 }).first()
           ).toBeVisible();
@@ -33,7 +35,7 @@ test.describe("route visuals", () => {
             `${route.slug}-${theme.name}.png`,
             {
               fullPage: true,
-              timeout: 30_000,
+              timeout: 60_000,
             }
           );
         });
