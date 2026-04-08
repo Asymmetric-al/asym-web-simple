@@ -17,6 +17,8 @@
     "qa:visual:update": "playwright test tests/visual --update-snapshots",
     "qa:a11y": "playwright test tests/a11y",
     "qa:smoke": "playwright test tests/e2e/smoke.spec.ts",
+    "qa:stripe-api": "playwright test tests/e2e/stripe-giving-api.spec.ts",
+    "test:unit": "vitest run",
     "payload": "payload",
     "generate:types": "payload generate:types",
     "generate:importmap": "payload generate:importMap"
@@ -61,7 +63,8 @@
     "shadcn": "^4.0.8",
     "tailwindcss": "^4.2.1",
     "typescript": "^5",
-    "vercel": "^50.32.5"
+    "vercel": "^50.32.5",
+    "vitest": "^3.2.4"
   },
   "overrides": {
     "@types/react": "19.2.14",

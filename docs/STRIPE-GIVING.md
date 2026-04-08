@@ -64,6 +64,31 @@ Use [Stripe test cards](https://docs.stripe.com/testing#cards): e.g. `4242 4242 
 - Confirm Customer portal and branding in Dashboard.
 - Rotate any keys that were ever committed or shared.
 
+## 7. Automated checks (repo)
+
+From the project root:
+
+- `npm run lint` / `npm run typecheck` / `npm run build`
+- `npm run test:unit` — Vitest tests for `lib/stripe-giving.ts` (session id + email helpers)
+- `npm run qa:smoke` — Playwright marketing smoke (starts production server on port 3001)
+- `npm run qa:stripe-api` — Playwright API contract tests for giving routes (no Stripe keys required for the main cases)
+
+**Gated Playwright tests:** `tests/e2e/stripe-giving-api.spec.ts` also includes validation cases (422 responses) that run only when `STRIPE_SECRET_KEY` is set in the **same environment as the Playwright process** (so the spawned Next.js server inherits it). Example:
+
+```bash
+export STRIPE_SECRET_KEY=sk_test_...
+npm run qa:stripe-api
+```
+
+Playwright does not load `.env.local` automatically.
+
+## 8. Manual end-to-end smoke
+
+1. Add keys and price IDs to `.env.local`; set `NEXT_PUBLIC_SITE_URL` to your dev URL (e.g. `http://127.0.0.1:3000`).
+2. `npm run dev`, open `/give`, complete a **one-time** gift with test card `4242…`; confirm redirect to `/give/success?session_id=cs_…`.
+3. Complete a **monthly** gift; on the success page, use **Manage recurring gift** (Customer portal must be enabled in Dashboard).
+4. Optional: `stripe listen --forward-to localhost:3000/api/webhooks/stripe`, complete a payment, confirm `200` responses in logs.
+
 ## References
 
 - [Checkout Sessions API](https://docs.stripe.com/api/checkout/sessions/create)

@@ -49,6 +49,11 @@ function summarizeCheckoutSession(session: Stripe.Checkout.Session): string {
 }
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
+  const signature = request.headers.get("stripe-signature");
+  if (!signature) {
+    return NextResponse.json({ error: "Missing stripe-signature" }, { status: 400 });
+  }
+
   if (!process.env.STRIPE_SECRET_KEY) {
     return NextResponse.json({ error: "Webhook not configured" }, { status: 503 });
   }
@@ -57,11 +62,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   if (!webhookSecret) {
     console.error("[webhooks/stripe] STRIPE_WEBHOOK_SECRET is not set");
     return NextResponse.json({ error: "Webhook not configured" }, { status: 503 });
-  }
-
-  const signature = request.headers.get("stripe-signature");
-  if (!signature) {
-    return NextResponse.json({ error: "Missing stripe-signature" }, { status: 400 });
   }
 
   const rawBody = await request.text();

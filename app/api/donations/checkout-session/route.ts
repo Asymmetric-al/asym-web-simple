@@ -22,16 +22,6 @@ type Body = {
 };
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
-  if (!process.env.STRIPE_SECRET_KEY) {
-    return NextResponse.json(
-      {
-        error:
-          "Giving is not configured. Add Stripe keys to .env.local — see docs/STRIPE-GIVING.md.",
-      },
-      { status: 503 },
-    );
-  }
-
   let body: Body;
   try {
     body = (await request.json()) as Body;
@@ -52,6 +42,16 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     return NextResponse.json(
       { error: "Enter a valid email address, or omit it." },
       { status: 422 },
+    );
+  }
+
+  if (!process.env.STRIPE_SECRET_KEY) {
+    return NextResponse.json(
+      {
+        error:
+          "Giving is not configured. Add Stripe keys to .env.local — see docs/STRIPE-GIVING.md.",
+      },
+      { status: 503 },
     );
   }
 
