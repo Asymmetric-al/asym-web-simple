@@ -1,10 +1,23 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
+import {
+  canUseTextLayout,
+  measurePlatformTabTrigger,
+  platformTabTriggerPreset,
+  waitForTextLayoutFontsReady,
+  type PlatformTabTriggerElements,
+} from "@/lib/text-layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getRevealTransition, useReducedMotion } from "@/lib/motion";
-import { useState } from "react";
+import {
+  startTransition,
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 
 export type PlatformTabItem = {
   id: string;
@@ -17,6 +30,110 @@ export type PlatformTabItem = {
 export function PlatformTabs({ items }: { items: PlatformTabItem[] }) {
   const prefersReducedMotion = useReducedMotion();
   const [activeTab, setActiveTab] = useState(items[0]?.id);
+  const [sharedTriggerMinHeight, setSharedTriggerMinHeight] = useState<
+    number | null
+  >(null);
+  const [pretextReady, setPretextReady] = useState(false);
+  const listRef = useRef<HTMLDivElement | null>(null);
+  const triggerRefs = useRef<(HTMLElement | null)[]>([]);
+  const copyRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const tagRefs = useRef<(HTMLParagraphElement | null)[]>([]);
+  const titleRefs = useRef<(HTMLParagraphElement | null)[]>([]);
+  const summaryRefs = useRef<(HTMLParagraphElement | null)[]>([]);
+
+  useEffect(() => {
+    if (!canUseTextLayout()) return;
+
+    let cancelled = false;
+    let animationFrame = 0;
+    let resizeObserver: ResizeObserver | null = null;
+
+    const copy = items.map((item) => ({
+      title: item.title,
+      summary: item.summary,
+    }));
+
+    const scheduleMeasurement = () => {
+      window.cancelAnimationFrame(animationFrame);
+      animationFrame = window.requestAnimationFrame(() => {
+        if (cancelled) return;
+
+        const elements: PlatformTabTriggerElements[] = [];
+
+        items.forEach((_, index) => {
+          const trigger = triggerRefs.current[index];
+          const copyNode = copyRefs.current[index];
+          const tag = tagRefs.current[index];
+          const title = titleRefs.current[index];
+          const summary = summaryRefs.current[index];
+
+          if (
+            trigger == null ||
+            copyNode == null ||
+            tag == null ||
+            title == null ||
+            summary == null
+          ) {
+            return;
+          }
+
+          elements.push({
+            trigger,
+            copy: copyNode,
+            tag,
+            title,
+            summary,
+          });
+        });
+
+        if (elements.length !== items.length) {
+          return;
+        }
+
+        const measurement = measurePlatformTabTrigger({
+          items: copy,
+          elements,
+          fallbackMinHeightPx: platformTabTriggerPreset.fallbackMinHeightPx,
+        });
+
+        startTransition(() => {
+          setSharedTriggerMinHeight(measurement.sharedMinHeightPx);
+          setPretextReady(true);
+        });
+      });
+    };
+
+    void waitForTextLayoutFontsReady().then(() => {
+      if (cancelled) return;
+
+      scheduleMeasurement();
+
+      if (typeof ResizeObserver !== "undefined" && listRef.current !== null) {
+        resizeObserver = new ResizeObserver(() => {
+          scheduleMeasurement();
+        });
+        resizeObserver.observe(listRef.current);
+        return;
+      }
+
+      window.addEventListener("resize", scheduleMeasurement);
+    });
+
+    return () => {
+      cancelled = true;
+      window.cancelAnimationFrame(animationFrame);
+      resizeObserver?.disconnect();
+      window.removeEventListener("resize", scheduleMeasurement);
+    };
+  }, [items]);
+
+  const triggerMeasurementStyle =
+    sharedTriggerMinHeight === null
+      ? undefined
+      : ({
+          "--platform-tab-trigger-min-height": `${sharedTriggerMinHeight}px`,
+          minHeight: "var(--platform-tab-trigger-min-height)",
+        } as CSSProperties);
 
   return (
     <Tabs
@@ -25,23 +142,54 @@ export function PlatformTabs({ items }: { items: PlatformTabItem[] }) {
       className="gap-6 lg:grid lg:grid-cols-[minmax(0,0.42fr)_minmax(0,0.58fr)]"
     >
       <TabsList
+        ref={listRef}
         aria-label="Mission Control modules"
+        data-pretext-ready={pretextReady ? "true" : undefined}
         className="grid h-auto min-w-0 gap-2 rounded-[1.9rem] border-none bg-transparent p-0 shadow-none"
       >
-        {items.map((item) => (
+        {items.map((item, index) => (
           <TabsTrigger
             key={item.id}
+            ref={(value) => {
+              triggerRefs.current[index] = value;
+            }}
             value={item.id}
+            data-pretext-ready={pretextReady ? "true" : undefined}
+            style={triggerMeasurementStyle}
             className="surface-card surface-interactive data-active:bg-secondary/88 h-auto min-h-[9rem] justify-start rounded-[1.6rem] px-4 py-4 text-left leading-6"
           >
-            <div className="min-w-0">
-              <p className="text-resilient text-primary/70 font-mono text-[0.66rem] leading-[1.35] tracking-[0.16em] uppercase sm:text-[0.68rem] sm:tracking-[0.2em]">
+            <div
+              ref={(value) => {
+                copyRefs.current[index] = value;
+              }}
+              data-slot="platform-tab-trigger-copy"
+              className="min-w-0"
+            >
+              <p
+                ref={(value) => {
+                  tagRefs.current[index] = value;
+                }}
+                data-slot="platform-tab-trigger-tag"
+                className="text-resilient text-primary/70 font-mono text-[0.66rem] leading-[1.35] tracking-[0.16em] uppercase sm:text-[0.68rem] sm:tracking-[0.2em]"
+              >
                 {item.tag}
               </p>
-              <p className="font-heading mt-2 text-lg font-semibold tracking-[-0.03em]">
+              <p
+                ref={(value) => {
+                  titleRefs.current[index] = value;
+                }}
+                data-slot="platform-tab-trigger-title"
+                className="mt-2 [font-family:var(--font-plus-jakarta)] text-lg font-semibold tracking-[-0.03em] hyphens-none"
+              >
                 {item.title}
               </p>
-              <p className="text-resilient text-muted-foreground mt-2 max-w-none text-sm">
+              <p
+                ref={(value) => {
+                  summaryRefs.current[index] = value;
+                }}
+                data-slot="platform-tab-trigger-summary"
+                className="text-resilient text-muted-foreground mt-2 max-w-none [font-family:var(--font-inter)] text-sm hyphens-none"
+              >
                 {item.summary}
               </p>
             </div>

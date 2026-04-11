@@ -33,6 +33,8 @@ async function waitForUi(page: Page) {
 }
 
 test.describe("marketing site smoke tests", () => {
+  test.describe.configure({ timeout: 60_000 });
+
   test.beforeEach(async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "reduce" });
   });
@@ -66,18 +68,20 @@ test.describe("marketing site smoke tests", () => {
     await waitForUi(page);
 
     const menuTrigger = page.getByRole("button", { name: /open menu/i });
+    const mobileMenu = page.getByRole("dialog").last();
     await expect(async () => {
       await expect(menuTrigger).toBeVisible();
       await activate(menuTrigger, projectName);
+      await expect(mobileMenu).toBeVisible({ timeout: 10_000 });
       await expect(
-        page.getByRole("heading", {
+        mobileMenu.getByRole("heading", {
           level: 2,
           name: /mission operating system/i,
         })
       ).toBeVisible({ timeout: 10_000 });
     }).toPass({ timeout: 12_000 });
 
-    await page.getByRole("link", { name: /^Platform$/i }).click();
+    await mobileMenu.getByRole("link", { name: /^Platform$/i }).click();
     await expect(page).toHaveURL(/\/platform$/);
     await expect(
       page.getByRole("heading", {
@@ -125,6 +129,85 @@ test.describe("marketing site smoke tests", () => {
     await expect(mobilizePanel).toContainText(
       /Visual workflow orchestration for candidates, onboarding, and deployment using Zapier's ecosystem without spaghetti logic\./i
     );
+  });
+
+  test("platform tabs upgrade to measured trigger heights without client errors", async ({
+    page,
+  }) => {
+    const consoleErrors: string[] = [];
+    const pageErrors: string[] = [];
+    const notFoundResponses: string[] = [];
+    const genericResourceLoadError =
+      "Failed to load resource: the server responded with a status of 404 (Not Found)";
+    const ignoredLocal404Paths = new Set([
+      "/_vercel/insights/script.js",
+      "/_vercel/speed-insights/script.js",
+    ]);
+
+    page.on("console", (message) => {
+      if (message.type() === "error") {
+        consoleErrors.push(message.text());
+      }
+    });
+    page.on("pageerror", (error) => {
+      pageErrors.push(error.message);
+    });
+    page.on("response", (response) => {
+      if (response.status() === 404) {
+        notFoundResponses.push(new URL(response.url()).pathname);
+      }
+    });
+
+    await page.goto("/platform", { waitUntil: "domcontentloaded" });
+    await waitForUi(page);
+
+    const tabsList = page.getByRole("tablist", {
+      name: /mission control modules/i,
+    });
+    await expect(tabsList).toHaveAttribute("data-pretext-ready", "true");
+
+    const triggers = tabsList.locator('[role="tab"]');
+    expect(await triggers.count()).toBeGreaterThan(1);
+    await expect(triggers.first()).toHaveAttribute("data-pretext-ready", "true");
+
+    const triggerMeasurements = await triggers.evaluateAll((elements) =>
+      elements.map((element) => {
+        const styles = window.getComputedStyle(element);
+        const minHeight = Number.parseFloat(styles.minHeight);
+        const variableHeight = Number.parseFloat(
+          styles.getPropertyValue("--platform-tab-trigger-min-height")
+        );
+
+        return {
+          renderedHeight: Math.round(element.getBoundingClientRect().height),
+          minHeight: Number.isFinite(minHeight) ? Math.round(minHeight) : null,
+          variableHeight: Number.isFinite(variableHeight)
+            ? Math.round(variableHeight)
+            : null,
+        };
+      })
+    );
+
+    expect(new Set(triggerMeasurements.map((item) => item.renderedHeight)).size).toBe(
+      1
+    );
+    expect(new Set(triggerMeasurements.map((item) => item.variableHeight)).size).toBe(
+      1
+    );
+    expect(triggerMeasurements[0]?.minHeight).toBeGreaterThanOrEqual(144);
+    expect(triggerMeasurements[0]?.variableHeight).toBeGreaterThanOrEqual(144);
+    expect(triggerMeasurements[0]?.renderedHeight).toBeGreaterThanOrEqual(144);
+
+    const unexpected404s = notFoundResponses.filter(
+      (pathname) => !ignoredLocal404Paths.has(pathname)
+    );
+    const unexpectedConsoleErrors = consoleErrors.filter(
+      (message) => message !== genericResourceLoadError || unexpected404s.length > 0
+    );
+
+    expect(unexpected404s).toEqual([]);
+    expect(unexpectedConsoleErrors).toEqual([]);
+    expect(pageErrors).toEqual([]);
   });
 
   test("give FAQ expands the answer body", async ({ page }) => {

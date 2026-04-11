@@ -1,5 +1,6 @@
 "use client"
 
+import * as React from "react"
 import { Tabs as TabsPrimitive } from "@base-ui/react/tabs"
 import { cva, type VariantProps } from "class-variance-authority"
 
@@ -38,24 +39,29 @@ const tabsListVariants = cva(
   }
 )
 
-function TabsList({
-  className,
-  variant = "default",
-  ...props
-}: TabsPrimitive.List.Props & VariantProps<typeof tabsListVariants>) {
+const TabsList = React.forwardRef<
+  React.ComponentRef<typeof TabsPrimitive.List>,
+  TabsPrimitive.List.Props & VariantProps<typeof tabsListVariants>
+>(function TabsList({ className, variant = "default", ...props }, ref) {
   return (
     <TabsPrimitive.List
+      ref={ref}
       data-slot="tabs-list"
       data-variant={variant}
       className={cn(tabsListVariants({ variant }), className)}
       {...props}
     />
   )
-}
+})
+TabsList.displayName = "TabsList"
 
-function TabsTrigger({ className, ...props }: TabsPrimitive.Tab.Props) {
+const TabsTrigger = React.forwardRef<
+  React.ComponentRef<typeof TabsPrimitive.Tab>,
+  TabsPrimitive.Tab.Props
+>(function TabsTrigger({ className, ...props }, ref) {
   return (
     <TabsPrimitive.Tab
+      ref={ref}
       data-slot="tabs-trigger"
       className={cn(
         "relative flex min-h-10 max-w-full min-w-0 flex-1 items-center justify-center gap-1.5 rounded-[0.95rem] border border-transparent px-3 py-2 text-center text-sm font-medium whitespace-normal text-foreground/64 transition-[color,background-color,border-color,box-shadow,transform] duration-200 ease-out group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start group-data-vertical/tabs:px-3.5 group-data-vertical/tabs:py-2.5 hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/45 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:self-center [&_svg:not([class*='size-'])]:size-4",
@@ -67,7 +73,8 @@ function TabsTrigger({ className, ...props }: TabsPrimitive.Tab.Props) {
       {...props}
     />
   )
-}
+})
+TabsTrigger.displayName = "TabsTrigger"
 
 function TabsContent({ className, ...props }: TabsPrimitive.Panel.Props) {
   return (
