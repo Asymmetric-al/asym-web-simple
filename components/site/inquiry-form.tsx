@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { siteConfig } from "@/lib/config";
 import { cn } from "@/lib/utils";
-import { ArrowRight, Check, Copy, Mail } from "lucide-react";
+import { ArrowRight, Check, Copy, Loader2, Mail } from "lucide-react";
 import Link from "next/link";
 import { useRef, useState } from "react";
 
@@ -42,7 +42,7 @@ const presets = {
     },
     subject: "Asymmetric.al waitlist request",
     helper:
-      "Submitting opens your email client with a pre-filled note to info@asymmetric.al. That keeps the repo production-safe until a live form backend is chosen.",
+      "Your note is sent securely to our team. We will reply to the email you provide.",
   },
   contact: {
     title: "Send a direct note",
@@ -67,7 +67,7 @@ const presets = {
     },
     subject: "Asymmetric.al contact request",
     helper:
-      "Submitting opens your email client with a formatted message to info@asymmetric.al.",
+      "Your message is delivered to our inbox. We typically respond within about one business day.",
   },
 } as const;
 
@@ -92,9 +92,24 @@ function buildMailtoLink(kind: InquiryKind, form: FormData): string {
   )}&body=${encodeURIComponent(body)}`;
 }
 
+function formDataToPayload(kind: InquiryKind, form: FormData): Record<string, string> {
+  const preset = presets[kind];
+  const payload: Record<string, string> = { kind };
+  for (const field of preset.fields) {
+    payload[field.name] = (form.get(field.name) ?? "").toString().trim();
+  }
+  payload[preset.textarea.name] = (form.get(preset.textarea.name) ?? "")
+    .toString()
+    .trim();
+  return payload;
+}
+
 export function InquiryForm({ kind }: { kind: InquiryKind }) {
   const preset = presets[kind];
-  const [hasOpenedEmail, setHasOpenedEmail] = useState(false);
+  const [submitState, setSubmitState] = useState<
+    "idle" | "submitting" | "success" | "error"
+  >("idle");
+  const [errorMessage, setErrorMessage] = useState("");
   const [draftMailto, setDraftMailto] = useState("");
   const [copied, setCopied] = useState(false);
   const mailtoStatusRef = useRef<HTMLParagraphElement | null>(null);
@@ -130,16 +145,43 @@ export function InquiryForm({ kind }: { kind: InquiryKind }) {
       <form
         className="mt-8"
         aria-label={kind === "waitlist" ? "Waitlist inquiry" : "Contact inquiry"}
-        onSubmit={(event) => {
+        onSubmit={async (event) => {
           event.preventDefault();
-          const form = new FormData(event.currentTarget);
-          const mailto = buildMailtoLink(kind, form);
-          setDraftMailto(mailto);
-          setHasOpenedEmail(true);
-          window.open(mailto, "_self");
-          requestAnimationFrame(() => {
-            mailtoStatusRef.current?.focus();
-          });
+          const form = event.currentTarget;
+          const fd = new FormData(form);
+          setSubmitState("submitting");
+          setErrorMessage("");
+
+          try {
+            const res = await fetch("/api/contact", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(formDataToPayload(kind, fd)),
+            });
+            const data = (await res.json().catch(() => ({}))) as {
+              error?: string;
+            };
+
+            if (!res.ok) {
+              setErrorMessage(
+                data.error ?? "Something went wrong. Please try again.",
+              );
+              setSubmitState("error");
+              return;
+            }
+
+            setDraftMailto(buildMailtoLink(kind, fd));
+            setSubmitState("success");
+            form.reset();
+            requestAnimationFrame(() => {
+              mailtoStatusRef.current?.focus();
+            });
+          } catch {
+            setErrorMessage(
+              "Network error. Check your connection or email us directly.",
+            );
+            setSubmitState("error");
+          }
         }}
       >
         <FieldGroup>
@@ -159,6 +201,7 @@ export function InquiryForm({ kind }: { kind: InquiryKind }) {
                     name={field.name}
                     required={field.required}
                     placeholder={field.label}
+                    disabled={submitState === "submitting"}
                     autoComplete={
                       field.name === "name"
                         ? "name"
@@ -184,6 +227,7 @@ export function InquiryForm({ kind }: { kind: InquiryKind }) {
                 name={preset.textarea.name}
                 rows={6}
                 placeholder={preset.textarea.placeholder}
+                disabled={submitState === "submitting"}
               />
               <FieldDescription>{preset.helper}</FieldDescription>
             </FieldContent>
@@ -192,7 +236,7 @@ export function InquiryForm({ kind }: { kind: InquiryKind }) {
           <div
             className="border-foreground/10 bg-secondary/42 text-muted-foreground grid gap-4 rounded-[1.75rem] border p-4 text-sm leading-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center"
             role="region"
-            aria-label="Email handoff"
+            aria-label="Send and alternatives"
           >
             <div className="flex items-start gap-3">
               <Mail className="text-primary/70 mt-1 size-4 shrink-0" aria-hidden />
@@ -202,26 +246,21 @@ export function InquiryForm({ kind }: { kind: InquiryKind }) {
                 aria-live="polite"
                 aria-atomic="true"
               >
-                {!hasOpenedEmail ? (
-                  <p>
-                    We will open your email client with a drafted message so the
-                    details stay in your control.
-                  </p>
-                ) : (
+                {submitState === "success" ? (
                   <>
                     <p
                       ref={mailtoStatusRef}
                       tabIndex={-1}
                       className={cn(
                         "text-foreground font-medium outline-none",
-                        "rounded-[0.35rem] focus-visible:ring-[3px] focus-visible:ring-ring/45"
+                        "rounded-[0.35rem] focus-visible:ring-[3px] focus-visible:ring-ring/45",
                       )}
                     >
-                      Draft handed off — finish the message in your email app.
+                      Message sent — thank you. We will reply to the email you
+                      provided.
                     </p>
                     <p>
-                      If nothing opened, use the actions at right or write
-                      directly to{" "}
+                      Prefer your own client? You can still reach us at{" "}
                       <Link
                         href={`mailto:${siteConfig.email}`}
                         className="link-resilient text-foreground font-medium underline underline-offset-4"
@@ -231,23 +270,68 @@ export function InquiryForm({ kind }: { kind: InquiryKind }) {
                       .
                     </p>
                   </>
+                ) : submitState === "error" ? (
+                  <p className="text-foreground font-medium">{errorMessage}</p>
+                ) : (
+                  <p>
+                    Submitting sends your message to our team. You can also copy
+                    our address or open your email app if you prefer.
+                  </p>
                 )}
               </div>
             </div>
 
             <div className="flex min-w-0 flex-col gap-2 lg:items-end">
-              <Button type="submit" size="lg" className="px-5">
-                {kind === "waitlist"
-                  ? "Draft waitlist email"
-                  : "Draft contact email"}
-                <ArrowRight data-icon="inline-end" />
-              </Button>
+              {submitState === "success" ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="lg"
+                  className="px-5"
+                  onClick={() => {
+                    setSubmitState("idle");
+                    setErrorMessage("");
+                    setDraftMailto("");
+                  }}
+                >
+                  Send another message
+                  <ArrowRight data-icon="inline-end" />
+                </Button>
+              ) : (
+                <Button
+                  type="submit"
+                  size="lg"
+                  className="px-5"
+                  disabled={submitState === "submitting"}
+                >
+                  {submitState === "submitting" ? (
+                    <>
+                      <Loader2
+                        className="size-4 shrink-0 animate-spin"
+                        aria-hidden
+                      />
+                      Sending…
+                    </>
+                  ) : kind === "waitlist" ? (
+                    <>
+                      Send waitlist request
+                      <ArrowRight data-icon="inline-end" />
+                    </>
+                  ) : (
+                    <>
+                      Send message
+                      <ArrowRight data-icon="inline-end" />
+                    </>
+                  )}
+                </Button>
+              )}
               <div className="flex w-full flex-col gap-2 md:w-auto md:flex-row">
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
                   onClick={copyEmailAddress}
+                  disabled={submitState === "submitting"}
                 >
                   {copied ? (
                     <Check data-icon="inline-start" />
@@ -260,7 +344,7 @@ export function InquiryForm({ kind }: { kind: InquiryKind }) {
                   href={draftMailto || `mailto:${siteConfig.email}`}
                   className="link-resilient text-muted-foreground hover:border-foreground/10 hover:bg-background/72 hover:text-foreground inline-flex min-h-9 w-full items-center justify-center rounded-full border border-transparent px-3 py-2 text-center text-sm font-medium transition-[color,background-color,border-color] duration-200 md:w-auto md:max-w-[18rem]"
                 >
-                  Open direct email
+                  Open in email app
                 </Link>
               </div>
             </div>

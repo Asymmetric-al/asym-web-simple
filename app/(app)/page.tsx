@@ -4,6 +4,7 @@ import { HomePageHero } from "@/components/site/home-page-hero";
 import { Section, SectionHeader } from "@/components/site/page";
 import { Reveal, StaggerItem, StaggerReveal } from "@/components/site/reveal";
 import { ScrollThesis } from "@/components/site/scroll-thesis";
+import { SiteLogoMark } from "@/components/site/site-logo-mark";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { buttonVariants } from "@/components/ui/button-variants";
@@ -27,17 +28,14 @@ import Link from "next/link";
 import { siteConfig } from "@/lib/config";
 
 const heroLines = [
-  "Unified Operating System",
   "Accelerating the Great Commission",
-  "Open Source Core",
-  "Soli Deo Gloria",
+  "Always Open Source",
   "Zero Admin Drag",
   "Tenant Sovereignty Architecture",
   "Missions-First Design",
   "Small Inputs, Exponential Outputs",
   "By Missionaries, For Missionaries",
   "Nonprofit 501(c)(3)",
-  "Secure Data Stewardship",
   "No Vendor Lock-in",
 ];
 
@@ -57,7 +55,7 @@ const foundations = [
   {
     title: "Open Foundations",
     description:
-      "Built on proven open-source standards like Next.js and Directus. Extensible by design. Safe for the long haul.",
+      "Built on proven open-source standards like Next.js and Payload CMS. Extensible by design. Safe for the long haul.",
     icon: Blocks,
   },
 ] as const;
@@ -66,7 +64,7 @@ const capabilities = [
   {
     title: "Sovereign Web Architecture",
     description:
-      "Headless Directus CMS with Next.js gives agencies a portable website stack they actually own.",
+      "Headless Payload CMS with Next.js gives agencies a portable website stack they actually own.",
     icon: Globe,
   },
   {
@@ -118,16 +116,19 @@ const buildTracks = [
     title: "For sending agencies",
     description:
       "Early access, migration support, and a direct line into the product roadmap while the system is still being shaped.",
+    href: "/missions",
   },
   {
     title: "For builders",
     description:
       "High-agency engineers, designers, and systems thinkers who want to use their craft in service of the Great Commission.",
+    href: "/join",
   },
   {
     title: "For donors",
     description:
       "Capital that funds shared rails for many ministries at once instead of trapping each organization inside its own tool debt.",
+    href: "/give",
   },
 ] as const;
 
@@ -183,16 +184,16 @@ export default function HomePage() {
         }
         description="The unified platform for the modern missions agency. Bring finance, mobilization, donor support, communications, and web operations under one calm, trustworthy surface."
         actions={[
-          { label: "Join Waitlist", href: "/join" },
+          { label: siteConfig.cta.primary.label, href: siteConfig.cta.primary.href },
           {
-            label: "Request a Call",
-            href: "/contact",
+            label: siteConfig.cta.secondary.label,
+            href: siteConfig.cta.secondary.href,
             variant: "outline",
           },
         ]}
         meta={[
           "Unified operating system",
-          "Open source core",
+          "Always open source",
           "Tenant sovereignty",
           "Nonprofit 501(c)(3)",
         ]}
@@ -262,10 +263,10 @@ export default function HomePage() {
               />
               <div className="bg-primary text-primary-foreground mt-8 rounded-[1.9rem] px-6 py-8 sm:px-8">
                 <p className="text-primary-foreground/70 font-mono text-[0.7rem] tracking-[0.3em] uppercase">
-                  Visual line
+                  Mark
                 </p>
-                <div className="font-heading mt-3 text-[clamp(3.25rem,8vw,6rem)] leading-none font-semibold tracking-[-0.08em]">
-                  1 → ∞
+                <div className="text-primary-foreground mt-3 flex justify-start">
+                  <SiteLogoMark className="size-[clamp(4.5rem,14vw,7.5rem)]" />
                 </div>
                 <p className="text-primary-foreground/82 mt-4 max-w-[24ch] text-base leading-7">
                   Simple Faithfulness → Exponential Impact
@@ -304,8 +305,8 @@ export default function HomePage() {
             <StaggerItem className="col-span-full">
               <SectionHeader
                 eyebrow="System Capabilities"
-                title="Infrastructure as stewardship."
-                description="We do not look for ways to extract rent from your basic needs. We build digital rails for high-trust organizations to operate with sovereignty and speed."
+                title="Built to serve your mission."
+                description="We don't trap you in expensive subscriptions. We build solid, fast tools that put you in control of your own data."
               />
             </StaggerItem>
             {capabilities.map((item, index) => (
@@ -383,16 +384,19 @@ export default function HomePage() {
             <StaggerReveal>
               {buildTracks.map((item) => (
                 <StaggerItem key={item.title}>
-                  <Card className="surface-card surface-interactive rounded-[1.8rem]">
-                    <CardHeader>
-                      <CardTitle className="font-heading text-xl font-semibold tracking-[-0.04em]">
-                        {item.title}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="text-muted-foreground text-sm leading-7">
-                      {item.description}
-                    </CardContent>
-                  </Card>
+                  <Link href={item.href} className="group block h-full outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-[1.8rem]">
+                    <Card className="surface-card surface-interactive h-full rounded-[1.8rem] transition-colors group-hover:border-foreground/20">
+                      <CardHeader>
+                        <CardTitle className="font-heading flex items-center justify-between text-xl font-semibold tracking-[-0.04em]">
+                          {item.title}
+                          <ArrowRight className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-foreground" />
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="text-muted-foreground text-sm leading-7">
+                        {item.description}
+                      </CardContent>
+                    </Card>
+                  </Link>
                 </StaggerItem>
               ))}
             </StaggerReveal>

@@ -1,7 +1,8 @@
 import { footerGroups, siteConfig } from "@/lib/config";
 import { buttonVariants } from "@/components/ui/button-variants";
+import { SiteLogoMark } from "@/components/site/site-logo-mark";
 import { cn } from "@/lib/utils";
-import { ArrowUpRight, MoveRight } from "lucide-react";
+import { ArrowUpRight, Github, MoveRight } from "lucide-react";
 import Link from "next/link";
 
 export function Footer() {
@@ -55,15 +56,26 @@ export function Footer() {
         </div>
 
         <div className="surface-panel surface-interactive rounded-[2.35rem] p-7 sm:p-10">
-          <div className="grid gap-10 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,0.75fr)_minmax(0,0.75fr)_minmax(0,0.75fr)]">
-            <div className="max-w-xl min-w-0">
-              <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.3em] uppercase">
-                The Manifesto
-              </p>
-              <h3 className="font-heading text-foreground mt-4 text-2xl font-semibold tracking-[-0.05em] sm:text-3xl">
-                WE BUILD FOR THE GLOBAL CHURCH.
+          <div className="grid gap-12 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,0.7fr)_minmax(0,0.7fr)_minmax(0,0.7fr)] lg:gap-10">
+            <div className="max-w-xl min-w-0 lg:pr-6">
+              <SiteLogoMark className="text-primary/80 mb-6 size-10" />
+              <h3 className="font-heading flex flex-col items-start font-bold uppercase tracking-[-0.05em]">
+                <span className="text-foreground text-xl leading-[1.15] sm:text-2xl md:text-3xl">
+                  We build for the <span className="text-muted-foreground">global church.</span>
+                </span>
+                <span className="text-foreground text-xl leading-[1.15] sm:text-2xl md:text-3xl">
+                  We measure success in
+                </span>
+                <span className="mt-1 flex flex-col">
+                  <span className="text-foreground text-[clamp(3.5rem,7vw,5.5rem)] leading-[0.8] tracking-[-0.07em]">
+                    Impact,
+                  </span>
+                  <span className="text-muted-foreground mt-1.5 self-end text-xl leading-[1.15] sm:mt-2 sm:text-2xl md:text-3xl">
+                    Not profit.
+                  </span>
+                </span>
               </h3>
-              <p className="text-muted-foreground mt-4 text-sm leading-7 sm:text-base">
+              <p className="text-muted-foreground mt-6 text-sm leading-7 sm:text-base">
                 Asymmetric.al is a nonprofit project shaping a missions-first
                 operating system for executive, operations, finance, and
                 advancement teams. Soli Deo Gloria.
@@ -91,19 +103,32 @@ export function Footer() {
             ))}
           </div>
 
-          <div className="border-foreground/10 text-muted-foreground mt-10 flex flex-col gap-5 border-t pt-6 text-sm sm:flex-row sm:items-center sm:justify-between">
-            <div className="content-measure">
-              Operating as a project under {siteConfig.nonprofit}. EIN:{" "}
+          <div className="border-foreground/10 text-muted-foreground mt-12 flex flex-col gap-6 border-t pt-8 text-sm sm:flex-row sm:items-center sm:justify-between">
+            <div className="content-measure max-w-xl leading-relaxed">
+              Operating as a project under {siteConfig.nonprofit} EIN:{" "}
               {siteConfig.ein}
             </div>
-            <div className="flex flex-col gap-1 sm:items-end">
-              <Link
-                href={`mailto:${siteConfig.email}`}
-                className="link-resilient hover:text-foreground inline-block w-full max-w-[20rem] text-left sm:text-right"
-              >
-                {siteConfig.email}
-              </Link>
-              <span>Asymmetric.al © 2026</span>
+            <div className="flex flex-col gap-2 sm:items-end">
+              <div className="flex items-center gap-3">
+                <Link
+                  href={`mailto:${siteConfig.email}`}
+                  className="link-resilient text-foreground hover:text-primary font-mono text-[0.72rem] tracking-[0.2em] uppercase transition-colors sm:text-right"
+                >
+                  {siteConfig.email}
+                </Link>
+                <Link
+                  href="https://github.com/Asymmetric-al"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-foreground/80 hover:text-primary transition-colors"
+                  aria-label="GitHub"
+                >
+                  <Github className="size-[1.1rem]" />
+                </Link>
+              </div>
+              <span className="font-mono text-[0.72rem] tracking-[0.15em] uppercase opacity-70">
+                Asymmetric.al © {new Date().getFullYear()}
+              </span>
             </div>
           </div>
         </div>

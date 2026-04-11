@@ -1,8 +1,10 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { buttonVariants } from "@/components/ui/button-variants";
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetDescription,
   SheetFooter,
@@ -14,11 +16,12 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { navigationLinks, siteConfig, supportLinks } from "@/lib/config";
 import { useReducedMotion } from "@/lib/motion";
 import { cn } from "@/lib/utils";
-import { Menu, MoveRight } from "lucide-react";
+import { Menu, MoveRight, X } from "lucide-react";
 import { motion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { SiteLogoMark } from "@/components/site/site-logo-mark";
 
 const pageLinks = [...navigationLinks, ...supportLinks];
 
@@ -30,9 +33,7 @@ function BrandLockup({ compact = false }: { compact?: boolean }) {
       aria-label={`${siteConfig.name} home`}
     >
       <div className="border-foreground/10 flex size-11 items-center justify-center rounded-full border bg-[linear-gradient(135deg,rgba(221,242,255,0.95),rgba(231,238,225,0.95))] shadow-[0_14px_30px_-20px_rgba(30,58,79,0.45)] transition-transform duration-300 group-hover:-translate-y-0.5">
-        <span className="text-primary font-mono text-[0.72rem] font-semibold tracking-[0.24em]">
-          1→∞
-        </span>
+        <SiteLogoMark className="text-primary size-[1.35rem]" />
       </div>
       <span className="text-resilient font-heading text-foreground min-w-0 text-[1.02rem] leading-none font-semibold tracking-[-0.04em]">
         {compact ? siteConfig.shortName : siteConfig.name}
@@ -158,12 +159,28 @@ export function Header() {
             </div>
             <SheetContent
               side="right"
+              showCloseButton={false}
               className="border-foreground/10 bg-card/96 w-[88vw] max-w-sm border-l px-0"
             >
               <SheetHeader className="border-foreground/8 border-b pb-5">
-                <div className="flex items-start justify-between gap-4">
+                <div className="flex items-start justify-between gap-3">
                   <BrandLockup compact />
-                  <ThemeToggle />
+                  <div className="flex shrink-0 items-center gap-2">
+                    <ThemeToggle />
+                    <SheetClose
+                      render={
+                        <Button
+                          variant="ghost"
+                          size="icon-sm"
+                          className="shrink-0"
+                          aria-label="Close menu"
+                        />
+                      }
+                    >
+                      <X className="size-4" />
+                      <span className="sr-only">Close</span>
+                    </SheetClose>
+                  </div>
                 </div>
                 <SheetTitle className="font-heading text-xl tracking-[-0.04em]">
                   Mission operating system
@@ -205,7 +222,7 @@ export function Header() {
 
                 <div className="surface-card surface-interactive mt-8 rounded-[1.75rem] p-5">
                   <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
-                    Primary next step
+                    Next steps
                   </p>
                   <p className="font-heading text-foreground mt-3 text-xl font-semibold tracking-[-0.04em]">
                     Join the build community.

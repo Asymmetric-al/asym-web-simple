@@ -69,7 +69,6 @@ export default function ContactPage() {
   return (
     <main id="main-content" tabIndex={-1}>
       <PageHero
-        eyebrow="OPEN CHANNEL"
         title={
           <h1 className="font-heading text-foreground text-[clamp(3rem,6vw,5rem)] leading-[0.92] font-semibold tracking-[-0.07em] text-balance">
             Start the
@@ -82,7 +81,6 @@ export default function ContactPage() {
           "info@asymmetric.al",
           "General inquiry",
           "Builder support",
-          "Global HQ",
         ]}
       >
         <Reveal trigger="mount">
@@ -95,11 +93,8 @@ export default function ContactPage() {
                 info@asymmetric.al
               </CardTitle>
             </CardHeader>
-            <CardContent className="text-primary-foreground/82 space-y-3 text-sm leading-7">
+            <CardContent className="text-primary-foreground/82 text-sm leading-7">
               <p>Start with a direct email if you already know the path you need.</p>
-              <p className="font-mono text-[0.72rem] uppercase tracking-[0.22em] text-primary-foreground/72">
-                Response time: ~24hrs
-              </p>
             </CardContent>
           </Card>
         </Reveal>
@@ -170,17 +165,26 @@ export default function ContactPage() {
                   Share enough context for the first reply to be useful.
                 </CardTitle>
               </CardHeader>
-              <CardContent className="text-muted-foreground flex flex-col gap-4 text-base leading-7">
-                <p>Name, organization, topic, and the main question you need answered.</p>
-                <p>Any current tools, workflows, or systems creating unnecessary drag.</p>
-                <p>
-                  Whether you are reaching out as an agency, donor, advisor, or builder.
-                </p>
-                <p>
-                  Direct email always works:{" "}
+              <CardContent className="text-muted-foreground flex flex-col gap-5 text-base leading-7 text-pretty">
+                <ul className="flex list-none flex-col gap-3.5 pl-0">
+                  <li className="relative pl-[1.1em] before:absolute before:left-0 before:top-[0.55em] before:size-1.5 before:rounded-full before:bg-primary/35">
+                    Include your name, organization, topic, and the main question so
+                    the first reply can be substantive.
+                  </li>
+                  <li className="relative pl-[1.1em] before:absolute before:left-0 before:top-[0.55em] before:size-1.5 before:rounded-full before:bg-primary/35">
+                    Note any tools, workflows, or systems that are creating drag
+                    today—we route faster with that context.
+                  </li>
+                  <li className="relative pl-[1.1em] before:absolute before:left-0 before:top-[0.55em] before:size-1.5 before:rounded-full before:bg-primary/35">
+                    Say whether you are an agency, donor, advisor, or builder so we
+                    know who we are serving.
+                  </li>
+                </ul>
+                <p className="border-foreground/10 text-sm leading-6 text-muted-foreground border-t pt-4">
+                  Prefer to write directly?{" "}
                   <Link
                     href="mailto:info@asymmetric.al"
-                    className="link-resilient text-foreground inline-block font-medium underline underline-offset-4"
+                    className="link-resilient text-foreground font-medium underline underline-offset-4"
                   >
                     info@asymmetric.al
                   </Link>

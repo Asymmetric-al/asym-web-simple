@@ -35,74 +35,21 @@ export default function AppleIcon() {
               "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 10,
-            }}
+          <svg
+            width="72"
+            height="72"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden
           >
-            <div
-              style={{
-                fontSize: 42,
-                fontWeight: 700,
-                lineHeight: 1,
-              }}
-            >
-              1
-            </div>
-            <div
-              style={{
-                display: "flex",
-                position: "relative",
-                width: 34,
-                height: 14,
-              }}
-            >
-              <div
-                style={{
-                  position: "absolute",
-                  top: 6,
-                  left: 0,
-                  right: 7,
-                  height: 2.5,
-                  background: "#1E3A4F",
-                }}
-              />
-              <div
-                style={{
-                  position: "absolute",
-                  right: 1,
-                  top: 2,
-                  width: 10,
-                  height: 10,
-                  borderTop: "2.5px solid #1E3A4F",
-                  borderRight: "2.5px solid #1E3A4F",
-                  transform: "rotate(45deg)",
-                }}
-              />
-            </div>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                marginLeft: -2,
-              }}
-            >
-              {[0, -8].map((offset) => (
-                <div
-                  key={offset}
-                  style={{
-                    width: 20,
-                    height: 16,
-                    marginLeft: offset,
-                    border: "2.5px solid #1E3A4F",
-                    borderRadius: 999,
-                  }}
-                />
-              ))}
-            </div>
-          </div>
+            <path
+              d="M6 19L11 5M18 19L12.5 5M8.5 13.5h7"
+              stroke="#1E3A4F"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
         </div>
       </div>
     ),

@@ -40,7 +40,7 @@ export function PageHero({
   className,
   revealTitle = true,
 }: {
-  eyebrow: string;
+  eyebrow?: string;
   title: ReactNode;
   description: ReactNode;
   actions?: Action[];
@@ -60,13 +60,15 @@ export function PageHero({
     <section className={cn("relative overflow-hidden", densityClassName, className)}>
       <Container className="grid gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-center">
         <div className="max-w-3xl">
-          <Badge
-            variant="outline"
-            className="h-auto rounded-full border-foreground/10 bg-card/76 px-3 py-1 font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/80"
-          >
-            {eyebrow}
-          </Badge>
-          <div className="min-w-0 mt-6">
+          {eyebrow ? (
+            <Badge
+              variant="outline"
+              className="h-auto rounded-full border-foreground/10 bg-card/76 px-3 py-1 font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/80"
+            >
+              {eyebrow}
+            </Badge>
+          ) : null}
+          <div className={cn("min-w-0", eyebrow && "mt-6")}>
             {revealTitle ? <HeroReveal>{title}</HeroReveal> : title}
           </div>
           <div className="content-measure mt-6 text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">

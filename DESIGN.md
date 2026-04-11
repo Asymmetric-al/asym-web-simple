@@ -218,7 +218,7 @@ The site has three distinct surface treatments that convey elevation:
 - Medium cards and tab triggers: `rounded-[1.8rem]` = 28.8px
 - Section containers within panels: `rounded-[1.9rem]` – `rounded-[2.2rem]`
 - Small pill elements (badges, inputs, buttons): `rounded-full`
-- "Why the name" visual block (deep navy `1→∞`): `rounded-[1.9rem]`
+- "Why the name" brand mark block (deep navy asymmetric “A” SVG): `rounded-[1.9rem]`
 
 The radius system is consistently very generous — all cards feel gently rounded, never sharp.
 
@@ -302,7 +302,8 @@ The header is a **fixed floating pill** — it does not span the full width. It 
 - Container: `surface-panel rounded-[2rem] p-6 sm:p-8`
 - Fields arranged in `grid gap-4 sm:grid-cols-2`
 - Submit / action area: `grid rounded-[1.75rem] border border-foreground/10 bg-secondary/42 p-4` — a contained action box
-- Email handoff region: `role="region"` + `role="status"` / `aria-live="polite"` announces draft handoff; first focusable line uses `tabIndex={-1}` after submit
+- Primary submit POSTs to `/api/contact` (Resend); `role="status"` / `aria-live="polite"` announces success or errors; success line uses `tabIndex={-1}` for focus management
+- Fallback: copy inbox address and “Open in email app” (`mailto:`) when users prefer their client
 - Copy control: visually labeled “Copied”; screen readers get `aria-live="polite"` confirmation via a visually hidden span
 
 ---

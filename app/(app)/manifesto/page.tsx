@@ -38,7 +38,7 @@ const manifestoSections = [
 ] as const;
 
 export const metadata: Metadata = createMetadata({
-  title: "Manifesto",
+  title: "Philosophy",
   description:
     "The underlying logic of Asymmetric.al: software, stewardship, hyper-focus, and the Kingdom logic behind small inputs and exponential outputs.",
   path: "/manifesto",
@@ -59,9 +59,8 @@ export default function ManifestoPage() {
         meta={[
           "Stewardship",
           "Hyper-focus",
-          "Open hands",
+          "Kingdom-minded",
           "Support-raised staff",
-          "Kingdom logic",
         ]}
       >
         <Reveal trigger="mount">
@@ -217,10 +216,13 @@ export default function ManifestoPage() {
                   </div>
                   <div>
                     <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-[0.2em] mb-2">
-                      Digitally Signed
+                      Signed
                     </p>
-                    <span className="font-heading text-2xl font-semibold tracking-[-0.05em] text-foreground">
+                    <span className="font-heading flex flex-col gap-1 text-2xl font-semibold tracking-[-0.05em] text-foreground">
                       The Maintainers
+                      <span className="text-muted-foreground text-sm font-medium tracking-normal">
+                        Cobmojo &amp; II-ricky-bobby-II
+                      </span>
                     </span>
                   </div>
                   <div className="w-full pt-6 border-t border-border flex justify-between text-[10px] font-mono text-muted-foreground uppercase tracking-widest">

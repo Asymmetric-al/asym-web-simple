@@ -1,3 +1,4 @@
+import { DonationCheckout } from "@/components/site/donation-checkout";
 import { PageHero, Section, SectionHeader } from "@/components/site/page";
 import { Reveal, StaggerItem, StaggerReveal } from "@/components/site/reveal";
 import {
@@ -94,6 +95,13 @@ export const metadata: Metadata = createMetadata({
 });
 
 export default function GivePage() {
+  const stripeConfigured = Boolean(process.env.STRIPE_SECRET_KEY);
+  const recurringConfigured = Boolean(
+    process.env.STRIPE_PRICE_RECURRING_25 &&
+      process.env.STRIPE_PRICE_RECURRING_50 &&
+      process.env.STRIPE_PRICE_RECURRING_100,
+  );
+
   return (
     <main id="main-content" tabIndex={-1}>
       <PageHero
@@ -171,30 +179,36 @@ export default function GivePage() {
       <Section tone="sky">
         <div className="grid gap-6 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
           <Reveal>
-            <div className="page-shell-glow surface-panel surface-interactive rounded-[2rem] p-7 sm:p-8">
-              <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
-                Giving paths
-              </p>
-              <h2 className="font-heading mt-4 text-[clamp(2rem,4vw,3rem)] leading-[1.02] font-semibold tracking-[-0.06em]">
-                Clean, trust-heavy giving options.
-              </h2>
-              <div className="text-muted-foreground mt-6 flex flex-col gap-4 text-base leading-7">
-                <p>
-                  Checks payable to “Global Fellowship Inc” with “Asymmetric.al”
-                  in the memo can be mailed to PO Box 1, Meadow Vista, CA 95722.
+            <div className="flex flex-col gap-6">
+              <DonationCheckout
+                stripeConfigured={stripeConfigured}
+                recurringConfigured={recurringConfigured}
+              />
+              <div className="page-shell-glow surface-panel surface-interactive rounded-[2rem] p-7 sm:p-8">
+                <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
+                  Giving paths
                 </p>
-                <p>
-                  Email info@asymmetric.al for donor-advised fund support, wire
-                  instructions, or questions about project oversight and use of
-                  funds.
-                </p>
-                <Link
-                  href="mailto:info@asymmetric.al?subject=Asymmetric.al%20giving%20inquiry"
-                  className={cn(buttonVariants({ size: "lg" }), "mt-2 px-5")}
-                >
-                  Start a Giving Conversation
-                  <ArrowRight data-icon="inline-end" />
-                </Link>
+                <h2 className="font-heading mt-4 text-[clamp(2rem,4vw,3rem)] leading-[1.02] font-semibold tracking-[-0.06em]">
+                  Clean, trust-heavy giving options.
+                </h2>
+                <div className="text-muted-foreground mt-6 flex flex-col gap-4 text-base leading-7">
+                  <p>
+                    Checks payable to “Global Fellowship Inc” with “Asymmetric.al”
+                    in the memo can be mailed to PO Box 1, Meadow Vista, CA 95722.
+                  </p>
+                  <p>
+                    Email info@asymmetric.al for donor-advised fund support, wire
+                    instructions, or questions about project oversight and use of
+                    funds.
+                  </p>
+                  <Link
+                    href="mailto:info@asymmetric.al?subject=Asymmetric.al%20giving%20inquiry"
+                    className={cn(buttonVariants({ size: "lg" }), "mt-2 px-5")}
+                  >
+                    Start a Giving Conversation
+                    <ArrowRight data-icon="inline-end" />
+                  </Link>
+                </div>
               </div>
             </div>
           </Reveal>

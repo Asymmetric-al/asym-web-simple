@@ -13,7 +13,7 @@ export function DocumentPage({
   footer,
   heroMeta,
 }: {
-  eyebrow: string;
+  eyebrow?: string;
   title: ReactNode;
   description: ReactNode;
   heading: ReactNode;
@@ -24,7 +24,7 @@ export function DocumentPage({
   return (
     <main id="main-content" tabIndex={-1}>
       <PageHero
-        eyebrow={eyebrow}
+        {...(eyebrow ? { eyebrow } : {})}
         density="legal"
         title={title}
         description={description}

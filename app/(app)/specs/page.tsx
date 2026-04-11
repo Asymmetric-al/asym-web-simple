@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { createMetadata } from "@/lib/metadata";
 import {
   Activity,
+  ArrowUpRight,
   Blocks,
   Bot,
   Database,
@@ -19,18 +20,18 @@ import Link from "next/link";
 const layers = [
   {
     title: "Layer 01 — Languages & Core",
-    description: "TypeScript, JavaScript, React, Next.js, Node.js, NestJS, GraphQL, TanStack",
+    description: "TypeScript, React, Next.js, Bun, GraphQL, TanStack",
     links: [
       { label: "TypeScript", url: "https://github.com/microsoft/TypeScript" },
       { label: "React", url: "https://github.com/facebook/react" },
       { label: "Next.js", url: "https://nextjs.org/" },
-      { label: "Node.js", url: "https://github.com/nodejs" },
+      { label: "Bun", url: "https://bun.sh/" },
     ],
     icon: FileCode2,
   },
   {
     title: "Layer 02 — Data Persistence",
-    description: "PostgreSQL, MySQL, Redis, TanStack DB, pgvector, TanStack Query, TanStack Table",
+    description: "PostgreSQL, Redis, TanStack DB, pgvector, TanStack Query, TanStack Table",
     links: [
       { label: "PostgreSQL", url: "https://www.postgresql.org/" },
       { label: "Redis", url: "https://github.com/redis/redis/" },
@@ -50,17 +51,16 @@ const layers = [
   },
   {
     title: "Layer 04 — Content Engine",
-    description: "Directus",
-    links: [{ label: "Directus", url: "https://directus.io/" }],
+    description: "Payload CMS",
+    links: [{ label: "Payload CMS", url: "https://payloadcms.com/" }],
     icon: Blocks,
   },
   {
     title: "Layer 05 — Infrastructure & Ops",
-    description: "Vercel, AWS, Docker, GitHub, Sentry, OpenTelemetry",
+    description: "Vercel, Supabase, GitHub, Sentry, OpenTelemetry",
     links: [
       { label: "Vercel", url: "https://vercel.com/" },
-      { label: "AWS", url: "https://aws.amazon.com/" },
-      { label: "Docker", url: "https://www.docker.com/" },
+      { label: "Supabase", url: "https://supabase.com/" },
       { label: "GitHub", url: "https://github.com/" },
       { label: "Sentry", url: "https://github.com/getsentry/sentry" },
     ],
@@ -74,10 +74,13 @@ const layers = [
   },
   {
     title: "Layer 07 — Integrations & Async",
-    description: "Stripe, SendGrid, Zapier, Inngest, BullMQ",
+    description: "Stripe, Resend, Zapier, Inngest, BullMQ",
     links: [
       { label: "Stripe", url: "https://stripe.com/" },
-      { label: "SendGrid", url: "https://sendgrid.com/" },
+      {
+        label: "Resend",
+        url: "https://resend.com/docs/dashboard/emails/introduction",
+      },
       { label: "Zapier", url: "https://zapier.com/" },
     ],
     icon: Activity,
@@ -94,14 +97,16 @@ const layers = [
   },
   {
     title: "Layer 09 — Intelligence",
-    description: "OpenAI",
-    links: [{ label: "OpenAI", url: "https://openai.com/" }],
+    description: "OpenAI Codex, Cursor",
+    links: [
+      { label: "OpenAI Codex", url: "https://openai.com/" },
+      { label: "Cursor", url: "https://cursor.com/" },
+    ],
     icon: Bot,
   },
 ] as const;
 
 const targets = [
-  { label: "Edge Protocol", value: "HTTP/3 + QUIC" },
   { label: "API Read Latency", value: "< 150ms (p50)" },
   { label: "API Write Latency", value: "< 600ms (p95)" },
   { label: "Core Web Vitals", value: "75th % Pass" },
@@ -130,7 +135,6 @@ export default function SpecsPage() {
   return (
     <main id="main-content" tabIndex={-1}>
       <PageHero
-        eyebrow="System Normal | TECH MANIFEST v2.1.0"
         title={
           <h1 className="font-heading text-foreground text-[clamp(3rem,6vw,5.15rem)] leading-[0.94] font-semibold tracking-[-0.07em] text-balance">
             Transparent Architecture.
@@ -142,28 +146,38 @@ export default function SpecsPage() {
           "Portable",
           "Observable",
           "Secure",
-          "Vercel-friendly",
         ]}
       >
         <Reveal trigger="mount">
-          <div className="page-shell-glow surface-interactive border-foreground/10 bg-primary text-primary-foreground rounded-[2rem] border px-6 py-7 shadow-[0_32px_80px_-56px_rgba(22,33,43,0.8)] sm:px-8 sm:py-9">
-            <p className="text-primary-foreground/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
-              Engine room
-            </p>
-            <div className="mt-5 grid gap-3">
-              {targets.slice(0, 4).map((item) => (
-                <div
-                  key={item.label}
-                  className="rounded-[1.2rem] border border-white/10 bg-white/6 px-4 py-3"
-                >
-                  <p className="text-primary-foreground/66 font-mono text-[0.68rem] tracking-[0.22em] uppercase">
-                    {item.label}
-                  </p>
-                  <p className="font-heading mt-1 text-xl font-semibold tracking-[-0.04em]">
-                    {item.value}
-                  </p>
-                </div>
-              ))}
+          <div className="page-shell-glow surface-interactive border-foreground/10 bg-primary text-primary-foreground flex flex-col overflow-hidden rounded-[2rem] border shadow-[0_32px_80px_-56px_rgba(22,33,43,0.8)]">
+            <div className="border-white/10 flex items-center justify-between border-b bg-white/5 px-6 py-4 sm:px-8">
+              <div className="flex gap-2">
+                <div className="size-2.5 rounded-full bg-white/20" />
+                <div className="size-2.5 rounded-full bg-white/20" />
+                <div className="size-2.5 rounded-full bg-white/20" />
+              </div>
+              <p className="text-primary-foreground/50 font-mono text-[0.68rem] tracking-[0.15em] uppercase">
+                payload.config.ts
+              </p>
+            </div>
+            <div className="overflow-x-auto p-6 sm:p-8">
+              <pre className="font-mono text-[0.8rem] leading-relaxed sm:text-[0.85rem]">
+                <code className="text-primary-foreground/80">
+                  <span className="text-[#a3b8cc]">import</span> {"{"} buildConfig {"}"} <span className="text-[#a3b8cc]">from</span> <span className="text-[#dbe8d1]">&quot;payload&quot;</span>;{"\n"}
+                  <span className="text-[#a3b8cc]">import</span> {"{"} postgresAdapter {"}"} <span className="text-[#a3b8cc]">from</span> <span className="text-[#dbe8d1]">&quot;@payloadcms/db-postgres&quot;</span>;{"\n"}
+                  {"\n"}
+                  <span className="text-[#a3b8cc]">export default</span> buildConfig({"{\n"}
+                  {"  "}db: postgresAdapter({"{\n"}
+                  {"    "}pool: {"{\n"}
+                  {"      "}connectionString: process.env.<span className="text-[#dbe8d1]">DATABASE_URI</span>,{"\n"}
+                  {"    },\n"}
+                  {"  }),\n"}
+                  {"  "}admin: {"{\n"}
+                  {"    "}user: <span className="text-[#dbe8d1]">&quot;users&quot;</span>,{"\n"}
+                  {"  },\n"}
+                  {"});\n"}
+                </code>
+              </pre>
             </div>
           </div>
         </Reveal>
@@ -171,7 +185,6 @@ export default function SpecsPage() {
 
       <Section className="section-divider-accent">
         <SectionHeader
-          eyebrow="Layered stack"
           title="Built on open foundations and cloud primitives that can survive the long haul."
           description="These choices are practical, portable, and legible to serious engineering teams. Nothing here depends on proprietary magic."
         />
@@ -197,10 +210,12 @@ export default function SpecsPage() {
                           href={link.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="group/tag inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary/50 px-2.5 py-1.5 font-mono text-[10px] text-muted-foreground transition-all hover:border-foreground/20 hover:bg-secondary hover:text-foreground"
+                          className="group/tag inline-flex items-center overflow-hidden rounded-full border border-border bg-secondary/50 px-2.5 py-1.5 font-mono text-[10px] text-muted-foreground transition-all duration-300 hover:border-foreground/20 hover:bg-secondary hover:text-foreground"
                         >
-                          {link.label}
-                          <span className="opacity-0 transition-opacity group-hover/tag:opacity-100">→</span>
+                          <span className="transition-transform duration-300 group-hover/tag:-translate-x-0.5">
+                            {link.label}
+                          </span>
+                          <ArrowUpRight className="-mr-3 ml-0 size-3 -translate-x-2 opacity-0 transition-all duration-300 group-hover/tag:mr-0 group-hover/tag:ml-1 group-hover/tag:translate-x-0 group-hover/tag:opacity-100" />
                         </Link>
                       ))}
                     </div>
