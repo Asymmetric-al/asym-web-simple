@@ -59,7 +59,7 @@ const FaithPointCard = ({ point, index }: { point: FaithPoint; index: number }) 
         <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
           {String(index + 1).padStart(2, "0")}
         </p>
-        <span className="text-[10px] font-mono text-muted-foreground/30">//</span>
+        <span className="text-[10px] font-mono text-muted-foreground/30">{"//"}</span>
         <p className="text-xs font-mono text-muted-foreground/50 uppercase tracking-wider">
           Article {index + 1}
         </p>
@@ -76,7 +76,7 @@ const FaithPointCard = ({ point, index }: { point: FaithPoint; index: number }) 
 
 export default function StatementOfFaithPage() {
   return (
-    <>
+    <main id="main-content" tabIndex={-1}>
       <PageHero
         eyebrow={
           <div className="inline-flex items-center gap-2 px-3 py-1.5 border border-border bg-secondary/50 rounded-full text-[10px] font-mono uppercase tracking-widest text-muted-foreground backdrop-blur-md">
@@ -116,6 +116,6 @@ export default function StatementOfFaithPage() {
           </div>
         </div>
       </Section>
-    </>
+    </main>
   );
 }
