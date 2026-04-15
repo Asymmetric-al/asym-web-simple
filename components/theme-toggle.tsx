@@ -13,6 +13,17 @@ import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Check, LaptopMinimal, MoonStar, SunMedium } from "lucide-react";
 import { useTheme } from "next-themes";
+import { useSyncExternalStore } from "react";
+
+const emptySubscribe = () => () => {};
+
+function useIsClient(): boolean {
+  return useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false,
+  );
+}
 
 const themes = [
   { value: "light", label: "Light", icon: SunMedium },
@@ -21,9 +32,16 @@ const themes = [
 ] as const;
 
 export function ThemeToggle() {
+  const mounted = useIsClient();
   const { resolvedTheme, setTheme, theme } = useTheme();
   const activeTheme = theme ?? "system";
-  const TriggerIcon = resolvedTheme === "dark" ? MoonStar : SunMedium;
+
+  // Avoid hydration mismatch: resolvedTheme differs between server and first client render.
+  const TriggerIcon = !mounted
+    ? LaptopMinimal
+    : resolvedTheme === "dark"
+      ? MoonStar
+      : SunMedium;
 
   return (
     <DropdownMenu>
