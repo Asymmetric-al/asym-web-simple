@@ -20,9 +20,9 @@ type InquiryKind = "waitlist" | "contact";
 
 const presets = {
   waitlist: {
-    title: "Start the conversation",
+    title: "Join the waitlist",
     description:
-      "Tell us who you are, where your organization is feeling administrative drag, and what a healthy next step would look like.",
+      "Be among the first Christian missions organizations to see how Asym can replace disconnected tools, reduce manual handoffs, and give your team one mission-built system for donor care, missionary support, and operations.",
     fields: [
       { name: "name", label: "Name", type: "text", required: true },
       {
@@ -36,18 +36,18 @@ const presets = {
     ],
     textarea: {
       name: "challenge",
-      label: "What is your biggest operational bottleneck right now?",
+      label: "What is creating the most drag for your team right now?",
       placeholder:
-        "Disconnected tools, donor systems, mobilization friction, finance reconciliation, fragmented websites, or something else.",
+        "Disconnected tools, donor care friction, missionary support bottlenecks, statements, reporting, reconciliation, or something else.",
     },
-    subject: "Asymmetric.al waitlist request",
+    subject: "Asym waitlist request",
     helper:
-      "Your note is sent securely to our team. We will reply to the email you provide.",
+      "Your note is sent securely to our team. We will use it to route waitlist updates, walkthrough invitations, and qualified rollout conversations.",
   },
   contact: {
-    title: "Send a direct note",
+    title: "Request the Mission Tech Stack Audit",
     description:
-      "Use this for agency questions, donor and governance questions, technical partnership conversations, or media inquiries.",
+      "Use this for the Mission Tech Stack Audit, general agency questions, donor and governance questions, technical partnership conversations, or media inquiries.",
     fields: [
       { name: "name", label: "Name", type: "text", required: true },
       {
@@ -65,7 +65,7 @@ const presets = {
       placeholder:
         "Share enough detail for us to route your note quickly and respond with context.",
     },
-    subject: "Asymmetric.al contact request",
+    subject: "Asym contact request",
     helper:
       "Your message is delivered to our inbox. We typically respond within about one business day.",
   },
@@ -314,7 +314,7 @@ export function InquiryForm({ kind }: { kind: InquiryKind }) {
                     </>
                   ) : kind === "waitlist" ? (
                     <>
-                      Send waitlist request
+                      Join the Waitlist
                       <ArrowRight data-icon="inline-end" />
                     </>
                   ) : (

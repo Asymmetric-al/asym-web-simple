@@ -10,7 +10,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Check, LaptopMinimal, MoonStar, SunMedium } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useSyncExternalStore } from "react";
@@ -45,19 +44,12 @@ export function ThemeToggle() {
 
   return (
     <DropdownMenu>
-      <Tooltip>
-        <TooltipTrigger
-          render={
-            <DropdownMenuTrigger
-              render={<Button variant="outline" size="icon-sm" />}
-            />
-          }
-        >
-          <TriggerIcon />
-          <span className="sr-only">Change color theme</span>
-        </TooltipTrigger>
-        <TooltipContent>Change theme</TooltipContent>
-      </Tooltip>
+      <DropdownMenuTrigger
+        render={<Button variant="outline" size="icon-sm" aria-label="Change color theme" />}
+      >
+        <TriggerIcon />
+        <span className="sr-only">Change color theme</span>
+      </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-52">
         <DropdownMenuGroup>
           <DropdownMenuLabel>Appearance</DropdownMenuLabel>

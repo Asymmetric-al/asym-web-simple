@@ -1,49 +1,22 @@
 import { InquiryForm } from "@/components/site/inquiry-form";
+import { PlatformTabs, type PlatformTabItem } from "@/components/site/platform-tabs";
+import { Reveal } from "@/components/site/reveal";
 import Link from "next/link";
 import type { Metadata } from "next";
 import {
-  Database,
-  Globe,
-  Zap,
-  Mail,
-  FileText,
-  PenTool,
-  BarChart,
-  Heart,
-  Calendar,
-  PlusCircle,
   ArrowRight,
-  Layers,
-  ShieldAlert,
-  type LucideIcon,
-  Server,
-  MessageCircle,
-  Target,
+  ChartNoAxesCombined,
   DollarSign,
+  Globe,
+  Heart,
+  Layers,
+  Mail,
+  ShieldCheck,
+  type LucideIcon,
 } from "lucide-react";
 import { createMetadata } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
-import { Reveal } from "@/components/site/reveal";
-import { memo, type ReactNode } from "react";
-
-// ============================================================================
-// Types
-// ============================================================================
-
-interface MissionTile {
-  readonly title: string;
-  readonly desc: ReactNode;
-  readonly icon: LucideIcon;
-  readonly meta: string;
-  readonly highlight?: boolean;
-  readonly className?: string;
-}
-
-interface FocusPoint {
-  readonly title: string;
-  readonly icon: LucideIcon;
-  readonly desc: string;
-}
+import { memo } from "react";
 
 interface ProblemOption {
   readonly id: string;
@@ -54,201 +27,130 @@ interface ProblemOption {
   readonly points: readonly string[];
 }
 
-// ============================================================================
-// Static Data
-// ============================================================================
-
-const MISSION_CONTROL_TILES: readonly MissionTile[] = [
-  {
-    title: "Specialized CRM",
-    desc: (
-      <>
-        Powered by a custom Missions Built{" "}
-        <a
-          href="https://github.com/twentyhq/twenty"
-          target="_blank"
-          rel="noreferrer"
-          className="text-foreground hover:text-primary underline decoration-border transition-colors"
-        >
-          Twenty CRM
-        </a>
-        , the open‑source standard with 40k GitHub Stars. The definitive source of
-        truth for people, churches, and pledges. A living record that updates in
-        real‑time, managed with a modern interface designed for speed. A CRM your
-        Advancement team will actually enjoy using.
-      </>
-    ),
-    icon: Database,
-    meta: "// CORE RECORD",
-  },
-  {
-    title: "Contributions Hub",
-    desc: "Live transaction feed. Automate reconciliation and eliminate manual entry. Reversals and management in one place, all perfectly integrated with Stripe for the best‑in‑class payment processing experience.",
-    icon: DollarSign,
-    meta: "// FINANCE",
-  },
-  {
-    title: "Web Studio",
-    desc: (
-      <>
-        The power of{" "}
-        <a
-          href="https://nextjs.org/"
-          target="_blank"
-          rel="noreferrer"
-          className="text-foreground hover:text-primary underline decoration-border transition-colors"
-        >
-          Next.js
-        </a>{" "}
-        with the ease of a visual CMS (a headless Payload CMS). Whether you have a
-        frontend team or just need to update the blog, you are in control. No more
-        change orders for simple button tweaks. Build on open standards, not
-        proprietary cages.
-      </>
-    ),
-    icon: Globe,
-    meta: "// CMS",
-  },
-  {
-    title: "Email Studio",
-    desc: "Every email that comes from your organization needs to represent the work you're doing. No more compromises on what comes from your organization whether it be an appeal campaign, emailed donation receipt, or a simple password‑reset email. It all needs to be fully branded and owned by you.",
-    icon: Mail,
-    meta: "// COMMS",
-  },
-  {
-    title: "Donor Support Hub",
-    desc: (
-      <>
-        Donor care is vital to any missions organization. Integrated{" "}
-        <a
-          href="https://github.com/chatwoot/chatwoot"
-          target="_blank"
-          rel="noreferrer"
-          className="text-foreground hover:text-primary underline decoration-border transition-colors"
-        >
-          Chatwoot CE
-        </a>{" "}
-        to handle all donor issues with easy tracking to make sure no donor
-        question gets dropped or missed. All integrated into your Mission Control
-        Panel.
-      </>
-    ),
-    icon: MessageCircle,
-    meta: "// SUPPORT",
-  },
-  {
-    title: "Statements Studio",
-    desc: "Generate receipt packs and year‑end tax documents automatically. The easy way to create and manage templates for your printable statements or reports. You can make it exactly how you want it with no compromises or hours of endless coding just to get the header or footer right.",
-    icon: FileText,
-    meta: "// COMPLIANCE",
-  },
-  {
-    title: "Sign Studio",
-    desc: (
-      <>
-        No need for DocuSign anymore. Powered by{" "}
-        <a
-          href="https://github.com/documenso/documenso"
-          target="_blank"
-          rel="noreferrer"
-          className="text-foreground hover:text-primary underline decoration-border transition-colors"
-        >
-          Documenso CE
-        </a>
-        , fully integrated in your mobilization and onboarding workflow. One
-        integrated place to handle agreements, waivers, and packets.
-      </>
-    ),
-    icon: PenTool,
-    meta: "// LEGAL",
-  },
-  {
-    title: "Start‑to‑Finish Mobilization",
-    desc: "Accelerate your deployment with effortless management. You set up the workflow and process you want with best‑in‑class automation that is fully visualized instead of endless and confusing logic trees. Move candidates from interest to field with clear steps.",
-    icon: ArrowRight,
-    meta: "// HR FLOW",
-  },
-  {
-    title: "Report Studio",
-    desc: "Pull or schedule reports for leadership, finance, etc in a few simple steps. One beautiful, easy‑to‑use interface that just gives you the reports you need, when you need them, with real‑time visibility.",
-    icon: BarChart,
-    meta: "// INTELLIGENCE",
-  },
-  {
-    title: "Simplified Automations",
-    desc: "You are fully in charge to automatically trigger actions based on donations, new applications, and more with Zapier's 8,000+ app integrations.",
-    icon: Zap,
-    meta: "// LOGIC",
-  },
-  {
-    title: "Member Care",
-    desc: "One dashboard for your MC team to track care, plans, and milestones. Support your workers with intentional care and equip your team with the resources they need for effective care plans.",
-    icon: Heart,
-    meta: "// RETENTION",
-  },
-  {
-    title: "Events & Gatherings",
-    desc: "Handle events on your own website, fully branded and under your control. One source of truth for centralized registration and logistics. Connect attendees to your CRM instantly without re‑entering data.",
-    icon: Calendar,
-    meta: "// LOGISTICS",
-  },
-  {
-    title: "Roadmap Active",
-    desc: "The OS is alive. We are continuously deploying new modules to serve the field.",
-    icon: PlusCircle,
-    meta: "// FUTURE",
-    highlight: true,
-    className: "md:col-span-2 lg:col-span-3",
-  },
-];
-
-const WHY_FOCUS_DATA: readonly FocusPoint[] = [
-  {
-    title: "Sending is not Selling",
-    icon: Target,
-    desc: "Generic CRMs are built for sales pipelines. They don't understand deputation, support raising, or the delicate nature of donor relationships. We build for partnership, not transactions.",
-  },
-  {
-    title: "The Fragmentation Tax",
-    icon: Layers,
-    desc: "When you stitch together 15 different SaaS tools, you pay a 'tax' in lost data, broken syncs, and staff burnout. Missions agencies lose millions of dollars annually to this inefficiency.",
-  },
-  {
-    title: "Control Matters",
-    icon: ShieldAlert,
-    desc: "True ownership means you aren't beholden to a vendor's roadmap or pricing. We build architecture where you own the data, the keys, and the code, ensuring you are never locked into a system you can't control.",
-  },
-];
+interface SurfaceCard {
+  readonly title: string;
+  readonly description: string;
+  readonly icon: LucideIcon;
+}
 
 const PROBLEM_OPTIONS: readonly ProblemOption[] = [
   {
     id: "diy",
-    title: "OPTION A: THE DIY TRAP",
+    title: "OPTION A: PATCHWORK TOOLS",
     icon: Layers,
-    subtitle: "The Generic Stack",
-    desc: "Stitching together Salesforce, Mailchimp, QuickBooks, spreadsheets, and standalone website builders.",
-    points: ["DATA SILOS", "BROKEN AUTOMATION LINKS", "HIGH SUBSCRIPTION FEES"],
+    subtitle: "Disconnected stack",
+    desc: "Stitch together generic CRMs, donor tools, email tools, website builders, accounting workflows, and spreadsheets.",
+    points: ["DATA GAPS", "MANUAL HANDOFFS", "STAFF DRAG"],
   },
   {
     id: "legacy",
-    title: "OPTION B: Legacy Vendors",
+    title: "OPTION B: LEGACY VENDORS",
     icon: Globe,
-    subtitle: "Outdated tech",
-    desc: "Proprietary software built in the early 2000s. Safe, but stagnant and difficult to modernize.",
-    points: ["VENDOR LOCK-IN", "CLUNKY UX", "SLOW ROADMAPS"],
+    subtitle: "Closed systems",
+    desc: "Stay inside outdated, proprietary software that is difficult to modernize and hard for your team to trust long term.",
+    points: ["VENDOR LOCK-IN", "LIMITED VISIBILITY", "SLOW CHANGE"],
+  },
+] as const;
+
+const PLATFORM_TABS: readonly PlatformTabItem[] = [
+  {
+    id: "donor-care",
+    title: "Donor Care",
+    tag: "DONOR CARE",
+    summary:
+      "Keep donor questions, giving follow-through, receipts, and relationship context connected instead of scattered across inboxes and separate systems.",
+    details: [
+      "Shared donor context for support, finance, and advancement teams",
+      "Clear follow-through on routine donor questions and updates",
+      "Statements, receipts, and reporting tied back to the same records",
+    ],
+  },
+  {
+    id: "missionary-support",
+    title: "Missionary Support",
+    tag: "MISSIONARY SUPPORT",
+    summary:
+      "Help finance, mobilization, member care, and leadership stay aligned around the people they are supporting instead of rebuilding context in side systems.",
+    details: [
+      "Role-aware views for operators, finance staff, and care teams",
+      "Shared records reduce manual handoffs and duplicate notes",
+      "Missionary support stays connected to the rest of mission operations",
+    ],
+  },
+  {
+    id: "mobilize",
+    title: "Mobilize",
+    tag: "MOBILIZE",
+    summary:
+      "Visual workflow orchestration for candidates, onboarding, and deployment using Zapier's ecosystem without spaghetti logic.",
+    details: [
+      "Move people from inquiry to deployment with clear next steps",
+      "Keep forms, signatures, and milestones tied to one workflow",
+      "Reduce admin drag without forcing teams into brittle process hacks",
+    ],
+  },
+  {
+    id: "reporting",
+    title: "Reporting",
+    tag: "REPORTING",
+    summary:
+      "Pull statements, reports, and leadership visibility from the same source of truth instead of exporting from disconnected systems and reconciling later.",
+    details: [
+      "Statements and reporting from the same mission-built system",
+      "Cleaner leadership visibility across donor care and operations",
+      "Audit-friendly outputs with less spreadsheet cleanup",
+    ],
+  },
+] as const;
+
+const SURFACE_CARDS: readonly SurfaceCard[] = [
+  {
+    title: "Donor self-service",
+    description:
+      "Donors can manage recurring gifts, receipts, payment methods, and account changes without sending staff back into manual support loops.",
+    icon: Mail,
+  },
+  {
+    title: "Missionary dashboard",
+    description:
+      "Missionaries can see support progress, new donors, at-risk recurring, tasks, and next actions without waiting on staff to stitch the answer together.",
+    icon: ChartNoAxesCombined,
+  },
+  {
+    title: "Statements and reporting",
+    description:
+      "Finance can move with stronger statement, reporting, and reconciliation handoff flows instead of rebuilding the story from exports every cycle.",
+    icon: DollarSign,
   },
 ];
 
-// ============================================================================
-// Sub‑Components (visual parity with legacy)
-// ============================================================================
+const TRUST_POINTS: readonly SurfaceCard[] = [
+  {
+    title: "Ownership and trust",
+    description:
+      "Your organization should own the data, keys, branding, and domains that carry the work instead of outsourcing trust to a black box.",
+    icon: ShieldCheck,
+  },
+  {
+    title: "Open-source foundations",
+    description:
+      "Transparency, stewardship, and long-term trust matter. Most teams simply use Asym as a supported system, but the foundations stay open and inspectable.",
+    icon: Globe,
+  },
+  {
+    title: "Mission reality first",
+    description:
+      "Donor care, missionary support, statements, reporting, and operations were designed together so the product does not feel like a stack of bolt-ons.",
+    icon: Heart,
+  },
+] as const;
 
-// Simple DitherGrid / DitherGlobe replacements (CSS only, to avoid import issues)
 const DitherGrid = () => (
   <div
-    className="fixed inset-0 z-0 pointer-events-none opacity-10"
+    className="pointer-events-none fixed inset-0 z-0 opacity-10"
     style={{
-      backgroundImage: "radial-gradient(circle at 1px 1px, hsl(var(--foreground)) 1px, transparent 1px)",
+      backgroundImage:
+        "radial-gradient(circle at 1px 1px, hsl(var(--foreground)) 1px, transparent 1px)",
       backgroundSize: "24px 24px",
     }}
   />
@@ -256,10 +158,14 @@ const DitherGrid = () => (
 
 const DitherGlobe = ({ scale = 1.2, className = "" }) => (
   <div
-    className={cn("pointer-events-none select-none opacity-20 mix-blend-screen", className)}
+    className={cn(
+      "pointer-events-none select-none opacity-20 mix-blend-screen",
+      className,
+    )}
     style={{
       transform: `scale(${scale})`,
-      background: "radial-gradient(circle at 30% 40%, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0) 70%)",
+      background:
+        "radial-gradient(circle at 30% 40%, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0) 70%)",
       width: "min(80vw, 80vh)",
       height: "min(80vw, 80vh)",
       borderRadius: "50%",
@@ -268,110 +174,8 @@ const DitherGlobe = ({ scale = 1.2, className = "" }) => (
   />
 );
 
-// ScrambleText alternative (simple typing effect – we skip the full animation but keep the look)
-const ScrambleText = ({ text }: { text: string }) => <span className="tracking-wider">{text}</span>;
-
-// SpotlightCard effect using Tailwind
-const SpotlightCard = memo(({ children, className }: { children: React.ReactNode; className?: string }) => (
-  <div
-    className={cn(
-      "relative overflow-hidden rounded-sm transition-all duration-300 hover:shadow-lg group",
-      className
-    )}
-  >
-    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-foreground/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-    {children}
-  </div>
-));
-SpotlightCard.displayName = "SpotlightCard";
-
-const MissionCard = memo(({ tile }: { tile: MissionTile }) => (
-  <div
-    className={cn(
-      "group relative h-full flex flex-col justify-between bg-card border rounded-sm overflow-hidden transition-all duration-300",
-      tile.highlight
-        ? "border-primary/40 shadow-[0_0_0_1px_rgba(16,185,129,0.1)]"
-        : "border-border hover:border-foreground/20"
-    )}
-  >
-    {/* Header */}
-    <div className="p-8 flex justify-between items-start border-b border-border bg-card">
-      <div
-        className={cn(
-          "flex items-center justify-center w-10 h-10 rounded-sm border transition-colors",
-          tile.highlight
-            ? "bg-primary/10 border-primary/20 text-primary"
-            : "bg-secondary border-border text-muted-foreground group-hover:text-foreground group-hover:border-foreground/30"
-        )}
-      >
-        <tile.icon size={20} strokeWidth={1.5} />
-      </div>
-      <span
-        className={cn(
-          "font-mono text-[9px] uppercase tracking-widest mt-2",
-          tile.highlight
-            ? "text-emerald-600 dark:text-primary"
-            : "text-muted-foreground group-hover:text-foreground/60 transition-colors"
-        )}
-      >
-        {tile.meta}
-      </span>
-    </div>
-
-    {/* Content */}
-    <div className="p-8 flex-grow relative bg-card">
-      <div className="relative z-10">
-        <h3
-          className={cn(
-            "text-xl font-display font-bold mb-4 tracking-tight transition-colors",
-            tile.highlight ? "text-foreground" : "text-foreground group-hover:text-primary"
-          )}
-        >
-          {tile.title}
-        </h3>
-        <div className="text-sm text-muted-foreground leading-relaxed font-light text-balance">
-          {tile.desc}
-        </div>
-      </div>
-    </div>
-
-    {/* Status Bar */}
-    <div
-      className={cn(
-        "px-8 py-4 border-t flex items-center gap-3",
-        tile.highlight ? "bg-primary/5 border-primary/20" : "bg-background border-border"
-      )}
-    >
-      <div className="relative flex h-1.5 w-1.5">
-        <span
-          className={cn(
-            "animate-ping absolute inline-flex h-full w-full rounded-full opacity-75",
-            tile.highlight ? "bg-primary" : "bg-success"
-          )}
-        />
-        <span
-          className={cn(
-            "relative inline-flex rounded-full h-1.5 w-1.5",
-            tile.highlight ? "bg-primary" : "bg-success"
-          )}
-        />
-      </div>
-      <span
-        className={cn(
-          "font-mono text-[9px] uppercase tracking-widest",
-          tile.highlight ? "text-emerald-600 dark:text-primary" : "text-muted-foreground"
-        )}
-      >
-        {tile.highlight ? "Continuous Deployment" : "System Active"}
-      </span>
-    </div>
-  </div>
-));
-MissionCard.displayName = "MissionCard";
-
 const FalseChoicePanel = memo(({ option }: { option: ProblemOption }) => {
   const isDIY = option.id === "diy";
-
   const borderColor = isDIY
     ? "group-hover:border-orange-500/50 dark:group-hover:border-orange-500/30"
     : "group-hover:border-blue-500/50 dark:group-hover:border-blue-500/30";
@@ -386,61 +190,67 @@ const FalseChoicePanel = memo(({ option }: { option: ProblemOption }) => {
   return (
     <div
       className={cn(
-        "bg-card h-full border border-border transition-colors duration-500 group relative overflow-hidden flex flex-col rounded-sm",
-        borderColor
+        "group relative flex h-full flex-col overflow-hidden rounded-sm border border-border bg-card transition-colors duration-500",
+        borderColor,
       )}
     >
-      {/* Corner markers */}
       <div
-        className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 text-border"
+        className="pointer-events-none absolute inset-0 text-border opacity-0 transition-opacity duration-500 group-hover:opacity-100"
         aria-hidden="true"
       >
-        <div className="absolute top-0 left-0 w-2 h-2 border-l border-t border-current" />
-        <div className="absolute top-0 right-0 w-2 h-2 border-r border-t border-current" />
-        <div className="absolute bottom-0 left-0 w-2 h-2 border-l border-b border-current" />
-        <div className="absolute bottom-0 right-0 w-2 h-2 border-r border-b border-current" />
+        <div className="absolute left-0 top-0 h-2 w-2 border-l border-t border-current" />
+        <div className="absolute right-0 top-0 h-2 w-2 border-r border-t border-current" />
+        <div className="absolute bottom-0 left-0 h-2 w-2 border-b border-l border-current" />
+        <div className="absolute bottom-0 right-0 h-2 w-2 border-b border-r border-current" />
       </div>
 
-      <div className="relative z-10 flex flex-col h-full p-8 md:p-10">
-        {/* Header */}
-        <div className="flex justify-between items-start mb-10">
+      <div className="relative z-10 flex h-full flex-col p-8 md:p-10">
+        <div className="mb-10 flex items-start justify-between">
           <div
             className={cn(
-              "p-3 rounded-sm border bg-secondary border-border transition-colors",
-              iconColor
+              "rounded-sm border border-border bg-secondary p-3 transition-colors",
+              iconColor,
             )}
           >
             <option.icon size={24} strokeWidth={1.5} />
           </div>
-          <span className="font-mono text-[10px] font-bold text-muted-foreground uppercase tracking-widest bg-secondary px-3 py-1.5 rounded-sm border border-border">
+          <span className="rounded-sm border border-border bg-secondary px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
             {option.title.split(":")[0]}
           </span>
         </div>
 
-        {/* Content */}
         <div className="mb-8">
-          <h3 className="text-2xl font-display font-bold text-foreground mb-4 tracking-tight group-hover:text-foreground/90 transition-colors">
+          <h3 className="mb-4 text-2xl font-bold tracking-tight text-foreground transition-colors group-hover:text-foreground/90">
             {option.title.split(":")[1]?.trim()}
           </h3>
-          <div className={cn("flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest mb-6", subtitleColor)}>
+          <div
+            className={cn(
+              "mb-6 flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest",
+              subtitleColor,
+            )}
+          >
             <div className={cn("h-px w-6", lineColor)} />
             {option.subtitle}
           </div>
-          <p className="text-muted-foreground text-sm leading-relaxed border-l border-border pl-6 text-balance">
+          <p className="border-l border-border pl-6 text-balance text-sm leading-relaxed text-muted-foreground">
             {option.desc}
           </p>
         </div>
 
-        {/* Footer List */}
-        <div className="mt-auto pt-8 border-t border-border">
-          <div className="text-[9px] font-mono text-muted-foreground uppercase tracking-widest mb-4">
-            Critical Failures
+        <div className="mt-auto border-t border-border pt-8">
+          <div className="mb-4 font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
+            What teams feel
           </div>
           <ul className="space-y-4">
-            {option.points.map((point, i) => (
-              <li key={i} className="text-[11px] font-mono text-muted-foreground flex items-center gap-3 group/list">
-                <div className="w-1 h-1 bg-destructive rounded-full shadow-[0_0_8px_rgba(239,68,68,0.5)]" />
-                <span className="group-hover/list:text-foreground transition-colors tracking-wider">{point}</span>
+            {option.points.map((point) => (
+              <li
+                key={point}
+                className="group/list flex items-center gap-3 font-mono text-[11px] text-muted-foreground"
+              >
+                <div className="h-1 w-1 rounded-full bg-destructive shadow-[0_0_8px_rgba(239,68,68,0.5)]" />
+                <span className="tracking-wider transition-colors group-hover/list:text-foreground">
+                  {point}
+                </span>
               </li>
             ))}
           </ul>
@@ -451,75 +261,85 @@ const FalseChoicePanel = memo(({ option }: { option: ProblemOption }) => {
 });
 FalseChoicePanel.displayName = "FalseChoicePanel";
 
-const FocusCard = memo(({ item }: { item: FocusPoint }) => (
-  <SpotlightCard className="h-full bg-card flex flex-col justify-between group rounded-sm border-border hover:border-foreground/20">
-    <div className="p-8 md:p-10 h-full flex flex-col">
-      <div className="mb-8 p-3 bg-secondary w-fit rounded-sm border border-border text-foreground group-hover:text-primary transition-colors">
-        <item.icon size={24} strokeWidth={1.5} />
+const SurfacePanel = memo(({ item }: { item: SurfaceCard }) => (
+  <div className="group relative flex h-full flex-col overflow-hidden rounded-sm border border-border bg-card transition-colors duration-300 hover:border-foreground/20">
+    <div className="flex items-start justify-between border-b border-border bg-card p-8">
+      <div className="flex h-10 w-10 items-center justify-center rounded-sm border border-border bg-secondary text-muted-foreground transition-colors group-hover:border-foreground/30 group-hover:text-foreground">
+        <item.icon size={20} strokeWidth={1.5} />
       </div>
-      <h3 className="text-2xl font-display font-bold text-foreground mb-4 tracking-tight">{item.title}</h3>
-      <p className="text-muted-foreground leading-relaxed text-sm text-balance border-l border-border pl-6 mt-auto">
-        {item.desc}
+      <span className="mt-2 font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
+        SYSTEM SURFACE
+      </span>
+    </div>
+    <div className="p-8">
+      <h3 className="mb-4 text-xl font-bold tracking-tight text-foreground transition-colors group-hover:text-primary">
+        {item.title}
+      </h3>
+      <p className="text-balance text-sm font-light leading-relaxed text-muted-foreground">
+        {item.description}
       </p>
     </div>
-  </SpotlightCard>
+  </div>
 ));
-FocusCard.displayName = "FocusCard";
+SurfacePanel.displayName = "SurfacePanel";
 
 function DeploymentForm() {
   return <InquiryForm kind="waitlist" />;
 }
 
-// ============================================================================
-// Main Page Component
-// ============================================================================
-
 export const metadata: Metadata = createMetadata({
-  title: "Platform",
+  title: "One Mission-Built System for Christian Missions",
   description:
-    "See how Asymmetric.al replaces the fragmented DIY stack with a coherent mission operating system built for sending agencies.",
+    "See how Asym replaces disconnected tools and manual handoffs with one mission-built system for donor care, missionary support, statements, reporting, and operations.",
   path: "/platform",
 });
 
 export default function PlatformPage() {
   return (
-    <main id="main-content" tabIndex={-1} className="pt-24 min-h-screen bg-background text-foreground overflow-hidden selection:bg-foreground selection:text-background">
-      {/* Global backgrounds */}
+    <main
+      id="main-content"
+      tabIndex={-1}
+      className="min-h-screen overflow-hidden bg-background pt-24 text-foreground selection:bg-foreground selection:text-background"
+    >
       <DitherGrid />
-      <div className="fixed right-0 top-1/2 -translate-y-1/2 translate-x-1/3 pointer-events-none hidden lg:block z-0">
+      <div className="pointer-events-none fixed right-0 top-1/2 z-0 hidden translate-x-1/3 -translate-y-1/2 lg:block">
         <DitherGlobe scale={1.6} />
       </div>
 
-      {/* ========== HERO SECTION ========== */}
-      <section className="relative border-b border-border pb-12 md:pb-24 bg-background">
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
+      <section className="relative border-b border-border bg-background pb-12 md:pb-24">
+        <div className="relative z-10 mx-auto max-w-7xl px-6">
           <Reveal>
             <div className="max-w-4xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 border border-border bg-secondary/50 rounded-full text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-8 backdrop-blur-md">
-                <span className="w-1.5 h-1.5 bg-success rounded-full animate-pulse" />
-                <ScrambleText text="MISSION OPERATING SYSTEM" />
+              <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-border bg-secondary/50 px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground backdrop-blur-md">
+                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-success" />
+                <span>MISSION-BUILT SYSTEM</span>
               </div>
 
-              <h1 className="text-6xl md:text-8xl font-display font-bold text-foreground mb-8 tracking-tighter leading-[0.9]">
-                One Platform.<br />
-                <span className="text-muted-foreground">Total Clarity.</span>
+              <h1 className="mb-8 max-w-[12ch] text-5xl font-bold leading-[0.92] tracking-tighter text-foreground md:text-7xl">
+                One mission-built system instead of a pile of tools.
               </h1>
 
-              <div className="pl-6 border-l-2 border-border mb-12">
-                <p className="text-xl text-muted-foreground max-w-2xl font-light leading-relaxed text-balance">
-                  Most agencies are running on a patchwork of disconnected tools. Data is siloed. Staff are exhausted. The mission slows down.
+              <div className="mb-12 border-l-2 border-border pl-6">
+                <p className="max-w-3xl text-xl font-light leading-relaxed text-balance text-muted-foreground">
+                  Asym replaces disconnected tools and manual handoffs with one place for donor care, missionary support, statements, reporting, and operations.
                 </p>
-                <p className="text-lg text-muted-foreground/80 max-w-2xl font-light leading-relaxed text-balance mt-4">
-                  Asymmetric.al replaces the chaos of the &quot;DIY stack&quot; with a single, unified operating system designed specifically for the complexities of sending Organizations.
+                <p className="mt-4 max-w-3xl text-lg font-light leading-relaxed text-balance text-muted-foreground">
+                  Your staff stops bouncing between tools. Donors stop waiting on staff for basic account changes. Missionaries stop guessing what changed. Finance stops chasing cleaner records at month-end.
                 </p>
               </div>
 
               <div className="flex flex-wrap gap-4">
-                <Link href="/specs" className="inline-flex items-center justify-center px-6 py-3 bg-foreground text-background rounded-sm font-medium hover:bg-primary transition-colors">
-                  System Architecture
+                <Link
+                  href="/waitlist"
+                  className="inline-flex items-center justify-center rounded-sm bg-foreground px-6 py-3 font-medium text-background transition-colors hover:bg-primary"
+                >
+                  Join the Waitlist
                 </Link>
-                <Link href="#mission-control" className="inline-flex items-center justify-center px-6 py-3 border border-border rounded-sm font-medium hover:bg-secondary transition-colors">
-                  Role Views
+                <Link
+                  href="#portal-walkthrough"
+                  className="inline-flex items-center justify-center rounded-sm border border-border px-6 py-3 font-medium transition-colors hover:bg-secondary"
+                >
+                  See the Donor and Missionary Portal Walkthrough
                 </Link>
               </div>
             </div>
@@ -527,22 +347,21 @@ export default function PlatformPage() {
         </div>
       </section>
 
-      {/* ========== FALSE CHOICE SECTION ========== */}
-      <section className="bg-card border-b border-border py-24">
-        <div className="max-w-7xl mx-auto px-6">
+      <section className="border-b border-border bg-card py-24">
+        <div className="mx-auto max-w-7xl px-6">
           <Reveal>
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-stretch">
-              <div className="lg:col-span-5 flex flex-col justify-center">
-                <h2 className="text-4xl md:text-5xl font-display font-bold text-foreground mb-6 tracking-tight leading-[1.1]">
-                  Agencies today face limited options.
+            <div className="grid grid-cols-1 items-stretch gap-16 lg:grid-cols-12 lg:gap-24">
+              <div className="flex flex-col justify-center lg:col-span-5">
+                <h2 className="mb-6 text-4xl font-bold leading-[1.1] tracking-tight text-foreground md:text-5xl">
+                  Old software and patchwork workflows create drag.
                 </h2>
-                <div className="p-8 border border-destructive/20 bg-destructive/5 rounded-sm">
-                  <p className="text-destructive/80 text-sm leading-relaxed italic border-l border-destructive/20 pl-4">
-                    &ldquo;Our ops, mobilization, and finance teams are spending more time managing our tools than we are supporting our missionaries.&rdquo; — Common Agency Feedback
+                <div className="rounded-sm border border-destructive/20 bg-destructive/5 p-8">
+                  <p className="border-l border-destructive/20 pl-4 text-sm italic leading-relaxed text-destructive/80">
+                    &ldquo;Our ops, mobilization, and finance teams are spending more time managing our tools than we are supporting our missionaries.&rdquo;
                   </p>
                 </div>
               </div>
-              <div className="lg:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:col-span-7 lg:gap-8">
                 {PROBLEM_OPTIONS.map((option) => (
                   <FalseChoicePanel key={option.id} option={option} />
                 ))}
@@ -552,101 +371,165 @@ export default function PlatformPage() {
         </div>
       </section>
 
-      {/* ========== WHY FOCUS SECTION ========== */}
-      <section className="bg-background border-b border-border py-24 relative overflow-hidden">
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-10 pointer-events-none">
-          <DitherGlobe scale={1.2} />
-        </div>
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="text-center max-w-3xl mx-auto mb-20">
-            <Reveal>
-              <h2 className="text-4xl md:text-5xl font-display font-bold text-foreground mb-6 tracking-tight">
-                You need an option built strategically for missions.
-              </h2>
-              <p className="text-xl text-muted-foreground font-light leading-relaxed text-balance">
-                We aren&apos;t trying to build software for everyone. We are hyper‑focused on the unique complexities of sending agencies.
-              </p>
-            </Reveal>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-            {WHY_FOCUS_DATA.map((item, i) => (
-              <Reveal key={i} delay={i * 100} className="h-full">
-                <FocusCard item={item} />
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========== MISSION CONTROL SECTION ========== */}
-      <section id="mission-control" className="bg-background border-b border-border py-24 relative overflow-hidden">
+      <section
+        id="portal-walkthrough"
+        className="relative overflow-hidden border-b border-border bg-background py-24"
+      >
         <div
-          className="absolute inset-0 opacity-[0.05] pointer-events-none"
-          style={{ backgroundImage: "radial-gradient(var(--foreground) 1px, transparent 1px)", backgroundSize: "30px 30px" }}
+          className="pointer-events-none absolute inset-0 opacity-[0.05]"
+          style={{
+            backgroundImage:
+              "radial-gradient(var(--foreground) 1px, transparent 1px)",
+            backgroundSize: "30px 30px",
+          }}
         />
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
+        <div className="relative z-10 mx-auto max-w-7xl px-6">
           <Reveal>
-            <div className="text-center max-w-4xl mx-auto mb-24">
-              <div className="inline-flex items-center gap-2 mb-6">
-                <Server size={14} className="text-success" />
-                <span className="font-mono text-xs text-success uppercase tracking-widest">The Unified Solution</span>
+            <div className="mx-auto mb-24 max-w-4xl text-center">
+              <div className="mb-6 inline-flex items-center gap-2">
+                <Layers size={14} className="text-success" />
+                <span className="font-mono text-xs uppercase tracking-widest text-success">
+                  Mission Control
+                </span>
               </div>
-              <h2 className="text-5xl md:text-7xl font-display font-bold text-foreground mb-8 tracking-tighter leading-[0.9]">
-                Mission Control
+              <h2 className="mb-8 text-5xl font-bold leading-[0.9] tracking-tighter text-foreground md:text-7xl">
+                One place for the work that keeps getting split apart.
               </h2>
-              <div className="h-px w-24 bg-gradient-to-r from-transparent via-foreground/40 to-transparent mx-auto mb-8" />
-              <p className="text-xl md:text-2xl text-muted-foreground font-light leading-relaxed text-balance mb-8">
-                Replace the clutter with clarity. Every operational function under one login, sharing one database.
+              <div className="mx-auto mb-8 h-px w-24 bg-gradient-to-r from-transparent via-foreground/40 to-transparent" />
+              <p className="mb-8 text-xl font-light leading-relaxed text-balance text-muted-foreground md:text-2xl">
+                Mission Control gives staff one operating surface instead of a pile of disconnected screens and handoffs.
               </p>
-              <p className="text-muted-foreground/80 max-w-2xl mx-auto leading-relaxed text-balance">
-                Eliminate the hassle of disjointed and disconnected platforms. Stop zapping data between five different SaaS tools.
-                Just one unified operating system designed to run the work of the Great Commission.
+              <p className="mx-auto max-w-2xl leading-relaxed text-balance text-muted-foreground/80">
+                Keep donor care, missionary support, statements, reporting, and operations inside the same mission-built system.
               </p>
             </div>
           </Reveal>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {MISSION_CONTROL_TILES.map((tile, i) => (
-              <Reveal key={i} delay={i * 50} className={cn("h-full", tile.className)}>
-                <MissionCard tile={tile} />
+          <Reveal>
+            <div className="mx-auto mb-10 max-w-6xl">
+              <PlatformTabs items={[...PLATFORM_TABS]} />
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      <section className="relative overflow-hidden border-b border-border bg-background py-24">
+        <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-10">
+          <DitherGlobe scale={1.2} />
+        </div>
+        <div className="relative z-10 mx-auto max-w-7xl px-6">
+          <div className="mx-auto mb-20 max-w-3xl text-center">
+            <Reveal>
+              <h2 className="mb-6 text-4xl font-bold tracking-tight text-foreground md:text-5xl">
+                The product surfaces teams actually keep needing.
+              </h2>
+              <p className="text-xl font-light leading-relaxed text-balance text-muted-foreground">
+                Donor self-service, missionary visibility, and finance/reporting should not feel like disconnected add-ons.
+              </p>
+            </Reveal>
+          </div>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-8">
+            {SURFACE_CARDS.map((item, index) => (
+              <Reveal key={item.title} delay={index * 100} className="h-full">
+                <SurfacePanel item={item} />
               </Reveal>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ========== PARTNERSHIP / DEPLOYMENT SECTION ========== */}
-      <section className="bg-card py-24 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+      <section className="border-b border-border bg-card py-24">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="mx-auto mb-16 max-w-3xl text-center">
             <Reveal>
-              <div className="flex items-center gap-2 mb-6 text-primary">
-                <Heart size={16} />
-                <span className="font-mono text-xs uppercase tracking-widest">Partnership Model</span>
-              </div>
-              <h2 className="text-5xl md:text-6xl font-display font-bold text-foreground mb-8 tracking-tighter leading-[0.9]">
-                Let&apos;s build<br />the future.
+              <h2 className="mb-6 text-4xl font-bold tracking-tight text-foreground md:text-5xl">
+                Ownership and trust belong inside the product story.
               </h2>
-              <p className="text-muted-foreground mb-12 leading-relaxed max-w-md text-balance text-lg border-l border-border pl-6">
-                We are looking for agencies who are tired of the status quo. If you are ready to modernize your operations and steward your data, we want to talk.
+              <p className="text-xl font-light leading-relaxed text-balance text-muted-foreground">
+                Mission operations software is easier to trust when ownership, permissions, and stewardship are visible from the start.
               </p>
-              <ul className="space-y-6 font-mono text-xs text-muted-foreground uppercase tracking-widest">
-                <li className="flex items-center gap-4 group">
-                  <div className="p-1 border border-border rounded-full group-hover:border-primary/50 transition-colors">
-                    <div className="w-1.5 h-1.5 bg-foreground rounded-full group-hover:bg-primary transition-colors" />
+            </Reveal>
+          </div>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-8">
+            {TRUST_POINTS.map((item, index) => (
+              <Reveal key={item.title} delay={index * 100} className="h-full">
+                <SurfacePanel item={item} />
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="relative overflow-hidden border-b border-border bg-background py-24">
+        <div className="mx-auto max-w-7xl px-6">
+          <Reveal>
+            <div className="page-shell-glow surface-interactive border-foreground/10 bg-primary text-primary-foreground rounded-[2rem] border px-8 py-10 shadow-[0_32px_82px_-56px_rgba(22,33,43,0.82)]">
+              <div className="grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-end">
+                <div>
+                  <p className="text-primary-foreground/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
+                    Optional managed support
+                  </p>
+                  <h2 className="font-heading mt-4 max-w-[14ch] text-[clamp(2.3rem,4vw,3.7rem)] leading-[0.98] font-semibold tracking-[-0.06em]">
+                    Need more lift than software alone?
+                  </h2>
+                  <p className="text-primary-foreground/82 mt-5 max-w-[58ch] text-base leading-7">
+                    Asym can add a managed donor care and ops layer for teams that want help handling routine donor questions, expense follow-through, and simple reconciliation prep.
+                  </p>
+                </div>
+                <div className="flex items-start lg:justify-end">
+                  <Link
+                    href="/contact"
+                    className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/8 px-6 py-3 font-medium text-primary-foreground transition-colors hover:bg-white/12"
+                  >
+                    Talk with us about managed support
+                    <ArrowRight className="ml-2 size-4" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      <section className="relative overflow-hidden bg-card py-24">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-2 lg:gap-24">
+            <Reveal>
+              <div className="mb-6 flex items-center gap-2 text-primary">
+                <Heart size={16} />
+                <span className="font-mono text-xs uppercase tracking-widest">
+                  Waitlist and rollout
+                </span>
+              </div>
+              <h2 className="mb-8 text-5xl font-bold leading-[0.9] tracking-tighter text-foreground md:text-6xl">
+                Join the waitlist.
+              </h2>
+              <p className="mb-12 max-w-md border-l border-border pl-6 text-balance text-lg leading-relaxed text-muted-foreground">
+                Start with early access updates, product walkthrough invitations, and rollout conversations for qualified organizations. Managed Donor Care + Ops can be discussed if your team needs more lift than software alone.
+              </p>
+              <ul className="space-y-6 font-mono text-xs uppercase tracking-widest text-muted-foreground">
+                <li className="group flex items-center gap-4">
+                  <div className="rounded-full border border-border p-1 transition-colors group-hover:border-primary/50">
+                    <div className="h-1.5 w-1.5 rounded-full bg-foreground transition-colors group-hover:bg-primary" />
                   </div>
-                  Early Access Program
+                  Early access updates
                 </li>
-                <li className="flex items-center gap-4 group">
-                  <div className="p-1 border border-border rounded-full group-hover:border-primary/50 transition-colors">
-                    <div className="w-1.5 h-1.5 bg-foreground rounded-full group-hover:bg-primary transition-colors" />
+                <li className="group flex items-center gap-4">
+                  <div className="rounded-full border border-border p-1 transition-colors group-hover:border-primary/50">
+                    <div className="h-1.5 w-1.5 rounded-full bg-foreground transition-colors group-hover:bg-primary" />
                   </div>
-                  Data Migration Support
+                  Product walkthrough invitations
                 </li>
-                <li className="flex items-center gap-4 group">
-                  <div className="p-1 border border-border rounded-full group-hover:border-primary/50 transition-colors">
-                    <div className="w-1.5 h-1.5 bg-foreground rounded-full group-hover:bg-primary transition-colors" />
+                <li className="group flex items-center gap-4">
+                  <div className="rounded-full border border-border p-1 transition-colors group-hover:border-primary/50">
+                    <div className="h-1.5 w-1.5 rounded-full bg-foreground transition-colors group-hover:bg-primary" />
                   </div>
-                  Open Source Contribution
+                  Qualified rollout conversations
+                </li>
+                <li className="group flex items-center gap-4">
+                  <div className="rounded-full border border-border p-1 transition-colors group-hover:border-primary/50">
+                    <div className="h-1.5 w-1.5 rounded-full bg-foreground transition-colors group-hover:bg-primary" />
+                  </div>
+                  Optional managed-support interest
                 </li>
               </ul>
             </Reveal>

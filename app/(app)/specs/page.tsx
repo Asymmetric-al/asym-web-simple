@@ -125,9 +125,9 @@ const releaseGates = [
 ] as const;
 
 export const metadata: Metadata = createMetadata({
-  title: "Specs",
+  title: "How Asym Is Built for Trust",
   description:
-    "The architecture, performance targets, and release gates behind the Asymmetric.al mission operating system.",
+    "See the architecture, ownership choices, performance targets, and release standards behind Asym.",
   path: "/specs",
 });
 
@@ -137,15 +137,15 @@ export default function SpecsPage() {
       <PageHero
         title={
           <h1 className="font-heading text-foreground text-[clamp(3rem,6vw,5.15rem)] leading-[0.94] font-semibold tracking-[-0.07em] text-balance">
-            Transparent Architecture.
+            How Asym is built for trust.
           </h1>
         }
-        description="We don't hide our choices. We build on a foundation of best-in-class open source technologies and proven cloud primitives. This is the engine room of Asymmetric.al."
+        description="We do not hide our choices. This page explains the architecture decisions behind transparency, ownership, security, and long-term maintainability."
         meta={[
-          "Open source",
-          "Portable",
-          "Observable",
-          "Secure",
+          "Transparent foundations",
+          "Ownership visible",
+          "Security and observability",
+          "Long-term maintainability",
         ]}
       >
         <Reveal trigger="mount">
@@ -160,7 +160,11 @@ export default function SpecsPage() {
                 payload.config.ts
               </p>
             </div>
-            <div className="overflow-x-auto p-6 sm:p-8">
+            <div
+              className="overflow-x-auto p-6 sm:p-8"
+              tabIndex={0}
+              aria-label="Payload config code sample"
+            >
               <pre className="font-mono text-[0.8rem] leading-relaxed sm:text-[0.85rem]">
                 <code className="text-primary-foreground/80">
                   <span className="text-[#a3b8cc]">import</span> {"{"} buildConfig {"}"} <span className="text-[#a3b8cc]">from</span> <span className="text-[#dbe8d1]">&quot;payload&quot;</span>;{"\n"}
@@ -185,8 +189,8 @@ export default function SpecsPage() {
 
       <Section className="section-divider-accent">
         <SectionHeader
-          title="Built on open foundations and cloud primitives that can survive the long haul."
-          description="These choices are practical, portable, and legible to serious engineering teams. Nothing here depends on proprietary magic."
+          title="Built on open foundations and practical infrastructure choices."
+          description="The goal is not novelty. The goal is a system teams can trust, understand, and live with for the long haul."
         />
         <div className="mt-8 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           <StaggerReveal>
@@ -258,10 +262,10 @@ export default function SpecsPage() {
           <Reveal>
             <div className="page-shell-glow surface-panel surface-interactive rounded-[2rem] p-7 sm:p-8">
               <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
-                Release posture
+                Release criteria
               </p>
               <h2 className="font-heading mt-4 text-[clamp(2rem,4vw,3rem)] leading-[1.02] font-semibold tracking-[-0.06em]">
-                Release gates are stewardship gates.
+                Release gates protect trust.
               </h2>
               <p className="text-muted-foreground mt-5 text-base leading-7">
                 We care about elegance, but we care more about truth in the

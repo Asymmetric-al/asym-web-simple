@@ -105,7 +105,7 @@ export default function TermsPage() {
               <TermsTableOfContents items={TOC_ITEMS} />
 
               <div className="mt-12 pt-8 border-t border-border">
-                <div className="flex items-center gap-2 text-muted-foreground/60 mb-4">
+                <div className="mb-4 flex items-center gap-2 text-muted-foreground">
                   <ShieldAlert size={16} />
                   <span className="font-mono text-[10px] uppercase tracking-widest">Legal Entity</span>
                 </div>

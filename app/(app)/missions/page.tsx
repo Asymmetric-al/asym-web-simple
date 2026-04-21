@@ -72,13 +72,13 @@ const impactPoints = [
   "Front-to-back support. From first interest to retirement, the data stays connected so teams stay aligned.",
   "Global from day one. Currency, receipts, addresses, and communications all assume cross-border realities.",
   "One Mission Control, many roles. Executives, mobilizers, advancement, finance, and communications work from the same source.",
-  "AI and automation with guardrails. Staff do more with less friction while tenant safety and auditability remain intact.",
+  "Clear automation and reporting. Routine follow-through happens with less manual cleanup and better visibility.",
 ] as const;
 
 export const metadata: Metadata = createMetadata({
-  title: "Missions",
+  title: "Why Christian Missions Teams Need Better Software",
   description:
-    "Why Asymmetric.al is built specifically for Christian missions agencies and the teams carrying the operational weight of sending.",
+    "Why Asym is built specifically for Christian missions organizations and the teams carrying the operational weight of donor care, missionary support, and operations.",
   path: "/missions",
 });
 
@@ -89,12 +89,12 @@ export default function MissionsPage() {
         eyebrow="The Underserved Sector"
         title={
           <h1 className="font-heading text-foreground text-[clamp(3rem,6vw,5.15rem)] leading-[0.94] font-semibold tracking-[-0.07em] text-balance">
-            The frontier deserves world-class tools.
+            Christian missions teams deserve better software.
           </h1>
         }
-        description="Global missions is the most important work on earth. The tools behind it should not feel like an afterthought. We exist to serve one thing: getting the gospel to people who have never heard the name of Jesus."
+        description="Christian missions teams carry donor care, missionary support, statements, reporting, and sending across borders. Asym exists to reduce the operational drag that slows that work down."
         actions={[
-          { label: "Start the Conversation", href: "/contact" },
+          { label: "Join the Waitlist", href: "/waitlist" },
           {
             label: "Learn how the platform works",
             href: "/platform",
@@ -102,11 +102,11 @@ export default function MissionsPage() {
           },
         ]}
         meta={[
-          "By missionaries, for missionaries",
-          "Hopeful",
-          "Trusted",
-          "Modern",
-          "Open hands",
+          "Mission-built",
+          "Christian missions focus",
+          "Open-source foundations",
+          "Visible trust",
+          "Waitlist-first rollout",
         ]}
       >
         <Reveal trigger="mount">
@@ -118,12 +118,13 @@ export default function MissionsPage() {
             caption={
               <div className="flex flex-col gap-1">
                 <p className="text-foreground font-medium">
-                  Close the gap between Silicon Valley innovation and the Great
-                  Commission.
+                  Mission teams should not have to build their own operating
+                  system.
                 </p>
                 <p className="text-muted-foreground">
-                  Software should lift the load from teams stewarding people,
-                  churches, donors, and field realities across borders.
+                  Software should reduce administrative drag for teams
+                  stewarding donors, missionaries, churches, and field realities
+                  across borders.
                 </p>
               </div>
             }
@@ -142,16 +143,10 @@ export default function MissionsPage() {
                 Why we give all our focus to missions agencies.
               </h2>
               <p className="text-muted-foreground mt-5 text-base leading-7">
-                Most software stacks are built for sales teams, memberships, or
-                generic fundraising. Missions does not fit that mold. You are
-                sending people, not shipping products.
+                Most software is built for sales teams, memberships, or generic fundraising. Missions does not fit that mold. You are sending people, not shipping products.
               </p>
               <p className="text-muted-foreground mt-4 text-base leading-7">
-                The current leadership of Asymmetric.al felt that gap in
-                missions ourselves. We watched faithful staff spend hours
-                wrestling tools that were never built for their calling. That
-                tension is what gave birth to Asymmetric.al: a project by
-                missionaries, for missionaries.
+                That changes what the system has to hold together: donors, missionaries, churches, finance, field realities, and follow-through all at once.
               </p>
             </div>
           </Reveal>
@@ -196,8 +191,8 @@ export default function MissionsPage() {
       <Section className="section-divider-accent">
         <SectionHeader
           eyebrow="03 // Our Calling"
-          title="We use technology to serve the servants."
-          description="Our role is not to be the hero of the story. Our role is to lift the load from the shoulders of the people carrying it."
+          title="We build for the teams carrying the operational weight."
+          description="We build for the operators, mobilizers, finance teams, advancement staff, and missionaries carrying this work every day."
         />
         <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-6">
           <StaggerReveal>
@@ -272,15 +267,14 @@ export default function MissionsPage() {
                 Asymmetric.al started inside a mission organization that wanted
                 to send technologists as missionaries. We expected to build
                 field-facing tools. Instead, we kept running into the same
-                problem: mission staff were drowning in admin.
+                problem: mission staff were carrying too much admin.
               </p>
               <p className="text-muted-foreground mt-4 text-base leading-7">
-                Wrestling old donor systems, manual statements, scattered
-                websites, and brittle integrations. The field was waiting, but
-                the back office was underwater. That holy frustration pushed us
-                toward a single question: what if missions agencies had
-                first-class tools, built for their calling, not as an
-                afterthought to some other market?
+                Old donor systems, manual statements, scattered websites, and
+                brittle integrations were taking time away from people. That
+                repeated pressure pushed us toward a single question: what if
+                missions agencies had first-class tools built for their calling,
+                not adapted from some other market?
               </p>
             </div>
           </Reveal>
@@ -293,17 +287,15 @@ export default function MissionsPage() {
                     06 // Open Source
                   </p>
                   <CardTitle className="font-heading text-2xl font-semibold tracking-[-0.05em]">
-                    Not just a product. A shared build for the global church.
+                    Open foundations. Supported product. Clear trust.
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="text-primary-foreground/82 space-y-4 text-sm leading-7">
                   <p>
-                    Open by design, clear data ownership, and a stack that can
-                    be audited and extended by a wider missions tech community.
+                    Asym is built on open-source foundations because transparency, stewardship, and long-term trust matter.
                   </p>
                   <p>
-                    Agencies can share patterns, flows, and templates instead of
-                    solving the same problems alone.
+                    Most teams simply use the product as a supported system. If your team wants to extend or contribute, you can.
                   </p>
                 </CardContent>
               </Card>
@@ -321,20 +313,16 @@ export default function MissionsPage() {
                 </CardHeader>
                 <CardContent className="text-muted-foreground space-y-4 text-sm leading-7">
                   <p>
-                    We would rather build this with a small group of sending
-                    agencies who care about the field than ship a finished
-                    product that misses real needs.
+                    If your team is carrying this kind of operational drag, the waitlist is the best place to start.
                   </p>
                   <p>
-                    If you lead a missions organization or you are a
-                    missions-minded technologist who wants to contribute, we
-                    would love to connect.
+                    We use it to route walkthroughs, early access updates, and rollout conversations around the flows creating the most pressure first.
                   </p>
                   <Link
-                    href="/join"
+                    href="/waitlist"
                     className={cn(buttonVariants({ size: "lg" }), "mt-2 px-5")}
                   >
-                    Join the Build Community
+                    Join the Waitlist
                     <ArrowRight data-icon="inline-end" />
                   </Link>
                 </CardContent>

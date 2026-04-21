@@ -1,6 +1,7 @@
 import config from "@payload-config";
 import "@payloadcms/next/css";
 import { handleServerFunctions, RootLayout } from "@payloadcms/next/layouts";
+import type { Metadata } from "next";
 import type { ServerFunctionClient } from "payload";
 import React from "react";
 
@@ -9,6 +10,17 @@ import "./custom.scss";
 
 type Args = {
   children: React.ReactNode;
+};
+
+export const metadata: Metadata = {
+  robots: {
+    index: false,
+    follow: false,
+    googleBot: {
+      index: false,
+      follow: false,
+    },
+  },
 };
 
 const serverFunction: ServerFunctionClient = async function (args) {

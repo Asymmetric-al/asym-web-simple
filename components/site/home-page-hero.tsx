@@ -18,6 +18,7 @@ export function HomePageHero({
   subtitle,
   description,
   actions,
+  supportAction,
   meta,
   children,
 }: {
@@ -26,6 +27,7 @@ export function HomePageHero({
   subtitle: ReactNode;
   description: ReactNode;
   actions?: Action[];
+  supportAction?: Action;
   meta?: string[];
   children?: ReactNode;
 }) {
@@ -125,6 +127,18 @@ export function HomePageHero({
                     <ArrowUpRight data-icon="inline-end" />
                   </Link>
                 ) : null}
+              </div>
+            ) : null}
+
+            {supportAction ? (
+              <div className="mt-4 flex justify-center max-lg:justify-start">
+                <Link
+                  href={supportAction.href}
+                  className="text-foreground hover:text-primary inline-flex items-center gap-2 text-sm font-medium transition-colors"
+                >
+                  {supportAction.label}
+                  <ArrowUpRight className="size-4" aria-hidden />
+                </Link>
               </div>
             ) : null}
 

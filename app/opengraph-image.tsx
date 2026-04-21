@@ -88,14 +88,14 @@ export default function OpengraphImage() {
                   />
                 </svg>
               </span>
-              Mission Operating System
+              The operating system for Christian missions
             </div>
             <div style={{ fontSize: 76, lineHeight: 0.94, fontWeight: 700, letterSpacing: "-0.08em" }}>
-              Run the Work In One Place
+              Stop spending staff time managing the gaps between disconnected systems.
             </div>
             <div style={{ fontSize: 30, lineHeight: 1.45, color: "#435361", maxWidth: "820px" }}>
-              Less admin. More ministry. The unified platform for the modern
-              missions agency.
+              One mission-built system for donor care, missionary support,
+              statements, reporting, and operations.
             </div>
             <div
               style={{
@@ -106,9 +106,9 @@ export default function OpengraphImage() {
               }}
             >
               {[
-                "Always open source",
-                "Tenant sovereignty",
-                "Nonprofit 501(c)(3)",
+                "Join the Waitlist",
+                "Open-source foundations",
+                "Christian nonprofit posture",
               ].map((item) => (
                 <div
                   key={item}
