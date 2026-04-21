@@ -1,115 +1,202 @@
-import { PageHero, Section } from "@/components/site/page";
+import { PageHero, Section, SectionHeader } from "@/components/site/page";
 import { Reveal, StaggerItem, StaggerReveal } from "@/components/site/reveal";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { createMetadata } from "@/lib/metadata";
 import { BookOpen } from "lucide-react";
 import type { Metadata } from "next";
+import Link from "next/link";
 
 interface FaithPoint {
   readonly label: string;
+  readonly title: string;
   readonly text: string;
 }
 
 const FAITH_POINTS: readonly FaithPoint[] = [
   {
-    label: "One",
-    text: "We believe that the writings of both Old and New Testaments were breathed out by God through the Holy Spirit, perfectly and without error, and are the final authority in all matters of faith and practice.",
+    label: "01",
+    title: "Scripture",
+    text: "We believe the Old and New Testaments were breathed out by God through the Holy Spirit, are true and without error, and are the final authority in all matters of faith and practice.",
   },
   {
-    label: "Two",
-    text: "We believe in one true and living God the maker of heaven and earth, who exists eternally as three distinct persons: Father, Son, and Holy Spirit.",
+    label: "02",
+    title: "God",
+    text: "We believe in one true and living God, the maker of heaven and earth, who exists eternally as three distinct persons: Father, Son, and Holy Spirit.",
   },
   {
-    label: "Three",
-    text: "We believe man was created in the image of God, to glorify God, and enjoy Him forever. But, because of Adam's sin, man lost his innocence and incurred the penalty of spiritual and physical death, so that all human beings are now born with a sinful nature, unable to please God, unable to satisfy God's just requirements, and are therefore separated from God, lost, and unable to save themselves.",
+    label: "03",
+    title: "Humanity and sin",
+    text: "We believe humanity was created in the image of God to glorify Him and enjoy Him forever. Because of Adam's sin, all people are now born with a sinful nature, separated from God, and unable to save themselves.",
   },
   {
-    label: "Four",
-    text: "We believe Jesus Christ is the only begotten Son of God, who was born of the virgin Mary, lived a life of perfect obedience, suffered under Pontius Pilate, was crucified, died, and was buried; and that on the third day He arose bodily from the tomb, ascended into heaven, and now sits at the right hand of the throne of God.",
+    label: "04",
+    title: "Jesus Christ",
+    text: "We believe Jesus Christ is the only begotten Son of God, born of the virgin Mary, perfectly obedient, crucified, buried, bodily raised on the third day, ascended into heaven, and now seated at the right hand of God.",
   },
   {
-    label: "Five",
-    text: "We believe salvation is in no way a work of man, but a gracious gift of God, received by faith, and made possible only by the substitutionary death of Jesus Christ on the cross.",
+    label: "05",
+    title: "Salvation",
+    text: "We believe salvation is not the work of man but a gracious gift of God, received by faith and made possible only through the substitutionary death of Jesus Christ on the cross.",
   },
   {
-    label: "Six",
-    text: "We believe in one church, which is the body of Christ, and includes all those who have been born again by the Holy Spirit. We affirm that believers in Jesus Christ should be baptized, and should participate together in the Lord's Supper to remember His death until He comes.",
+    label: "06",
+    title: "Church and ordinances",
+    text: "We believe in one church, the body of Christ, made up of all who have been born again by the Holy Spirit. We affirm baptism and the Lord's Supper as practices for believers in Jesus Christ.",
   },
   {
-    label: "Seven",
-    text: "We believe Jesus Christ is coming again in glory to receive His church to Himself, and to judge the world in righteousness.",
+    label: "07",
+    title: "Christ's return",
+    text: "We believe Jesus Christ is coming again in glory to receive His church to Himself and to judge the world in righteousness.",
   },
   {
-    label: "Eight",
+    label: "08",
+    title: "Resurrection and judgment",
     text: "We believe in the resurrection of the dead, the punishment of the wicked, and the eternal blessedness of the redeemed.",
   },
-];
+] as const;
+
+const trustLinks = [
+  {
+    title: "About Asym",
+    href: "/about",
+    description:
+      "See why Christian faith, stewardship, and mission reality stay visible in the public story.",
+  },
+  {
+    title: "Open Source and Trust",
+    href: "/open-source-and-trust",
+    description:
+      "Read how supported delivery, open-source foundations, and long-term trust fit together.",
+  },
+  {
+    title: "Financials",
+    href: "/501c3",
+    description:
+      "Review the nonprofit covering and financial oversight under Global Fellowship Inc.",
+  },
+] as const;
 
 export const metadata: Metadata = createMetadata({
   title: "Statement of Faith",
   description:
-    "The doctrinal foundation beneath Asymmetric.al and its covering under Global Fellowship Inc.",
+    "The Christian doctrinal foundation behind Asym and its nonprofit covering under Global Fellowship Inc.",
   path: "/statement-of-faith",
 });
-
-const FaithPointCard = ({ point, index }: { point: FaithPoint; index: number }) => (
-  <Card className="surface-card surface-interactive rounded-[1.9rem] group hover:border-foreground/30 transition-all duration-300">
-    <CardHeader>
-      <div className="flex items-center gap-3 mb-2">
-        <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
-          {String(index + 1).padStart(2, "0")}
-        </p>
-        <span className="text-[10px] font-mono text-muted-foreground/30">{"//"}</span>
-        <p className="text-xs font-mono text-muted-foreground/50 uppercase tracking-wider">
-          Article {index + 1}
-        </p>
-      </div>
-      <CardTitle className="font-heading text-xl font-semibold tracking-[-0.04em]">
-        {point.label}
-      </CardTitle>
-    </CardHeader>
-    <CardContent className="text-muted-foreground text-base leading-7 group-hover:text-foreground transition-colors">
-      {point.text}
-    </CardContent>
-  </Card>
-);
 
 export default function StatementOfFaithPage() {
   return (
     <main id="main-content" tabIndex={-1}>
       <PageHero
-        eyebrow={
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 border border-border bg-secondary/50 rounded-full text-[10px] font-mono uppercase tracking-widest text-muted-foreground backdrop-blur-md">
-            <BookOpen size={12} className="text-primary" />
-            <span>DOCTRINAL FOUNDATION</span>
-          </div>
-        }
+        eyebrow="Statement of Faith"
         title={
-          <h1 className="font-heading text-foreground text-[clamp(3rem,6vw,4.8rem)] leading-[0.94] font-semibold tracking-[-0.07em] text-balance">
-            Statement
-            <br />
-            of Faith.
+          <h1 className="font-heading text-foreground text-[clamp(3rem,6vw,5rem)] leading-[0.94] font-semibold tracking-[-0.07em] text-balance">
+            Christian faith stays visible here.
           </h1>
         }
-        description="The theological bedrock upon which we build. Asymmetric.al is a project of Global Fellowship Inc., standing on the historic Christian faith."
-      />
-
-      <Section>
-        <div className="max-w-4xl mx-auto">
-          <Reveal>
-            <div className="border-l-2 border-border pl-8 mb-12">
-              <p className="text-xl text-muted-foreground font-light leading-relaxed text-balance">
-                We operate under Christian governance and doctrinal accountability,
-                not as an isolated brand with detached spiritual language.
+        description="Asym is openly Christian. This statement summarizes the doctrinal foundation behind the work under Global Fellowship Inc."
+        meta={[
+          "Openly Christian",
+          "Doctrinal foundation",
+          "Public trust surface",
+          "Nonprofit covering",
+        ]}
+      >
+        <Reveal trigger="mount">
+          <Card className="page-shell-glow surface-interactive border-foreground/10 bg-primary text-primary-foreground rounded-[2rem] border shadow-[0_32px_82px_-56px_rgba(22,33,43,0.82)]">
+            <CardHeader>
+              <div className="bg-primary-foreground/12 flex size-12 items-center justify-center rounded-2xl">
+                <BookOpen className="size-6" aria-hidden />
+              </div>
+              <CardTitle className="font-heading text-3xl font-semibold tracking-[-0.05em]">
+                Faith should be visible, plain, and sincere.
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="text-primary-foreground/82 flex flex-col gap-3 text-sm leading-7">
+              <p>We do not treat doctrine like private background information.</p>
+              <p>
+                These convictions shape how we think about truth, stewardship,
+                service, and accountability.
               </p>
-            </div>
-          </Reveal>
+              <p>
+                Asym operates under Christian governance and nonprofit covering,
+                and we want that to be clear instead of implied.
+              </p>
+            </CardContent>
+          </Card>
+        </Reveal>
+      </PageHero>
 
-          <div className="grid gap-4 pt-4">
+      <Section className="section-divider-accent">
+        <SectionHeader
+          eyebrow="Core convictions"
+          title="The doctrinal foundation beneath the work."
+          description="These statements summarize the historic Christian beliefs behind Asym."
+        />
+        <div className="mt-8 grid gap-4 md:grid-cols-2">
+          <StaggerReveal>
+            {FAITH_POINTS.map((point) => (
+              <StaggerItem key={point.label}>
+                <Card className="surface-card surface-interactive h-full rounded-[1.8rem]">
+                  <CardHeader>
+                    <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
+                      {point.label}
+                    </p>
+                    <CardTitle className="font-heading text-xl font-semibold tracking-[-0.04em]">
+                      {point.title}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="text-muted-foreground text-sm leading-7">
+                    {point.text}
+                  </CardContent>
+                </Card>
+              </StaggerItem>
+            ))}
+          </StaggerReveal>
+        </div>
+      </Section>
+
+      <Section tone="sky">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-start">
+          <Reveal>
+            <Card className="page-shell-glow surface-panel surface-interactive rounded-[2rem] p-1">
+              <CardHeader className="pb-0">
+                <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
+                  Closing note
+                </p>
+                <CardTitle className="font-heading text-3xl font-semibold tracking-[-0.05em]">
+                  We want faith to be visible in public, not implied in private.
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="text-muted-foreground flex flex-col gap-4 text-base leading-7">
+                <p>
+                  This page is one part of a wider public trust surface that
+                  also includes nonprofit covering, financial oversight, and
+                  open-source foundations.
+                </p>
+                <p>
+                  If you are evaluating Asym, we want you to be able to see the
+                  convictions, the stewardship commitments, and the trust story in
+                  plain language.
+                </p>
+              </CardContent>
+            </Card>
+          </Reveal>
+          <div className="grid gap-4">
             <StaggerReveal>
-              {FAITH_POINTS.map((point, index) => (
-                <StaggerItem key={point.label}>
-                  <FaithPointCard point={point} index={index} />
+              {trustLinks.map((item) => (
+                <StaggerItem key={item.href}>
+                  <Card className="surface-card surface-interactive rounded-[1.8rem]">
+                    <CardHeader>
+                      <CardTitle className="font-heading text-xl font-semibold tracking-[-0.04em]">
+                        <Link href={item.href} className="link-resilient">
+                          {item.title}
+                        </Link>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="text-muted-foreground text-sm leading-7">
+                      {item.description}
+                    </CardContent>
+                  </Card>
                 </StaggerItem>
               ))}
             </StaggerReveal>

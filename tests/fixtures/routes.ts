@@ -13,6 +13,22 @@ export const routeFixtures: RouteFixture[] = [
     slug: "platform",
   },
   {
+    path: "/about",
+    slug: "about",
+  },
+  {
+    path: "/faq",
+    slug: "faq",
+  },
+  {
+    path: "/waitlist",
+    slug: "waitlist",
+  },
+  {
+    path: "/open-source-and-trust",
+    slug: "open-source-and-trust",
+  },
+  {
     path: "/missions",
     slug: "missions",
   },

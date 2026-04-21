@@ -19,6 +19,7 @@ export const metadata: Metadata = createMetadata({
   description:
     "Thank you for supporting Asymmetric.al through Global Fellowship Inc.",
   path: "/give/success",
+  noIndex: true,
 });
 
 export default async function GiveSuccessPage({

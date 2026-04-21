@@ -86,7 +86,7 @@ test.describe("marketing site smoke tests", () => {
     await expect(
       page.getByRole("heading", {
         level: 1,
-        name: /One Surface\. Total Clarity\./i,
+        name: /One mission-built system instead of a pile of tools\./i,
       })
     ).toBeVisible();
   });

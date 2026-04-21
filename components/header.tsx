@@ -186,8 +186,8 @@ export function Header() {
                   Mission operating system
                 </SheetTitle>
                 <SheetDescription className="max-w-[28ch] text-sm leading-6">
-                  Navigate the platform, learn the philosophy, or start a
-                  conversation.
+                  Explore the platform, learn why Asym exists, or join the
+                  waitlist.
                 </SheetDescription>
               </SheetHeader>
 
@@ -225,11 +225,11 @@ export function Header() {
                     Next steps
                   </p>
                   <p className="font-heading text-foreground mt-3 text-xl font-semibold tracking-[-0.04em]">
-                    Join the build community.
+                    See whether Asym fits your team.
                   </p>
                   <p className="text-muted-foreground mt-2 text-sm leading-6">
-                    Pilot agencies, senior builders, and missions-minded donors
-                    can all start with the same conversation.
+                    Join the waitlist, request the mission tech stack audit, or
+                    reach us directly if you already know what you need.
                   </p>
                   <SheetFooter className="mt-5 p-0">
                     <Link

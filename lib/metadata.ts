@@ -3,8 +3,7 @@ import type { Metadata } from "next";
 
 export const siteMetadata = {
   name: siteConfig.name,
-  description:
-    "Mission operating system for Christian nonprofit and missions organizations. Built for executive, operations, and advancement teams who need trust, clarity, and modern infrastructure.",
+  description: siteConfig.description,
   url: siteConfig.url,
   ogImage: "/opengraph-image",
   creator: siteConfig.name,
@@ -15,16 +14,15 @@ export const siteMetadata = {
     },
   ],
   keywords: [
-    "missions software",
-    "nonprofit SaaS",
-    "Christian missions",
+    "Christian missions software",
+    "missions donor management software",
+    "donor care platform for missions",
+    "missionary dashboard software",
+    "mission operations software",
+    "donor portal for Christian nonprofits",
+    "statement and reporting software for missions",
     "mission operating system",
-    "donor management",
-    "mobilization",
-    "member care",
-    "missions CRM",
-    "Next.js",
-    "open source",
+    "open source missions software",
   ],
 } as const;
 
@@ -39,7 +37,7 @@ export const baseMetadata: Metadata = {
   authors: [...siteMetadata.authors],
   creator: siteMetadata.creator,
   publisher: siteMetadata.name,
-  category: "technology",
+  category: "nonprofit technology",
   applicationName: siteMetadata.name,
   alternates: {
     canonical: "/",

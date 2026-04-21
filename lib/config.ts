@@ -2,8 +2,8 @@ export const siteConfig = {
   name: "Asymmetric.al",
   shortName: "Asym",
   description:
-    "Less admin. More ministry. The unified mission operating system for modern sending agencies.",
-  mission: "Mission Operating System",
+    "Asym is the operating system for Christian missions, giving teams one mission-built system for donor care, missionary support, statements, reporting, and operations.",
+  mission: "The operating system for Christian missions",
   url: "https://asymmetric.al",
   email: "info@asymmetric.al",
   nonprofit: "Global Fellowship Inc.",
@@ -12,11 +12,11 @@ export const siteConfig = {
   /** Primary site CTA — keep in sync with home `PageHero` actions when both are visible. */
   cta: {
     primary: {
-      label: "Join Waitlist",
-      href: "/contact",
+      label: "Join the Waitlist",
+      href: "/waitlist",
     },
     secondary: {
-      label: "Request a Call",
+      label: "Get the Mission Tech Stack Audit",
       href: "/contact",
     },
   },
@@ -24,13 +24,16 @@ export const siteConfig = {
 
 export const navigationLinks = [
   { label: "Platform", href: "/platform" },
+  { label: "About", href: "/about" },
   { label: "Missions", href: "/missions" },
   { label: "Specs", href: "/specs" },
-  { label: "Philosophy", href: "/manifesto" },
   { label: "Give", href: "/give" },
 ] as const;
 
 export const supportLinks = [
+  { label: "Waitlist", href: "/waitlist" },
+  { label: "FAQ", href: "/faq" },
+  { label: "Open Source & Trust", href: "/open-source-and-trust" },
   { label: "Join the Build", href: "/join" },
   { label: "Contact", href: "/contact" },
   { label: "Statement of Faith", href: "/statement-of-faith" },
@@ -38,29 +41,33 @@ export const supportLinks = [
 
 export const footerGroups = [
   {
-    title: "Platform",
+    title: "Explore",
     links: [
-      { label: "Mission Control", href: "/platform" },
-      { label: "System Specs", href: "/specs" },
+      { label: "Platform", href: "/platform" },
+      { label: "About", href: "/about" },
+      { label: "FAQ", href: "/faq" },
+      { label: "Open Source & Trust", href: "/open-source-and-trust" },
       { label: "Philosophy", href: "/manifesto" },
       { label: "Statement of Faith", href: "/statement-of-faith" },
     ],
   },
   {
-    title: "Involvement",
+    title: "Take Action",
     links: [
+      { label: "Join the Waitlist", href: "/waitlist" },
+      { label: "Get the Mission Tech Stack Audit", href: "/contact" },
       { label: "For Missions", href: "/missions" },
       { label: "Give to Build", href: "/give" },
       { label: "Join the Team", href: "/join" },
-      { label: "Contact Us", href: "/contact" },
     ],
   },
   {
-    title: "Legal",
+    title: "Trust",
     links: [
+      { label: "Financials", href: "/501c3" },
+      { label: "System Specs", href: "/specs" },
       { label: "Privacy Policy", href: "/privacy" },
       { label: "Terms of Service", href: "/terms" },
-      { label: "501(c)(3) Disclosure", href: "/501c3" },
     ],
   },
 ] as const;

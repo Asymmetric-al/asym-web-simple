@@ -232,13 +232,14 @@ async function assertPlatformTabSwitching(
 ) {
   const tabAssertions = [
     {
-      name: /Partners CRM/i,
-      panelText: /A missions-built CRM for people, churches, and pledges/i,
+      name: /Donor Care/i,
+      panelText:
+        /Keep donor questions, giving follow-through, receipts, and relationship context connected instead of scattered across inboxes and separate systems\./i,
     },
     {
-      name: /Web Studio/i,
+      name: /Missionary Support/i,
       panelText:
-        /The power of Next\.js with a visual CMS experience so agencies control their sites without change-order lock-in\./i,
+        /Help finance, mobilization, member care, and leadership stay aligned around the people they are supporting instead of rebuilding context in side systems\./i,
     },
     {
       name: /Mobilize/i,
@@ -371,7 +372,7 @@ test.describe("responsive regression coverage", () => {
     await expect(
       page.getByRole("heading", {
         level: 1,
-        name: /One Surface\. Total Clarity\./i,
+        name: /One mission-built system instead of a pile of tools\./i,
       })
     ).toBeVisible();
     issues.expectNoUnexpectedIssuesSince(

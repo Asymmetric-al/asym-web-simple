@@ -27,22 +27,22 @@ const disclosures = [
 ] as const;
 
 export const metadata: Metadata = createMetadata({
-  title: "501(c)(3) Disclosure",
+  title: "Financials and Nonprofit Covering",
   description:
-    "Disclosure regarding Asymmetric.al's status as a project under Global Fellowship Inc. and the tax treatment of donations.",
+    "Financial and nonprofit covering information for Asym under Global Fellowship Inc., including donation treatment and oversight.",
   path: "/501c3",
 });
 
 export default function DisclosurePage() {
   return (
     <DocumentPage
-      eyebrow="501(c)(3) Disclosure"
+      eyebrow="Financials"
       title={
         <h1 className="font-heading text-foreground text-[clamp(2.8rem,5vw,4.5rem)] leading-[0.95] font-semibold tracking-[-0.07em] text-balance">
-          Nonprofit covering and donation treatment.
+          Financial oversight and nonprofit covering.
         </h1>
       }
-      description="Asymmetric.al is not a stand-alone tax entity. It operates under the legal and financial covering of Global Fellowship Inc."
+      description="Asym is not a stand-alone tax entity. It operates under the legal and financial covering of Global Fellowship Inc."
       heading="Global Fellowship Inc. EIN 68-0214543"
       heroMeta={[
         "Nonprofit covering",

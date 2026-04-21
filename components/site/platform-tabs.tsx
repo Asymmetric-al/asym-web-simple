@@ -97,7 +97,12 @@ export function PlatformTabs({ items }: { items: PlatformTabItem[] }) {
         });
 
         startTransition(() => {
-          setSharedTriggerMinHeight(measurement.sharedMinHeightPx);
+          setSharedTriggerMinHeight(
+            Math.max(
+              measurement.sharedMinHeightPx,
+              platformTabTriggerPreset.fallbackMinHeightPx,
+            ),
+          );
           setPretextReady(true);
         });
       });
@@ -131,8 +136,9 @@ export function PlatformTabs({ items }: { items: PlatformTabItem[] }) {
     sharedTriggerMinHeight === null
       ? undefined
       : ({
-          "--platform-tab-trigger-min-height": `${sharedTriggerMinHeight}px`,
+          "--platform-tab-trigger-min-height": `${sharedTriggerMinHeight + platformTabTriggerPreset.measurementSafetyPx}px`,
           minHeight: "var(--platform-tab-trigger-min-height)",
+          height: "var(--platform-tab-trigger-min-height)",
         } as CSSProperties);
 
   return (

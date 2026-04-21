@@ -16,20 +16,20 @@ export function Footer() {
                 Join the waitlist
               </p>
               <h2 className="font-heading text-foreground mt-4 max-w-[16ch] text-[clamp(2.35rem,5vw,4.6rem)] leading-[0.95] font-semibold tracking-[-0.06em] text-balance">
-                Build with open hands. Deploy with clarity.
+                One mission-built system for donor care, missionary support, and operations.
               </h2>
               <p className="text-muted-foreground mt-5 max-w-[58ch] text-base leading-7 sm:text-lg">
-                We build for the global church. We measure success in impact,
-                not profit. Start a conversation if your agency is ready for a
-                more coherent operating system.
+                Asym keeps donor care, missionary support, statements,
+                reporting, and operations in one mission-built system so your
+                staff can stop managing the gaps between disconnected tools.
               </p>
             </div>
 
             <div className="flex min-w-0 flex-col gap-3 lg:items-end">
               <div className="border-foreground/10 bg-background/62 text-muted-foreground grid w-full gap-2 rounded-[1.5rem] border p-4 text-sm sm:max-w-[22rem]">
-                <span>Open-source foundations</span>
-                <span>Tenant sovereignty by design</span>
-                <span>Nonprofit 501(c)(3) posture</span>
+                <span>Open-source foundations for long-term trust</span>
+                <span>Christian, nonprofit posture</span>
+                <span>Statement of Faith and financials available</span>
               </div>
               <Link
                 href={siteConfig.cta.primary.href}
@@ -76,9 +76,9 @@ export function Footer() {
                 </span>
               </h3>
               <p className="text-muted-foreground mt-6 text-sm leading-7 sm:text-base">
-                Asymmetric.al is a nonprofit project shaping a missions-first
-                operating system for executive, operations, finance, and
-                advancement teams. Soli Deo Gloria.
+                Asym is the operating system for Christian missions. It is built
+                on open-source foundations because transparency, stewardship,
+                and long-term trust matter.
               </p>
             </div>
 
@@ -106,7 +106,9 @@ export function Footer() {
           <div className="border-foreground/10 text-muted-foreground mt-12 flex flex-col gap-6 border-t pt-8 text-sm sm:flex-row sm:items-center sm:justify-between">
             <div className="content-measure max-w-xl leading-relaxed">
               Operating as a project under {siteConfig.nonprofit} EIN:{" "}
-              {siteConfig.ein}
+              {siteConfig.ein}. We remain openly Christian and visibly
+              accountable through our Statement of Faith and nonprofit
+              covering.
             </div>
             <div className="flex flex-col gap-2 sm:items-end">
               <div className="flex items-center gap-3">

@@ -21,9 +21,9 @@ const pathways = [
   {
     title: "Full-Time Staff",
     icon: Users,
-    subtitle: "The Core Team",
+    subtitle: "Support-Raised Roles",
     description:
-      "Join the core engineering unit. Our staff operate on a support-raised model, similar to the missionaries we serve. This allows us to sustain world-class engineering talent while keeping platform costs accessible for the global church.",
+      "Join the core team on a support-raised model. These roles help build and maintain Asym for Christian missions organizations over the long haul.",
     action: "View roles",
     link: "#roles",
     internal: true,
@@ -31,9 +31,9 @@ const pathways = [
   {
     title: "Internships",
     icon: BookOpen,
-    subtitle: "The Forge",
+    subtitle: "Learning Pathway",
     description:
-      "A rigorous season of contribution and learning. We pair you with senior engineers to ship real code to production. Ideal for students or boot camp graduates looking to bridge the gap to seniority.",
+      "A season of contribution and learning with real product work. Best for people who want practical experience inside a serious mission-driven software team.",
     action: "Inquire via email",
     link: "mailto:careers@asymmetric.al?subject=Internship Inquiry",
     internal: false,
@@ -41,9 +41,9 @@ const pathways = [
   {
     title: "Open Source",
     icon: GitPullRequest,
-    subtitle: "The Community",
+    subtitle: "Flexible Contribution",
     description:
-      "You do not need to change jobs to contribute. Jump into our GitHub, pick up a ticket, and help us improve the ecosystem. A perfect way to tithe your talent on your own schedule.",
+      "You do not need to change jobs to contribute. If you want to help improve the product or ecosystem in your own time, open-source contribution is welcome.",
     action: "GitHub repo",
     link: "https://github.com/Asymmetric-al",
     internal: false,
@@ -52,22 +52,22 @@ const pathways = [
 
 const values = [
   {
-    title: "Excellence as Stewardship",
+    title: "Excellence is stewardship",
     icon: Heart,
     description:
-      "We do not ship broken windows. We believe that building reliable, performant, and maintainable software is a form of care for the people who rely on it.",
+      "Reliable, maintainable software is one form of care for the people who depend on it every day.",
   },
   {
-    title: "High-Agency Builders",
+    title: "Builders who take ownership",
     icon: Zap,
     description:
-      "We are a lean team. We value individuals who can take an ambiguous problem, architect a solution, and drive it to completion without needing constant oversight.",
+      "We value people who can bring clarity to ambiguous problems and carry work through to completion.",
   },
   {
-    title: "Empathy for the Field",
+    title: "Empathy for mission realities",
     icon: Globe,
     description:
-      "We build for people working in low-bandwidth, high-stress environments. We prioritize offline-first architecture and accessible UX over flashy trends.",
+      "We build for teams doing serious work across borders and in demanding environments. That should shape how we design and build.",
   },
 ] as const;
 
@@ -79,7 +79,7 @@ const roles = [
     location: "Remote",
     stack: "React, Next.js, TypeScript, Tailwind",
     description:
-      "Own the Mission Control interface. You will architect the dashboard experience used by thousands of workers, focusing on performance, accessibility, and offline-sync capabilities.",
+      "Shape the staff and missionary surfaces in Asym. We need someone who can turn complex workflows into clear, reliable interfaces.",
   },
   {
     id: "be-eng",
@@ -88,7 +88,7 @@ const roles = [
     location: "Remote",
     stack: "Node.js, PostgreSQL, Redis, Keycloak",
     description:
-      "Scale the kernel. You will handle complex data synchronization between tenants, manage identity across services, and ensure data sovereignty protocols.",
+      "Shape the core data and workflow systems behind donor care, missionary support, and reporting.",
   },
   {
     id: "db-eng",
@@ -97,7 +97,7 @@ const roles = [
     location: "Remote",
     stack: "PostgreSQL, Redis, pgvector",
     description:
-      "Steward the data. You will optimize complex multi-tenant queries, design efficient schemas for financial ledgers, and manage replication strategies for high availability.",
+      "Help us keep mission data trustworthy, fast, and resilient as the platform grows.",
   },
   {
     id: "devops",
@@ -106,7 +106,7 @@ const roles = [
     location: "Remote",
     stack: "AWS, Terraform, Docker, GitHub Actions",
     description:
-      "Manage the fleet. You will own our Infrastructure as Code, secure our cloud perimeter, and build resilient CI/CD pipelines for zero-downtime deployments.",
+      "Own the cloud, deployment, and security foundations that keep the platform reliable.",
   },
   {
     id: "dev-rel",
@@ -115,7 +115,7 @@ const roles = [
     location: "Remote",
     stack: "Docs, Community, Content",
     description:
-      "Bridge the gap between our core team and the open-source community. You will write technical documentation, manage pull requests, and help external contributors succeed.",
+      "Help external contributors, docs, and community participation stay clear and healthy.",
   },
   {
     id: "prod-design",
@@ -124,14 +124,14 @@ const roles = [
     location: "Remote",
     stack: "Figma, Design Systems, UX Research",
     description:
-      "Translate complex operational workflows into intuitive interfaces. You will maintain our design system and work directly with missionaries to understand their friction points.",
+      "Turn complicated mission workflows into calm, understandable product experiences.",
   },
 ] as const;
 
 export const metadata: Metadata = createMetadata({
-  title: "Join the Build",
+  title: "Careers and Contributions at Asym",
   description:
-    "Join the Asymmetric.al build as a full-time staff engineer, intern, or open-source contributor serving the global church.",
+    "Join Asym as staff, intern, or contributor if you want to use your craft in service of Christian missions.",
   path: "/join",
 });
 
@@ -139,21 +139,19 @@ export default function JoinPage() {
   return (
     <main id="main-content" tabIndex={-1}>
       <PageHero
-        eyebrow="OPEN RECRUITMENT"
+        eyebrow="Careers and contribution"
         title={
           <h1 className="font-heading text-foreground text-[clamp(3rem,6vw,5rem)] leading-[0.94] font-semibold tracking-[-0.07em] text-balance">
-            Your code.
-            <br />
-            Their mission.
+            Use your craft to serve Christian missions.
           </h1>
         }
-        description="We are bridging the gap between Silicon Valley innovation and the Great Commission. If you are a builder looking to use your craft for something that outlasts you, you belong here."
+        description="We are building Asym for teams carrying donor care, missionary support, and operations. If you are a builder who wants to do serious work in service of the global church, there are a few ways to get involved."
         meta={[
           "Full-Time Staff",
           "Internships",
           "Open Source",
-          "High agency",
-          "Mission-first",
+          "Serious work",
+          "Christian missions",
         ]}
       >
         <Reveal trigger="mount">
@@ -163,13 +161,13 @@ export default function JoinPage() {
                 Three ways to engage
               </p>
               <CardTitle className="font-heading text-3xl font-semibold tracking-[-0.05em]">
-                Full-Time. Intern. Open Source.
+                Three ways to get involved.
               </CardTitle>
             </CardHeader>
             <CardContent className="text-primary-foreground/82 flex flex-col gap-3 text-sm leading-7">
-              <p>Join the core engineering unit on a support-raised model.</p>
-              <p>Learn through a rigorous internship shipping real code.</p>
-              <p>Contribute to open source on your own schedule.</p>
+              <p>Join the core team on a support-raised model.</p>
+              <p>Learn through an internship with real product work.</p>
+              <p>Contribute in the open on your own schedule.</p>
             </CardContent>
           </Card>
         </Reveal>
@@ -178,7 +176,7 @@ export default function JoinPage() {
       <Section className="section-divider-accent">
         <SectionHeader
           eyebrow="How to Engage"
-          title="There are three ways to join the mission."
+          title="There are three ways to get involved."
           description="Depending on your capacity and calling, there is a place for you to contribute."
         />
         <div className="mt-8 grid gap-4 lg:grid-cols-3">
@@ -251,8 +249,8 @@ export default function JoinPage() {
 
       <Section id="roles">
         <SectionHeader
-          eyebrow="Active Deployments"
-          title="Current priority needs for the team"
+          eyebrow="Open roles"
+          title="Current roles for the team"
           description="We are looking for high-agency builders to join these roles."
         />
         <div className="mt-8 grid gap-4">
@@ -292,7 +290,7 @@ export default function JoinPage() {
                           "w-full px-5 md:w-auto"
                         )}
                       >
-                        Initiate conversation
+                        Start a conversation
                         <ArrowRight data-icon="inline-end" />
                       </Link>
                     </div>
@@ -306,11 +304,10 @@ export default function JoinPage() {
         <div className="relative mt-20 mb-24 overflow-hidden rounded-[1.8rem] border border-dashed border-border bg-card p-12 text-center">
           <div className="relative z-10">
             <h4 className="font-heading mb-4 text-2xl font-semibold tracking-[-0.05em] text-foreground">
-              Don&apos;t see your specific role?
+              Do not see the exact role yet?
             </h4>
             <p className="mx-auto mb-8 max-w-lg text-sm leading-relaxed text-muted-foreground">
-              We are always interested in conversations with high-agency builders.
-              Whether you are a Security Specialist, Data Scientist, or just want to help, let&apos;s talk.
+              We are always open to hearing from strong builders who want to serve Christian missions, even if the right role is not listed yet.
             </p>
             <Link href="/contact" className={cn(buttonVariants({ size: "lg" }), "px-5")}>
               Start a conversation
