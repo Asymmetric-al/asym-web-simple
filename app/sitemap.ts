@@ -3,17 +3,6 @@ import { siteConfig } from "@/lib/config";
 
 const routes = [
   "/",
-  "/platform",
-  "/about",
-  "/faq",
-  "/waitlist",
-  "/open-source-and-trust",
-  "/missions",
-  "/specs",
-  "/manifesto",
-  "/give",
-  "/join",
-  "/contact",
   "/statement-of-faith",
   "/privacy",
   "/terms",

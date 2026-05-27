@@ -1,6 +1,7 @@
-import { buttonVariants } from "@/components/ui/button-variants";
 import { Container, PageHero, Section } from "@/components/site/page";
+import { buttonVariants } from "@/components/ui/button-variants";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { siteConfig } from "@/lib/config";
 import { ArrowRight, Compass } from "lucide-react";
 import Link from "next/link";
 
@@ -12,13 +13,13 @@ export default function NotFound() {
         density="legal"
         title={
           <h1 className="font-heading text-foreground text-[clamp(2.9rem,5vw,4.8rem)] leading-[0.95] font-semibold tracking-[-0.07em] text-balance">
-            The page is missing, but the path forward is clear.
+            The page is missing, but the letter is still here.
           </h1>
         }
-        description="The link may be outdated or the address may be incomplete. You can return to the main platform pages or start a direct conversation with us."
+        description="The link may be outdated. You can return to the letter or email us."
         actions={[
-          { label: "Go home", href: "/" },
-          { label: "Contact us", href: "/contact", variant: "outline" },
+          { label: "Letter", href: "/#letter" },
+          { label: "Build with us", href: "/#talk", variant: "outline" },
         ]}
       />
 
@@ -27,17 +28,17 @@ export default function NotFound() {
           <Card className="page-shell-glow surface-panel surface-interactive rounded-[2rem]">
             <CardHeader>
               <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
-                Suggested routes
+                Suggested anchors
               </p>
               <CardTitle className="font-heading text-3xl font-semibold tracking-[-0.05em]">
-                Start from the most useful surfaces.
+                Start with the one-page note.
               </CardTitle>
             </CardHeader>
             <CardContent className="grid gap-3">
               {[
-                { href: "/platform", label: "Mission Control overview" },
-                { href: "/missions", label: "Why we serve missions agencies" },
-                { href: "/join", label: "Join the build" },
+                { href: "/#letter", label: "The letter" },
+                { href: "/#why", label: "Why this matters" },
+                { href: "/#builders", label: "Builders we are looking for" },
               ].map((item) => (
                 <Link
                   key={item.href}
@@ -53,7 +54,7 @@ export default function NotFound() {
           <Card className="surface-card surface-interactive rounded-[2rem]">
             <CardHeader>
               <div className="bg-secondary text-primary flex size-11 items-center justify-center rounded-2xl shadow-sm">
-                <Compass className="size-5" />
+                <Compass className="size-5" aria-hidden="true" />
               </div>
               <CardTitle className="font-heading text-2xl font-semibold tracking-[-0.05em]">
                 If you were looking for something specific, tell us.
@@ -61,13 +62,16 @@ export default function NotFound() {
             </CardHeader>
             <CardContent className="text-muted-foreground space-y-4 text-base leading-7">
               <p>
-                Broken links and ambiguous paths are product debt. If you found
-                this page while trying to evaluate the platform, contact us and
-                we will route you directly.
+                Broken links are useful signals. If you found this page while
+                trying to understand Asym, email us and we will route you
+                directly.
               </p>
-              <Link href="/contact" className={buttonVariants({ size: "lg" })}>
-                Request a direct reply
-                <ArrowRight data-icon="inline-end" />
+              <Link
+                href={`mailto:${siteConfig.email}?subject=Building%20with%20Asym`}
+                className={buttonVariants({ size: "lg" })}
+              >
+                Email {siteConfig.email}
+                <ArrowRight data-icon="inline-end" aria-hidden="true" />
               </Link>
             </CardContent>
           </Card>

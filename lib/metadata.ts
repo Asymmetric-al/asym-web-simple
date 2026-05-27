@@ -15,14 +15,14 @@ export const siteMetadata = {
   ],
   keywords: [
     "Christian missions software",
-    "missions donor management software",
-    "donor care platform for missions",
-    "missionary dashboard software",
-    "mission operations software",
-    "donor portal for Christian nonprofits",
-    "statement and reporting software for missions",
-    "mission operating system",
-    "open source missions software",
+    "early missions technology",
+    "missions donor care software",
+    "missionary support software",
+    "nonprofit operations software",
+    "donor portal for missions",
+    "Christian nonprofit technology",
+    "mission technology builders",
+    "Asym",
   ],
 } as const;
 

@@ -10,6 +10,25 @@ const nextConfig: NextConfig = {
   experimental: {
     viewTransition: true,
   },
+  async redirects() {
+    return [
+      { source: "/about", destination: "/#letter", permanent: false },
+      { source: "/faq", destination: "/#letter", permanent: false },
+      { source: "/waitlist", destination: "/#talk", permanent: false },
+      {
+        source: "/open-source-and-trust",
+        destination: "/#letter",
+        permanent: false,
+      },
+      { source: "/platform", destination: "/#product", permanent: false },
+      { source: "/missions", destination: "/#why", permanent: false },
+      { source: "/specs", destination: "/#product", permanent: false },
+      { source: "/manifesto", destination: "/#letter", permanent: false },
+      { source: "/give", destination: "/#talk", permanent: false },
+      { source: "/join", destination: "/#builders", permanent: false },
+      { source: "/contact", destination: "/#talk", permanent: false },
+    ];
+  },
   images: {
     remotePatterns: [
       {

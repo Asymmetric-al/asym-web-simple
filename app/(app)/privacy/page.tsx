@@ -1,60 +1,13 @@
 import { DocumentPage, DocumentSection } from "@/components/site/document-page";
+import { siteConfig } from "@/lib/config";
 import { createMetadata } from "@/lib/metadata";
 import type { Metadata } from "next";
 import Link from "next/link";
 
-const sections = [
-  {
-    title: "Overview",
-    body: [
-      "This Privacy Policy describes how Asymmetric.al handles information collected through this website and through direct communications initiated from this site.",
-      "Asymmetric.al is a project of Global Fellowship Inc. We collect only the information necessary to operate the website, respond to inquiries, and maintain a secure, reliable service experience.",
-    ],
-  },
-  {
-    title: "Information we collect",
-    body: [
-      "Information you choose to send us, including your name, organization, role, email address, and message contents.",
-      "Operational data such as server logs, request metadata, security signals, and aggregate website analytics needed to keep the site reliable and safe.",
-      "If you contact us by email, the contents of that correspondence and related follow-up records may be retained for stewardship, security, and organizational continuity.",
-    ],
-  },
-  {
-    title: "How we use information",
-    body: [
-      "To respond to agency, donor, governance, media, or builder inquiries.",
-      "To improve website performance, reliability, and security.",
-      "To evaluate early platform interest, coordinate conversations, and understand broad operating needs across missions organizations.",
-    ],
-  },
-  {
-    title: "Sharing and disclosure",
-    body: [
-      "We do not sell personal information.",
-      "We may share information with service providers who help host, secure, or operate the site, or with our covering nonprofit and advisors when needed for governance, legal compliance, or donor stewardship.",
-      "We may disclose information if required by law or if necessary to protect the rights, safety, and integrity of our users, staff, systems, or the public.",
-    ],
-  },
-  {
-    title: "Retention and security",
-    body: [
-      "We retain information only as long as reasonably necessary for the purpose for which it was provided, or as required for legal, operational, or governance reasons.",
-      "We use practical technical and organizational safeguards to protect the information we receive, but no internet transmission or storage system can be guaranteed to be perfectly secure.",
-    ],
-  },
-  {
-    title: "Your choices",
-    body: [
-      "You may contact us to request access, correction, or deletion of information you have sent us, subject to applicable legal and operational constraints.",
-      "Questions about this policy can be sent to info@asymmetric.al.",
-    ],
-  },
-] as const;
-
 export const metadata: Metadata = createMetadata({
   title: "Privacy Policy",
   description:
-    "Privacy policy for the Asymmetric.al website and inquiry flows.",
+    "Simple privacy policy for the Asymmetric.al website and early Asym conversations.",
   path: "/privacy",
 });
 
@@ -63,41 +16,82 @@ export default function PrivacyPage() {
     <DocumentPage
       eyebrow="Privacy Policy"
       title={
-        <h1 className="font-heading text-foreground text-[clamp(2.8rem,5vw,4.5rem)] leading-[0.95] font-semibold tracking-[-0.07em] text-balance">
-          Privacy and stewardship of information.
+        <h1 className="font-heading text-foreground mt-5 text-[clamp(3rem,6vw,5rem)] leading-[0.94] font-semibold tracking-[-0.07em] text-balance">
+          Privacy Policy
         </h1>
       }
-      description="We aim to be clear, proportionate, and respectful in how we handle information. This page applies to the public website and communications initiated from it."
-      heading="Effective as of March 17, 2026"
-      heroMeta={[
-        "Website inquiries",
-        "Operational logs",
-        "Stewardship-minded retention",
-      ]}
+      description="We collect only what we need to respond, operate the website, protect the work, and understand whether Asym can serve a missions organization well."
       footer={
         <>
-          Questions or requests can be sent to{" "}
+          Privacy questions can be sent to{" "}
           <Link
-            href="mailto:info@asymmetric.al"
-            className="link-resilient text-foreground inline-block max-w-full font-medium underline underline-offset-4"
+            href={`mailto:${siteConfig.email}`}
+            className="text-foreground hover:text-primary focus-visible:ring-ring/45 link-resilient rounded-sm font-medium underline underline-offset-4 transition-colors focus-visible:ring-[3px] focus-visible:outline-none"
           >
-            info@asymmetric.al
+            {siteConfig.email}
           </Link>
           .
         </>
       }
     >
-      {sections.map((section, index) => (
-        <DocumentSection
-          key={section.title}
-          title={section.title}
-          tone={index === 0 ? "accent" : "default"}
-        >
-          {section.body.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
-          ))}
-        </DocumentSection>
-      ))}
+      <DocumentSection number="01" title="What this covers">
+        <p>
+          This policy covers the Asymmetric.al website and direct conversations
+          started through it. It also covers early Asym interest forms, emails,
+          and related follow-up.
+        </p>
+      </DocumentSection>
+
+      <DocumentSection number="02" title="What we collect">
+        <p>
+          We may collect information you choose to send us, such as your name,
+          email address, organization, role, and message.
+        </p>
+        <p>
+          We may also collect basic operational data such as server logs,
+          request metadata, analytics, and security signals needed to keep the
+          site reliable and safe.
+        </p>
+      </DocumentSection>
+
+      <DocumentSection number="03" title="How we use it">
+        <p>
+          We use information to respond to you, evaluate fit, improve the
+          website, protect our systems, and understand the needs of Christian
+          missions organizations.
+        </p>
+      </DocumentSection>
+
+      <DocumentSection number="04" title="What we do not do">
+        <p>We do not sell personal information.</p>
+      </DocumentSection>
+
+      <DocumentSection number="05" title="When we share information">
+        <p>
+          We may share information with service providers who help host, secure,
+          or operate the site, or with Global Fellowship Inc. and advisors when
+          needed for governance, legal compliance, security, or stewardship.
+        </p>
+      </DocumentSection>
+
+      <DocumentSection number="06" title="Retention and security">
+        <p>
+          We keep information only as long as reasonably necessary for the
+          purpose it was provided, unless legal, operational, or governance
+          needs require longer retention.
+        </p>
+        <p>
+          We use practical safeguards, but no internet system can be guaranteed
+          to be perfectly secure.
+        </p>
+      </DocumentSection>
+
+      <DocumentSection number="07" title="Your choices">
+        <p>
+          You may ask us to access, correct, or delete information you have sent
+          us, subject to legal and operational limits.
+        </p>
+      </DocumentSection>
     </DocumentPage>
   );
 }

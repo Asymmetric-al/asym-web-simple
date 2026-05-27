@@ -1,519 +1,379 @@
-import { HeroProductPreview } from "@/components/site/hero-product-preview";
-import { HomePageHero } from "@/components/site/home-page-hero";
-import { Section, SectionHeader } from "@/components/site/page";
-import { Reveal, StaggerItem, StaggerReveal } from "@/components/site/reveal";
-import { SiteLogoMark } from "@/components/site/site-logo-mark";
-import { buttonVariants } from "@/components/ui/button-variants";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { createMetadata } from "@/lib/metadata";
-import { cn } from "@/lib/utils";
-import {
-  ArrowRight,
-  Blocks,
-  ChartNoAxesCombined,
-  FileText,
-  Layers3,
-  MailCheck,
-  ShieldCheck,
-  Users,
-  type LucideIcon,
-} from "lucide-react";
-import type { Metadata } from "next";
-import Link from "next/link";
+import { Container } from "@/components/site/page";
 import { siteConfig } from "@/lib/config";
+import { createMetadata } from "@/lib/metadata";
+import type { Metadata } from "next";
+import Image from "next/image";
 
-type IconCard = {
-  readonly title: string;
-  readonly description: string;
-  readonly icon: LucideIcon;
-};
-
-type Step = {
-  readonly label: string;
-  readonly title: string;
-  readonly description: string;
-};
-
-const trustBar = [
-  "Mission Control",
-  "Donor Self-Service",
-  "Missionary Dashboard",
-  "Statements",
-  "Accounting Sync",
-] as const;
-
-const problemPoints = [
-  {
-    title: "Month-end still drags",
-    description:
-      "Month-end takes too many people, too many exports, and too much hand-checking before finance trusts the numbers.",
-  },
-  {
-    title: "Donors still need staff help",
-    description:
-      "Donors still need staff help for recurring gifts, receipts, card changes, and other updates that should be self-serve.",
-  },
-  {
-    title: "Missionaries hear changes too late",
-    description:
-      "Missionaries still hear what changed too late and act too late because the answer lives in too many systems.",
-  },
-  {
-    title: "Staff are stuck on system glue",
-    description:
-      "Staff still spend too much time managing manual handoffs, workarounds, and disconnected tools instead of serving people.",
-  },
-] as const;
-
-const guidePoints: readonly IconCard[] = [
-  {
-    title: "Purpose-built for Christian missions",
-    description:
-      "Asymmetric.al built Asym from inside mission realities instead of adapting a generic business template after the fact.",
-    icon: ShieldCheck,
-  },
-  {
-    title: "Mission Control for staff",
-    description:
-      "Teams search people, review gifts, run reports, and launch workflows from one role-aware operating surface.",
-    icon: Layers3,
-  },
-  {
-    title: "Self-service portals for donors",
-    description:
-      "Donors can give, update recurring gifts, change payment methods, and download receipts without staff handoffs.",
-    icon: MailCheck,
-  },
-  {
-    title: "Live dashboards for missionaries",
-    description:
-      "Missionaries can see support progress, new donors, at-risk recurring, tasks, and next actions without waiting on staff.",
-    icon: ChartNoAxesCombined,
-  },
-  {
-    title: "Ownership over keys, branding, and domains",
-    description:
-      "Ownership and trust stay visible instead of hiding behind a vendor boundary your team cannot inspect.",
-    icon: Blocks,
-  },
-  {
-    title: "Built on open-source foundations",
-    description:
-      "Most teams simply use Asym as a supported system, but the foundations stay open for transparency, stewardship, and long-term trust.",
-    icon: FileText,
-  },
-] as const;
-
-const productSections: readonly IconCard[] = [
-  {
-    title: "Mission Control",
-    description:
-      "Search people, review gifts, run reports, generate statements, manage content, and launch workflows from one role-aware console.",
-    icon: Layers3,
-  },
-  {
-    title: "Donor self-service",
-    description:
-      "Let donors give, update recurring gifts, change payment methods, and download receipts without staff handoffs.",
-    icon: MailCheck,
-  },
-  {
-    title: "Missionary dashboard",
-    description:
-      "Show support progress, new donors, at-risk recurring, tasks, and draft thank-yous without asking staff to chase updates.",
-    icon: Users,
-  },
-  {
-    title: "Statements and finance",
-    description:
-      "Move from guesswork to cleaner reporting, branded statements, signed links, and stronger reconciliation flows.",
-    icon: FileText,
-  },
-] as const;
-
-const planSteps: readonly Step[] = [
-  {
-    label: "01",
-    title: "Join the waitlist or take the audit",
-    description:
-      "Start with the public entry point that matches your urgency without pretending every organization should onboard the same way on day one.",
-  },
-  {
-    label: "02",
-    title: "Map the handoffs and blind spots",
-    description:
-      "We identify the spreadsheets, exports, and manual workflows that create the most drag in your current stack.",
-  },
-  {
-    label: "03",
-    title: "Replace the patchwork in sequence",
-    description:
-      "We show how Asym can replace the stack in a sequence your team can absorb instead of forcing a disruptive rewrite all at once.",
-  },
-] as const;
-
-const successBullets = [
-  "Donors give and self-serve without waiting on staff.",
-  "Missionaries see what changed and know what to do next.",
-  "Finance trusts the numbers sooner.",
-  "Leadership gets visibility without asking three teams for updates.",
-] as const;
+const mailtoHref = `mailto:${siteConfig.email}?subject=Building%20with%20Asym`;
+const contributeHref =
+  "https://github.com/Asymmetric-al/core?tab=contributing-ov-file#readme";
 
 export const metadata: Metadata = createMetadata({
-  title: "The Operating System for Christian Missions",
+  title: "Asym is being built for missions organizations",
   description:
-    "Asym is the operating system for Christian missions, giving teams one mission-built system for donor care, missionary support, statements, reporting, and operations.",
+    "A letter from Conrad and Blake about the early build of Asym, a product for Christian missions organizations and the teams carrying donor care, finance, missionary support, and operations.",
   path: "/",
 });
+
+function StructuredData({ data }: { data: Record<string, unknown> }) {
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(data).replace(/</g, "\\u003c"),
+      }}
+    />
+  );
+}
+
+function LandscapeBackground() {
+  return (
+    <div
+      className="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
+      aria-hidden="true"
+    >
+      <Image
+        src="/BG.jpg"
+        alt=""
+        fill
+        preload
+        sizes="100vw"
+        className="[transform:scale(1.035)] object-cover object-[54%_42%] brightness-[1.04] contrast-[1.06] saturate-[1.08] dark:opacity-[0.7] dark:brightness-[0.66] dark:contrast-[1.08]"
+      />
+      <div className="from-background/78 via-background/18 to-background/64 dark:from-background/88 dark:via-background/42 dark:to-background/82 absolute inset-0 bg-gradient-to-b" />
+      <div className="from-background/94 via-background/52 to-background/4 dark:from-background/92 dark:via-background/66 dark:to-background/24 absolute inset-0 bg-gradient-to-r" />
+      <div className="from-accent/16 to-primary/12 dark:from-accent/10 dark:to-primary/10 absolute inset-0 bg-gradient-to-tr via-transparent" />
+      <div
+        className="absolute inset-0 opacity-[0.2] mix-blend-overlay dark:opacity-[0.24] dark:mix-blend-soft-light"
+        style={{
+          backgroundImage:
+            "linear-gradient(0deg, transparent 2px, transparent 4px, color-mix(in srgb, var(--foreground) 14%, transparent) 4px, color-mix(in srgb, var(--foreground) 14%, transparent) 5px), linear-gradient(90deg, transparent 2px, transparent 4px, color-mix(in srgb, var(--foreground) 14%, transparent) 4px, color-mix(in srgb, var(--foreground) 14%, transparent) 5px)",
+          backgroundSize: "5px 5px",
+        }}
+      />
+    </div>
+  );
+}
 
 export default function HomePage() {
   const organizationStructuredData = {
     "@context": "https://schema.org",
     "@type": "NGO",
     name: siteConfig.name,
+    alternateName: siteConfig.shortName,
     url: siteConfig.url,
     email: siteConfig.email,
     description: siteConfig.description,
     areaServed: "Global",
+    knowsAbout: [
+      "missions software",
+      "donor care",
+      "missionary support",
+      "nonprofit operations",
+    ],
     parentOrganization: {
       "@type": "NGO",
       name: siteConfig.nonprofit,
     },
   };
 
-  const websiteStructuredData = {
+  const softwareStructuredData = {
     "@context": "https://schema.org",
-    "@type": "WebSite",
+    "@type": "SoftwareApplication",
     name: siteConfig.shortName,
-    url: siteConfig.url,
-    description: siteConfig.description,
+    applicationCategory: "Missions software",
+    operatingSystem: "Web",
+    description:
+      "An early product for Christian missions organizations, built by the nonprofit ministry Asymmetric.al.",
+    provider: {
+      "@type": "NGO",
+      name: siteConfig.name,
+      url: siteConfig.url,
+    },
   };
 
   return (
-    <main id="main-content" tabIndex={-1}>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(organizationStructuredData),
-        }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(websiteStructuredData),
-        }}
-      />
+    <main
+      id="main-content"
+      className="relative isolate overflow-hidden"
+      tabIndex={-1}
+    >
+      <StructuredData data={organizationStructuredData} />
+      <StructuredData data={softwareStructuredData} />
+      <LandscapeBackground />
 
-      <HomePageHero
-        eyebrow="The operating system for Christian missions"
-        title={
-          <h1 className="font-heading text-foreground text-[clamp(2.7rem,6.4vw,5.35rem)] leading-[0.92] font-semibold tracking-[-0.07em] text-pretty">
-            Stop spending staff time managing the gaps between disconnected systems.
-          </h1>
-        }
-        subtitle={
-          <p className="font-heading text-primary/80 mx-auto max-w-2xl text-[clamp(1.15rem,2.4vw,1.65rem)] font-medium tracking-[-0.04em] max-lg:mx-0">
-            One mission-built system for donor care, missionary support, and operations.
-          </p>
-        }
-        description="Asym gives Christian missions teams one mission-built system for donor care, missionary support, statements, reporting, and operations, so the team can move with more clarity and less admin drag."
-        actions={[
-          { label: siteConfig.cta.primary.label, href: siteConfig.cta.primary.href },
-          {
-            label: siteConfig.cta.secondary.label,
-            href: siteConfig.cta.secondary.href,
-            variant: "outline",
-          },
-        ]}
-        supportAction={{
-          label: "See the Donor and Missionary Portal Walkthrough",
-          href: "/platform#portal-walkthrough",
-        }}
-        meta={[...trustBar]}
-      >
-        <Reveal trigger="mount">
-          <HeroProductPreview
-            screenshotAlt="Asymmetric mission control interface preview"
-            caption={
-              <div className="flex flex-col gap-3">
-                <div className="flex flex-col gap-1">
-                  <p className="text-foreground font-medium">
-                    One mission-built system for donor care, missionary support, and operations.
-                  </p>
-                  <p className="text-muted-foreground">
-                    Calm software, visible trust, and role-aware workflows for the teams carrying the operational weight of sending.
-                  </p>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  <span className="border-foreground/10 bg-background/76 text-muted-foreground rounded-full border px-3 py-1 font-mono text-[0.68rem] tracking-[0.2em] uppercase">
-                    Donor and missionary portal walkthrough
-                  </span>
-                  <span className="border-foreground/10 bg-background/76 text-muted-foreground rounded-full border px-3 py-1 font-mono text-[0.68rem] tracking-[0.2em] uppercase">
-                    Mission-built workflows
-                  </span>
-                </div>
-              </div>
-            }
-          />
-        </Reveal>
-      </HomePageHero>
+      <article className="pb-12 sm:pb-16">
+        <Container className="max-w-[76rem]">
+          <div
+            id="letter"
+            className="text-foreground max-w-[45rem] scroll-mt-32 pt-[clamp(7.4rem,9vw,9.5rem)] text-[1.03rem] leading-[1.68] font-normal sm:text-[1.1rem] sm:leading-[1.72] lg:ml-0"
+          >
+            <h1 className="font-heading max-w-[12ch] text-[clamp(2.5rem,6vw,4.25rem)] leading-[0.94] font-bold tracking-[-0.075em] text-balance">
+              We&rsquo;re building Asym.
+            </h1>
 
-      <Section tone="sky" className="section-divider-accent">
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:items-start">
-          <Reveal>
-            <div className="page-shell-glow surface-panel surface-interactive rounded-[2.2rem] p-7 sm:p-9">
-              <SectionHeader
-                eyebrow="The problem"
-                title="Most mission agencies are stuck between old software and fragile patchwork."
-                description="You can stay inside an outdated all-in-one system that slows everyone down. Or you can stitch together newer tools and keep paying the cost in handoffs, workarounds, and staff time spent keeping things moving. Either way, the strain lands on your team."
-              />
-              <div className="bg-primary text-primary-foreground mt-8 rounded-[1.9rem] px-6 py-8 sm:px-8">
-                <p className="text-primary-foreground/70 font-mono text-[0.7rem] tracking-[0.3em] uppercase">
-                  The pressure underneath it
-                </p>
-                <div className="text-primary-foreground mt-3 flex justify-start">
-                  <SiteLogoMark className="size-[clamp(4.5rem,14vw,7.5rem)]" />
-                </div>
-                <p className="text-primary-foreground/82 mt-4 max-w-[24ch] text-base leading-7">
-                  Old software and patchwork workflows create drag that lands on the people already carrying the work.
-                </p>
-              </div>
-            </div>
-          </Reveal>
-
-          <div className="grid gap-4">
-            <StaggerReveal>
-              {problemPoints.map((item) => (
-                <StaggerItem key={item.title}>
-                  <Card className="surface-card surface-interactive rounded-[1.8rem]">
-                    <CardHeader>
-                      <CardTitle className="font-heading text-xl font-semibold tracking-[-0.04em]">
-                        {item.title}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="text-muted-foreground text-sm leading-7">
-                      {item.description}
-                    </CardContent>
-                  </Card>
-                </StaggerItem>
-              ))}
-            </StaggerReveal>
-          </div>
-        </div>
-      </Section>
-
-      <Section className="section-divider-accent">
-        <SectionHeader
-          eyebrow="Guide and trust"
-          title="Asym was built for the exact pressure mission teams live with."
-          description="Asymmetric.al built Asym from inside mission realities, not from a generic business template. That means donor care, missionary visibility, statements, and finance do not feel like bolt-ons. They feel like the system was made for the work you already do."
-        />
-        <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          <StaggerReveal>
-            {guidePoints.map((item) => (
-              <StaggerItem key={item.title}>
-                <Card className="surface-card surface-interactive h-full rounded-[1.8rem]">
-                  <CardHeader>
-                    <div className="bg-secondary text-primary flex size-11 items-center justify-center rounded-2xl shadow-sm">
-                      <item.icon className="size-5" />
-                    </div>
-                    <CardTitle className="font-heading text-xl font-semibold tracking-[-0.04em]">
-                      {item.title}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="text-muted-foreground text-sm leading-7">
-                    {item.description}
-                  </CardContent>
-                </Card>
-              </StaggerItem>
-            ))}
-          </StaggerReveal>
-        </div>
-      </Section>
-
-      <Section tone="accent" className="section-divider-accent">
-        <SectionHeader
-          eyebrow="One system"
-          title="One system for the work mission teams keep doing in too many places."
-          description="Mission Control, donor self-service, missionary visibility, statements, and finance should not be split across disconnected tools. Asym brings them together in one mission-built system."
-        />
-        <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          <StaggerReveal>
-            {productSections.map((item) => (
-              <StaggerItem key={item.title}>
-                <Card className="surface-card surface-interactive h-full rounded-[1.8rem]">
-                  <CardHeader>
-                    <div className="bg-accent text-accent-foreground flex size-11 items-center justify-center rounded-2xl shadow-sm">
-                      <item.icon className="size-5" />
-                    </div>
-                    <CardTitle className="font-heading text-xl font-semibold tracking-[-0.04em]">
-                      {item.title}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="text-muted-foreground text-sm leading-7">
-                    {item.description}
-                  </CardContent>
-                </Card>
-              </StaggerItem>
-            ))}
-          </StaggerReveal>
-        </div>
-      </Section>
-
-      <Section className="section-divider-accent">
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-start">
-          <Reveal>
-            <Card className="page-shell-glow surface-panel surface-interactive rounded-[2rem] p-1">
-              <CardHeader className="pb-0">
-                <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
-                  How to get started
-                </p>
-                <CardTitle className="font-heading text-3xl font-semibold tracking-[-0.05em]">
-                  Start with the relief your team needs fastest.
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="text-muted-foreground flex flex-col gap-4 text-base leading-7">
-                <p>
-                  The system can be adopted in a calm sequence, starting with the flows that create relief fastest.
-                </p>
-                <p>
-                  You do not need to replace everything at once. Start where the drag is worst, then expand in a sequence your team can actually absorb.
-                </p>
-              </CardContent>
-            </Card>
-          </Reveal>
-          <div className="grid gap-4">
-            <StaggerReveal>
-              {planSteps.map((step) => (
-                <StaggerItem key={step.label}>
-                  <Card className="surface-card surface-interactive rounded-[1.8rem]">
-                    <CardHeader>
-                      <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
-                        {step.label}
-                      </p>
-                      <CardTitle className="font-heading text-xl font-semibold tracking-[-0.04em]">
-                        {step.title}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="text-muted-foreground text-sm leading-7">
-                      {step.description}
-                    </CardContent>
-                  </Card>
-                </StaggerItem>
-              ))}
-            </StaggerReveal>
-          </div>
-        </div>
-      </Section>
-
-      <Section tone="sky" className="section-divider-accent">
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,0.96fr)_minmax(0,1.04fr)] lg:items-start">
-          <Reveal>
-            <div className="page-shell-glow surface-interactive border-foreground/10 bg-primary text-primary-foreground relative overflow-hidden rounded-[2.2rem] border px-7 py-8 shadow-[0_32px_80px_-54px_rgba(22,33,43,0.78)] sm:px-9 sm:py-10">
-              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(221,242,255,0.18),transparent_35%)]" />
-              <p className="text-primary-foreground/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
-                Success and stakes
+            <div className="mt-9 space-y-3.5 sm:space-y-4">
+              <p>We&rsquo;re Conrad and Blake.</p>
+              <p>
+                Asym is a product for Christian missions organizations.
+                Asymmetric.al is the nonprofit ministry behind it.
               </p>
-              <h2 className="font-heading mt-4 max-w-[14ch] text-[clamp(2.3rem,4vw,3.7rem)] leading-[0.98] font-semibold tracking-[-0.06em]">
-                When the system gets out of the way, the team moves with confidence.
-              </h2>
-              <p className="text-primary-foreground/82 mt-5 max-w-[58ch] text-base leading-7">
-                If nothing changes, donor follow-up still slips. Month-end still drags. Missionaries still hear critical things too late. Staff keep spending energy on systems and workarounds that should have been serving them.
+              <p>We don&rsquo;t have customers yet.</p>
+              <p>
+                We do have a few organizations waiting to use it, a clear
+                problem in front of us, and we&rsquo;re building nonstop.
+              </p>
+              <p>
+                It is very early. Some parts are still ugly. Some parts are
+                half-wired. Some parts work well enough that you can already see
+                where this is going.
               </p>
             </div>
-          </Reveal>
 
-          <Card className="surface-card surface-interactive rounded-[2rem]">
-            <CardHeader>
-              <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
-                What changes
-              </p>
-              <CardTitle className="font-heading text-3xl font-semibold tracking-[-0.05em]">
-                The team gets room to move.
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="text-muted-foreground">
-              <ul className="flex list-none flex-col gap-4 pl-0 text-base leading-7">
-                {successBullets.map((item) => (
-                  <li
-                    key={item}
-                    className="border-foreground/10 rounded-[1.4rem] border bg-background/70 px-4 py-4"
-                  >
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
-        </div>
-      </Section>
-
-      <Section className="section-divider-accent">
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
-          <Reveal>
-            <div className="page-shell-glow surface-interactive border-foreground/10 bg-primary text-primary-foreground relative overflow-hidden rounded-[2.2rem] border px-7 py-8 shadow-[0_32px_80px_-54px_rgba(22,33,43,0.78)] sm:px-9 sm:py-10">
-              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(221,242,255,0.18),transparent_35%)]" />
-              <p className="text-primary-foreground/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
-                Managed Donor Care + Ops
-              </p>
-              <h2 className="font-heading mt-4 max-w-[16ch] text-[clamp(2.3rem,4vw,3.7rem)] leading-[0.98] font-semibold tracking-[-0.06em]">
-                Need more lift than software alone?
+            <section
+              id="why"
+              aria-labelledby="vision-heading"
+              className="scroll-mt-32 space-y-3.5 pt-8 sm:space-y-4 sm:pt-9"
+            >
+              <h2
+                id="vision-heading"
+                className="font-heading text-foreground text-[clamp(1.5rem,3vw,2.125rem)] leading-tight font-bold tracking-[-0.055em] text-balance"
+              >
+                The vision is simple.
               </h2>
-              <p className="text-primary-foreground/82 mt-5 max-w-[58ch] text-base leading-7">
-                For organizations that want more help, Asym can add a managed donor care and ops layer that handles routine donor questions, expense follow-through, and simple reconciliation prep inside the same mission-built system.
+              <p>
+                Christian missions organizations should not need five
+                disconnected tools, three spreadsheets, two CRMs, and a
+                part-time miracle worker just to keep donors, missionaries,
+                gifts, receipts, websites, emails, reports, and workflows from
+                falling apart.
               </p>
-              <div className="mt-8">
-                <Link
-                  href="/contact"
-                  className={cn(
-                    buttonVariants({ size: "lg", variant: "secondary" }),
-                    "px-5",
-                  )}
+              <p>That is not a small problem.</p>
+              <p>
+                It eats hours every week from people who already carry a lot.
+              </p>
+              <p>
+                Mobilizers chase candidate paperwork. Finance teams reconcile
+                gifts by hand. Missionaries wonder who gave, who stopped giving,
+                and who needs a thank-you. Donors want a clean way to give,
+                manage their gifts, and get receipts. Member Care teams try to
+                keep track of conversations, next steps, and care history in
+                systems that were not built for that work. Leaders want to know
+                what is actually happening without asking someone to pull
+                another report.
+              </p>
+              <p>
+                Most of the time, the people doing the work are not asking for
+                something flashy.
+              </p>
+              <p>
+                They just want software that does not make their day harder.
+              </p>
+              <p>That is what Asym is trying to become.</p>
+              <p>One Mission Control for missions and nonprofit operations.</p>
+              <p>
+                Giving. CRM. Donor portal. Missionary portal. Receipts.
+                Statements. Automations. Reports. Websites. Email. AI help where
+                it is actually useful.
+              </p>
+              <p>Not another dashboard for the sake of having a dashboard.</p>
+              <p>
+                A working system that takes the operational weight off Christian
+                missions organizations, so their teams can stay focused on
+                people and the Gospel.
+              </p>
+            </section>
+
+            <section
+              aria-labelledby="bothers-heading"
+              className="scroll-mt-32 space-y-3.5 pt-8 sm:space-y-4 sm:pt-9"
+            >
+              <h2
+                id="bothers-heading"
+                className="font-heading text-foreground text-[clamp(1.5rem,3vw,2.125rem)] leading-tight font-bold tracking-[-0.055em] text-balance"
+              >
+                That bothers us.
+              </h2>
+              <p>
+                We think missions technology is way behind where it should be.
+              </p>
+              <p>Not because the work is unimportant.</p>
+              <p>Because the market is weird.</p>
+              <p>
+                The people doing some of the most meaningful work in the world
+                often get stuck with the worst tools, because they are not a
+                flashy customer segment and they do not have enterprise budgets.
+              </p>
+              <p>That bothers us.</p>
+              <p>
+                It bothers us that a missionary can raise support from fifty
+                people and still not have a simple way to know who gave, who
+                needs care, and what to do next.
+              </p>
+              <p>
+                It bothers us that finance teams doing sacred trust work with
+                donor money have to fight broken exports and manual
+                reconciliation.
+              </p>
+              <p>
+                It bothers us that small missions teams often have to choose
+                between expensive legacy software or duct-taped tools that
+                constantly break.
+              </p>
+              <p>We are not okay with that.</p>
+            </section>
+
+            <section
+              id="product"
+              aria-labelledby="product-heading"
+              className="scroll-mt-32 space-y-3.5 pt-8 sm:space-y-4 sm:pt-9"
+            >
+              <h2
+                id="product-heading"
+                className="font-heading text-foreground text-[clamp(1.5rem,3vw,2.125rem)] leading-tight font-bold tracking-[-0.055em] text-balance"
+              >
+                The product is early. The mission is not.
+              </h2>
+              <p>
+                Asym exists because we believe small teams should be able to do
+                more with less.
+              </p>
+              <p>Not by working longer hours.</p>
+              <p>Not by adding more admin.</p>
+              <p>
+                By giving them tools that quietly handle the boring parts, so
+                they can stay focused on people, prayer, sending, care,
+                discipleship, and the Gospel.
+              </p>
+              <p>That is the purpose.</p>
+              <p>The product is early.</p>
+              <p>The mission is not.</p>
+            </section>
+
+            <section
+              id="builders"
+              aria-labelledby="builders-heading"
+              className="scroll-mt-32 space-y-3.5 pt-8 sm:space-y-4 sm:pt-9"
+            >
+              <h2
+                id="builders-heading"
+                className="font-heading text-foreground text-[clamp(1.5rem,3vw,2.125rem)] leading-tight font-bold tracking-[-0.055em] text-balance"
+              >
+                We are looking for builders.
+              </h2>
+              <p>
+                We are looking for people who want to build with us before it is
+                obvious.
+              </p>
+              <p>
+                People who can handle messy. People who care about craft, but do
+                not need perfect conditions to start. People who can ship,
+                learn, fix, and keep going.
+              </p>
+              <p>
+                People who understand that software can either drain a ministry
+                team or give them time back.
+              </p>
+              <p>
+                We need builders who are comfortable owning real pieces of the
+                system.
+              </p>
+              <p>Not fake ownership.</p>
+              <p>Real ownership.</p>
+              <p>
+                You might work on the donor portal one week, Stripe flows the
+                next, Mission Control after that, then a receipt PDF bug that
+                absolutely has to work before year-end giving.
+              </p>
+              <p>This is not a polished big-company job.</p>
+              <p>There is no giant team around each feature.</p>
+              <p>There is a lot to build, and every good decision matters.</p>
+              <p>
+                Money data has to be right. People data has to be safe.
+                Permissions have to hold. Receipts have to send. Reports have to
+                match.
+              </p>
+              <p>The boring details matter because the mission matters.</p>
+            </section>
+
+            <section
+              aria-labelledby="work-heading"
+              className="scroll-mt-32 space-y-3.5 pt-8 sm:space-y-4 sm:pt-9"
+            >
+              <h2
+                id="work-heading"
+                className="font-heading text-foreground text-[clamp(1.5rem,3vw,2.125rem)] leading-tight font-bold tracking-[-0.055em] text-balance"
+              >
+                The work is ordinary before it is big.
+              </h2>
+              <p>
+                We think Asym can become the operating system for Christian
+                missions organizations.
+              </p>
+              <p>That sounds big because it is.</p>
+              <p>But the first version is much more ordinary.</p>
+              <p>A donor gives.</p>
+              <p>A receipt sends.</p>
+              <p>A missionary sees the gift.</p>
+              <p>A staff member can find the donor.</p>
+              <p>A finance person can export the report.</p>
+              <p>A leader can understand what happened.</p>
+              <p>Then we make that smoother.</p>
+              <p>Then we make it faster.</p>
+              <p>Then we connect the next piece.</p>
+              <p>That is the work.</p>
+              <p>Small inputs. Real output.</p>
+              <p>
+                A few good builders can change the daily life of a lot of
+                missions teams.
+              </p>
+              <p>That is what we want to build this around.</p>
+              <p>
+                If you are looking for a clean, predictable, already-figured-out
+                thing, this probably is not it.
+              </p>
+              <p>
+                If you want to help build the foundation for something that
+                could serve thousands of missionaries and the organizations
+                behind them, we should talk.
+              </p>
+              <p>Asym is early.</p>
+              <p>We are building nonstop.</p>
+              <p>And we think this is worth giving ourselves to.</p>
+              <p>- Conrad and Blake</p>
+            </section>
+
+            <section
+              id="talk"
+              aria-labelledby="talk-title"
+              className="scroll-mt-32 pt-9 sm:pt-10"
+            >
+              <h2
+                id="talk-title"
+                className="font-heading text-foreground text-[clamp(1.5rem,3vw,2.125rem)] leading-tight font-bold tracking-[-0.055em] text-balance"
+              >
+                Want to build with us?
+              </h2>
+              <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-base leading-7">
+                <a
+                  href={mailtoHref}
+                  className="text-primary hover:text-foreground focus-visible:ring-ring/45 rounded-sm font-medium underline underline-offset-4 transition-colors focus-visible:ring-[3px] focus-visible:outline-none"
                 >
-                  Talk with us about managed support
-                  <ArrowRight data-icon="inline-end" />
-                </Link>
+                  Send us an email.
+                </a>
+                <a
+                  href={contributeHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary hover:text-foreground focus-visible:ring-ring/45 rounded-sm font-medium underline underline-offset-4 transition-colors focus-visible:ring-[3px] focus-visible:outline-none"
+                >
+                  Contribute.
+                </a>
               </div>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.08}>
-            <Card className="page-shell-glow surface-panel surface-interactive rounded-[2rem] p-1">
-              <CardHeader className="pb-0">
-                <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
-                  Final CTA
-                </p>
-                <CardTitle className="font-heading text-3xl font-semibold tracking-[-0.05em]">
-                  Less system glue. More time for people.
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="text-muted-foreground flex flex-col gap-5 text-base leading-7">
-                <p>
-                  If your team is carrying too much load in held-together systems, join the waitlist and see what Asym could replace first.
-                </p>
-                <div className="flex flex-col gap-3 sm:flex-row">
-                  <Link
-                    href="/waitlist"
-                    className={cn(buttonVariants({ size: "lg" }), "px-5")}
-                  >
-                    Join the Waitlist
-                    <ArrowRight data-icon="inline-end" />
-                  </Link>
-                  <Link
-                    href="/contact"
-                    className={cn(
-                      buttonVariants({ size: "lg", variant: "outline" }),
-                      "px-5",
-                    )}
-                  >
-                    Get the Mission Tech Stack Audit
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
-          </Reveal>
-        </div>
-      </Section>
+            </section>
+          </div>
+        </Container>
+      </article>
     </main>
   );
 }

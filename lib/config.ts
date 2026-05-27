@@ -2,72 +2,48 @@ export const siteConfig = {
   name: "Asymmetric.al",
   shortName: "Asym",
   description:
-    "Asym is the operating system for Christian missions, giving teams one mission-built system for donor care, missionary support, statements, reporting, and operations.",
-  mission: "The operating system for Christian missions",
+    "Asym is an early product for Christian missions organizations. Asymmetric.al is the nonprofit ministry behind it.",
+  mission: "Building mission technology that gives small teams time back.",
   url: "https://asymmetric.al",
   email: "info@asymmetric.al",
   nonprofit: "Global Fellowship Inc.",
   ein: "68-0214543",
   location: "Meadow Vista, California",
-  /** Primary site CTA — keep in sync with home `PageHero` actions when both are visible. */
+  /** Primary site CTA - keep in sync with the one-page homepage anchors. */
   cta: {
     primary: {
-      label: "Join the Waitlist",
-      href: "/waitlist",
+      label: "Build with us",
+      href: "#talk",
     },
     secondary: {
-      label: "Get the Mission Tech Stack Audit",
-      href: "/contact",
+      label: "Letter",
+      href: "#letter",
     },
   },
 } as const;
 
 export const navigationLinks = [
-  { label: "Platform", href: "/platform" },
-  { label: "About", href: "/about" },
-  { label: "Missions", href: "/missions" },
-  { label: "Specs", href: "/specs" },
-  { label: "Give", href: "/give" },
+  { label: "Letter", href: "#letter" },
+  { label: "Why", href: "#why" },
+  { label: "Product", href: "#product" },
+  { label: "Builders", href: "#builders" },
 ] as const;
 
 export const supportLinks = [
-  { label: "Waitlist", href: "/waitlist" },
-  { label: "FAQ", href: "/faq" },
-  { label: "Open Source & Trust", href: "/open-source-and-trust" },
-  { label: "Join the Build", href: "/join" },
-  { label: "Contact", href: "/contact" },
+  { label: "Privacy", href: "/privacy" },
+  { label: "Terms", href: "/terms" },
   { label: "Statement of Faith", href: "/statement-of-faith" },
+  { label: "501(c)(3)", href: "/501c3" },
 ] as const;
 
 export const footerGroups = [
   {
-    title: "Explore",
+    title: "Legal",
     links: [
-      { label: "Platform", href: "/platform" },
-      { label: "About", href: "/about" },
-      { label: "FAQ", href: "/faq" },
-      { label: "Open Source & Trust", href: "/open-source-and-trust" },
-      { label: "Philosophy", href: "/manifesto" },
-      { label: "Statement of Faith", href: "/statement-of-faith" },
-    ],
-  },
-  {
-    title: "Take Action",
-    links: [
-      { label: "Join the Waitlist", href: "/waitlist" },
-      { label: "Get the Mission Tech Stack Audit", href: "/contact" },
-      { label: "For Missions", href: "/missions" },
-      { label: "Give to Build", href: "/give" },
-      { label: "Join the Team", href: "/join" },
-    ],
-  },
-  {
-    title: "Trust",
-    links: [
-      { label: "Financials", href: "/501c3" },
-      { label: "System Specs", href: "/specs" },
       { label: "Privacy Policy", href: "/privacy" },
       { label: "Terms of Service", href: "/terms" },
+      { label: "Statement of Faith", href: "/statement-of-faith" },
+      { label: "501(c)(3)", href: "/501c3" },
     ],
   },
 ] as const;

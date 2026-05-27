@@ -1,6 +1,4 @@
-import { PageHero, Section } from "@/components/site/page";
-import { Reveal } from "@/components/site/reveal";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Container } from "@/components/site/page";
 import { cn } from "@/lib/utils";
 import type { ReactNode } from "react";
 
@@ -8,78 +6,60 @@ export function DocumentPage({
   eyebrow,
   title,
   description,
-  heading,
   children,
   footer,
-  heroMeta,
 }: {
-  eyebrow?: string;
+  eyebrow: string;
   title: ReactNode;
   description: ReactNode;
-  heading: ReactNode;
   children: ReactNode;
   footer?: ReactNode;
-  heroMeta?: string[];
 }) {
   return (
-    <main id="main-content" tabIndex={-1}>
-      <PageHero
-        {...(eyebrow ? { eyebrow } : {})}
-        density="legal"
-        title={title}
-        description={description}
-        {...(heroMeta ? { meta: heroMeta } : {})}
-      />
-
-      <Section density="legal" className="pt-0">
-        <Reveal trigger="mount">
-          <Card className="surface-panel document-shell rounded-[2.15rem]">
-            <CardHeader className="border-foreground/8 relative z-10 border-b pb-6">
-              <CardTitle className="font-heading text-[clamp(2rem,3vw,3rem)] font-semibold tracking-[-0.05em]">
-                {heading}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="relative z-10 space-y-0">
-              {children}
-              {footer ? (
-                <div className="document-section pt-7">
-                  <div className="content-measure text-muted-foreground text-base leading-7">
-                    {footer}
-                  </div>
-                </div>
-              ) : null}
-            </CardContent>
-          </Card>
-        </Reveal>
-      </Section>
+    <main id="main-content" className="relative isolate" tabIndex={-1}>
+      <Container className="max-w-[76rem]">
+        <article className="max-w-[48rem] pt-[clamp(7.4rem,9vw,9.5rem)] pb-14 sm:pb-18">
+          <p className="text-primary/72 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
+            {eyebrow}
+          </p>
+          {title}
+          <div className="text-muted-foreground mt-6 max-w-[44rem] text-base leading-7 sm:text-lg sm:leading-8">
+            {description}
+          </div>
+          <div className="mt-12 space-y-10 sm:space-y-12">{children}</div>
+          {footer ? (
+            <div className="border-foreground/10 text-muted-foreground mt-12 border-t pt-6 text-base leading-7">
+              {footer}
+            </div>
+          ) : null}
+        </article>
+      </Container>
     </main>
   );
 }
 
 export function DocumentSection({
+  number,
   title,
-  eyebrow,
-  tone = "default",
   children,
   className,
 }: {
+  number?: string;
   title: ReactNode;
-  eyebrow?: ReactNode;
-  tone?: "default" | "accent";
   children: ReactNode;
   className?: string;
 }) {
   return (
-    <section data-tone={tone} className={cn("document-section", className)}>
-      {eyebrow ? (
-        <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
-          {eyebrow}
+    <section className={cn("grid gap-3", className)}>
+      {number ? (
+        <p className="text-primary/62 font-mono text-[0.72rem] tracking-[0.24em] uppercase">
+          {number}
         </p>
       ) : null}
-      <h2 className="font-heading text-foreground text-[clamp(1.45rem,2vw,2rem)] font-semibold tracking-[-0.04em]">
+      <h2 className="font-heading text-foreground text-[clamp(1.5rem,2.4vw,2rem)] leading-tight font-semibold tracking-[-0.045em]">
         {title}
       </h2>
-      <div className="content-measure text-muted-foreground grid gap-4 text-base leading-7">
+      <div className="text-muted-foreground grid gap-4 text-base leading-7 sm:text-[1.04rem] sm:leading-8">
         {children}
       </div>
     </section>

@@ -2,7 +2,8 @@
 
 import { siteFeatures } from "@/lib/config";
 import Lenis from "lenis";
-import { useEffect, type ReactNode } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, type ReactNode } from "react";
 
 const LENIS_OPTIONS = {
   duration: 0.88,
@@ -15,6 +16,9 @@ const LENIS_OPTIONS = {
 };
 
 export function SmoothScroll({ children }: { children: ReactNode }): ReactNode {
+  const pathname = usePathname();
+  const lenisRef = useRef<Lenis | null>(null);
+
   useEffect(() => {
     if (!siteFeatures.smoothScroll) return;
 
@@ -25,7 +29,11 @@ export function SmoothScroll({ children }: { children: ReactNode }): ReactNode {
     if (prefersReducedMotion) return;
 
     const lenis = new Lenis(LENIS_OPTIONS);
+    const previousScrollRestoration = window.history.scrollRestoration;
     let rafId = 0;
+
+    lenisRef.current = lenis;
+    window.history.scrollRestoration = "manual";
 
     function stopRaf(): void {
       if (!rafId) return;
@@ -105,9 +113,27 @@ export function SmoothScroll({ children }: { children: ReactNode }): ReactNode {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("resize", handleResize);
       stopRaf();
+      window.history.scrollRestoration = previousScrollRestoration;
+      lenisRef.current = null;
       lenis.destroy();
     };
   }, []);
+
+  useEffect(() => {
+    if (!siteFeatures.smoothScroll || window.location.hash) return;
+
+    const resetScroll = () => {
+      lenisRef.current?.scrollTo(0, { immediate: true });
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    };
+
+    resetScroll();
+    const frameId = requestAnimationFrame(resetScroll);
+
+    return () => cancelAnimationFrame(frameId);
+  }, [pathname]);
 
   return <>{children}</>;
 }

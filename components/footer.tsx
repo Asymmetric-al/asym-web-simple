@@ -1,136 +1,70 @@
-import { footerGroups, siteConfig } from "@/lib/config";
-import { buttonVariants } from "@/components/ui/button-variants";
 import { SiteLogoMark } from "@/components/site/site-logo-mark";
-import { cn } from "@/lib/utils";
-import { ArrowUpRight, Github, MoveRight } from "lucide-react";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { footerGroups, siteConfig } from "@/lib/config";
+import { Github } from "lucide-react";
 import Link from "next/link";
 
 export function Footer() {
   return (
-    <footer className="pt-6 pb-10 sm:pt-8 sm:pb-12">
-      <div className="mx-auto flex max-w-[80rem] flex-col gap-6 px-4 sm:px-6 lg:px-8">
-        <div className="page-shell-glow surface-hero surface-interactive overflow-hidden rounded-[2.35rem] p-7 sm:p-10">
-          <div className="grid gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-end">
-            <div className="max-w-2xl min-w-0">
-              <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.3em] uppercase">
-                Join the waitlist
-              </p>
-              <h2 className="font-heading text-foreground mt-4 max-w-[16ch] text-[clamp(2.35rem,5vw,4.6rem)] leading-[0.95] font-semibold tracking-[-0.06em] text-balance">
-                One mission-built system for donor care, missionary support, and operations.
-              </h2>
-              <p className="text-muted-foreground mt-5 max-w-[58ch] text-base leading-7 sm:text-lg">
-                Asym keeps donor care, missionary support, statements,
-                reporting, and operations in one mission-built system so your
-                staff can stop managing the gaps between disconnected tools.
+    <footer className="pb-8 sm:pb-10">
+      <div className="mx-auto max-w-[76rem] px-4 sm:px-6 lg:px-8">
+        <div className="border-foreground/10 bg-background/48 rounded-[1.8rem] border p-5 shadow-[0_24px_72px_-58px_rgba(22,33,43,0.5)] backdrop-blur-md sm:p-6">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-xl min-w-0">
+              <Link
+                href="/"
+                className="focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-w-0 items-center gap-2 rounded-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+                aria-label={`${siteConfig.shortName} home`}
+              >
+                <SiteLogoMark className="text-primary size-5" />
+                <span className="font-heading text-foreground text-base font-semibold tracking-[-0.04em]">
+                  {siteConfig.shortName}
+                </span>
+              </Link>
+              <p className="text-muted-foreground mt-4 max-w-[54ch] text-sm leading-6">
+                Asym exists to carry the operational weight for Christian
+                missions organizations, so they can stay focused on people and
+                the Gospel.
               </p>
             </div>
 
-            <div className="flex min-w-0 flex-col gap-3 lg:items-end">
-              <div className="border-foreground/10 bg-background/62 text-muted-foreground grid w-full gap-2 rounded-[1.5rem] border p-4 text-sm sm:max-w-[22rem]">
-                <span>Open-source foundations for long-term trust</span>
-                <span>Christian, nonprofit posture</span>
-                <span>Statement of Faith and financials available</span>
-              </div>
+            <div className="flex flex-wrap items-center gap-3">
               <Link
-                href={siteConfig.cta.primary.href}
-                className={cn(
-                  buttonVariants({ size: "lg" }),
-                  "w-full justify-center rounded-full px-6 sm:w-auto"
-                )}
+                href={`mailto:${siteConfig.email}?subject=Building%20with%20Asym`}
+                className="text-foreground/84 hover:text-primary focus-visible:ring-ring/45 link-resilient rounded-sm text-sm font-medium underline-offset-4 transition-colors hover:underline focus-visible:ring-[3px] focus-visible:outline-none"
               >
-                {siteConfig.cta.primary.label}
-                <MoveRight data-icon="inline-end" />
+                {siteConfig.email}
               </Link>
               <Link
-                href={siteConfig.cta.secondary.href}
-                className={cn(
-                  buttonVariants({ variant: "outline", size: "lg" }),
-                  "w-full justify-center rounded-full px-6 sm:w-auto"
-                )}
+                href="https://github.com/Asymmetric-al"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-foreground/76 hover:text-primary focus-visible:ring-ring/45 border-foreground/10 bg-background/58 hover:bg-background/82 inline-flex size-9 items-center justify-center rounded-full border transition-[color,background-color,border-color,transform] duration-200 ease-out hover:-translate-y-px focus-visible:ring-[3px] focus-visible:outline-none active:scale-[0.985]"
+                aria-label="GitHub"
               >
-                {siteConfig.cta.secondary.label}
-                <ArrowUpRight data-icon="inline-end" />
+                <Github className="size-4" aria-hidden="true" />
               </Link>
+              <ThemeToggle />
             </div>
           </div>
-        </div>
 
-        <div className="surface-panel surface-interactive rounded-[2.35rem] p-7 sm:p-10">
-          <div className="grid gap-12 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,0.7fr)_minmax(0,0.7fr)_minmax(0,0.7fr)] lg:gap-10">
-            <div className="max-w-xl min-w-0 lg:pr-6">
-              <SiteLogoMark className="text-primary/80 mb-6 size-10" />
-              <h3 className="font-heading flex flex-col items-start font-bold uppercase tracking-[-0.05em]">
-                <span className="text-foreground text-xl leading-[1.15] sm:text-2xl md:text-3xl">
-                  We build for the <span className="text-muted-foreground">global church.</span>
-                </span>
-                <span className="text-foreground text-xl leading-[1.15] sm:text-2xl md:text-3xl">
-                  We measure success in
-                </span>
-                <span className="mt-1 flex flex-col">
-                  <span className="text-foreground text-[clamp(3.5rem,7vw,5.5rem)] leading-[0.8] tracking-[-0.07em]">
-                    Impact,
-                  </span>
-                  <span className="text-muted-foreground mt-1.5 self-end text-xl leading-[1.15] sm:mt-2 sm:text-2xl md:text-3xl">
-                    Not profit.
-                  </span>
-                </span>
-              </h3>
-              <p className="text-muted-foreground mt-6 text-sm leading-7 sm:text-base">
-                Asym is the operating system for Christian missions. It is built
-                on open-source foundations because transparency, stewardship,
-                and long-term trust matter.
-              </p>
-            </div>
-
-            {footerGroups.map((group) => (
-              <div key={group.title} className="min-w-0">
-                <h4 className="text-muted-foreground font-mono text-[0.72rem] tracking-[0.28em] uppercase">
-                  {group.title}
-                </h4>
-                <ul className="mt-4 flex flex-col gap-3">
-                  {group.links.map((link) => (
-                    <li key={link.href}>
-                      <Link
-                        href={link.href}
-                        className="text-foreground/84 hover:text-foreground inline-flex items-center text-sm transition-[color,transform] duration-200 hover:translate-x-1"
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-
-          <div className="border-foreground/10 text-muted-foreground mt-12 flex flex-col gap-6 border-t pt-8 text-sm sm:flex-row sm:items-center sm:justify-between">
-            <div className="content-measure max-w-xl leading-relaxed">
-              Operating as a project under {siteConfig.nonprofit} EIN:{" "}
-              {siteConfig.ein}. We remain openly Christian and visibly
-              accountable through our Statement of Faith and nonprofit
-              covering.
-            </div>
-            <div className="flex flex-col gap-2 sm:items-end">
-              <div className="flex items-center gap-3">
-                <Link
-                  href={`mailto:${siteConfig.email}`}
-                  className="link-resilient text-foreground hover:text-primary font-mono text-[0.72rem] tracking-[0.2em] uppercase transition-colors sm:text-right"
-                >
-                  {siteConfig.email}
-                </Link>
-                <Link
-                  href="https://github.com/Asymmetric-al"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-foreground/80 hover:text-primary transition-colors"
-                  aria-label="GitHub"
-                >
-                  <Github className="size-[1.1rem]" />
-                </Link>
-              </div>
-              <span className="font-mono text-[0.72rem] tracking-[0.15em] uppercase opacity-70">
-                Asymmetric.al © {new Date().getFullYear()}
-              </span>
+          <div className="border-foreground/10 text-muted-foreground mt-6 flex flex-col gap-4 border-t pt-5 text-xs leading-6 sm:flex-row sm:items-center sm:justify-between">
+            <p>
+              Asymmetric.al &copy; {new Date().getFullYear()}. Operating under{" "}
+              {siteConfig.nonprofit}, EIN {siteConfig.ein}.
+            </p>
+            <div className="flex flex-wrap gap-x-4 gap-y-2">
+              {footerGroups.flatMap((group) =>
+                group.links.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="text-foreground/72 hover:text-foreground focus-visible:ring-ring/45 rounded-sm underline-offset-4 transition-colors hover:underline focus-visible:ring-[3px] focus-visible:outline-none"
+                  >
+                    {link.label}
+                  </Link>
+                ))
+              )}
             </div>
           </div>
         </div>
