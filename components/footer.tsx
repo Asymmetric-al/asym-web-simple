@@ -16,8 +16,8 @@ export function Footer() {
                 className="focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-w-0 items-center gap-2 rounded-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
                 aria-label={`${siteConfig.shortName} home`}
               >
-                <SiteLogoMark className="text-primary size-5" />
-                <span className="font-heading text-foreground text-base font-semibold tracking-[-0.04em]">
+                <SiteLogoMark className="text-primary size-5" imageSizes="20px" />
+                <span className="font-heading text-foreground inline-block -translate-y-px text-base leading-none font-semibold tracking-[-0.04em]">
                   {siteConfig.shortName}
                 </span>
               </Link>

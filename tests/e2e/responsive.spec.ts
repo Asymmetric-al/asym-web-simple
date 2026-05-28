@@ -1,8 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 import { routeFixtures } from "../fixtures/routes";
 import {
-  orientationPairs,
-  platformStressViewports,
   routeSanityViewports,
   type ViewportFixture,
 } from "../fixtures/viewports";
@@ -146,116 +144,6 @@ async function expectNoVisibleDialogs(page: Page, context: string) {
     .toBe(0);
 }
 
-async function readPlatformTriggerHeights(page: Page): Promise<{
-  renderedHeights: number[];
-  variableHeights: number[];
-}> {
-  const triggers = page
-    .getByRole("tablist", { name: /mission control modules/i })
-    .getByRole("tab");
-
-  return triggers.evaluateAll((elements) => ({
-    renderedHeights: elements.map((element) =>
-      Math.round(element.getBoundingClientRect().height)
-    ),
-    variableHeights: elements.map((element) => {
-      const value = Number.parseFloat(
-        window
-          .getComputedStyle(element)
-          .getPropertyValue("--platform-tab-trigger-min-height")
-      );
-
-      return Number.isFinite(value) ? Math.round(value) : 0;
-    }),
-  }));
-}
-
-async function assertPlatformTabsStable(page: Page, context: string) {
-  const tabsList = page.getByRole("tablist", {
-    name: /mission control modules/i,
-  });
-  const triggers = tabsList.getByRole("tab");
-
-  await expect(tabsList, `${context} tablist should upgrade`).toHaveAttribute(
-    "data-pretext-ready",
-    "true"
-  );
-  await expect(
-    triggers.first(),
-    `${context} first trigger should upgrade`
-  ).toHaveAttribute("data-pretext-ready", "true");
-
-  await expect
-    .poll(
-      async () => {
-        const { renderedHeights } = await readPlatformTriggerHeights(page);
-        return Math.max(...renderedHeights) - Math.min(...renderedHeights);
-      },
-      {
-        timeout: 10_000,
-        message: `${context} rendered trigger heights should converge`,
-      }
-    )
-    .toBeLessThanOrEqual(1);
-
-  await expect
-    .poll(
-      async () => {
-        const { variableHeights } = await readPlatformTriggerHeights(page);
-        return Math.max(...variableHeights) - Math.min(...variableHeights);
-      },
-      {
-        timeout: 10_000,
-        message: `${context} measured trigger heights should converge`,
-      }
-    )
-    .toBeLessThanOrEqual(1);
-
-  await expect
-    .poll(
-      async () => {
-        const { renderedHeights } = await readPlatformTriggerHeights(page);
-        return Math.min(...renderedHeights);
-      },
-      {
-        timeout: 10_000,
-        message: `${context} rendered trigger height floor should remain intact`,
-      }
-    )
-    .toBeGreaterThanOrEqual(144);
-}
-
-async function assertPlatformTabSwitching(
-  page: Page,
-  context: string,
-  index: number
-) {
-  const tabAssertions = [
-    {
-      name: /Donor Care/i,
-      panelText:
-        /Keep donor questions, giving follow-through, receipts, and relationship context connected instead of scattered across inboxes and separate systems\./i,
-    },
-    {
-      name: /Missionary Support/i,
-      panelText:
-        /Help finance, mobilization, member care, and leadership stay aligned around the people they are supporting instead of rebuilding context in side systems\./i,
-    },
-    {
-      name: /Mobilize/i,
-      panelText:
-        /Visual workflow orchestration for candidates, onboarding, and deployment using Zapier's ecosystem without spaghetti logic\./i,
-    },
-  ] as const;
-  const target = tabAssertions[index % tabAssertions.length]!;
-
-  await page.getByRole("tab", { name: target.name }).click();
-  await expect(
-    page.getByRole("tabpanel", { name: target.name }),
-    `${context} tab panel should stay interactive`
-  ).toContainText(target.panelText);
-}
-
 test.describe("responsive regression coverage", () => {
   test.describe.configure({ mode: "serial", timeout: 240_000 });
 
@@ -289,155 +177,104 @@ test.describe("responsive regression coverage", () => {
     });
   }
 
-  test("/platform stays measured and interactive across resize stress", async ({
+  test("home header stays a compact brand chip across viewport changes", async ({
     page,
   }) => {
     const issues = createBrowserIssueTracker(page);
-    await setViewport(page, platformStressViewports[0]!);
-
-    await page.goto("/platform", { waitUntil: "domcontentloaded" });
-    await waitForUi(page);
-
-    let interactionIndex = 0;
-
-    for (const viewport of platformStressViewports) {
-      const checkpoint = issues.checkpoint();
-      const context = `/platform @ ${viewport.label}`;
-
-      await setViewport(page, viewport);
-      await assertPlatformTabsStable(page, context);
-      await assertPlatformTabSwitching(page, context, interactionIndex);
-      await expectNoHorizontalOverflow(page, context);
-      await expectNoVisibleDialogs(page, context);
-      issues.expectNoUnexpectedIssuesSince(checkpoint, context);
-      interactionIndex += 1;
-    }
-
-    for (const pair of orientationPairs) {
-      const portraitCheckpoint = issues.checkpoint();
-      const portraitContext = `/platform @ ${pair.portrait.label}`;
-      await setViewport(page, pair.portrait);
-      await assertPlatformTabsStable(page, portraitContext);
-      await assertPlatformTabSwitching(page, portraitContext, interactionIndex);
-      await expectNoHorizontalOverflow(page, portraitContext);
-      issues.expectNoUnexpectedIssuesSince(portraitCheckpoint, portraitContext);
-      interactionIndex += 1;
-
-      const landscapeCheckpoint = issues.checkpoint();
-      const landscapeContext = `/platform @ ${pair.landscape.label}`;
-      await setViewport(page, pair.landscape);
-      await assertPlatformTabsStable(page, landscapeContext);
-      await assertPlatformTabSwitching(
-        page,
-        landscapeContext,
-        interactionIndex
-      );
-      await expectNoHorizontalOverflow(page, landscapeContext);
-      issues.expectNoUnexpectedIssuesSince(
-        landscapeCheckpoint,
-        landscapeContext
-      );
-      interactionIndex += 1;
-    }
-  });
-
-  test("home header hands off cleanly between desktop and mobile nav", async ({
-    page,
-  }) => {
-    const issues = createBrowserIssueTracker(page);
-    const primaryNav = page.getByRole("navigation", {
-      name: /primary navigation/i,
-    });
-    const menuTrigger = page.getByRole("button", { name: /open menu/i });
+    const brandLink = page
+      .getByRole("banner")
+      .getByRole("link", { name: /^Asym home$/i });
 
     await setViewport(page, { label: "1440x900", width: 1440, height: 900 });
     let checkpoint = issues.checkpoint();
     await page.goto("/", { waitUntil: "domcontentloaded" });
     await waitForUi(page);
-    await expect(primaryNav).toBeVisible();
-    await expect(menuTrigger).toBeHidden();
+    await expect(brandLink).toBeVisible();
+    await expect(page.locator("header nav")).toHaveCount(0);
+    await expect(page.getByRole("button", { name: /open menu/i })).toHaveCount(0);
+    await expect(
+      brandLink.locator('span[aria-hidden="true"]')
+    ).toHaveCSS("width", "28px");
     await expectNoHorizontalOverflow(page, "home @ 1440x900");
     issues.expectNoUnexpectedIssuesSince(checkpoint, "home @ 1440x900");
 
     await setViewport(page, { label: "390x844", width: 390, height: 844 });
     checkpoint = issues.checkpoint();
-    await expect(primaryNav).toBeHidden();
-    await expect(menuTrigger).toBeVisible();
-    await menuTrigger.click();
-
-    const mobileDialog = page.getByRole("dialog").last();
-    await expect(mobileDialog).toBeVisible();
-    await mobileDialog.getByRole("link", { name: /^Platform$/i }).click();
-    await expect(page).toHaveURL(/\/platform$/);
+    await expect(brandLink).toBeVisible();
+    await expect(page.locator("header nav")).toHaveCount(0);
+    await expect(page.getByRole("button", { name: /open menu/i })).toHaveCount(0);
     await expect(
       page.getByRole("heading", {
         level: 1,
-        name: /One mission-built system instead of a pile of tools\./i,
+        name: /We.re building Asym\./i,
       })
     ).toBeVisible();
-    issues.expectNoUnexpectedIssuesSince(
-      checkpoint,
-      "home -> mobile sheet -> platform"
-    );
+    await expectNoVisibleDialogs(page, "home @ 390x844");
+    await expectNoHorizontalOverflow(page, "home @ 390x844");
+    issues.expectNoUnexpectedIssuesSince(checkpoint, "home @ 390x844");
 
     await setViewport(page, { label: "1280x900", width: 1280, height: 900 });
     checkpoint = issues.checkpoint();
     await page.goto("/", { waitUntil: "domcontentloaded" });
     await waitForUi(page);
-    await expect(primaryNav).toBeVisible();
-    await expect(menuTrigger).toBeHidden();
-    await expectNoVisibleDialogs(page, "home @ 1280x900 after mobile handoff");
+    await expect(brandLink).toBeVisible();
+    await expect(page.locator("header nav")).toHaveCount(0);
+    await expect(page.getByRole("button", { name: /open menu/i })).toHaveCount(0);
+    await expectNoVisibleDialogs(page, "home @ 1280x900 after resize");
     await expectNoHorizontalOverflow(
       page,
-      "home @ 1280x900 after mobile handoff"
+      "home @ 1280x900 after resize"
     );
     issues.expectNoUnexpectedIssuesSince(
       checkpoint,
-      "home @ 1280x900 after mobile handoff"
+      "home @ 1280x900 after resize"
     );
   });
 
-  test("give faq remains interactive after repeated viewport changes", async ({
+  test("home footer remains accessible after repeated viewport changes", async ({
     page,
   }) => {
     const issues = createBrowserIssueTracker(page);
+    const footer = page.locator("footer");
 
     await setViewport(page, { label: "390x844", width: 390, height: 844 });
     let checkpoint = issues.checkpoint();
-    await page.goto("/give", { waitUntil: "domcontentloaded" });
+    await page.goto("/", { waitUntil: "domcontentloaded" });
     await waitForUi(page);
+    await footer.scrollIntoViewIfNeeded();
 
-    await page
-      .getByRole("button", { name: /Can I give via check or DAF\?/i })
-      .click();
     await expect(
-      page.getByText(/donor-advised fund coordination\./i)
+      footer.getByRole("link", { name: "info@asymmetric.al" })
     ).toBeVisible();
-    await expectNoHorizontalOverflow(page, "give @ 390x844");
-    issues.expectNoUnexpectedIssuesSince(checkpoint, "give @ 390x844");
+    await expect(
+      footer.getByRole("button", { name: /change color theme/i })
+    ).toBeVisible();
+    await expectNoHorizontalOverflow(page, "home footer @ 390x844");
+    issues.expectNoUnexpectedIssuesSince(checkpoint, "home footer @ 390x844");
 
     await setViewport(page, { label: "1280x900", width: 1280, height: 900 });
     checkpoint = issues.checkpoint();
-    await page
-      .getByRole("button", { name: /Is my gift tax-deductible\?/i })
-      .click();
+    await footer.scrollIntoViewIfNeeded();
     await expect(
-      page.getByText(/fully tax-deductible in the United States\./i)
+      footer.getByRole("link", { name: /^GitHub$/i })
     ).toBeVisible();
-    await expectNoHorizontalOverflow(page, "give @ 1280x900");
-    issues.expectNoUnexpectedIssuesSince(checkpoint, "give @ 1280x900");
+    await expect(
+      footer.getByRole("link", { name: /^Privacy Policy$/i })
+    ).toBeVisible();
+    await expectNoHorizontalOverflow(page, "home footer @ 1280x900");
+    issues.expectNoUnexpectedIssuesSince(checkpoint, "home footer @ 1280x900");
 
     await setViewport(page, { label: "390x844", width: 390, height: 844 });
     checkpoint = issues.checkpoint();
-    await page
-      .getByRole("button", { name: /Who controls the funds\?/i })
-      .click();
+    await footer.scrollIntoViewIfNeeded();
     await expect(
-      page.getByText(
-        /Global Fellowship board, which provides financial accountability/i
-      )
+      footer.getByRole("link", { name: /^Terms of Service$/i })
     ).toBeVisible();
-    await expectNoHorizontalOverflow(page, "give @ 390x844 repeated");
-    issues.expectNoUnexpectedIssuesSince(checkpoint, "give @ 390x844 repeated");
+    await expectNoVisibleDialogs(page, "home footer @ 390x844 repeated");
+    await expectNoHorizontalOverflow(page, "home footer @ 390x844 repeated");
+    issues.expectNoUnexpectedIssuesSince(
+      checkpoint,
+      "home footer @ 390x844 repeated"
+    );
   });
 });
