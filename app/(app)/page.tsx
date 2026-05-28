@@ -107,12 +107,12 @@ export default function HomePage() {
       <LandscapeBackground />
 
       <article className="letter-prose pb-12 sm:pb-16">
-        <Container className="max-w-[92rem]">
+        <Container className="max-w-[76rem]">
           <div
             id="letter"
             className="text-foreground scroll-mt-32 pt-[clamp(7.4rem,9vw,9.5rem)]"
           >
-            <h1 className="font-heading max-w-none text-[clamp(2.85rem,7vw,6.25rem)] leading-[0.92] font-bold tracking-[-0.075em] text-balance lg:whitespace-nowrap">
+            <h1 className="font-heading max-w-none text-[clamp(2.85rem,6.1vw,5.5rem)] leading-[0.92] font-bold tracking-[-0.075em] text-balance lg:whitespace-nowrap">
               {heroTitle}
             </h1>
 
