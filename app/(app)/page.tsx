@@ -7,10 +7,15 @@ import {
 } from "@/lib/content/home-letter";
 import { siteConfig } from "@/lib/config";
 import { createMetadata } from "@/lib/metadata";
+import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import Image from "next/image";
 
 const mailtoHref = `mailto:${siteConfig.email}?subject=Building%20with%20Asym`;
+const emphasizedParagraphs = new Set([
+  "That bothers us.",
+  "We are not okay with that.",
+]);
 
 export const metadata: Metadata = createMetadata({
   title: "Asym is being built for missions organizations",
@@ -141,7 +146,15 @@ export default function HomePage() {
                     </h2>
                   ) : null}
                   {section.paragraphs.map((paragraph, index) => (
-                    <p key={`${section.title}-${index}`}>{paragraph}</p>
+                    <p
+                      key={`${section.title}-${index}`}
+                      className={cn(
+                        emphasizedParagraphs.has(paragraph) &&
+                          "text-foreground font-semibold"
+                      )}
+                    >
+                      {paragraph}
+                    </p>
                   ))}
                 </section>
               ))}

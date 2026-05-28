@@ -20,7 +20,10 @@ export const letterSections = [
     paragraphs: [
       "Christian missions organizations should not need five disconnected tools, three spreadsheets, two CRMs, and a part-time miracle worker just to keep donors, missionaries, gifts, receipts, websites, emails, reports, and workflows from falling apart. That is not a small problem. It eats hours every week from people who already carry a lot.",
       "Mobilizers chase candidate paperwork. Finance teams reconcile gifts by hand. Missionaries wonder who gave, who stopped giving, and who needs a thank-you. Donors want a clean way to give, manage their gifts, and get receipts. Member Care teams try to keep track of conversations, next steps, and care history in systems that were not built for that work. Leaders want to know what is actually happening without asking someone to pull another report.",
-      "We think missions technology is way behind where it should be. Not because the work is unimportant, but because the market is weird. The people doing some of the most meaningful work in the world often get stuck with the worst tools, because they are not a flashy customer segment and they do not have enterprise budgets.",
+      "We think missions technology is way behind where it should be. Not because the work is unimportant. Because the market is weird. The people doing some of the most meaningful work in the world often get stuck with the worst tools, because they are not a flashy customer segment and they do not have enterprise budgets.",
+      "That bothers us.",
+      "It bothers us that a missionary can raise support from fifty people and still not have a simple, beautiful way to know who gave, who needs care, and what to do next. It bothers us that finance teams doing sacred trust work with donor money have to fight broken exports and manual reconciliation. It bothers us that small missions teams often have to choose between expensive legacy software or duct-taped tools that constantly break.",
+      "We are not okay with that.",
     ],
   },
   {
@@ -60,7 +63,7 @@ export const letterSections = [
     paragraphs: [
       "A few good builders can change the daily life of a lot of missions teams. That is what we want to build this around.",
       "We are looking for people who want to build with us before it is obvious. People who can handle messy. People who care about craft, but do not need perfect conditions to start. People who can ship, learn, fix, and keep going.",
-      "We also want to hear from missions organizations carrying this kind of operational drag now. It bothers us that a missionary can raise support from fifty people and still not have a simple way to know who gave, who needs care, and what to do next. It bothers us that finance teams doing mission-critical work with donor money have to fight broken exports and manual reconciliation. It bothers us that small missions teams often have to choose between expensive legacy software or duct-taped tools that constantly break.",
+      "We also want to hear from missions organizations carrying this kind of operational drag now.",
       "If you want to help build the foundation for something that could serve thousands of missionaries and the organizations behind them, we should talk.",
       "Asym is early. We are building nonstop. And we think this is worth giving ourselves to.",
       "- Conrad and Blake",
