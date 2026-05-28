@@ -127,7 +127,9 @@ export default function HomePage() {
                 <section
                   key={section.headingId}
                   id={"id" in section ? section.id : undefined}
-                  aria-labelledby={section.title ? section.headingId : undefined}
+                  aria-labelledby={
+                    section.title ? section.headingId : undefined
+                  }
                   className="scroll-mt-32 space-y-3.5 pt-8 sm:space-y-4 sm:pt-9"
                 >
                   {section.title ? (
@@ -139,16 +141,7 @@ export default function HomePage() {
                     </h2>
                   ) : null}
                   {section.paragraphs.map((paragraph, index) => (
-                    <p
-                      key={`${section.title}-${index}`}
-                      className={
-                        paragraph === "That bothers us."
-                          ? "text-foreground font-semibold"
-                          : undefined
-                      }
-                    >
-                      {paragraph}
-                    </p>
+                    <p key={`${section.title}-${index}`}>{paragraph}</p>
                   ))}
                 </section>
               ))}
