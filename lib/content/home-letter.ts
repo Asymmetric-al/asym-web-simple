@@ -11,7 +11,7 @@ export const introParagraphs = [
 type LetterSection = {
   id?: string;
   headingId: string;
-  title: string;
+  title: string | undefined;
   paragraphs: readonly string[];
 };
 
@@ -36,7 +36,7 @@ export const letterSections = [
   },
   {
     headingId: "bothers-heading",
-    title: "That bothers us.",
+    title: undefined,
     paragraphs: [
       "We think missions technology is way behind where it should be.",
       "Not because the work is unimportant.",
@@ -44,7 +44,7 @@ export const letterSections = [
       "The people doing some of the most meaningful work in the world often get stuck with the worst tools, because they are not a flashy customer segment and they do not have enterprise budgets.",
       "That bothers us.",
       "It bothers us that a missionary can raise support from fifty people and still not have a simple way to know who gave, who needs care, and what to do next.",
-      "It bothers us that finance teams doing sacred trust work with donor money have to fight broken exports and manual reconciliation.",
+      "It bothers us that finance teams doing mission-critical work with donor money have to fight broken exports and manual reconciliation.",
       "It bothers us that small missions teams often have to choose between expensive legacy software or duct-taped tools that constantly break.",
       "We are not okay with that.",
     ],
@@ -127,7 +127,7 @@ export const allLetterParagraphs = [
 
 export const typographyAuditStrings = [
   heroTitle,
-  ...letterSections.map((section) => section.title),
+  ...letterSections.flatMap((section) => (section.title ? [section.title] : [])),
   ...allLetterParagraphs,
   cta.title,
   cta.emailLabel,

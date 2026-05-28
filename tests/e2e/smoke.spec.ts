@@ -32,7 +32,17 @@ async function waitForUi(page: Page) {
   }
 }
 
-test.describe("marketing site smoke tests", () => {
+async function expectNoHorizontalOverflow(page: Page) {
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () => document.documentElement.scrollWidth <= window.innerWidth
+      )
+    )
+    .toBe(true);
+}
+
+test.describe("letter site smoke tests", () => {
   test.describe.configure({ timeout: 60_000 });
 
   test.beforeEach(async ({ page }) => {
@@ -59,42 +69,35 @@ test.describe("marketing site smoke tests", () => {
     await expect(page.locator("#main-content")).toBeFocused();
   });
 
-  test("mobile navigation opens and routes to platform", async ({
+  test("mobile header stays a compact brand chip without fake navigation", async ({
     page,
   }) => {
-    const projectName = test.info().project.name;
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/", { waitUntil: "domcontentloaded" });
     await waitForUi(page);
 
-    const menuTrigger = page.getByRole("button", { name: /open menu/i });
-    const mobileMenu = page.getByRole("dialog").last();
-    await expect(async () => {
-      await expect(menuTrigger).toBeVisible();
-      await activate(menuTrigger, projectName);
-      await expect(mobileMenu).toBeVisible({ timeout: 10_000 });
-      await expect(
-        mobileMenu.getByRole("heading", {
-          level: 2,
-          name: /mission operating system/i,
-        })
-      ).toBeVisible({ timeout: 10_000 });
-    }).toPass({ timeout: 12_000 });
+    const brandLink = page
+      .getByRole("banner")
+      .getByRole("link", { name: /^Asym home$/i });
 
-    await mobileMenu.getByRole("link", { name: /^Platform$/i }).click();
-    await expect(page).toHaveURL(/\/platform$/);
+    await expect(brandLink).toBeVisible();
+    await expect(page.locator("header nav")).toHaveCount(0);
+    await expect(page.getByRole("button", { name: /open menu/i })).toHaveCount(0);
     await expect(
-      page.getByRole("heading", {
-        level: 1,
-        name: /One mission-built system instead of a pile of tools\./i,
-      })
+      page.getByRole("heading", { level: 1, name: /We.re building Asym\./i })
     ).toBeVisible();
+
+    const brandBox = await brandLink.boundingBox();
+    expect(brandBox?.width).toBeLessThan(180);
+    expect(brandBox?.height).toBeLessThan(64);
+    await expectNoHorizontalOverflow(page);
   });
 
   test("theme toggle applies dark mode", async ({ page }) => {
     const projectName = test.info().project.name;
     await page.goto("/", { waitUntil: "domcontentloaded" });
     await waitForUi(page);
+    await page.locator("footer").scrollIntoViewIfNeeded();
 
     const themeToggle = page
       .getByRole("button", { name: /change color theme/i })
@@ -111,27 +114,59 @@ test.describe("marketing site smoke tests", () => {
     await expect(page.locator("html")).toHaveClass(/dark/);
   });
 
-  test("platform tabs switch visible content", async ({ page }) => {
-    const projectName = test.info().project.name;
-    await page.goto("/platform", { waitUntil: "domcontentloaded" });
+  test("homepage renders the founder letter and builder actions", async ({
+    page,
+  }) => {
+    await page.goto("/", { waitUntil: "domcontentloaded" });
     await waitForUi(page);
 
-    const mobilizeTab = page.getByRole("tab", { name: /Mobilize/i });
-    const mobilizePanel = page.getByRole("tabpanel", { name: /Mobilize/i });
-    await expect(async () => {
-      await expect(mobilizeTab).toBeVisible();
-      await activate(mobilizeTab, projectName);
-      await expect(mobilizePanel).toContainText(
-        /Visual workflow orchestration for candidates, onboarding, and deployment using Zapier's ecosystem without spaghetti logic\./i,
-        { timeout: 10_000 }
-      );
-    }).toPass({ timeout: 12_000 });
-    await expect(mobilizePanel).toContainText(
-      /Visual workflow orchestration for candidates, onboarding, and deployment using Zapier's ecosystem without spaghetti logic\./i
+    await expect(
+      page.getByRole("heading", { level: 1, name: /We.re building Asym\./i })
+    ).toBeVisible();
+    await expect(page.getByText(/We.re Conrad and Blake\./i)).toBeVisible();
+    await expect(
+      page.getByRole("heading", { level: 2, name: "The vision is simple." })
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", {
+        level: 2,
+        name: "We are looking for builders.",
+      })
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", {
+        level: 2,
+        name: "The work is ordinary before it is big.",
+      })
+    ).toBeVisible();
+    await expect(
+      page.getByText(
+        /Member Care teams try to keep track of conversations, next steps, and care history/i
+      )
+    ).toBeVisible();
+    await expect(
+      page.getByText(
+        /finance teams doing mission-critical work with donor money/i
+      )
+    ).toBeVisible();
+    await expect(
+      page.locator("p", { hasText: /^That bothers us\.$/ })
+    ).toHaveCSS("font-weight", /^(600|700)$/);
+
+    const emailLink = page.getByRole("link", { name: /^Send us an email\.$/i });
+    await expect(emailLink).toHaveAttribute(
+      "href",
+      "mailto:info@asymmetric.al?subject=Building%20with%20Asym"
+    );
+    await expect(
+      page.getByRole("link", { name: /^Contribute\.$/i })
+    ).toHaveAttribute(
+      "href",
+      "https://github.com/Asymmetric-al/core?tab=contributing-ov-file#readme"
     );
   });
 
-  test("platform tabs upgrade to measured trigger heights without client errors", async ({
+  test("brand logo sizing and theme artwork stay correct", async ({
     page,
   }) => {
     const consoleErrors: string[] = [];
@@ -158,45 +193,83 @@ test.describe("marketing site smoke tests", () => {
       }
     });
 
-    await page.goto("/platform", { waitUntil: "domcontentloaded" });
+    await page.goto("/", { waitUntil: "domcontentloaded" });
     await waitForUi(page);
 
-    const tabsList = page.getByRole("tablist", {
-      name: /mission control modules/i,
-    });
-    await expect(tabsList).toHaveAttribute("data-pretext-ready", "true");
+    await expect(page.locator('header a[aria-label="Asym home"]')).toBeVisible();
+    await expect(page.locator('footer a[aria-label="Asym home"]')).toBeVisible();
 
-    const triggers = tabsList.locator('[role="tab"]');
-    expect(await triggers.count()).toBeGreaterThan(1);
-    await expect(triggers.first()).toHaveAttribute("data-pretext-ready", "true");
+    const logoState = await page.evaluate(() => {
+      const readMark = (selector: string) => {
+        const mark = document.querySelector<HTMLElement>(selector);
+        if (!mark) {
+          return null;
+        }
 
-    const triggerMeasurements = await triggers.evaluateAll((elements) =>
-      elements.map((element) => {
-        const styles = window.getComputedStyle(element);
-        const minHeight = Number.parseFloat(styles.minHeight);
-        const variableHeight = Number.parseFloat(
-          styles.getPropertyValue("--platform-tab-trigger-min-height")
+        const rect = mark.getBoundingClientRect();
+        const visibleImage = Array.from(mark.querySelectorAll("img")).find(
+          (image) => window.getComputedStyle(image).display !== "none"
         );
 
         return {
-          renderedHeight: Math.round(element.getBoundingClientRect().height),
-          minHeight: Number.isFinite(minHeight) ? Math.round(minHeight) : null,
-          variableHeight: Number.isFinite(variableHeight)
-            ? Math.round(variableHeight)
-            : null,
+          width: Math.round(rect.width),
+          height: Math.round(rect.height),
+          visibleSrc: visibleImage?.getAttribute("src") ?? "",
         };
-      })
-    );
+      };
 
-    expect(new Set(triggerMeasurements.map((item) => item.renderedHeight)).size).toBe(
-      1
-    );
-    expect(new Set(triggerMeasurements.map((item) => item.variableHeight)).size).toBe(
-      1
-    );
-    expect(triggerMeasurements[0]?.minHeight).toBeGreaterThanOrEqual(144);
-    expect(triggerMeasurements[0]?.variableHeight).toBeGreaterThanOrEqual(144);
-    expect(triggerMeasurements[0]?.renderedHeight).toBeGreaterThanOrEqual(144);
+      return {
+        footer: readMark(
+          'footer a[aria-label="Asym home"] span[aria-hidden="true"]'
+        ),
+        header: readMark(
+          'header a[aria-label="Asym home"] span[aria-hidden="true"]'
+        ),
+      };
+    });
+
+    expect(logoState.header).toMatchObject({
+      height: 28,
+      visibleSrc: expect.stringContaining("asym-mark-dark"),
+      width: 28,
+    });
+    expect(logoState.footer).toMatchObject({
+      height: 20,
+      visibleSrc: expect.stringContaining("asym-mark-dark"),
+      width: 20,
+    });
+
+    await page.locator("footer").scrollIntoViewIfNeeded();
+    const projectName = test.info().project.name;
+    const themeToggle = page
+      .getByRole("button", { name: /change color theme/i })
+      .first();
+    await activate(themeToggle, projectName);
+    await page.getByRole("menuitem", { name: /dark/i }).click();
+
+    const darkLogoState = await page.evaluate(() => {
+      const readVisibleSrc = (selector: string) => {
+        const mark = document.querySelector<HTMLElement>(selector);
+        const visibleImage = Array.from(mark?.querySelectorAll("img") ?? []).find(
+          (image) => window.getComputedStyle(image).display !== "none"
+        );
+
+        return visibleImage?.getAttribute("src") ?? "";
+      };
+
+      return {
+        footer: readVisibleSrc(
+          'footer a[aria-label="Asym home"] span[aria-hidden="true"]'
+        ),
+        header: readVisibleSrc(
+          'header a[aria-label="Asym home"] span[aria-hidden="true"]'
+        ),
+      };
+    });
+
+    expect(darkLogoState.header).toContain("asym-mark-light");
+    expect(darkLogoState.footer).toContain("asym-mark-light");
+    await expectNoHorizontalOverflow(page);
 
     const unexpected404s = notFoundResponses.filter(
       (pathname) => !ignoredLocal404Paths.has(pathname)
@@ -210,23 +283,37 @@ test.describe("marketing site smoke tests", () => {
     expect(pageErrors).toEqual([]);
   });
 
-  test("give FAQ expands the answer body", async ({ page }) => {
-    const projectName = test.info().project.name;
-    await page.goto("/give", { waitUntil: "domcontentloaded" });
+  test("footer keeps contact, GitHub, legal links, and theme control", async ({
+    page,
+  }) => {
+    await page.goto("/", { waitUntil: "domcontentloaded" });
     await waitForUi(page);
+    await page.locator("footer").scrollIntoViewIfNeeded();
 
-    const trigger = page.getByRole("button", {
-      name: /Can I give via check or DAF\?/i,
-    });
-    await expect(async () => {
-      await expect(trigger).toBeVisible();
-      await activate(trigger, projectName);
-      await expect(
-        page.getByText(/donor-advised fund coordination\./i)
-      ).toBeVisible();
-    }).toPass({ timeout: 6_000 });
-
-    await expect(page.getByText(/donor-advised fund coordination\./i)).toBeVisible();
+    await expect(
+      page.getByText(
+        /Asym exists to carry the operational weight for Christian missions organizations/i
+      )
+    ).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: "info@asymmetric.al" })
+    ).toHaveAttribute(
+      "href",
+      "mailto:info@asymmetric.al?subject=Building%20with%20Asym"
+    );
+    await expect(page.getByRole("link", { name: /^GitHub$/i })).toHaveAttribute(
+      "href",
+      "https://github.com/Asymmetric-al"
+    );
+    await expect(
+      page.getByRole("button", { name: /change color theme/i })
+    ).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: /^Privacy Policy$/i })
+    ).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: /^Terms of Service$/i })
+    ).toBeVisible();
   });
 
   test("missing routes land on the custom not-found page", async ({ page }) => {
@@ -235,11 +322,12 @@ test.describe("marketing site smoke tests", () => {
     await expect(
       page.getByRole("heading", {
         level: 1,
-        name: /The page is missing, but the path forward is clear\./i,
+        name: /The page is missing, but the letter is still here\./i,
       })
     ).toBeVisible();
+    await expect(page.getByRole("link", { name: /^Letter$/i })).toBeVisible();
     await expect(
-      page.getByRole("link", { name: /Contact us/i }).first()
+      page.getByRole("link", { name: /^Build with us$/i })
     ).toBeVisible();
   });
 

@@ -125,19 +125,30 @@ export default function HomePage() {
             <div className="letter-copy max-w-[64rem] text-[1.03rem] leading-[1.68] font-normal sm:text-[1.1rem] sm:leading-[1.72] lg:text-[1.18rem] lg:leading-[1.76]">
               {letterSections.map((section) => (
                 <section
-                  key={section.title}
+                  key={section.headingId}
                   id={"id" in section ? section.id : undefined}
-                  aria-labelledby={section.headingId}
+                  aria-labelledby={section.title ? section.headingId : undefined}
                   className="scroll-mt-32 space-y-3.5 pt-8 sm:space-y-4 sm:pt-9"
                 >
-                  <h2
-                    id={section.headingId}
-                    className="font-heading text-foreground text-[clamp(1.5rem,3vw,2.125rem)] leading-tight font-bold tracking-[-0.055em] text-balance"
-                  >
-                    {section.title}
-                  </h2>
+                  {section.title ? (
+                    <h2
+                      id={section.headingId}
+                      className="font-heading text-foreground text-[clamp(1.5rem,3vw,2.125rem)] leading-tight font-bold tracking-[-0.055em] text-balance"
+                    >
+                      {section.title}
+                    </h2>
+                  ) : null}
                   {section.paragraphs.map((paragraph, index) => (
-                    <p key={`${section.title}-${index}`}>{paragraph}</p>
+                    <p
+                      key={`${section.title}-${index}`}
+                      className={
+                        paragraph === "That bothers us."
+                          ? "text-foreground font-semibold"
+                          : undefined
+                      }
+                    >
+                      {paragraph}
+                    </p>
                   ))}
                 </section>
               ))}

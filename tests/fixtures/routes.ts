@@ -9,50 +9,6 @@ export const routeFixtures: RouteFixture[] = [
     slug: "home",
   },
   {
-    path: "/platform",
-    slug: "platform",
-  },
-  {
-    path: "/about",
-    slug: "about",
-  },
-  {
-    path: "/faq",
-    slug: "faq",
-  },
-  {
-    path: "/waitlist",
-    slug: "waitlist",
-  },
-  {
-    path: "/open-source-and-trust",
-    slug: "open-source-and-trust",
-  },
-  {
-    path: "/missions",
-    slug: "missions",
-  },
-  {
-    path: "/specs",
-    slug: "specs",
-  },
-  {
-    path: "/manifesto",
-    slug: "manifesto",
-  },
-  {
-    path: "/join",
-    slug: "join",
-  },
-  {
-    path: "/contact",
-    slug: "contact",
-  },
-  {
-    path: "/give",
-    slug: "give",
-  },
-  {
     path: "/statement-of-faith",
     slug: "statement-of-faith",
   },
