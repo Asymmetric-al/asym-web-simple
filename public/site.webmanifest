@@ -1,16 +1,23 @@
 {
   "name": "Asymmetric.al",
   "short_name": "Asym",
-  "description": "Mission operating system for Christian nonprofit and missions organizations.",
+  "description": "Asym is an early product for Christian missions organizations. Asymmetric.al is the nonprofit ministry behind it.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#faf6ef",
+  "background_color": "#f6f2ea",
   "theme_color": "#1e3a4f",
   "icons": [
     {
-      "src": "/icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml"
+      "src": "/brand/asym-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/brand/asym-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }

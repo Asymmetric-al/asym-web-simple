@@ -1,26 +1,34 @@
 import { cn } from "@/lib/utils";
-import type { SVGProps } from "react";
+import Image from "next/image";
+import type { ComponentPropsWithoutRef } from "react";
 
-/** Inline brand mark: asymmetric “A” for Asymmetric.al (navy stroke, inherits `currentColor`). */
+/** Transparent Asym mark with explicit light/dark artwork. */
 export function SiteLogoMark({
   className,
   ...props
-}: SVGProps<SVGSVGElement>) {
+}: ComponentPropsWithoutRef<"span">) {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      className={cn("shrink-0", className)}
-      aria-hidden
+    <span
+      className={cn("relative inline-block shrink-0", className)}
+      aria-hidden="true"
       {...props}
     >
-      <path
-        d="M6 19L11 5M18 19L12.5 5M8.5 13.5h7"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+      <Image
+        src="/brand/asym-mark-dark.png"
+        alt=""
+        fill
+        priority
+        sizes="24px"
+        className="object-contain dark:hidden"
       />
-    </svg>
+      <Image
+        src="/brand/asym-mark-light.png"
+        alt=""
+        fill
+        priority
+        sizes="24px"
+        className="hidden object-contain dark:block"
+      />
+    </span>
   );
 }

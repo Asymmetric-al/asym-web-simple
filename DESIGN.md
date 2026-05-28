@@ -203,7 +203,7 @@ The site has three distinct surface treatments that convey elevation:
 - `backdrop-filter: blur(22px)` — strongest blur
 - Used for the floating navigation pill, the footer CTA upper panel, and the `MediaStage` hero image container.
 
-**`page-shell-glow`** — A positioning utility that adds a pseudo-element `::before` with a diagonal gradient glow (`glow-primary` to `glow-accent`) with `filter: blur(16px)` behind the element. Applied to the header nav pill and the footer CTA panel for a subtle ambient halo effect.
+**`page-shell-glow`** — A positioning utility that adds a pseudo-element `::before` with a diagonal gradient glow (`glow-primary` to `glow-accent`) with `filter: blur(16px)` behind the element. Used only where a larger frosted panel needs an ambient halo.
 
 **Base Card Component (`components/ui/card.tsx`):**
 - `rounded-2xl` (32px) base radius
@@ -218,7 +218,7 @@ The site has three distinct surface treatments that convey elevation:
 - Medium cards and tab triggers: `rounded-[1.8rem]` = 28.8px
 - Section containers within panels: `rounded-[1.9rem]` – `rounded-[2.2rem]`
 - Small pill elements (badges, inputs, buttons): `rounded-full`
-- "Why the name" brand mark block (deep navy asymmetric “A” SVG): `rounded-[1.9rem]`
+- Brand chips and compact identity marks: `rounded-full`
 
 The radius system is consistently very generous — all cards feel gently rounded, never sharp.
 
@@ -249,35 +249,16 @@ The radius system is consistently very generous — all cards feel gently rounde
 
 ### Navigation (Header)
 
-The header is a **fixed floating pill** — it does not span the full width. It floats 16–20px from the top of the viewport, with a maximum width of `80rem`.
+The current one-page letter site uses a **small absolute brand chip**, not a full navigation bar. It sits top-left inside the same `max-w-[76rem] px-4 sm:px-6 lg:px-8` rail as the letter content, so the first visual emphasis stays on the H1.
 
-**Shell:** `surface-hero` + `page-shell-glow` + `rounded-[1.85rem]`. The most elevated surface on the page.
-
-**Entrance animation:** Slides down from `-12px` with `opacity: 0 → 1` over `~360ms` using `[0.22, 1, 0.36, 1]` easing on mount; skipped when `prefers-reduced-motion: reduce`.
+**Shell:** `inline-flex rounded-full border border-foreground/10 bg-background/50 px-4 py-2 backdrop-blur-md` with only a soft compact shadow. It is sized to content and must not render an empty full-width pill.
 
 **Brand lockup:**
-- Circular monogram: `size-11 rounded-full border border-foreground/10` with diagonal gradient fill `linear-gradient(135deg, rgba(221,242,255,0.95), rgba(231,238,225,0.95))`
-- Shadow: `0 14px 30px -20px rgba(30,58,79,0.45)`
-- Hover: `-translate-y-0.5` lift
-- Wordmark: Plus Jakarta Sans `text-[1.02rem] font-semibold tracking-[-0.04em]`
+- Mark: the supplied rounded split-window Asym mark, extracted as transparent PNG artwork.
+- Component: `SiteLogoMark` renders explicit transparent light/dark mark assets (`public/brand/asym-mark-dark.png` and `public/brand/asym-mark-light.png`) so no square background appears during theme changes.
+- Wordmark: Plus Jakarta Sans `text-sm font-semibold tracking-[-0.04em]`.
 
-**Desktop nav bar** (inside header pill):
-- Nested pill: `rounded-full bg-background/50 p-1`
-- Nav links: `rounded-full px-3.5 py-2 text-sm font-medium text-muted-foreground`
-- Active state: `bg-secondary text-secondary-foreground shadow-sm`
-- Hover state: `hover:bg-background/88 hover:text-foreground`
-- `aria-current="page"` is set on the active link
-
-**Desktop CTAs (right of nav):**
-- Theme toggle (icon button, `ghost`, `icon-sm`)
-- Ghost link for secondary CTA (`text-muted-foreground`)
-- Primary CTA button (`size="lg"`) with `MoveRight` icon
-
-**Mobile:** The full nav collapses behind a `Sheet` (right-side drawer) triggered by a `Menu` icon button. Closing the sheet returns focus to the menu trigger for keyboard users.
-- Sheet width: `w-[88vw] max-w-sm`
-- Background: `bg-card/96 border-l border-foreground/10`
-- Nav links: `rounded-2xl px-4 py-3` with `MoveRight` icon at right
-- CTA card at bottom: `surface-card rounded-[1.75rem] p-5` with primary and email buttons
+There is no visible nav, no mobile menu, and no fake right-side placeholder on the one-page letter surface.
 
 ---
 

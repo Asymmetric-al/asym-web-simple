@@ -1,6 +1,9 @@
+/* eslint-disable @next/next/no-img-element */
 import { ImageResponse } from "next/og";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 export const alt = "Asym is being built for missions organizations";
 export const size = {
   width: 1200,
@@ -8,7 +11,13 @@ export const size = {
 };
 export const contentType = "image/png";
 
-export default function OpengraphImage() {
+export default async function OpengraphImage() {
+  const logoData = await readFile(
+    join(process.cwd(), "public", "brand", "asym-mark-dark.png"),
+    "base64"
+  );
+  const logoSrc = `data:image/png;base64,${logoData}`;
+
   return new ImageResponse(
     <div
       style={{
@@ -54,7 +63,6 @@ export default function OpengraphImage() {
             flexDirection: "column",
             gap: "28px",
             maxWidth: "820px",
-            zIndex: 1,
           }}
         >
           <div
@@ -76,11 +84,17 @@ export default function OpengraphImage() {
                 width: "62px",
                 height: "62px",
                 borderRadius: "999px",
-                background: "linear-gradient(135deg, #DDF2FF, #E7EEE1)",
-                color: "#1E3A4F",
+                background: "rgba(246,242,234,0.72)",
+                border: "1px solid rgba(22,33,43,0.12)",
               }}
             >
-              A
+              <img
+                src={logoSrc}
+                alt=""
+                width={40}
+                height={40}
+                style={{ display: "block", objectFit: "contain" }}
+              />
             </span>
             Asym
           </div>
@@ -111,7 +125,6 @@ export default function OpengraphImage() {
             display: "flex",
             gap: "14px",
             flexWrap: "wrap",
-            zIndex: 1,
           }}
         >
           {[
