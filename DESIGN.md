@@ -129,7 +129,7 @@ All three are loaded via `next/font/google` with `display: "swap"`. Google Fonts
 | **Card H2 (Forms)** | `text-3xl` / `text-4xl` | 600 | `-0.05em` | default | Inside `surface-panel` |
 | **Card H3 / CardTitle** | `text-2xl` | 600 | `-0.05em` | default | Foundation cards, platform tabs |
 | **Capabilities CardTitle** | `text-xl` | 600 | `-0.04em` | default | Smaller cap grid cards |
-| **Body paragraph** | `text-base` / `sm:text-lg` | 400 | default | `leading-7` | `.content-measure` max-width `72ch` |
+| **Body paragraph** | `text-base` / `sm:text-lg` | 400 | default | `leading-7` | `.content-measure` max-width `72ch`, with normal word wrapping and no auto-hyphenation |
 | **Small body / card body** | `text-sm` | 400 | default | `leading-7` | Inside cards, descriptions |
 | **Eyebrow label** | `0.72rem` | 400–500 | `0.28em` | default | `.eyebrow` / `font-mono`; always uppercase |
 | **Meta pill text** | `0.72rem` | 400 | `0.22em` | default | Pill badges in hero meta row |
@@ -141,7 +141,7 @@ All three are loaded via `next/font/google` with `display: "swap"`. Google Fonts
 - **Negative tracking on all headings is non-negotiable.** The compressed feel is a core identity signal. Even `h3` and `h4` receive at minimum `-0.04em`.
 - **`text-balance`** is applied globally to all headings via CSS, and explicitly to `h2`-level section headers via the `SectionHeader` component.
 - **Eyebrow labels always use JetBrains Mono**, all-caps, wide tracking (≥ `0.22em`), and are positioned above section H2s as contextual framing. They use `text-primary/70` (70% opacity of the primary color) for subtle hierarchy.
-- **Body text never exceeds `72ch` in measure** via `.content-measure` — a content width constraint applied to description paragraphs.
+- **Body text never exceeds `72ch` in measure** via `.content-measure` — a content width constraint applied to description paragraphs. Normal prose uses `overflow-wrap: normal`, `word-break: normal`, and `hyphens: none`; aggressive breaking is reserved for explicit long-token utilities.
 - **`text-wrap: pretty`** is available as a utility class for multi-line text that needs softer line breaks.
 
 ---
@@ -422,7 +422,7 @@ Inline links (footer, forms, legal):
 - Default: `text-foreground/84`
 - Hover: `hover:text-foreground`
 - No underline by default; semantic links in body text use `underline underline-offset-4` when emphasis is needed
-- Email links in footer use `.link-resilient` (`word-break: break-all`) for long address wrapping
+- Email links in footer use `.link-resilient` for long address wrapping. This utility allows emergency token breaking without enabling auto-hyphenation in normal prose.
 - The `buttonVariants` `link` variant provides an underline-on-hover styled inline link
 
 ---
