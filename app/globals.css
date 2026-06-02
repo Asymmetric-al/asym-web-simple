@@ -372,11 +372,94 @@ textarea:focus-visible {
   hyphens: none;
 }
 
-.letter-prose,
-.letter-copy {
+.letter-prose {
+  font-size: clamp(1.08rem, 1.25vw, 1.32rem);
+  line-height: 1.62;
+  letter-spacing: -0.01em;
   overflow-wrap: normal;
   word-break: normal;
   hyphens: none;
+}
+
+.letter-prose p {
+  margin: 0;
+}
+
+.letter-prose p + p {
+  margin-top: 1rem;
+}
+
+.letter-prose .letter-turn {
+  margin-top: 3rem;
+}
+
+.letter-prose .emphasis-line {
+  margin-bottom: 0;
+  color: var(--foreground);
+  font-family: var(--font-heading);
+  font-size: clamp(1.8rem, 3.4vw, 3.4rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.055em;
+  text-wrap: balance;
+}
+
+.letter-prose .emphasis-line + p,
+.letter-prose .emphasis-line + .tight-stanza {
+  margin-top: 1.25rem;
+}
+
+.letter-prose .tight-stanza {
+  display: grid;
+  gap: 0.35rem;
+  margin-block: 1.25rem;
+}
+
+.letter-prose .tight-stanza p + p {
+  margin-top: 0;
+}
+
+.letter-prose .letter-strong {
+  color: var(--foreground);
+  font-weight: 600;
+}
+
+.letter-prose .letter-signature {
+  display: grid;
+  gap: 0.25rem;
+  margin-top: 1.5rem;
+  color: var(--foreground);
+  font-weight: 600;
+}
+
+.letter-prose .letter-signature p + p {
+  margin-top: 0;
+}
+
+.letter-prose .letter-cta {
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
+
+.letter-prose .letter-cta h2 {
+  margin: 0;
+  color: var(--foreground);
+  font-family: var(--font-heading);
+  font-size: clamp(1.45rem, 2.4vw, 2rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.055em;
+  text-wrap: balance;
+}
+
+.letter-prose .letter-cta a {
+  font-size: clamp(1rem, 1.1vw, 1.1rem);
+  line-height: 1.55;
+}
+
+@media (min-width: 640px) {
+  .letter-prose .letter-turn {
+    margin-top: clamp(3.5rem, 6vw, 6rem);
+  }
 }
 
 .eyebrow {
@@ -456,6 +539,10 @@ textarea:focus-visible {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .surface-interactive:is(:hover, :focus-within) {
+    transition: none;
+  }
+
   .surface-interactive:is(:hover, :focus-within) {
     transform: none;
   }

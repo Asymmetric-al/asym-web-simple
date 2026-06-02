@@ -82,7 +82,9 @@ test.describe("letter site smoke tests", () => {
 
     await expect(brandLink).toBeVisible();
     await expect(page.locator("header nav")).toHaveCount(0);
-    await expect(page.getByRole("button", { name: /open menu/i })).toHaveCount(0);
+    await expect(page.getByRole("button", { name: /open menu/i })).toHaveCount(
+      0
+    );
     await expect(
       page.getByRole("heading", { level: 1, name: /We.re building Asym\./i })
     ).toBeVisible();
@@ -123,35 +125,87 @@ test.describe("letter site smoke tests", () => {
     await expect(
       page.getByRole("heading", { level: 1, name: /We.re building Asym\./i })
     ).toBeVisible();
-    await expect(page.getByText(/We.re Conrad and Blake\./i)).toBeVisible();
+    await expect(
+      page.locator("p", { hasText: /^We.re Conrad and Blake\.$/i })
+    ).toBeVisible();
     await expect(
       page.getByRole("heading", { level: 2, name: "The vision is simple." })
     ).toBeVisible();
     await expect(
       page.getByRole("heading", {
         level: 2,
-        name: "We are looking for builders.",
+        name: "One Mission Control for missions and nonprofit operations.",
       })
     ).toBeVisible();
     await expect(
       page.getByRole("heading", {
         level: 2,
-        name: "The work is ordinary before it is big.",
+        name: "The details matter because the mission matter.",
       })
     ).toBeVisible();
     await expect(
-      page.getByText(
-        /Member Care teams try to keep track of conversations, next steps, and care history/i
-      )
+      page.getByRole("heading", {
+        level: 2,
+        name: "Come build the next piece.",
+      })
     ).toBeVisible();
     await expect(
-      page.getByText(
-        /finance teams doing mission-critical work with donor money/i
-      )
+      page.getByText(/Some parts are still ugly\. Some parts are half wired/i)
+    ).toBeVisible();
+    await expect(
+      page.getByText(/Member care teams try to keep track/i)
+    ).toBeVisible();
+    await expect(
+      page.getByText(/finance teams entrusted with donor money/i)
     ).toBeVisible();
     await expect(
       page.locator("p", { hasText: /^That bothers us\.$/ })
     ).toHaveCSS("font-weight", /^(600|700)$/);
+    await expect(
+      page.locator(".tight-stanza", {
+        hasText: "Not by working longer hours.",
+      })
+    ).toContainText("Not by adding more admin.");
+
+    const rhythm = await page.locator(".letter-prose").evaluate((element) => {
+      const style = window.getComputedStyle(element);
+      const firstParagraph = element.querySelector(
+        ".letter-flow > p"
+      ) as HTMLElement | null;
+      const secondParagraph =
+        firstParagraph?.nextElementSibling as HTMLElement | null;
+      const stanzaLines = Array.from(
+        element.querySelectorAll(".tight-stanza p")
+      ) as HTMLElement[];
+      const firstStanzaLine = stanzaLines[0];
+      const secondStanzaLine = stanzaLines[1];
+
+      const normalGap =
+        firstParagraph && secondParagraph
+          ? secondParagraph.getBoundingClientRect().top -
+            firstParagraph.getBoundingClientRect().bottom
+          : 0;
+      const stanzaGap =
+        firstStanzaLine && secondStanzaLine
+          ? secondStanzaLine.getBoundingClientRect().top -
+            firstStanzaLine.getBoundingClientRect().bottom
+          : 0;
+
+      return {
+        lineHeightRatio:
+          Number.parseFloat(style.lineHeight) /
+          Number.parseFloat(style.fontSize),
+        normalGap,
+        stanzaGap,
+      };
+    });
+
+    expect(rhythm.lineHeightRatio).toBeGreaterThanOrEqual(1.5);
+    expect(rhythm.lineHeightRatio).toBeLessThanOrEqual(1.7);
+    expect(rhythm.normalGap).toBeGreaterThanOrEqual(12);
+    expect(rhythm.normalGap).toBeLessThanOrEqual(20);
+    expect(rhythm.stanzaGap).toBeGreaterThanOrEqual(4);
+    expect(rhythm.stanzaGap).toBeLessThan(rhythm.normalGap);
 
     const emailLink = page.getByRole("link", { name: /^Send us an email\.$/i });
     await expect(emailLink).toHaveAttribute(
@@ -159,16 +213,14 @@ test.describe("letter site smoke tests", () => {
       "mailto:info@asymmetric.al?subject=Building%20with%20Asym"
     );
     await expect(
-      page.getByRole("link", { name: /^Contribute\.$/i })
+      page.getByRole("link", { name: /^Contribute on GitHub\.$/i })
     ).toHaveAttribute(
       "href",
       "https://github.com/Asymmetric-al/core?tab=contributing-ov-file#readme"
     );
   });
 
-  test("brand logo sizing and theme artwork stay correct", async ({
-    page,
-  }) => {
+  test("brand logo sizing and theme artwork stay correct", async ({ page }) => {
     const consoleErrors: string[] = [];
     const pageErrors: string[] = [];
     const notFoundResponses: string[] = [];
@@ -196,8 +248,12 @@ test.describe("letter site smoke tests", () => {
     await page.goto("/", { waitUntil: "domcontentloaded" });
     await waitForUi(page);
 
-    await expect(page.locator('header a[aria-label="Asym home"]')).toBeVisible();
-    await expect(page.locator('footer a[aria-label="Asym home"]')).toBeVisible();
+    await expect(
+      page.locator('header a[aria-label="Asym home"]')
+    ).toBeVisible();
+    await expect(
+      page.locator('footer a[aria-label="Asym home"]')
+    ).toBeVisible();
 
     const logoState = await page.evaluate(() => {
       const readMark = (selector: string) => {
@@ -250,9 +306,9 @@ test.describe("letter site smoke tests", () => {
     const darkLogoState = await page.evaluate(() => {
       const readVisibleSrc = (selector: string) => {
         const mark = document.querySelector<HTMLElement>(selector);
-        const visibleImage = Array.from(mark?.querySelectorAll("img") ?? []).find(
-          (image) => window.getComputedStyle(image).display !== "none"
-        );
+        const visibleImage = Array.from(
+          mark?.querySelectorAll("img") ?? []
+        ).find((image) => window.getComputedStyle(image).display !== "none");
 
         return visibleImage?.getAttribute("src") ?? "";
       };
@@ -275,7 +331,8 @@ test.describe("letter site smoke tests", () => {
       (pathname) => !ignoredLocal404Paths.has(pathname)
     );
     const unexpectedConsoleErrors = consoleErrors.filter(
-      (message) => message !== genericResourceLoadError || unexpected404s.length > 0
+      (message) =>
+        message !== genericResourceLoadError || unexpected404s.length > 0
     );
 
     expect(unexpected404s).toEqual([]);

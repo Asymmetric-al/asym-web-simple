@@ -1,10 +1,6 @@
 import { Container } from "@/components/site/page";
-import {
-  cta,
-  heroTitle,
-  introParagraphs,
-  letterSections,
-} from "@/lib/content/home-letter";
+import { cta, heroTitle, letterBlocks } from "@/lib/content/home-letter";
+import type { LetterBlock } from "@/lib/content/home-letter";
 import { siteConfig } from "@/lib/config";
 import { createMetadata } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
@@ -12,10 +8,6 @@ import type { Metadata } from "next";
 import Image from "next/image";
 
 const mailtoHref = `mailto:${siteConfig.email}?subject=Building%20with%20Asym`;
-const emphasizedParagraphs = new Set([
-  "That bothers us.",
-  "We are not okay with that.",
-]);
 
 export const metadata: Metadata = createMetadata({
   title: "Asym is being built for missions organizations",
@@ -62,6 +54,41 @@ function LandscapeBackground() {
       />
     </div>
   );
+}
+
+function LetterFlowBlock({ block }: { block: LetterBlock }) {
+  if (block.type === "heading") {
+    return (
+      <h2
+        id={block.id ?? block.headingId}
+        className="letter-turn emphasis-line scroll-mt-32"
+      >
+        {block.text}
+      </h2>
+    );
+  }
+
+  if (block.type === "stanza") {
+    return (
+      <div className="tight-stanza">
+        {block.lines.map((line) => (
+          <p key={line}>{line}</p>
+        ))}
+      </div>
+    );
+  }
+
+  if (block.type === "signature") {
+    return (
+      <div className="letter-signature">
+        {block.lines.map((line) => (
+          <p key={line}>{line}</p>
+        ))}
+      </div>
+    );
+  }
+
+  return <p className={cn(block.emphasis && "letter-strong")}>{block.text}</p>;
 }
 
 export default function HomePage() {
@@ -111,7 +138,7 @@ export default function HomePage() {
       <StructuredData data={softwareStructuredData} />
       <LandscapeBackground />
 
-      <article className="letter-prose pb-12 sm:pb-16">
+      <article className="letter-prose pb-10 sm:pb-14">
         <Container className="max-w-[76rem]">
           <div
             id="letter"
@@ -121,73 +148,35 @@ export default function HomePage() {
               {heroTitle}
             </h1>
 
-            <div className="letter-copy mt-9 max-w-[64rem] space-y-3.5 text-[1.03rem] leading-[1.68] font-normal sm:space-y-4 sm:text-[1.1rem] sm:leading-[1.72] lg:text-[1.18rem] lg:leading-[1.76]">
-              {introParagraphs.map((paragraph) => (
-                <p key={paragraph}>{paragraph}</p>
+            <div className="letter-flow mt-8 max-w-[64rem] sm:mt-9">
+              {letterBlocks.map((block, index) => (
+                <LetterFlowBlock key={`${block.type}-${index}`} block={block} />
               ))}
-            </div>
 
-            <div className="letter-copy max-w-[64rem] text-[1.03rem] leading-[1.68] font-normal sm:text-[1.1rem] sm:leading-[1.72] lg:text-[1.18rem] lg:leading-[1.76]">
-              {letterSections.map((section) => (
-                <section
-                  key={section.headingId}
-                  id={"id" in section ? section.id : undefined}
-                  aria-labelledby={
-                    section.title ? section.headingId : undefined
-                  }
-                  className="scroll-mt-32 space-y-3.5 pt-8 sm:space-y-4 sm:pt-9"
-                >
-                  {section.title ? (
-                    <h2
-                      id={section.headingId}
-                      className="font-heading text-foreground text-[clamp(1.5rem,3vw,2.125rem)] leading-tight font-bold tracking-[-0.055em] text-balance"
-                    >
-                      {section.title}
-                    </h2>
-                  ) : null}
-                  {section.paragraphs.map((paragraph, index) => (
-                    <p
-                      key={`${section.title}-${index}`}
-                      className={cn(
-                        emphasizedParagraphs.has(paragraph) &&
-                          "text-foreground font-semibold"
-                      )}
-                    >
-                      {paragraph}
-                    </p>
-                  ))}
-                </section>
-              ))}
-            </div>
-
-            <section
-              id="talk"
-              aria-labelledby="talk-title"
-              className="scroll-mt-32 pt-9 sm:pt-10"
-            >
-              <h2
-                id="talk-title"
-                className="font-heading text-foreground text-[clamp(1.5rem,3vw,2.125rem)] leading-tight font-bold tracking-[-0.055em] text-balance"
+              <section
+                id="talk"
+                aria-labelledby="talk-title"
+                className="letter-cta scroll-mt-32"
               >
-                {cta.title}
-              </h2>
-              <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-base leading-7">
-                <a
-                  href={mailtoHref}
-                  className="text-primary hover:text-foreground focus-visible:ring-ring/45 rounded-sm font-medium underline underline-offset-4 transition-colors focus-visible:ring-[3px] focus-visible:outline-none"
-                >
-                  {cta.emailLabel}
-                </a>
-                <a
-                  href={cta.contributeHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary hover:text-foreground focus-visible:ring-ring/45 rounded-sm font-medium underline underline-offset-4 transition-colors focus-visible:ring-[3px] focus-visible:outline-none"
-                >
-                  {cta.contributeLabel}
-                </a>
-              </div>
-            </section>
+                <h2 id="talk-title">{cta.title}</h2>
+                <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2">
+                  <a
+                    href={mailtoHref}
+                    className="text-primary hover:text-foreground focus-visible:ring-ring/45 rounded-sm font-medium underline underline-offset-4 transition-colors focus-visible:ring-[3px] focus-visible:outline-none"
+                  >
+                    {cta.emailLabel}
+                  </a>
+                  <a
+                    href={cta.contributeHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary hover:text-foreground focus-visible:ring-ring/45 rounded-sm font-medium underline underline-offset-4 transition-colors focus-visible:ring-[3px] focus-visible:outline-none"
+                  >
+                    {cta.contributeLabel}
+                  </a>
+                </div>
+              </section>
+            </div>
           </div>
         </Container>
       </article>
