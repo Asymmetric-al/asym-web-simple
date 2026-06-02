@@ -207,7 +207,7 @@ export const letterBlocks = [
   {
     type: "heading",
     headingId: "details-heading",
-    text: "The details matter because the mission matter.",
+    text: "The details matter because the mission matters.",
   },
   {
     type: "paragraph",

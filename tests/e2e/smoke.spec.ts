@@ -140,7 +140,7 @@ test.describe("letter site smoke tests", () => {
     await expect(
       page.getByRole("heading", {
         level: 2,
-        name: "The details matter because the mission matter.",
+        name: "The details matter because the mission matters.",
       })
     ).toBeVisible();
     await expect(
