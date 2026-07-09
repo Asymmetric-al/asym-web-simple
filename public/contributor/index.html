@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Asym Missions Platform - Contributor Briefing</title>
-  <meta name="description" content="A contributor briefing for the Asym Missions Platform: a safety-critical CRM and web platform for global missions, built in the open.">
-  <meta property="og:title" content="Asym Missions Platform">
-  <meta property="og:description" content="A safety-critical CRM and web platform for the frontier of global missions - rebuilt properly, and built in the open.">
+  <title>Asym Contributor Briefing</title>
+  <meta name="description" content="A contributor briefing for Asym: the operating system for Christian missions, built in the open.">
+  <meta property="og:title" content="Asym Contributor Briefing">
+  <meta property="og:description" content="One mission-built system for donor care, missionary support, and operations - rebuilt properly, and built in the open.">
   <meta property="og:type" content="website">
   <meta name="theme-color" content="#0b0c0e">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -396,7 +396,7 @@
 
     .index-list {
       display: grid;
-      grid-template-columns: repeat(7, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
       gap: 0.5rem;
     }
 
@@ -1126,17 +1126,17 @@
   <div class="progress" aria-hidden="true"><span></span></div>
   <header class="topbar">
     <div class="topbar-inner">
-      <a class="brand" href="#cover" aria-label="Asym Missions Platform home">
+      <a class="brand" href="#cover" aria-label="Asym contributor briefing home">
         <span class="brand-mark">A</span>
-        <span>Asym Missions Platform</span>
+        <span>Asym Contributor Briefing</span>
       </a>
-      <nav class="nav-links" aria-label="Deck sections">
+      <nav class="nav-links" aria-label="Contributor briefing sections">
         <a href="#problem">Problem</a>
         <a href="#platform">Platform</a>
         <a href="#architecture">Truth</a>
         <a href="#roadmap">Roadmap</a>
         <a href="#phase-10">Phase 10</a>
-        <a href="#engineering">Engineering</a>
+        <a href="#who-we-are">Who</a>
         <a href="#contact">Contact</a>
       </nav>
       <a class="topbar-cta" href="https://github.com/Asymmetric-al/core">GitHub</a>
@@ -1153,10 +1153,10 @@
             <span>/</span>
             <span>Contributor Briefing</span>
             <span>/</span>
-            <strong>2026-07-07</strong>
+            <strong>Asymmetric.al</strong>
           </div>
-          <h1 id="cover-title">Asym Missions Platform</h1>
-          <p>A safety-critical CRM and web platform for the frontier of global missions - rebuilt properly, and built in the open.</p>
+          <h1 id="cover-title">Asym</h1>
+          <p>The operating system for Christian missions. One mission-built system for donor care, missionary support, and operations - rebuilt properly, and built in the open.</p>
           <div class="hero-actions">
             <a class="button button-primary" href="#get-involved">Build with us</a>
             <a class="button" href="#roadmap">Read the roadmap</a>
@@ -1179,7 +1179,7 @@
       </div>
     </section>
 
-    <section class="deck-index section" aria-label="Briefing index">
+    <section class="deck-index section" aria-label="Contributor briefing index">
       <div class="section-shell">
         <div class="index-list">
           <a href="#problem"><span>01</span>Problem</a>
@@ -1189,6 +1189,7 @@
           <a href="#principles"><span>05</span>Rules</a>
           <a href="#roadmap"><span>06</span>Roadmap shape</a>
           <a href="#phase-10"><span>07</span>Phase 10</a>
+          <a href="#who-we-are"><span>08</span>Who we are</a>
         </div>
       </div>
     </section>
@@ -1197,23 +1198,26 @@
       <div class="section-shell split">
         <div class="reveal">
           <p class="section-kicker">The problem</p>
-          <h2 class="section-title" id="problem-title">Missions organizations run the world's hardest CRM on tools never built for it.</h2>
+          <h2 class="section-title" id="problem-title">Mission teams spend staff time managing the gaps between disconnected systems.</h2>
         </div>
         <div class="problem-list">
+
           <article class="card reveal">
-            <p class="number">01 / Legacy</p>
-            <h3>Closed systems age in the hardest places.</h3>
-            <p>SiteStacker and its peers are aging, closed, and thin exactly where missions work is hardest.</p>
+            <p class="number">01 / Legacy suites</p>
+            <h3>The boxes get checked. The system still feels old.</h3>
+            <p>Suites like SiteStacker promise one system, but feel old, rigid, and behind - even when they check the boxes.</p>
           </article>
+
           <article class="card reveal">
-            <p class="number">02 / Generic</p>
-            <h3>The record model is wrong.</h3>
-            <p>Generic nonprofit CRMs collapse donor, missionary, and login into one record - the most expensive mistake there is.</p>
+            <p class="number">02 / DIY patchwork</p>
+            <h3>Tool choice becomes staff burden.</h3>
+            <p>DIY stacks let teams pick tools they like. The real cost shows up in handoffs, exports, and duplicate entry.</p>
           </article>
+
           <article class="card reveal">
-            <p class="number">03 / Unsafe</p>
-            <h3>Person data can become a physical risk.</h3>
-            <p>None treat a person record as what it can become in the wrong hands: a physical-safety risk.</p>
+            <p class="number">03 / Generic CRMs</p>
+            <h3>Business logic bends ministry reality.</h3>
+            <p>Generic CRMs bend ministry reality into business logic - and still collapse donor, missionary, and login into one unsafe record.</p>
           </article>
         </div>
       </div>
@@ -1225,7 +1229,7 @@
         <h2 class="section-title reveal" id="stakes-title">The database is a targeting list.</h2>
         <div class="stakes-grid">
           <p class="section-lede reveal">In ~60 restricted-access countries, a leaked name, photo, or location is a physical-safety event - not a privacy incident.</p>
-          <p class="stakes-proof reveal">Every record reveals religious belief by mere presence: special-category data by default.</p>
+          <p class="stakes-proof reveal">Every record reveals religious belief by mere presence: special-category data by default. People doing Gospel work should not be held back by clunky software - or by software that gets people hurt.</p>
         </div>
       </div>
     </section>
@@ -1233,37 +1237,43 @@
     <section id="platform" class="section" data-deck-slide="4" aria-labelledby="platform-title">
       <div class="section-shell">
         <p class="section-kicker reveal">What we're building</p>
-        <h2 class="section-title reveal" id="platform-title">One platform, six surfaces.</h2>
+        <h2 class="section-title reveal" id="platform-title">One mission-built system, six surfaces.</h2>
         <div class="card-grid">
+
           <article class="card reveal">
-            <p class="number">CRM & graph</p>
-            <h3>Relationship graph</h3>
-            <p>A real relationship graph over people, churches, and households - one record shell, one list engine.</p>
+            <p class="number">Mission Control</p>
+            <h3>Role-aware staff console</h3>
+            <p>Partners CRM, contributions, web, statements, reporting, and workflows in one place.</p>
           </article>
+
           <article class="card reveal">
-            <p class="number">Giving & finance</p>
-            <h3>Money backbone</h3>
-            <p>A designation ledger, giving cart, pledges, soft credits, DAFs, batch entry, receipts, and statements.</p>
+            <p class="number">Donor self-service</p>
+            <h3>Donors do the ordinary work</h3>
+            <p>Give, view history, update recurring gifts, change payment methods, and download receipts without waiting on staff.</p>
           </article>
+
           <article class="card reveal">
-            <p class="number">Public web</p>
-            <h3>Firewalled projection</h3>
-            <p>Multi-site, multi-language content and missionary pages that render through a firewalled public projection.</p>
+            <p class="number">Missionary dashboard</p>
+            <h3>Support health without the stitch-work</h3>
+            <p>Support progress, new donors, at-risk recurring gifts, tasks, and next actions without waiting on staff to stitch it together.</p>
           </article>
+
           <article class="card reveal">
-            <p class="number">Donor portal</p>
-            <h3>Self-service</h3>
-            <p>Giving history, recurring self-service, wallet, statements, and campaign following.</p>
+            <p class="number">Statements &amp; finance</p>
+            <h3>Cleaner finance handoff</h3>
+            <p>Branded statements, signed links, reporting, and cleaner handoff to QuickBooks or Xero.</p>
           </article>
+
           <article class="card reveal">
-            <p class="number">Missionary workspace</p>
-            <h3>Support raising</h3>
-            <p>A safe slice of support-raising: portfolios, appeals, partner health, and field accounts.</p>
+            <p class="number">Ownership &amp; trust</p>
+            <h3>Tenant-owned by design</h3>
+            <p>Tenant-owned Stripe and email keys, custom branding and domains, audit trails, and safety classification built in from the schema up.</p>
           </article>
+
           <article class="card reveal">
-            <p class="number">Care & safety</p>
-            <h3>Schema-level protection</h3>
-            <p>Data classification, member care, crisis, and restricted-ministry operations - built in from the schema up.</p>
+            <p class="number">Open-source foundations</p>
+            <h3>Transparent and stewarded</h3>
+            <p>Built in the open for transparency and long-term stewardship - supported like a product, open to contribution when you want in.</p>
           </article>
         </div>
       </div>
@@ -1479,6 +1489,7 @@
         <h2 class="section-title reveal" id="engineering-title">Nothing is built on guesses.</h2>
         <p class="section-lede reveal">Every phase is groomed from a complete inventory before a line is written. You inherit scope, seams, and open questions - not a blank page.</p>
         <div class="work-grid">
+
           <article class="work-item reveal">
             <span>01</span>
             <div>
@@ -1486,6 +1497,7 @@
               <p>Binding scope, per phase, dispatch-ready.</p>
             </div>
           </article>
+
           <article class="work-item reveal">
             <span>02</span>
             <div>
@@ -1493,6 +1505,7 @@
               <p>Every record type has an owner and repair path.</p>
             </div>
           </article>
+
           <article class="work-item reveal">
             <span>03</span>
             <div>
@@ -1500,10 +1513,11 @@
               <p>Built, Live, and Confirmed stay separate.</p>
             </div>
           </article>
+
           <article class="work-item reveal">
             <span>04</span>
             <div>
-              <h3>ADRs & OpenSpec</h3>
+              <h3>ADRs &amp; OpenSpec</h3>
               <p>Hard rulings and boundaries written down.</p>
             </div>
           </article>
@@ -1529,12 +1543,35 @@
       </div>
     </section>
 
-    <section id="get-involved" class="section" data-deck-slide="13" aria-labelledby="involved-title">
+    <section id="who-we-are" class="section" data-deck-slide="13" aria-labelledby="who-title">
+      <div class="section-shell">
+        <p class="section-kicker reveal">Who we are</p>
+        <h2 class="section-title reveal" id="who-title">Openly Christian. Built in the open.</h2>
+        <div class="card-grid two">
+
+          <article class="card reveal">
+            <p class="number">Faith</p>
+            <h3>The Gospel is why the work matters.</h3>
+            <p>We are openly Christian. We believe Jesus Christ is Lord, the Gospel is true, and our work should be marked by truth, service, stewardship, and love for neighbor. Our faith does not replace clear engineering - it is why the engineering has to be this careful.</p>
+          </article>
+
+          <article class="card reveal">
+            <p class="number">Open source</p>
+            <h3>Transparent, inspectable, and stewarded.</h3>
+            <p>Asym is built on open-source foundations because transparency and long-term stewardship matter. It is supported like a product, not abandoned like a side project, and we welcome thoughtful contribution from developers who care about Christian missions.</p>
+          </article>
+        </div>
+        <p class="phase-note reveal">Small inputs. Mountain-moving outputs.</p>
+      </div>
+    </section>
+
+    <section id="get-involved" class="section" data-deck-slide="14" aria-labelledby="involved-title">
       <div class="section-shell">
         <p class="section-kicker reveal">Where you come in</p>
         <h2 class="section-title reveal" id="involved-title">Clean ways in, at any commitment.</h2>
         <p class="section-lede reveal">Every phase begins from a complete, bounded inventory - you're never guessing scope. We'll shape the exact fit together.</p>
         <div class="work-grid">
+
           <article class="work-item reveal">
             <span>01</span>
             <div>
@@ -1542,6 +1579,7 @@
               <p>From groomed PRD to shipped.</p>
             </div>
           </article>
+
           <article class="work-item reveal">
             <span>02</span>
             <div>
@@ -1549,13 +1587,15 @@
               <p>The highest-leverage work today.</p>
             </div>
           </article>
+
           <article class="work-item reveal">
             <span>03</span>
             <div>
               <h3>Pick up the money lane</h3>
-              <p>Ledger, credit, pledges, and the 13 -> backbone.</p>
+              <p>Ledger, credit, pledges, and the 13 -&gt; backbone.</p>
             </div>
           </article>
+
           <article class="work-item reveal">
             <span>04</span>
             <div>
@@ -1567,15 +1607,15 @@
       </div>
     </section>
 
-    <section id="contact" class="contact section" data-deck-slide="14" aria-labelledby="contact-title">
+    <section id="contact" class="contact section" data-deck-slide="15" aria-labelledby="contact-title">
       <div class="section-shell">
         <p class="section-kicker reveal">Build with us</p>
-        <h2 class="reveal" id="contact-title">Help build the platform the frontier deserves.</h2>
+        <h2 class="reveal" id="contact-title">Help build the operating system for Christian missions.</h2>
         <div class="contact-grid reveal">
           <div>
             <a href="https://github.com/Asymmetric-al/core">github.com/Asymmetric-al/core</a>
             <a href="mailto:blake@globalfellowship.org">Blake / blake@globalfellowship.org</a>
-            <p>Start with the roadmap. Read Phase 9's PRD as the pattern.</p>
+            <p>Small inputs. Mountain-moving outputs. Start with the roadmap. Read Phase 9's PRD as the pattern.</p>
           </div>
           <div class="contact-actions">
             <a class="button button-primary" href="mailto:blake@globalfellowship.org">Email Blake</a>
