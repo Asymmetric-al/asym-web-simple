@@ -5,31 +5,7 @@ import { Container, PageHero, Section } from "@/components/site/page";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RotateCcw, ShieldAlert } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useEffect } from "react";
-
-function queueRouteErrorEvent(payload: {
-  digest: string | null;
-  name: string;
-  path: string;
-}) {
-  const analyticsWindow = window as Window & {
-    va?: (event: "event", properties?: unknown) => void;
-    vaq?: [string, unknown?][];
-  };
-
-  if (!analyticsWindow.va) {
-    analyticsWindow.va = (...params) => {
-      analyticsWindow.vaq = analyticsWindow.vaq ?? [];
-      analyticsWindow.vaq.push(params as [string, unknown?]);
-    };
-  }
-
-  analyticsWindow.va("event", {
-    data: payload,
-    name: "route_error",
-  });
-}
 
 export default function ErrorPage({
   error,
@@ -38,19 +14,11 @@ export default function ErrorPage({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  const pathname = usePathname();
-
   useEffect(() => {
     if (process.env.NODE_ENV === "development") {
       console.error(error);
     }
-
-    queueRouteErrorEvent({
-      digest: error.digest ?? null,
-      name: error.name,
-      path: pathname,
-    });
-  }, [error, pathname]);
+  }, [error]);
 
   return (
     <main id="main-content" tabIndex={-1}>

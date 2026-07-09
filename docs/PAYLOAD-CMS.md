@@ -18,7 +18,7 @@ What *is* integrated:
 | **`app/(payload)/api/graphql` & `graphql-playground`** | GraphQL endpoint and playground (as provided by Payload). |
 | **`app/(app)/`** | Route group for **marketing** pages (URLs unchanged: `/`, `/contact`, …). |
 | **`app/(app)/layout.tsx`** | Marketing chrome: gradients, `SiteChrome`, `Header`, `Footer`. |
-| **`app/layout.tsx`** | Root: fonts, `Providers`, `SkipToContent`, `children`, Vercel Analytics & Speed Insights. Keeps admin layout independent. |
+| **`app/layout.tsx`** | Root: fonts, `Providers`, `SkipToContent`, and `children`. Keeps admin layout independent. |
 | **`app/api/draft/route.ts`** | Enables Next.js **draft mode** when `secret` query param matches `PAYLOAD_DRAFT_SECRET` (for future preview). |
 | **`app/api/revalidate/route.ts`** | **On-demand revalidation**: `POST` with `Authorization: Bearer ${REVALIDATION_SECRET}` and JSON `{ "path": "/..." }` or `{ "tag": "..." }`. |
 | **`app/api/disable-draft/route.ts`** | Disables draft mode (supporting route for preview flows). |

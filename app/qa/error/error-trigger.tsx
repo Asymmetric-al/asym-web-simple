@@ -33,7 +33,7 @@ export function QaErrorTrigger({
             <CardContent className="space-y-4">
               <p className="text-muted-foreground text-base leading-7">
                 This internal route exists only to exercise the App Router error
-                boundary and telemetry path in end-to-end tests.
+                boundary in end-to-end tests.
               </p>
               <button
                 type="button"

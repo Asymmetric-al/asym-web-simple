@@ -388,23 +388,25 @@ test.describe("letter site smoke tests", () => {
     ).toBeVisible();
   });
 
-  test("layout bootstraps analytics and speed insights", async ({ page }) => {
+  test("layout omits outbound Vercel analytics collectors", async ({
+    page,
+  }) => {
     await page.goto("/", { waitUntil: "domcontentloaded" });
 
-    await expect
-      .poll(async () =>
-        page.evaluate(() => ({
-          analytics: typeof window.va,
-          speedInsights: typeof window.si,
-        }))
-      )
-      .toEqual({
-        analytics: "function",
-        speedInsights: "function",
-      });
+    expect(
+      await page.evaluate(() => ({
+        analytics: "va" in window,
+        analyticsQueue: "vaq" in window,
+        speedInsights: "si" in window,
+      }))
+    ).toEqual({
+      analytics: false,
+      analyticsQueue: false,
+      speedInsights: false,
+    });
   });
 
-  test("route errors render the boundary and enqueue telemetry", async ({
+  test("route errors render the boundary without Vercel telemetry", async ({
     page,
   }) => {
     await page.goto("/qa/error?trigger=1", { waitUntil: "domcontentloaded" });
@@ -416,19 +418,16 @@ test.describe("letter site smoke tests", () => {
       })
     ).toBeVisible();
 
-    await expect
-      .poll(async () =>
-        page.evaluate(() =>
-          (window.vaq ?? []).some(
-            ([event, payload]) =>
-              event === "event" &&
-              typeof payload === "object" &&
-              payload !== null &&
-              "name" in payload &&
-              payload.name === "route_error"
-          )
-        )
-      )
-      .toBe(true);
+    expect(
+      await page.evaluate(() => ({
+        analytics: "va" in window,
+        analyticsQueue: "vaq" in window,
+        speedInsights: "si" in window,
+      }))
+    ).toEqual({
+      analytics: false,
+      analyticsQueue: false,
+      speedInsights: false,
+    });
   });
 });
