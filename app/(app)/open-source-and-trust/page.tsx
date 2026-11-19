@@ -1,10 +1,10 @@
+import { Blocks, BookOpen, ShieldCheck, Wrench } from "lucide-react";
+import Link from "next/link";
 import { PageHero, Section } from "@/components/site/page";
 import { Reveal, StaggerItem, StaggerReveal } from "@/components/site/reveal";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { createMetadata } from "@/lib/metadata";
-import { Blocks, BookOpen, ShieldCheck, Wrench } from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
 
 const trustCards = [
   {
@@ -37,8 +37,7 @@ const publicLinks = [
   {
     title: "Statement of Faith",
     href: "/statement-of-faith",
-    description:
-      "Read the doctrinal foundation behind the work.",
+    description: "Read the doctrinal foundation behind the work.",
   },
   {
     title: "Financials",
@@ -68,7 +67,8 @@ export default function OpenSourceAndTrustPage() {
         eyebrow="Open Source and Trust"
         title={
           <h1 className="font-heading text-foreground text-[clamp(3rem,6vw,5rem)] leading-[0.94] font-semibold tracking-[-0.07em] text-balance">
-            Built on open-source foundations, with transparent ownership and room to extend.
+            Built on open-source foundations, with transparent ownership and
+            room to extend.
           </h1>
         }
         description="Asym is built in the open because transparency, stewardship, and long-term trust matter. Most teams simply benefit from that. If your team wants to extend or contribute, you can."
@@ -100,8 +100,12 @@ export default function OpenSourceAndTrustPage() {
             </CardHeader>
             <CardContent className="text-primary-foreground/82 flex flex-col gap-3 text-sm leading-7">
               <p>Open foundations help lower long-term trust risk.</p>
-              <p>Supported delivery keeps the product practical for normal teams.</p>
-              <p>Faith and nonprofit covering stay visible instead of buried.</p>
+              <p>
+                Supported delivery keeps the product practical for normal teams.
+              </p>
+              <p>
+                Faith and nonprofit covering stay visible instead of buried.
+              </p>
             </CardContent>
           </Card>
         </Reveal>
@@ -145,9 +149,9 @@ export default function OpenSourceAndTrustPage() {
               </CardHeader>
               <CardContent className="text-muted-foreground flex flex-col gap-4 text-base leading-7">
                 <p>
-                  The public website should make trust legible:
-                  Christian faith, nonprofit covering, open-source foundations,
-                  and system transparency all belong in the public story.
+                  The public website should make trust legible: Christian faith,
+                  nonprofit covering, open-source foundations, and system
+                  transparency all belong in the public story.
                 </p>
                 <p>
                   That is why Asym keeps Statement of Faith, Financials, and

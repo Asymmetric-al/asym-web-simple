@@ -16,6 +16,7 @@ Guides website structure planning: which pages to build, page priority, and how 
 **Check for project context first:** If `.claude/project-context.md` or `.cursor/project-context.md` exists, read it for product type, audience, and growth goals.
 
 Identify:
+
 1. **Website type**: Product/SaaS, B2B, E-commerce, Portfolio, Forum, Directory
 2. **Stage**: New site (plan from scratch) vs. existing (extend or audit)
 3. **Growth strategy**: Affiliate, education, multi-language, community, B2B, developer
@@ -26,7 +27,7 @@ Identify:
 Plan pages by priority for development scheduling. See [skills-reference §2 Page Taxonomy](../../../docs/skills-reference.md#2-page-taxonomy) for full page types and website-type mapping.
 
 | Priority | Pages | Notes |
-|----------|-------|-------|
+| --- | --- | --- |
 | **Must Have** | Home, Product/Features, Pricing, Blog, About, Privacy, Terms, Contact | Essential for trust and conversion; Pricing: public page in nav for self-serve; enterprise-only may use "Contact sales" instead; see **pricing-page-generator** (Visibility & Placement) |
 | **Great to Have** | Testimonials, FAQ, Sitemap (HTML), 404, Refund/Returns | Support UX and SEO |
 | **Optional** | Search Results, News, Careers, Disclosure | Situational |
@@ -37,7 +38,7 @@ Plan pages by priority for development scheduling. See [skills-reference §2 Pag
 Applicable to SaaS, tools, and content sites. Adapt by removing unused nodes (e.g. no API → drop API) and adding specific modules (e.g. industry, region).
 
 | Section | Typical Paths | Page Skills |
-|---------|---------------|-------------|
+| --- | --- | --- |
 | **Root** | /, /features, /pricing, /demo, /contact | homepage-generator, features-page-generator, pricing-page-generator |
 | **Tools** | /tools, /free-tools; hub + per-tool pages | tools-page-generator; free tools for lead gen; often SPA; programmatic; see **programmatic-seo** |
 | **Resources** | /blog, /changelog, /glossary, /faq, /tutorials | blog-page-generator, changelog-page-generator, glossary-page-generator, faq-page-generator |
@@ -51,7 +52,7 @@ Applicable to SaaS, tools, and content sites. Adapt by removing unused nodes (e.
 Structure reflects growth strategy. Subdirectories signal channels:
 
 | Goal | Path Example | Page/Channel |
-|------|--------------|--------------|
+| --- | --- | --- |
 | Affiliate conversion | /affiliate | affiliate-page-generator |
 | Education/student plan | /education, /startups, /student-discount | education-program, startups-page-generator |
 | Multi-language | /zh-CN, /ja | localization-strategy |
@@ -79,7 +80,7 @@ When planning for multiple products or brands, see **domain-architecture** for s
 ## Structure Principles
 
 | Principle | Guideline |
-|-----------|-----------|
+| --- | --- |
 | **Flat structure** | Max 4 clicks from homepage to any page; improves crawlability and weight distribution |
 | **Early planning** | Plan structure before growth; can start right after domain purchase |
 | **Sitelinks** | Good structure + TOC + authoritative internal links → natural sitelinks in SERP (cannot be forced via schema); see **serp-features** |

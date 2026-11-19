@@ -48,9 +48,18 @@ export default function WaitlistPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="text-primary-foreground/82 flex flex-col gap-3 text-sm leading-7">
-              <p>The waitlist routes early access updates, walkthrough invitations, and qualified rollout conversations.</p>
-              <p>Managed Donor Care + Ops stays secondary and is never required to use Asym.</p>
-              <p>If managed support matters to your team, mention it in your note and we can talk through it.</p>
+              <p>
+                The waitlist routes early access updates, walkthrough
+                invitations, and qualified rollout conversations.
+              </p>
+              <p>
+                Managed Donor Care + Ops stays secondary and is never required
+                to use Asym.
+              </p>
+              <p>
+                If managed support matters to your team, mention it in your note
+                and we can talk through it.
+              </p>
             </CardContent>
           </Card>
         </Reveal>
@@ -91,10 +100,13 @@ export default function WaitlistPage() {
               </CardHeader>
               <CardContent className="text-muted-foreground flex flex-col gap-4 text-base leading-7">
                 <p>
-                  Share your organization, your role, and the main area where disconnected tools are creating drag so the first reply can be useful.
+                  Share your organization, your role, and the main area where
+                  disconnected tools are creating drag so the first reply can be
+                  useful.
                 </p>
                 <p>
-                  If managed support matters, mention it in your note so we can route the conversation well.
+                  If managed support matters, mention it in your note so we can
+                  route the conversation well.
                 </p>
               </CardContent>
             </Card>

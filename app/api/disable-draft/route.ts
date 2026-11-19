@@ -1,6 +1,6 @@
 import { draftMode } from "next/headers";
-import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
   const draft = await draftMode();

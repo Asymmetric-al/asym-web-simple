@@ -45,7 +45,7 @@ export function SiteChrome() {
         <path d={CORNER_PATH} fill="currentColor" />
       </svg>
       <svg
-        className={`${base} bottom-3 right-3 rotate-180`}
+        className={`${base} right-3 bottom-3 rotate-180`}
         width="50"
         height="50"
         viewBox="0 0 50 50"

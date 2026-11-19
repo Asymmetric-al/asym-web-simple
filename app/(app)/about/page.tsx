@@ -1,10 +1,10 @@
+import { Blocks, BookOpen, HeartHandshake, Scale } from "lucide-react";
+import Link from "next/link";
 import { PageHero, Section } from "@/components/site/page";
 import { Reveal, StaggerItem, StaggerReveal } from "@/components/site/reveal";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { createMetadata } from "@/lib/metadata";
-import { Blocks, BookOpen, HeartHandshake, Scale } from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
 
 const pillars = [
   {
@@ -78,9 +78,15 @@ export default function AboutPage() {
             </CardHeader>
             <CardContent className="text-primary-foreground/82 flex flex-col gap-3 text-sm leading-7">
               <p>We are openly Christian, and we want that to be clear.</p>
-              <p>Statement of Faith, financials, and open-source trust stay public on purpose.</p>
               <p>
-                <Link href="/statement-of-faith" className="underline underline-offset-4">
+                Statement of Faith, financials, and open-source trust stay
+                public on purpose.
+              </p>
+              <p>
+                <Link
+                  href="/statement-of-faith"
+                  className="underline underline-offset-4"
+                >
                   Learn more about our Statement of Faith
                 </Link>
                 .
@@ -136,7 +142,10 @@ export default function AboutPage() {
                 "Review nonprofit covering, financial oversight, and donation treatment under Global Fellowship Inc.",
             },
           ].map((item) => (
-            <Card key={item.href} className="surface-card surface-interactive rounded-[1.8rem]">
+            <Card
+              key={item.href}
+              className="surface-card surface-interactive rounded-[1.8rem]"
+            >
               <CardHeader>
                 <CardTitle className="font-heading text-xl font-semibold tracking-[-0.04em]">
                   <Link href={item.href} className="link-resilient">

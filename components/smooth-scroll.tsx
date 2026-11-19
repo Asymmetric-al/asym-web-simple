@@ -1,13 +1,14 @@
 "use client";
 
-import { siteFeatures } from "@/lib/config";
 import Lenis from "lenis";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef } from "react";
+import { siteFeatures } from "@/lib/config";
+import type { ReactNode } from "react";
 
 const LENIS_OPTIONS = {
   duration: 0.88,
-  easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+  easing: (t: number) => Math.min(1, 1.001 - 2 ** (-10 * t)),
   orientation: "vertical" as const,
   gestureOrientation: "vertical" as const,
   smoothWheel: true,
@@ -15,18 +16,26 @@ const LENIS_OPTIONS = {
   touchMultiplier: 1.5,
 };
 
-export function SmoothScroll({ children }: { children: ReactNode }): ReactNode {
+export function SmoothScroll({
+  children,
+}: {
+  readonly children: ReactNode;
+}): ReactNode {
   const pathname = usePathname();
   const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
-    if (!siteFeatures.smoothScroll) return;
+    if (!siteFeatures.smoothScroll) {
+      return;
+    }
 
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
-    if (prefersReducedMotion) return;
+    if (prefersReducedMotion) {
+      return;
+    }
 
     const lenis = new Lenis(LENIS_OPTIONS);
     const previousScrollRestoration = window.history.scrollRestoration;
@@ -36,7 +45,9 @@ export function SmoothScroll({ children }: { children: ReactNode }): ReactNode {
     window.history.scrollRestoration = "manual";
 
     function stopRaf(): void {
-      if (!rafId) return;
+      if (!rafId) {
+        return;
+      }
       cancelAnimationFrame(rafId);
       rafId = 0;
     }
@@ -47,7 +58,9 @@ export function SmoothScroll({ children }: { children: ReactNode }): ReactNode {
     }
 
     function startRaf(): void {
-      if (rafId) return;
+      if (rafId) {
+        return;
+      }
       rafId = requestAnimationFrame(raf);
     }
 
@@ -81,13 +94,19 @@ export function SmoothScroll({ children }: { children: ReactNode }): ReactNode {
 
       const target = event.target as HTMLElement;
       const anchor = target.closest('a[href^="#"]');
-      if (!anchor) return;
+      if (!anchor) {
+        return;
+      }
 
       const href = anchor.getAttribute("href");
-      if (!href || href === "#") return;
+      if (!href || href === "#") {
+        return;
+      }
 
       const element = document.querySelector(href);
-      if (!element) return;
+      if (!element) {
+        return;
+      }
 
       event.preventDefault();
       const focusTarget = element as HTMLElement;
@@ -106,7 +125,7 @@ export function SmoothScroll({ children }: { children: ReactNode }): ReactNode {
 
     document.addEventListener("click", handleAnchorClick);
     document.addEventListener("visibilitychange", handleVisibilityChange);
-    window.addEventListener("resize", handleResize, { passive: true });
+    window.addEventListener("resize", handleResize);
 
     return () => {
       document.removeEventListener("click", handleAnchorClick);
@@ -120,7 +139,9 @@ export function SmoothScroll({ children }: { children: ReactNode }): ReactNode {
   }, []);
 
   useEffect(() => {
-    if (!siteFeatures.smoothScroll || window.location.hash) return;
+    if (!siteFeatures.smoothScroll || window.location.hash) {
+      return;
+    }
 
     const resetScroll = () => {
       lenisRef.current?.scrollTo(0, { immediate: true });

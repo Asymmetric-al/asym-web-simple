@@ -48,7 +48,8 @@ test-results/
 /.adal/
 /.agent/
 /.augment/
-/.claude/
+/.claude/*
+!/.claude/settings.json
 /.codebuddy/
 /.commandcode/
 /.continue/

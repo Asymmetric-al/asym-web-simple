@@ -1,0 +1,14 @@
+diff --git a/node_modules/eslint/bin/eslint.js b/node_modules/eslint/bin/eslint.js
+index 6e48581..81d2985 100644
+--- a/node_modules/eslint/bin/eslint.js
++++ b/node_modules/eslint/bin/eslint.js
+@@ -9,6 +9,9 @@
+ 
+ "use strict";
+ 
++// TypeScript 7 has no compiler API. typescript-eslint needs the TypeScript 6 API.
++require(require("node:path").join(process.cwd(), "scripts/register-typescript6-for-eslint.cjs"));
++
+ const mod = require("node:module");
+ 
+ // to use V8's code cache to speed up instantiation time

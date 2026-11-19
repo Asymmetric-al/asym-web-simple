@@ -1,32 +1,32 @@
-export type PlainTextExcerptOptions = {
+export interface PlainTextExcerptOptions {
   maxLength?: number;
-};
+}
 
-export type TextStyleSnapshot = {
+export interface TextStyleSnapshot {
   font: string;
   lineHeight: number;
-};
+}
 
-export type PlatformTabTriggerPreset = {
+export interface PlatformTabTriggerPreset {
   id: "platform-tab-trigger";
   fallbackMinHeightPx: number;
   measurementSafetyPx: number;
-};
+}
 
-export type PlatformTabTriggerCopy = {
+export interface PlatformTabTriggerCopy {
   title: string;
   summary: string;
-};
+}
 
-export type PlatformTabTriggerElements = {
+export interface PlatformTabTriggerElements {
   trigger: HTMLElement;
   copy: HTMLElement;
   tag: HTMLElement;
   title: HTMLElement;
   summary: HTMLElement;
-};
+}
 
-export type PlatformTabTriggerMeasurement = {
+export interface PlatformTabTriggerMeasurement {
   itemHeights: number[];
   sharedMinHeightPx: number;
-};
+}

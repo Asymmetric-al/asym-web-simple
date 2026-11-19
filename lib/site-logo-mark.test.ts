@@ -1,10 +1,10 @@
-import { SiteLogoMark } from "../components/site/site-logo-mark";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { describe, expect, test } from "vitest";
+import { describe, expect } from "vitest";
+import { SiteLogoMark } from "../components/site/site-logo-mark";
 
-describe("SiteLogoMark", () => {
-  test("does not preload logo artwork by default", () => {
+describe("siteLogoMark", () => {
+  it("does not preload logo artwork by default", () => {
     const markup = renderToStaticMarkup(
       createElement(SiteLogoMark, { className: "size-5" })
     );

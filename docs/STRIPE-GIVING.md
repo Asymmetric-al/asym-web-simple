@@ -7,7 +7,7 @@ This site uses **Stripe Checkout (embedded page UI)** on `/give` for **monthly r
 Copy `.env.example` to `.env.local` and set:
 
 | Variable | Purpose |
-|----------|---------|
+| --- | --- |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Publishable key (`pk_test_...` / `pk_live_...`) |
 | `STRIPE_SECRET_KEY` | Secret key (`sk_test_...` / `sk_live_...`) — **server only** |
 | `STRIPE_WEBHOOK_SECRET` | Signing secret from the webhook endpoint (`whsec_...`) |

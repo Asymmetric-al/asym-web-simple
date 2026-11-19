@@ -1,8 +1,11 @@
-import type { RecurringTier } from "@/lib/donation-tiers";
-import { GIVE_PAGE_METADATA_SOURCE } from "@/lib/stripe-giving";
 import Stripe from "stripe";
+import { GIVE_PAGE_METADATA_SOURCE } from "@/lib/stripe-giving";
+import type { RecurringTier } from "@/lib/donation-tiers";
 
-export { ONE_TIME_AMOUNTS_CENTS, type RecurringTier } from "@/lib/donation-tiers";
+export {
+  ONE_TIME_AMOUNTS_CENTS,
+  type RecurringTier,
+} from "@/lib/donation-tiers";
 
 let stripeSingleton: Stripe | null = null;
 
@@ -24,14 +27,18 @@ export function getAppBaseUrl(): string {
 
 export function getRecurringPriceId(tier: RecurringTier): string | undefined {
   switch (tier) {
-    case "25":
+    case "25": {
       return process.env.STRIPE_PRICE_RECURRING_25;
-    case "50":
+    }
+    case "50": {
       return process.env.STRIPE_PRICE_RECURRING_50;
-    case "100":
+    }
+    case "100": {
       return process.env.STRIPE_PRICE_RECURRING_100;
-    default:
+    }
+    default: {
       return undefined;
+    }
   }
 }
 

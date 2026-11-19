@@ -1,8 +1,8 @@
+import Link from "next/link";
 import { DocumentPage, DocumentSection } from "@/components/site/document-page";
 import { siteConfig } from "@/lib/config";
 import { createMetadata } from "@/lib/metadata";
 import type { Metadata } from "next";
-import Link from "next/link";
 
 export const metadata: Metadata = createMetadata({
   title: "Privacy Policy",

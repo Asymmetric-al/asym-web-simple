@@ -1,15 +1,15 @@
 "use client";
 
+import { AlertTriangle } from "lucide-react";
+import { useState } from "react";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { Container, Section } from "@/components/site/page";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { AlertTriangle } from "lucide-react";
-import { useState } from "react";
 
 export function QaErrorTrigger({
   shouldThrowInitially = false,
 }: {
-  shouldThrowInitially?: boolean;
+  readonly shouldThrowInitially?: boolean;
 }) {
   const [shouldThrow, setShouldThrow] = useState(shouldThrowInitially);
 

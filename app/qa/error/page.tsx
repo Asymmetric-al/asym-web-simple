@@ -11,7 +11,7 @@ export const metadata = {
 export default async function QaErrorHarnessPage({
   searchParams,
 }: {
-  searchParams: Promise<{ trigger?: string }>;
+  readonly searchParams: Promise<{ trigger?: string }>;
 }) {
   const params = await searchParams;
 

@@ -1,5 +1,7 @@
 "use client";
 
+import { motion } from "motion/react";
+import Image from "next/image";
 import {
   getRevealStates,
   getRevealTransition,
@@ -7,8 +9,6 @@ import {
   useReducedMotion,
 } from "@/lib/motion";
 import { cn } from "@/lib/utils";
-import { motion } from "motion/react";
-import Image from "next/image";
 import type { ReactNode } from "react";
 
 export function MediaStage({
@@ -21,14 +21,14 @@ export function MediaStage({
   className,
   priority = false,
 }: {
-  sceneSrc?: string;
-  sceneAlt: string;
-  screenshotSrc?: string;
-  screenshotAlt: string;
-  badge: string;
-  caption: ReactNode;
-  className?: string;
-  priority?: boolean;
+  readonly sceneSrc?: string;
+  readonly sceneAlt: string;
+  readonly screenshotSrc?: string;
+  readonly screenshotAlt: string;
+  readonly badge: string;
+  readonly caption: ReactNode;
+  readonly className?: string;
+  readonly priority?: boolean;
 }) {
   const prefersReducedMotion = useReducedMotion();
   const floatingProps = prefersReducedMotion
@@ -49,14 +49,14 @@ export function MediaStage({
       <motion.div
         initial={heroStates.hidden}
         animate={heroStates.visible}
-        {...(!prefersReducedMotion
-          ? {
+        {...(prefersReducedMotion
+          ? {}
+          : {
               whileHover: {
                 y: -4,
                 scale: 1.004,
               },
-            }
-          : {})}
+            })}
         transition={getRevealTransition(prefersReducedMotion, {
           duration: 0.34,
         })}

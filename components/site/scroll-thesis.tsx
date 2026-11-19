@@ -1,9 +1,9 @@
 "use client";
 
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { siteRevealScale, useReducedMotion } from "@/lib/motion";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 
 const easeWord = "cubic-bezier(0.22, 1, 0.36, 1)";
 
@@ -26,9 +26,9 @@ export function ScrollThesis({
   text,
   className,
 }: {
-  eyebrow: string;
-  text: string;
-  className?: string | undefined;
+  readonly eyebrow: string;
+  readonly text: string;
+  readonly className?: string | undefined;
 }) {
   const prefersReducedMotion = useReducedMotion();
   const narrowLayout = useSyncExternalStore(
@@ -40,20 +40,25 @@ export function ScrollThesis({
   const [scrollProgress, setScrollProgress] = useState(0);
   const words = text.split(" ");
 
-  const liteWordMotion =
-    narrowLayout && !prefersReducedMotion ? true : false;
+  const isLiteWordMotion = !!(narrowLayout && !prefersReducedMotion);
 
   useEffect(() => {
-    if (prefersReducedMotion) return;
+    if (prefersReducedMotion) {
+      return;
+    }
 
     const container = containerRef.current;
-    if (!container) return;
+    if (!container) {
+      return;
+    }
 
-    let ticking = false;
+    let isTicking = false;
 
     const handleScroll = () => {
-      if (ticking) return;
-      ticking = true;
+      if (isTicking) {
+        return;
+      }
+      isTicking = true;
 
       requestAnimationFrame(() => {
         const rect = container.getBoundingClientRect();
@@ -66,11 +71,11 @@ export function ScrollThesis({
         );
 
         setScrollProgress(progress);
-        ticking = false;
+        isTicking = false;
       });
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("scroll", handleScroll);
     handleScroll();
 
     return () => window.removeEventListener("scroll", handleScroll);
@@ -106,20 +111,19 @@ export function ScrollThesis({
                 ? 1
                 : 0.18 + wordProgress * 0.82;
               const blur =
-                prefersReducedMotion || liteWordMotion
+                prefersReducedMotion || isLiteWordMotion
                   ? 0
                   : (1 - wordProgress) * 7;
               const scale =
-                prefersReducedMotion || liteWordMotion
+                prefersReducedMotion || isLiteWordMotion
                   ? 1
                   : siteRevealScale + wordProgress * (1 - siteRevealScale);
 
-              const transitionStyle =
-                prefersReducedMotion
-                  ? undefined
-                  : liteWordMotion
-                    ? `opacity 90ms ${easeWord}`
-                    : `opacity 90ms ${easeWord}, filter 90ms ${easeWord}, transform 90ms ${easeWord}`;
+              const transitionStyle = prefersReducedMotion
+                ? undefined
+                : isLiteWordMotion
+                  ? `opacity 90ms ${easeWord}`
+                  : `opacity 90ms ${easeWord}, filter 90ms ${easeWord}, transform 90ms ${easeWord}`;
 
               return (
                 <span
@@ -128,7 +132,7 @@ export function ScrollThesis({
                   style={{
                     opacity,
                     filter: blur > 0 ? `blur(${blur}px)` : "none",
-                    transform: scale !== 1 ? `scale(${scale})` : "none",
+                    transform: scale === 1 ? "none" : `scale(${scale})`,
                     transition: transitionStyle,
                   }}
                 >

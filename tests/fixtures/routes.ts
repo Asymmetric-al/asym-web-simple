@@ -1,7 +1,7 @@
-export type RouteFixture = {
+export interface RouteFixture {
   path: string;
   slug: string;
-};
+}
 
 export const routeFixtures: RouteFixture[] = [
   {

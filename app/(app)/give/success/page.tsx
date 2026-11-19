@@ -1,3 +1,5 @@
+import { Heart } from "lucide-react";
+import Link from "next/link";
 import { DonationSuccessActions } from "@/components/site/donation-success-actions";
 import { PageHero, Section } from "@/components/site/page";
 import { Reveal } from "@/components/site/reveal";
@@ -10,9 +12,7 @@ import {
 } from "@/lib/stripe-giving";
 import { getStripe } from "@/lib/stripe-server";
 import { cn } from "@/lib/utils";
-import { Heart } from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
 
 export const metadata: Metadata = createMetadata({
   title: "Thank you",
@@ -25,26 +25,28 @@ export const metadata: Metadata = createMetadata({
 export default async function GiveSuccessPage({
   searchParams,
 }: {
-  searchParams: Promise<{ session_id?: string }>;
+  readonly searchParams: Promise<{ session_id?: string }>;
 }) {
   const params = await searchParams;
   const rawSessionId =
     typeof params.session_id === "string" ? params.session_id.trim() : "";
-  const sessionId = isValidCheckoutSessionId(rawSessionId) ? rawSessionId : null;
+  const sessionId = isValidCheckoutSessionId(rawSessionId)
+    ? rawSessionId
+    : null;
 
-  const stripeConfigured = Boolean(process.env.STRIPE_SECRET_KEY);
+  const isStripeConfigured = Boolean(process.env.STRIPE_SECRET_KEY);
 
-  let portalEligible = false;
-  if (sessionId && stripeConfigured) {
+  let isPortalEligible = false;
+  if (sessionId && isStripeConfigured) {
     try {
       const stripe = getStripe();
       const session = await stripe.checkout.sessions.retrieve(sessionId);
-      portalEligible =
+      isPortalEligible =
         session.status === "complete" &&
         session.metadata?.source === GIVE_PAGE_METADATA_SOURCE &&
         session.mode === "subscription";
     } catch {
-      portalEligible = false;
+      isPortalEligible = false;
     }
   }
 
@@ -84,7 +86,7 @@ export default async function GiveSuccessPage({
                 href="/"
                 className={cn(
                   buttonVariants({ variant: "secondary", size: "default" }),
-                  "rounded-full",
+                  "rounded-full"
                 )}
               >
                 Back to home
@@ -111,8 +113,8 @@ export default async function GiveSuccessPage({
               <div className="mt-6">
                 <DonationSuccessActions
                   sessionId={sessionId}
-                  stripeConfigured={stripeConfigured}
-                  portalEligible={portalEligible}
+                  stripeConfigured={isStripeConfigured}
+                  portalEligible={isPortalEligible}
                 />
               </div>
             </div>

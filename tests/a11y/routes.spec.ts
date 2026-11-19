@@ -16,7 +16,10 @@ test.describe("route accessibility", () => {
     }) => {
       await page.emulateMedia({ reducedMotion: "reduce" });
       await page.goto(route.path, { waitUntil: "domcontentloaded" });
-      await expect(page.getByRole("heading", { level: 1 }).first()).toBeVisible();
+
+      await expect(
+        page.getByRole("heading", { level: 1 }).first()
+      ).toBeVisible();
 
       const accessibilityScanResults = await new AxeBuilder({ page })
         .withTags(["wcag2a", "wcag2aa"])

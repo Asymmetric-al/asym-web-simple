@@ -1,5 +1,7 @@
 "use client";
 
+import { motion } from "motion/react";
+import { Children, cloneElement, isValidElement } from "react";
 import {
   getRevealStates,
   getRevealTransition,
@@ -10,26 +12,19 @@ import {
   useReducedMotion,
 } from "@/lib/motion";
 import { cn } from "@/lib/utils";
-import { motion } from "motion/react";
-import {
-  Children,
-  cloneElement,
-  isValidElement,
-  type ReactElement,
-  type ReactNode,
-} from "react";
+import type { ReactElement, ReactNode } from "react";
 
-type RevealProps = {
-  children: ReactNode;
-  className?: string | undefined;
-  delay?: number;
-  y?: number;
-  scale?: number;
-  blur?: number;
-  trigger?: "inView" | "mount";
-  amount?: number;
-  margin?: string | undefined;
-};
+interface RevealProps {
+  readonly children: ReactNode;
+  readonly className?: string | undefined;
+  readonly delay?: number;
+  readonly y?: number;
+  readonly scale?: number;
+  readonly blur?: number;
+  readonly trigger?: "inView" | "mount";
+  readonly amount?: number;
+  readonly margin?: string | undefined;
+}
 
 export function Reveal({
   children,
@@ -77,12 +72,12 @@ export function StaggerReveal({
   margin = siteViewportMargin,
   step = 0.045,
 }: {
-  children: ReactNode;
-  className?: string | undefined;
-  delay?: number;
-  amount?: number;
-  margin?: string | undefined;
-  step?: number;
+  readonly children: ReactNode;
+  readonly className?: string | undefined;
+  readonly delay?: number;
+  readonly amount?: number;
+  readonly margin?: string | undefined;
+  readonly step?: number;
 }) {
   const items = Children.map(children, (child, index) => {
     if (!isValidElement(child)) {
@@ -101,16 +96,16 @@ export function StaggerReveal({
   return <div className={cn("contents", className)}>{items}</div>;
 }
 
-type StaggerItemProps = {
-  children: ReactNode;
-  className?: string | undefined;
-  delay?: number;
-  staggerIndex?: number;
-  staggerStep?: number;
-  staggerDelay?: number;
-  viewportAmount?: number;
-  viewportMargin?: string | undefined;
-};
+interface StaggerItemProps {
+  readonly children: ReactNode;
+  readonly className?: string | undefined;
+  readonly delay?: number;
+  readonly staggerIndex?: number;
+  readonly staggerStep?: number;
+  readonly staggerDelay?: number;
+  readonly viewportAmount?: number;
+  readonly viewportMargin?: string | undefined;
+}
 
 export function StaggerItem({
   children,

@@ -1,24 +1,28 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 export function DonationSuccessActions({
   sessionId,
   stripeConfigured,
   portalEligible,
 }: {
-  sessionId: string | null;
-  stripeConfigured: boolean;
-  /** Server-verified: completed give_page subscription checkout */
-  portalEligible: boolean;
+  readonly sessionId: string | null;
+  readonly stripeConfigured: boolean;
+  /**
+  Server-verified: completed give_page subscription checkout
+  */
+  readonly portalEligible: boolean;
 }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const openPortal = async () => {
-    if (!sessionId) return;
+    if (!sessionId) {
+      return;
+    }
     setError(null);
     setLoading(true);
     try {
@@ -33,9 +37,11 @@ export function DonationSuccessActions({
         setLoading(false);
         return;
       }
-      window.location.href = data.url;
+      window.location.assign(data.url);
     } catch {
-      setError("Something went wrong. Please try again or email info@asymmetric.al.");
+      setError(
+        "Something went wrong. Please try again or email info@asymmetric.al."
+      );
       setLoading(false);
     }
   };

@@ -2,7 +2,7 @@ export function canUseTextLayout(): boolean {
   return (
     typeof window !== "undefined" &&
     typeof Intl !== "undefined" &&
-    typeof Intl.Segmenter !== "undefined" &&
+    Intl.Segmenter !== undefined &&
     (typeof OffscreenCanvas !== "undefined" || typeof document !== "undefined")
   );
 }

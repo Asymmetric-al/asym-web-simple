@@ -1,7 +1,3 @@
-import { PageHero, Section, SectionHeader } from "@/components/site/page";
-import { Reveal, StaggerItem, StaggerReveal } from "@/components/site/reveal";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { createMetadata } from "@/lib/metadata";
 import {
   Activity,
   ArrowUpRight,
@@ -14,8 +10,12 @@ import {
   Layers3,
   ShieldCheck,
 } from "lucide-react";
-import type { Metadata } from "next";
 import Link from "next/link";
+import { PageHero, Section, SectionHeader } from "@/components/site/page";
+import { Reveal, StaggerItem, StaggerReveal } from "@/components/site/reveal";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { createMetadata } from "@/lib/metadata";
+import type { Metadata } from "next";
 
 const layers = [
   {
@@ -31,7 +31,8 @@ const layers = [
   },
   {
     title: "Layer 02 — Data Persistence",
-    description: "PostgreSQL, Redis, TanStack DB, pgvector, TanStack Query, TanStack Table",
+    description:
+      "PostgreSQL, Redis, TanStack DB, pgvector, TanStack Query, TanStack Table",
     links: [
       { label: "PostgreSQL", url: "https://www.postgresql.org/" },
       { label: "Redis", url: "https://github.com/redis/redis/" },
@@ -69,7 +70,9 @@ const layers = [
   {
     title: "Layer 06 — Identity & Security",
     description: "Supabase Authentication",
-    links: [{ label: "Supabase Auth", url: "https://supabase.com/docs/guides/auth" }],
+    links: [
+      { label: "Supabase Auth", url: "https://supabase.com/docs/guides/auth" },
+    ],
     icon: Fingerprint,
   },
   {
@@ -150,7 +153,7 @@ export default function SpecsPage() {
       >
         <Reveal trigger="mount">
           <div className="page-shell-glow surface-interactive border-foreground/10 bg-primary text-primary-foreground flex flex-col overflow-hidden rounded-[2rem] border shadow-[0_32px_80px_-56px_rgba(22,33,43,0.8)]">
-            <div className="border-white/10 flex items-center justify-between border-b bg-white/5 px-6 py-4 sm:px-8">
+            <div className="flex items-center justify-between border-b border-white/10 bg-white/5 px-6 py-4 sm:px-8">
               <div className="flex gap-2">
                 <div className="size-2.5 rounded-full bg-white/20" />
                 <div className="size-2.5 rounded-full bg-white/20" />
@@ -167,17 +170,30 @@ export default function SpecsPage() {
             >
               <pre className="font-mono text-[0.8rem] leading-relaxed sm:text-[0.85rem]">
                 <code className="text-primary-foreground/80">
-                  <span className="text-[#a3b8cc]">import</span> {"{"} buildConfig {"}"} <span className="text-[#a3b8cc]">from</span> <span className="text-[#dbe8d1]">&quot;payload&quot;</span>;{"\n"}
-                  <span className="text-[#a3b8cc]">import</span> {"{"} postgresAdapter {"}"} <span className="text-[#a3b8cc]">from</span> <span className="text-[#dbe8d1]">&quot;@payloadcms/db-postgres&quot;</span>;{"\n"}
+                  <span className="text-[#a3b8cc]">import</span> {"{"}{" "}
+                  buildConfig {"}"} <span className="text-[#a3b8cc]">from</span>{" "}
+                  <span className="text-[#dbe8d1]">&quot;payload&quot;</span>;
                   {"\n"}
-                  <span className="text-[#a3b8cc]">export default</span> buildConfig({"{\n"}
+                  <span className="text-[#a3b8cc]">import</span> {"{"}{" "}
+                  postgresAdapter {"}"}{" "}
+                  <span className="text-[#a3b8cc]">from</span>{" "}
+                  <span className="text-[#dbe8d1]">
+                    &quot;@payloadcms/db-postgres&quot;
+                  </span>
+                  ;{"\n"}
+                  {"\n"}
+                  <span className="text-[#a3b8cc]">export default</span>{" "}
+                  buildConfig({"{\n"}
                   {"  "}db: postgresAdapter({"{\n"}
-                  {"    "}pool: {"{\n"}
-                  {"      "}connectionString: process.env.<span className="text-[#dbe8d1]">DATABASE_URI</span>,{"\n"}
+                  {" ".repeat(4)}pool: {"{\n"}
+                  {" ".repeat(6)}connectionString: process.env.
+                  <span className="text-[#dbe8d1]">DATABASE_URI</span>,{"\n"}
                   {"    },\n"}
                   {"  }),\n"}
                   {"  "}admin: {"{\n"}
-                  {"    "}user: <span className="text-[#dbe8d1]">&quot;users&quot;</span>,{"\n"}
+                  {" ".repeat(4)}user:{" "}
+                  <span className="text-[#dbe8d1]">&quot;users&quot;</span>,
+                  {"\n"}
                   {"  },\n"}
                   {"});\n"}
                 </code>
@@ -192,11 +208,11 @@ export default function SpecsPage() {
           title="Built on open foundations and practical infrastructure choices."
           description="The goal is not novelty. The goal is a system teams can trust, understand, and live with for the long haul."
         />
-        <div className="mt-8 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           <StaggerReveal>
             {layers.map((item) => (
               <StaggerItem key={item.title}>
-                <Card className="surface-card surface-interactive h-full rounded-[1.8rem] transition-all duration-300 hover:border-foreground/20">
+                <Card className="surface-card surface-interactive hover:border-foreground/20 h-full rounded-[1.8rem] transition-all duration-300">
                   <CardHeader>
                     <div className="bg-secondary text-primary flex size-11 items-center justify-center rounded-2xl shadow-sm">
                       <item.icon className="size-5" />
@@ -214,7 +230,7 @@ export default function SpecsPage() {
                           href={link.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="group/tag inline-flex items-center overflow-hidden rounded-full border border-border bg-secondary/50 px-2.5 py-1.5 font-mono text-[10px] text-muted-foreground transition-all duration-300 hover:border-foreground/20 hover:bg-secondary hover:text-foreground"
+                          className="group/tag border-border bg-secondary/50 text-muted-foreground hover:border-foreground/20 hover:bg-secondary hover:text-foreground inline-flex items-center overflow-hidden rounded-full border px-2.5 py-1.5 font-mono text-[10px] transition-all duration-300"
                         >
                           <span className="transition-transform duration-300 group-hover/tag:-translate-x-0.5">
                             {link.label}
@@ -237,11 +253,11 @@ export default function SpecsPage() {
           title="Strong operational expectations, not vague aspirations."
           description="The system should feel fast, stay available, and be observable enough to trust when the stakes are real."
         />
-        <div className="mt-8 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <StaggerReveal>
             {targets.map((item) => (
               <StaggerItem key={item.label}>
-                <Card className="surface-card surface-interactive rounded-[1.7rem] border-border hover:border-foreground/20 transition-colors">
+                <Card className="surface-card surface-interactive border-border hover:border-foreground/20 rounded-[1.7rem] transition-colors">
                   <CardHeader>
                     <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
                       {item.label}

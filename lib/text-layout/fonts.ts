@@ -1,6 +1,6 @@
 import type { PlatformTabTriggerElements, TextStyleSnapshot } from "./types";
 
-export type MeasurementFontInput = {
+export interface MeasurementFontInput {
   font: string;
   fontStyle: string;
   fontVariant: string;
@@ -9,12 +9,12 @@ export type MeasurementFontInput = {
   fontSize: string;
   lineHeight: string;
   fontFamily: string;
-};
+}
 
-type MeasurementFontConfig = {
+interface MeasurementFontConfig {
   variableName: string;
   fallbackFamily: string;
-};
+}
 
 export const platformTabMeasurementFonts = {
   title: {
@@ -50,7 +50,7 @@ export function parsePixelValue(value: string): number {
 }
 
 function normalizeFontWhitespace(value: string): string {
-  return value.replace(/\s+/g, " ").trim();
+  return value.replaceAll(/\s+/g, " ").trim();
 }
 
 function stripGenericFontFamilies(fontFamily: string): string {
@@ -58,7 +58,10 @@ function stripGenericFontFamilies(fontFamily: string): string {
     .split(",")
     .map((token) => token.trim())
     .filter((token) => {
-      const normalizedToken = token.replace(/["']/g, "").trim().toLowerCase();
+      const normalizedToken = token
+        .replaceAll(/["']/g, "")
+        .trim()
+        .toLowerCase();
       return (
         normalizedToken.length > 0 && !genericFontFamilies.has(normalizedToken)
       );

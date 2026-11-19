@@ -1,8 +1,9 @@
 "use client";
 
-import { useReducedMotion } from "@/lib/motion";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useReducedMotion } from "@/lib/motion";
+import type { ReactNode } from "react";
 
 const LONG_READ_PATHS = new Set([
   "/manifesto",
@@ -18,7 +19,7 @@ export function ReadingProgress(): ReactNode {
   const prefersReducedMotion = useReducedMotion();
   const [ratio, setRatio] = useState(0);
 
-  const enabled =
+  const isEnabled =
     pathname != null && LONG_READ_PATHS.has(pathname) && !prefersReducedMotion;
 
   const update = useCallback(() => {
@@ -28,7 +29,7 @@ export function ReadingProgress(): ReactNode {
   }, []);
 
   useEffect(() => {
-    if (!enabled) {
+    if (!isEnabled) {
       const resetRaf = requestAnimationFrame(() => setRatio(0));
       return () => cancelAnimationFrame(resetRaf);
     }
@@ -37,16 +38,18 @@ export function ReadingProgress(): ReactNode {
       update();
     });
 
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update, { passive: true });
+    window.addEventListener("scroll", update);
+    window.addEventListener("resize", update);
     return () => {
       cancelAnimationFrame(initRaf);
       window.removeEventListener("scroll", update);
       window.removeEventListener("resize", update);
     };
-  }, [enabled, update]);
+  }, [isEnabled, update]);
 
-  if (!enabled) return null;
+  if (!isEnabled) {
+    return null;
+  }
 
   return (
     <div

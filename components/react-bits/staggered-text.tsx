@@ -1,9 +1,5 @@
 "use client";
 
-import {
-  siteEaseGentle,
-  useReducedMotion as useAppReducedMotion,
-} from "@/lib/motion";
 import React, {
   useEffect,
   useMemo,
@@ -12,7 +8,12 @@ import React, {
   useImperativeHandle,
   forwardRef,
 } from "react";
-import { motion, Transition, Easing } from "motion/react";
+import { motion } from "motion/react";
+import {
+  siteEaseGentle,
+  useReducedMotion as useAppReducedMotion,
+} from "@/lib/motion";
+import type { Transition, Easing } from "motion/react";
 
 type MotionStyle = Record<string, string | number>;
 type SegmentBy = "chars" | "words" | "lines";
@@ -24,13 +25,15 @@ export interface StaggeredTextHandle {
 }
 
 export interface StaggeredTextProps {
-  text: string;
-  className?: string;
-  as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "span";
-  trigger?: "inView" | "mount";
+  readonly text: string;
+  readonly className?: string;
+  readonly as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "span";
+  readonly trigger?: "inView" | "mount";
 
-  /** How to split the text visually and for staggering */
-  segmentBy?: SegmentBy;
+  /**
+  How to split the text visually and for staggering
+  */
+  readonly segmentBy?: SegmentBy;
 
   /**
    * Row separator, applied before segmenting.
@@ -39,45 +42,69 @@ export interface StaggeredTextProps {
    *  - separator="///" and text="One///Two"
    * If not provided, rows are split by newlines.
    */
-  separator?: string;
+  readonly separator?: string;
 
-  /** Delay between each segment in ms */
-  delay?: number;
+  /**
+  Delay between each segment in ms
+  */
+  readonly delay?: number;
 
-  /** Total duration of a segment animation in seconds */
-  duration?: number;
+  /**
+  Total duration of a segment animation in seconds
+  */
+  readonly duration?: number;
 
-  /** Motion easing (single or per-keyframe) */
-  easing?: Easing | Easing[];
+  /**
+  Motion easing (single or per-keyframe)
+  */
+  readonly easing?: Easing | Easing[];
 
-  /** Intersection observer options (for scroll trigger) */
-  threshold?: number;
-  rootMargin?: string;
+  /**
+  Intersection observer options (for scroll trigger)
+  */
+  readonly threshold?: number;
+  readonly rootMargin?: string;
 
-  /** Direction of movement */
-  direction?: "top" | "bottom" | "left" | "right";
+  /**
+  Direction of movement
+  */
+  readonly direction?: "top" | "bottom" | "left" | "right";
 
-  /** Enable blur in default animation */
-  blur?: boolean;
+  /**
+  Enable blur in default animation
+  */
+  readonly blur?: boolean;
 
-  /** Override default keyframes */
-  from?: MotionStyle;
-  to?: MotionStyle | MotionStyle[];
+  /**
+  Override default keyframes
+  */
+  readonly from?: MotionStyle;
+  readonly to?: MotionStyle | MotionStyle[];
 
-  /** Stagger direction: forward (start to end), reverse (end to start), or center (middle out) */
-  staggerDirection?: StaggerDirection;
+  /**
+  Stagger direction: forward (start to end), reverse (end to start), or center (middle out)
+  */
+  readonly staggerDirection?: StaggerDirection;
 
-  /** Respect user's reduced motion preference */
-  respectReducedMotion?: boolean;
+  /**
+  Respect user's reduced motion preference
+  */
+  readonly respectReducedMotion?: boolean;
 
-  /** Auto-exit animation when scrolled out of view */
-  exitOnScrollOut?: boolean;
+  /**
+  Auto-exit animation when scrolled out of view
+  */
+  readonly exitOnScrollOut?: boolean;
 
-  /** Called when the last segment finishes animating */
-  onAnimationComplete?: () => void;
+  /**
+  Called when the last segment finishes animating
+  */
+  readonly onAnimationComplete?: () => void;
 
-  /** Called when exit animation completes */
-  onExitComplete?: () => void;
+  /**
+  Called when exit animation completes
+  */
+  readonly onExitComplete?: () => void;
 }
 
 /**
@@ -85,14 +112,14 @@ export interface StaggeredTextProps {
  */
 const buildKeyframes = (
   from: MotionStyle,
-  steps: MotionStyle[],
-): Record<string, Array<string | number>> => {
+  steps: MotionStyle[]
+): Record<string, (string | number)[]> => {
   const keys = new Set<string>([
     ...Object.keys(from),
     ...steps.flatMap((step) => Object.keys(step)),
   ]);
 
-  const keyframes: Record<string, Array<string | number>> = {};
+  const keyframes: Record<string, (string | number)[]> = {};
   keys.forEach((key) => {
     const fallbackValue =
       from[key] ?? steps.find((step) => step[key] !== undefined)?.[key] ?? 0;
@@ -107,7 +134,7 @@ const buildKeyframes = (
 };
 
 const insertSoftBreaks = (value: string): string =>
-  value.replace(/([^\s-]{14})(?=[^\s-])/g, "$1\u200b");
+  value.replaceAll(/([^\s-]{14})(?=[^\s-])/g, "$1\u{200B}");
 
 const StaggeredText = forwardRef<StaggeredTextHandle, StaggeredTextProps>(
   (
@@ -133,7 +160,7 @@ const StaggeredText = forwardRef<StaggeredTextHandle, StaggeredTextProps>(
       onAnimationComplete,
       onExitComplete,
     },
-    ref,
+    ref
   ) => {
     const rootRef = useRef<HTMLElement | null>(null);
 
@@ -162,13 +189,16 @@ const StaggeredText = forwardRef<StaggeredTextHandle, StaggeredTextProps>(
     }, [trigger]);
 
     useEffect(() => {
-      if (trigger !== "inView") return;
-      if (!rootRef.current) return;
+      if (trigger !== "inView" || !rootRef.current) {
+        return;
+      }
 
       const observer = new IntersectionObserver(
         (entries) => {
           const entry = entries[0];
-          if (!entry) return;
+          if (!entry) {
+            return;
+          }
 
           if (entry.isIntersecting) {
             setHasEnteredView(true);
@@ -180,7 +210,7 @@ const StaggeredText = forwardRef<StaggeredTextHandle, StaggeredTextProps>(
             setIsExiting(true);
           }
         },
-        { threshold, rootMargin },
+        { threshold, rootMargin }
       );
 
       observer.observe(rootRef.current);
@@ -236,11 +266,13 @@ const StaggeredText = forwardRef<StaggeredTextHandle, StaggeredTextProps>(
 
     const fromSnapshot = useMemo<MotionStyle>(
       () => from ?? defaultFrom,
-      [from, defaultFrom],
+      [from, defaultFrom]
     );
 
     const toSnapshots = useMemo<MotionStyle[]>(() => {
-      if (!to) return defaultTo;
+      if (!to) {
+        return defaultTo;
+      }
       return Array.isArray(to) ? to : [to];
     }, [to, defaultTo]);
 
@@ -248,9 +280,9 @@ const StaggeredText = forwardRef<StaggeredTextHandle, StaggeredTextProps>(
     const times = useMemo(
       () =>
         Array.from({ length: stepCount }, (_, i) =>
-          stepCount === 1 ? 0 : i / (stepCount - 1),
+          stepCount === 1 ? 0 : i / (stepCount - 1)
         ),
-      [stepCount],
+      [stepCount]
     );
 
     const { rowsSegments, totalSegments } = useMemo(() => {
@@ -265,25 +297,30 @@ const StaggeredText = forwardRef<StaggeredTextHandle, StaggeredTextProps>(
 
       const rowsSegments: string[][] = rows.map((row) => {
         switch (segmentBy) {
-          case "chars":
+          case "chars": {
             return row.split("");
-          case "lines":
+          }
+          case "lines": {
             return [insertSoftBreaks(row)];
+          }
           case "words":
-          default:
+          default: {
             return row.split(" ").map(insertSoftBreaks);
+          }
         }
       });
 
       const total = rowsSegments.reduce(
         (sum, rowSegs) => sum + rowSegs.length,
-        0,
+        0
       );
 
       return { rowsSegments, totalSegments: total };
     }, [text, segmentBy, separator]);
 
-    if (!text) return null;
+    if (!text) {
+      return null;
+    }
 
     const animateKeyframes = buildKeyframes(fromSnapshot, toSnapshots);
 
@@ -292,19 +329,23 @@ const StaggeredText = forwardRef<StaggeredTextHandle, StaggeredTextProps>(
     const hasMultipleRows = rowsSegments.length > 1;
 
     const getStaggerDelay = (index: number, total: number): number => {
-      if (prefersReducedMotion) return 0;
+      if (prefersReducedMotion) {
+        return 0;
+      }
 
       switch (staggerDirection) {
-        case "reverse":
+        case "reverse": {
           return ((total - 1 - index) * delay) / 1000;
+        }
         case "center": {
           const middle = (total - 1) / 2;
           const distanceFromCenter = Math.abs(index - middle);
           return (distanceFromCenter * delay) / 1000;
         }
         case "forward":
-        default:
+        default: {
           return (index * delay) / 1000;
+        }
       }
     };
 
@@ -368,10 +409,8 @@ const StaggeredText = forwardRef<StaggeredTextHandle, StaggeredTextProps>(
                     wordBreak: "break-word",
                   }}
                 >
-                  {segmentBy === "chars"
-                    ? segment === " "
-                      ? "\u00A0"
-                      : segment
+                  {segmentBy === "chars" && segment === " "
+                    ? "\u{A0}"
                     : segment}
                   {segmentBy === "words" &&
                     rowSegIndex < rowSegments.length - 1 &&
@@ -386,7 +425,7 @@ const StaggeredText = forwardRef<StaggeredTextHandle, StaggeredTextProps>(
         ))}
       </Wrapper>
     );
-  },
+  }
 );
 
 StaggeredText.displayName = "StaggeredText";

@@ -1,23 +1,20 @@
+import { ArrowUpRight } from "lucide-react";
+import Link from "next/link";
 import { HeroReveal } from "@/components/site/hero-reveal";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { cn } from "@/lib/utils";
-import { ArrowUpRight } from "lucide-react";
-import Link from "next/link";
 import type { ComponentProps, ReactNode } from "react";
 
-type Action = {
+interface Action {
   label: string;
   href: string;
   variant?: "default" | "outline" | "secondary" | "ghost";
-};
+}
 
 type Density = "marketing" | "legal";
 
-export function Container({
-  className,
-  ...props
-}: ComponentProps<"div">) {
+export function Container({ className, ...props }: ComponentProps<"div">) {
   return (
     <div
       className={cn(
@@ -40,16 +37,18 @@ export function PageHero({
   className,
   revealTitle = true,
 }: {
-  eyebrow?: ReactNode;
-  title: ReactNode;
-  description: ReactNode;
-  actions?: Action[];
-  meta?: string[];
-  children?: ReactNode;
-  density?: Density;
-  className?: string;
-  /** When true, wraps `title` in a subtle mount reveal (skip if title already animates, e.g. StaggeredText). */
-  revealTitle?: boolean;
+  readonly eyebrow?: ReactNode;
+  readonly title: ReactNode;
+  readonly description: ReactNode;
+  readonly actions?: Action[];
+  readonly meta?: string[];
+  readonly children?: ReactNode;
+  readonly density?: Density;
+  readonly className?: string;
+  /**
+  When true, wraps `title` in a subtle mount reveal (skip if title already animates, e.g. StaggeredText).
+  */
+  readonly revealTitle?: boolean;
 }) {
   const densityClassName =
     density === "legal"
@@ -57,14 +56,16 @@ export function PageHero({
       : "pb-[var(--space-hero-marketing-bottom)] pt-[var(--space-hero-marketing-top)]";
 
   return (
-    <section className={cn("relative overflow-hidden", densityClassName, className)}>
+    <section
+      className={cn("relative overflow-hidden", densityClassName, className)}
+    >
       <Container className="grid gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-center">
         <div className="max-w-3xl">
           {eyebrow ? (
             typeof eyebrow === "string" ? (
               <Badge
                 variant="outline"
-                className="h-auto rounded-full border-foreground/10 bg-card/76 px-3 py-1 font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/80"
+                className="border-foreground/10 bg-card/76 text-primary/80 h-auto rounded-full px-3 py-1 font-mono text-[0.72rem] tracking-[0.28em] uppercase"
               >
                 {eyebrow}
               </Badge>
@@ -75,7 +76,7 @@ export function PageHero({
           <div className={cn("min-w-0", eyebrow && "mt-6")}>
             {revealTitle ? <HeroReveal>{title}</HeroReveal> : title}
           </div>
-          <div className="content-measure mt-6 text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">
+          <div className="content-measure text-muted-foreground mt-6 text-base leading-7 sm:text-lg sm:leading-8">
             {description}
           </div>
           {actions?.length ? (
@@ -103,7 +104,7 @@ export function PageHero({
               {meta.map((item) => (
                 <li
                   key={item}
-                  className="text-resilient max-w-full rounded-full border border-foreground/10 bg-background/76 px-3 py-1.5 text-center font-mono text-[0.72rem] uppercase tracking-[0.22em] text-muted-foreground shadow-[0_14px_34px_-28px_rgba(22,33,43,0.35)]"
+                  className="text-resilient border-foreground/10 bg-background/76 text-muted-foreground max-w-full rounded-full border px-3 py-1.5 text-center font-mono text-[0.72rem] tracking-[0.22em] uppercase shadow-[0_14px_34px_-28px_rgba(22,33,43,0.35)]"
                 >
                   {item}
                 </li>
@@ -125,9 +126,9 @@ export function Section({
   density = "marketing",
   ...props
 }: ComponentProps<"section"> & {
-  containerClassName?: string;
-  tone?: "default" | "sky" | "accent" | "ink";
-  density?: Density;
+  readonly containerClassName?: string;
+  readonly tone?: "default" | "sky" | "accent" | "ink";
+  readonly density?: Density;
 }) {
   const toneClassName =
     tone === "sky"
@@ -144,7 +145,10 @@ export function Section({
       : "py-[var(--space-section-marketing)]";
 
   return (
-    <section className={cn(densityClassName, toneClassName, className)} {...props}>
+    <section
+      className={cn(densityClassName, toneClassName, className)}
+      {...props}
+    >
       <Container className={containerClassName}>{children}</Container>
     </section>
   );
@@ -157,11 +161,11 @@ export function SectionHeader({
   align = "left",
   className,
 }: {
-  eyebrow?: string;
-  title: ReactNode;
-  description?: ReactNode;
-  align?: "left" | "center";
-  className?: string;
+  readonly eyebrow?: string;
+  readonly title: ReactNode;
+  readonly description?: ReactNode;
+  readonly align?: "left" | "center";
+  readonly className?: string;
 }) {
   return (
     <div
@@ -174,16 +178,16 @@ export function SectionHeader({
       {eyebrow ? (
         <Badge
           variant="outline"
-          className="h-auto rounded-full border-foreground/10 bg-card/76 px-3 py-1 font-mono text-[0.72rem] uppercase tracking-[0.28em] text-primary/80"
+          className="border-foreground/10 bg-card/76 text-primary/80 h-auto rounded-full px-3 py-1 font-mono text-[0.72rem] tracking-[0.28em] uppercase"
         >
           {eyebrow}
         </Badge>
       ) : null}
-      <h2 className="mt-4 text-balance font-heading text-[clamp(2.1rem,4vw,3.35rem)] font-semibold leading-[1.02] tracking-[-0.06em]">
+      <h2 className="font-heading mt-4 text-[clamp(2.1rem,4vw,3.35rem)] leading-[1.02] font-semibold tracking-[-0.06em] text-balance">
         {title}
       </h2>
       {description ? (
-        <div className="content-measure mt-4 text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">
+        <div className="content-measure text-muted-foreground mt-4 text-base leading-7 sm:text-lg sm:leading-8">
           {description}
         </div>
       ) : null}

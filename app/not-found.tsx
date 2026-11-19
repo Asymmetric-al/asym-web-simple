@@ -1,9 +1,9 @@
+import { ArrowRight, Compass } from "lucide-react";
+import Link from "next/link";
 import { Container, PageHero, Section } from "@/components/site/page";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { siteConfig } from "@/lib/config";
-import { ArrowRight, Compass } from "lucide-react";
-import Link from "next/link";
 
 export default function NotFound() {
   return (

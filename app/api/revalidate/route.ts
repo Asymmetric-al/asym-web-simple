@@ -1,14 +1,13 @@
-import { timingSafeEqual } from "crypto";
+import { timingSafeEqual } from "node:crypto";
 import { revalidatePath, revalidateTag } from "next/cache";
-import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
 function safeEqual(a: string, b: string): boolean {
   try {
     const ab = Buffer.from(a);
     const bb = Buffer.from(b);
-    if (ab.length !== bb.length) return false;
-    return timingSafeEqual(ab, bb);
+    return ab.length === bb.length ? timingSafeEqual(ab, bb) : false;
   } catch {
     return false;
   }
@@ -26,7 +25,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Invalid request body" },
+      { status: 400 }
+    );
   }
 
   const { tag, path } = body as { tag?: string; path?: string };
@@ -43,6 +45,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
   return NextResponse.json(
     { error: "Provide either tag or path in the request body." },
-    { status: 422 },
+    { status: 422 }
   );
 }

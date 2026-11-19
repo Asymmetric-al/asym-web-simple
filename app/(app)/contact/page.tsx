@@ -1,14 +1,15 @@
+import { Mail, MapPin, MessageSquare } from "lucide-react";
+import Link from "next/link";
 import { InquiryForm } from "@/components/site/inquiry-form";
 import { PageHero, Section } from "@/components/site/page";
 import { Reveal, StaggerItem, StaggerReveal } from "@/components/site/reveal";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { createMetadata } from "@/lib/metadata";
-import { Mail, MapPin, MessageSquare, type LucideIcon } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
 import type { ReactNode } from "react";
 
-type ContactChannel = {
+interface ContactChannel {
   id: string;
   icon: LucideIcon;
   title: string;
@@ -16,7 +17,7 @@ type ContactChannel = {
   content: ReactNode;
   meta?: string;
   href?: string;
-};
+}
 
 const contactChannels: ContactChannel[] = [
   {
@@ -95,7 +96,10 @@ export default function ContactPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="text-primary-foreground/82 text-sm leading-7">
-              <p>Use direct email if you already know the question you need to ask.</p>
+              <p>
+                Use direct email if you already know the question you need to
+                ask.
+              </p>
             </CardContent>
           </Card>
         </Reveal>
@@ -114,14 +118,14 @@ export default function ContactPage() {
                     <CardTitle className="font-heading text-xl font-semibold tracking-[-0.04em]">
                       {channel.title}
                     </CardTitle>
-                    <p className="text-sm leading-7 text-muted-foreground">
+                    <p className="text-muted-foreground text-sm leading-7">
                       {channel.description}
                     </p>
-                    <div className="link-resilient text-foreground font-mono text-[0.72rem] uppercase tracking-[0.22em]">
+                    <div className="link-resilient text-foreground font-mono text-[0.72rem] tracking-[0.22em] uppercase">
                       {channel.content}
                     </div>
                     {channel.meta ? (
-                      <p className="text-primary/72 font-mono text-[0.68rem] uppercase tracking-[0.22em]">
+                      <p className="text-primary/72 font-mono text-[0.68rem] tracking-[0.22em] uppercase">
                         {channel.meta}
                       </p>
                     ) : null}
@@ -136,8 +140,16 @@ export default function ContactPage() {
                       {channel.href ? (
                         <Link
                           href={channel.href}
-                          target={channel.href.startsWith("http") ? "_blank" : undefined}
-                          rel={channel.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                          target={
+                            channel.href.startsWith("http")
+                              ? "_blank"
+                              : undefined
+                          }
+                          rel={
+                            channel.href.startsWith("http")
+                              ? "noopener noreferrer"
+                              : undefined
+                          }
                           className="block"
                         >
                           {channelBody}
@@ -168,19 +180,23 @@ export default function ContactPage() {
               </CardHeader>
               <CardContent className="text-muted-foreground flex flex-col gap-5 text-base leading-7 text-pretty">
                 <ul className="flex list-none flex-col gap-3.5 pl-0">
-                  <li className="relative pl-[1.1em] before:absolute before:left-0 before:top-[0.55em] before:size-1.5 before:rounded-full before:bg-primary/35">
-                    Include your name, organization, topic, and the main question so
-                    the first reply can be substantive.
+                  <li className="before:bg-primary/35 relative pl-[1.1em] before:absolute before:top-[0.55em] before:left-0 before:size-1.5 before:rounded-full">
+                    Include your name, organization, topic, and the main
+                    question so the first reply can be substantive.
                   </li>
-                  <li className="relative pl-[1.1em] before:absolute before:left-0 before:top-[0.55em] before:size-1.5 before:rounded-full before:bg-primary/35">
+                  <li className="before:bg-primary/35 relative pl-[1.1em] before:absolute before:top-[0.55em] before:left-0 before:size-1.5 before:rounded-full">
                     Note any tools, workflows, or systems that are creating drag
-                    today. Disconnected tools, donor care issues, missionary support bottlenecks, statements, and reporting all help us route faster.
+                    today. Disconnected tools, donor care issues, missionary
+                    support bottlenecks, statements, and reporting all help us
+                    route faster.
                   </li>
-                  <li className="relative pl-[1.1em] before:absolute before:left-0 before:top-[0.55em] before:size-1.5 before:rounded-full before:bg-primary/35">
-                    Say whether you lead operations, finance, donor care, advancement, technology, or general evaluation so we know who we are serving.
+                  <li className="before:bg-primary/35 relative pl-[1.1em] before:absolute before:top-[0.55em] before:left-0 before:size-1.5 before:rounded-full">
+                    Say whether you lead operations, finance, donor care,
+                    advancement, technology, or general evaluation so we know
+                    who we are serving.
                   </li>
                 </ul>
-                <p className="border-foreground/10 text-sm leading-6 text-muted-foreground border-t pt-4">
+                <p className="border-foreground/10 text-muted-foreground border-t pt-4 text-sm leading-6">
                   Prefer to write directly?{" "}
                   <Link
                     href="mailto:info@asymmetric.al"

@@ -1,7 +1,7 @@
-import * as React from "react"
-import { Input as InputPrimitive } from "@base-ui/react/input"
+import * as React from "react";
+import { Input as InputPrimitive } from "@base-ui/react/input";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 function Input({ className, type, ...props }: React.ComponentProps<"input">) {
   return (
@@ -9,12 +9,12 @@ function Input({ className, type, ...props }: React.ComponentProps<"input">) {
       type={type}
       data-slot="input"
       className={cn(
-        "h-11 w-full min-w-0 rounded-full border border-input bg-background/76 px-4 py-2 text-base shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] transition-[border-color,box-shadow,background-color] duration-200 outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground/90 hover:border-foreground/14 focus-visible:border-ring focus-visible:bg-background focus-visible:ring-[3px] focus-visible:ring-ring/45 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-[3px] aria-invalid:ring-destructive/20 md:text-sm",
+        "border-input bg-background/76 file:text-foreground placeholder:text-muted-foreground/90 hover:border-foreground/14 focus-visible:border-ring focus-visible:bg-background focus-visible:ring-ring/45 aria-invalid:border-destructive aria-invalid:ring-destructive/20 h-11 w-full min-w-0 rounded-full border px-4 py-2 text-base shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] transition-[border-color,box-shadow,background-color] duration-200 outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:ring-[3px] md:text-sm",
         className
       )}
       {...props}
     />
-  )
+  );
 }
 
-export { Input }
+export { Input };

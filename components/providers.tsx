@@ -1,15 +1,19 @@
 "use client";
 
+import { MotionConfig } from "motion/react";
+import { ThemeProvider } from "next-themes";
 import { ReadingProgress } from "@/components/site/reading-progress";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import { UiReadyMarker } from "@/components/ui-ready-marker";
 import { ReducedMotionProvider } from "@/lib/motion";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { MotionConfig } from "motion/react";
-import { ThemeProvider } from "next-themes";
 import type { ReactNode } from "react";
 
-export function Providers({ children }: { children: ReactNode }): ReactNode {
+export function Providers({
+  children,
+}: {
+  readonly children: ReactNode;
+}): ReactNode {
   return (
     <ThemeProvider
       attribute="class"
