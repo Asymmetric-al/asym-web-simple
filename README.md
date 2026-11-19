@@ -188,7 +188,7 @@ The app is a standard **Node.js** Next deployment (API routes and Payload need a
 npm run build
 ```
 
-Vercel installs with npm. `.npmrc` sets `legacy-peer-deps=true` because typescript-eslint declares a TypeScript `<6.1` peer while the repo uses TypeScript 7 (lint runs on the TS 6 API through `@typescript/typescript6`). Without it, `npm install` fails with `ERESOLVE`.
+Vercel installs with Bun 1.4.5 from `bun.lock` (`installCommand` in `vercel.json`), matching `packageManager` in `package.json`. The build image ships an older Bun that cannot read this lockfile, so the version is pinned through `npx`. Plain `npm install` fails with `ERESOLVE` (typescript-eslint declares a TypeScript `<6.1` peer; lint runs on the TS 6 API through `@typescript/typescript6`), and forcing it with `legacy-peer-deps` skips required peers such as `graphql`, so use Bun.
 
 ## License and third-party
 
