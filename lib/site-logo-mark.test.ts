@@ -1,6 +1,6 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { describe, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { SiteLogoMark } from "../components/site/site-logo-mark";
 
 describe("siteLogoMark", () => {

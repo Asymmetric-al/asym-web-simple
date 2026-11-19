@@ -1,12 +1,13 @@
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
 import { buildConfig } from "payload";
 import type { CollectionConfig } from "payload";
 
-const { filename } = import.meta;
-const { dirname } = import.meta;
+// eslint-disable-next-line unicorn/prefer-import-meta-properties -- import.meta.dirname is undefined once Next bundles this config, which breaks `next build`.
+const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 /**
 Auth collection for Payload admin (`admin.user` must match slug).

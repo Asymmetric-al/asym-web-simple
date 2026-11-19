@@ -1,13 +1,7 @@
 import { siteConfig } from "@/lib/config";
 import type { MetadataRoute } from "next";
 
-const routes = [
-  "/",
-  "/statement-of-faith",
-  "/privacy",
-  "/terms",
-  "/501c3",
-] as const;
+const routes = ["/", "/statement-of-faith", "/privacy", "/terms"] as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = siteConfig.url;

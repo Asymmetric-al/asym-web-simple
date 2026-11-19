@@ -8,15 +8,11 @@ export interface SiteGlobal {
   name: string;
   shortName: string;
   description: string;
-  mission: string;
   url: string;
   email: string;
-  nonprofit: string;
-  ein: string;
-  location: string;
+  repoUrl: string;
   cta: {
     primary: NavLink;
-    secondary: NavLink;
   };
 }
 

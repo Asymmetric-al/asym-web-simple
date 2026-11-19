@@ -2,42 +2,38 @@ import { siteConfig } from "@/lib/config";
 import type { Metadata } from "next";
 
 export const siteMetadata = {
-  name: siteConfig.name,
+  name: siteConfig.shortName,
+  title: "asym | Open-source AI software for nonprofits",
   description: siteConfig.description,
+  socialTitle:
+    "Your website, fundraising, and CRM. Built to work together with AI.",
+  socialDescription:
+    "An open-source platform for nonprofit work. Launching soon, starting with missions organizations.",
   url: siteConfig.url,
   ogImage: "/opengraph-image",
-  creator: siteConfig.name,
-  authors: [
-    {
-      name: siteConfig.name,
-      url: siteConfig.url,
-    },
-  ],
   keywords: [
-    "Christian missions software",
-    "early missions technology",
-    "missions donor care software",
-    "missionary support software",
-    "nonprofit operations software",
-    "donor portal for missions",
-    "Christian nonprofit technology",
-    "mission technology builders",
-    "Asym",
+    "nonprofit software",
+    "open-source nonprofit CRM",
+    "nonprofit fundraising software",
+    "AI for nonprofits",
+    "donor management",
+    "missions organization software",
+    "asym",
   ],
 } as const;
 
 export const baseMetadata: Metadata = {
-  metadataBase: new URL(siteMetadata.url),
+  metadataBase: siteMetadata.url,
   title: {
-    default: siteMetadata.name,
+    default: siteMetadata.title,
     template: `%s | ${siteMetadata.name}`,
   },
   description: siteMetadata.description,
   keywords: [...siteMetadata.keywords],
-  authors: [...siteMetadata.authors],
-  creator: siteMetadata.creator,
-  publisher: siteMetadata.name,
-  category: "nonprofit technology",
+  authors: [{ name: siteConfig.name, url: siteConfig.url }],
+  creator: siteConfig.name,
+  publisher: siteConfig.name,
+  category: "nonprofit software",
   applicationName: siteMetadata.name,
   alternates: {
     canonical: "/",
@@ -57,28 +53,28 @@ export const baseMetadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: siteMetadata.url,
-    title: siteMetadata.name,
-    description: siteMetadata.description,
+    title: siteMetadata.socialTitle,
+    description: siteMetadata.socialDescription,
     siteName: siteMetadata.name,
     images: [
       {
         url: siteMetadata.ogImage,
         width: 1200,
         height: 630,
-        alt: siteMetadata.name,
+        alt: siteMetadata.socialTitle,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: siteMetadata.name,
-    description: siteMetadata.description,
+    title: siteMetadata.socialTitle,
+    description: siteMetadata.socialDescription,
     images: [siteMetadata.ogImage],
   },
   manifest: "/site.webmanifest",
 };
 
-export function createMetadata({
+export const createMetadata = ({
   title,
   description,
   path = "/",
@@ -90,10 +86,11 @@ export function createMetadata({
   path?: string;
   image?: string;
   noIndex?: boolean;
-}): Metadata {
-  const canonicalPath = path === "/" ? "/" : path.replace(/\/$/, "");
+}): Metadata => {
+  const canonicalPath = path === "/" ? "/" : path.replace(/\/$/u, "");
   const url = `${siteMetadata.url}${canonicalPath}`;
   const ogImage = image ?? siteMetadata.ogImage;
+  const socialTitle = title ?? siteMetadata.socialTitle;
 
   return {
     title,
@@ -102,21 +99,21 @@ export function createMetadata({
       canonical: canonicalPath,
     },
     openGraph: {
-      title: title ?? siteMetadata.name,
-      description: description ?? siteMetadata.description,
       url,
+      title: socialTitle,
+      description: description ?? siteMetadata.socialDescription,
       images: [
         {
           url: ogImage,
           width: 1200,
           height: 630,
-          alt: title ?? siteMetadata.name,
+          alt: socialTitle,
         },
       ],
     },
     twitter: {
-      title: title ?? siteMetadata.name,
-      description: description ?? siteMetadata.description,
+      title: socialTitle,
+      description: description ?? siteMetadata.socialDescription,
       images: [ogImage],
     },
     ...(noIndex && {
@@ -126,4 +123,4 @@ export function createMetadata({
       },
     }),
   };
-}
+};

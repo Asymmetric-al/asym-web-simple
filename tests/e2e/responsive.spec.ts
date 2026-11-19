@@ -175,13 +175,13 @@ test.describe("responsive regression coverage", () => {
     });
   }
 
-  test("home header stays a compact brand chip across viewport changes", async ({
+  test("home header keeps brand, navigation, and action across viewport changes", async ({
     page,
   }) => {
     const issues = createBrowserIssueTracker(page);
-    const brandLink = page
-      .getByRole("banner")
-      .getByRole("link", { name: /^Asym home$/i });
+    const banner = page.getByRole("banner");
+    const brandLink = banner.getByRole("link", { name: /^asym home$/i });
+    const mainNav = page.getByRole("navigation", { name: "Main" });
 
     await setViewport(page, { label: "1440x900", width: 1440, height: 900 });
     let checkpoint = issues.checkpoint();
@@ -189,15 +189,10 @@ test.describe("responsive regression coverage", () => {
     await waitForUi(page);
 
     await expect(brandLink).toBeVisible();
-    await expect(page.locator("header nav")).toHaveCount(0);
-    await expect(page.getByRole("button", { name: /open menu/i })).toHaveCount(
-      0
-    );
-    await expect(brandLink.locator('span[aria-hidden="true"]')).toHaveCSS(
-      "width",
-      "28px"
-    );
-
+    await expect(mainNav).toBeVisible();
+    await expect(
+      banner.getByRole("link", { name: "Request early access" })
+    ).toBeVisible();
     await expectNoHorizontalOverflow(page, "home @ 1440x900");
     issues.expectNoUnexpectedIssuesSince(checkpoint, "home @ 1440x900");
 
@@ -205,38 +200,13 @@ test.describe("responsive regression coverage", () => {
     checkpoint = issues.checkpoint();
 
     await expect(brandLink).toBeVisible();
-    await expect(page.locator("header nav")).toHaveCount(0);
-    await expect(page.getByRole("button", { name: /open menu/i })).toHaveCount(
-      0
-    );
+    await expect(mainNav).toBeHidden();
     await expect(
-      page.getByRole("heading", {
-        level: 1,
-        name: /We.re building Asym\./i,
-      })
+      banner.getByRole("link", { name: "Early access" })
     ).toBeVisible();
-
     await expectNoVisibleDialogs(page, "home @ 390x844");
     await expectNoHorizontalOverflow(page, "home @ 390x844");
     issues.expectNoUnexpectedIssuesSince(checkpoint, "home @ 390x844");
-
-    await setViewport(page, { label: "1280x900", width: 1280, height: 900 });
-    checkpoint = issues.checkpoint();
-    await page.goto("/", { waitUntil: "domcontentloaded" });
-    await waitForUi(page);
-
-    await expect(brandLink).toBeVisible();
-    await expect(page.locator("header nav")).toHaveCount(0);
-    await expect(page.getByRole("button", { name: /open menu/i })).toHaveCount(
-      0
-    );
-
-    await expectNoVisibleDialogs(page, "home @ 1280x900 after resize");
-    await expectNoHorizontalOverflow(page, "home @ 1280x900 after resize");
-    issues.expectNoUnexpectedIssuesSince(
-      checkpoint,
-      "home @ 1280x900 after resize"
-    );
   });
 
   test("home footer remains accessible after repeated viewport changes", async ({
@@ -245,47 +215,29 @@ test.describe("responsive regression coverage", () => {
     const issues = createBrowserIssueTracker(page);
     const footer = page.locator("footer");
 
-    await setViewport(page, { label: "390x844", width: 390, height: 844 });
-    let checkpoint = issues.checkpoint();
-    await page.goto("/", { waitUntil: "domcontentloaded" });
-    await waitForUi(page);
-    await footer.scrollIntoViewIfNeeded();
+    for (const viewport of [
+      { label: "390x844", width: 390, height: 844 },
+      { label: "1280x900", width: 1280, height: 900 },
+      { label: "390x844", width: 390, height: 844 },
+    ]) {
+      await setViewport(page, viewport);
+      const checkpoint = issues.checkpoint();
+      if (page.url() === "about:blank") {
+        await page.goto("/", { waitUntil: "domcontentloaded" });
+        await waitForUi(page);
+      }
+      await footer.scrollIntoViewIfNeeded();
 
-    await expect(
-      footer.getByRole("link", { name: "info@asymmetric.al" })
-    ).toBeVisible();
-    await expect(
-      footer.getByRole("button", { name: /change color theme/i })
-    ).toBeVisible();
-
-    await expectNoHorizontalOverflow(page, "home footer @ 390x844");
-    issues.expectNoUnexpectedIssuesSince(checkpoint, "home footer @ 390x844");
-
-    await setViewport(page, { label: "1280x900", width: 1280, height: 900 });
-    checkpoint = issues.checkpoint();
-    await footer.scrollIntoViewIfNeeded();
-
-    await expect(footer.getByRole("link", { name: /^GitHub$/i })).toBeVisible();
-    await expect(
-      footer.getByRole("link", { name: /^Privacy Policy$/i })
-    ).toBeVisible();
-
-    await expectNoHorizontalOverflow(page, "home footer @ 1280x900");
-    issues.expectNoUnexpectedIssuesSince(checkpoint, "home footer @ 1280x900");
-
-    await setViewport(page, { label: "390x844", width: 390, height: 844 });
-    checkpoint = issues.checkpoint();
-    await footer.scrollIntoViewIfNeeded();
-
-    await expect(
-      footer.getByRole("link", { name: /^Terms of Service$/i })
-    ).toBeVisible();
-
-    await expectNoVisibleDialogs(page, "home footer @ 390x844 repeated");
-    await expectNoHorizontalOverflow(page, "home footer @ 390x844 repeated");
-    issues.expectNoUnexpectedIssuesSince(
-      checkpoint,
-      "home footer @ 390x844 repeated"
-    );
+      await expect(footer.getByRole("link", { name: "GitHub" })).toBeVisible();
+      await expect(footer.getByRole("link", { name: "Privacy" })).toBeVisible();
+      await expect(
+        footer.getByRole("button", { name: /change color theme/i })
+      ).toBeVisible();
+      await expectNoHorizontalOverflow(page, `home footer @ ${viewport.label}`);
+      issues.expectNoUnexpectedIssuesSince(
+        checkpoint,
+        `home footer @ ${viewport.label}`
+      );
+    }
   });
 });
