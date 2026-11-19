@@ -1,22 +1,18 @@
-# Asymmetric.al
+# asym.app
 
-The production website for **Asym** — a unified mission operating system for Christian sending agencies. Built in the open because the organizations we serve deserve to see the architecture.
-
-> _Simple faithfulness can still create outsized outcomes._ — 1 → ∞
+The product website for **asym**, open-source software for nonprofits built by **Asymmetric.al**. asym connects a nonprofit's website, giving, donor records, and email so AI can prepare work and carry out the steps a team approves. Missions organizations are the first focus. asym is prelaunch; this site explains the product and collects early-access requests.
 
 ## What this is
 
-The public marketing site (product name and canonical URL live in `lib/config.ts` as `siteConfig.name` and `siteConfig.url`) presents the **Asym** platform: a mission operating system purpose-built for modern sending agencies. It replaces the fragmented DIY stack — Salesforce, Mailchimp, QuickBooks, spreadsheets, and site builders — with a single, coherent surface for finance, mobilization, donor support, communications, and web operations.
+This repository is the marketing site served at [asym.app](https://asym.app) (Vercel project `asym-web-simple`, production branch `main`). The product itself lives in [Asymmetric-al/core](https://github.com/Asymmetric-al/core) (AGPL-3.0-only). Product name, URL, contact address, navigation, and repository figures live in `lib/config.ts`.
 
-Operated as a project under **Global Fellowship Inc.**, a 501(c)(3) nonprofit (EIN 68-0214543) based in Meadow Vista, California. Our staff raise support like the missionaries we serve.
+The homepage is informational: it describes the first workflow in text and never shows mock product screens. See `DESIGN.md`.
 
 ### What lives in this repository
 
-This repo ships the **Next.js marketing site** plus **first-party API routes** (contact email, Stripe-based giving, draft mode and on-demand revalidation) and **Payload CMS 3** wired for **admin login and future content** (Phase 2). It is not a thin static brochure: `/give` can create real Checkout sessions when Stripe env vars are set; `/api/contact` sends mail when Resend is configured.
+The **Next.js marketing site**, the **`/api/early-access`** intake route, and older first-party routes (contact email, Stripe giving, draft mode, revalidation) plus **Payload CMS 3** wiring for a future admin. Marketing copy does not load from Payload.
 
-The broader **Asym platform** (Mission Control modules, CRM, automations, and so on) is **described** on the site and in the section below; those systems are **not implemented in this codebase** unless they appear as normal site pages or APIs here.
-
-**Note:** The npm `package.json` name is still `template-baseline` for historical reasons; site branding and copy use `lib/config.ts`.
+**Note:** The npm `package.json` name is still `template-baseline` for historical reasons.
 
 ## Stack
 
@@ -40,20 +36,14 @@ Visual design tokens and language live in **`DESIGN.md`**. Payload wiring and `/
 
 | Route | Description |
 | --- | --- |
-| `/` | Home — mission, philosophy, system capabilities |
-| `/platform` | Platform overview — Mission Control modules |
-| `/missions` | Role views for sending agency teams |
-| `/specs` | Tech architecture, performance targets, release gates |
-| `/manifesto` | Philosophy, design principles, organizational posture |
-| `/join` | Pilot agencies, builders, and build supporters |
-| `/give` | Support the build (Stripe Checkout when configured) |
-| `/give/success` | Post-checkout confirmation |
-| `/contact` | General inquiry |
-| `/statement-of-faith` | Theological foundation |
-| `/privacy` | Privacy policy |
+| `/` | Homepage: product, first workflow, open source, team, early access |
+| `/privacy` | Privacy policy (covers the early-access flow) |
 | `/terms` | Terms of service |
-| `/501c3` | 501(c)(3) disclosure |
-| `/admin` | Payload CMS admin (requires Postgres, secrets, and migrations — see Payload doc) |
+| `/statement-of-faith` | Statement of faith |
+| `/contributor` | Contributor briefing (static HTML); `/deck` redirects here |
+| `/admin` | Payload CMS admin (requires Postgres, secrets, and migrations; see Payload doc) |
+
+Older routes (`/about`, `/platform`, `/waitlist`, `/contact`, `/give`, `/501c3`, and others) redirect to homepage sections; see `next.config.ts`. Their page files remain but are unreachable.
 
 Route groups `(app)` and `(payload)` do **not** appear in URLs; they separate marketing chrome from the admin layout.
 
@@ -63,7 +53,8 @@ Next.js matches **more specific** `app/api/*` routes first; remaining `/api/*` t
 
 | Path | Role |
 | --- | --- |
-| `POST /api/contact` | Contact / waitlist email via Resend |
+| `POST /api/early-access` | Early-access requests, emailed to the team inbox via Resend |
+| `POST /api/contact` | Legacy contact / waitlist email via Resend (no longer linked) |
 | `POST /api/donations/checkout-session` | Stripe Checkout session creation |
 | `POST /api/donations/billing-portal` | Stripe Customer Portal session |
 | `POST /api/webhooks/stripe` | Stripe webhooks for giving |
@@ -131,7 +122,7 @@ Open [http://localhost:3000](http://localhost:3000). The dev server uses Turbopa
 | Goal | Required env (from `.env.example`) |
 | --- | --- |
 | Browse marketing pages, run `build` / `typecheck` / `lint` | None |
-| **Contact form** sends email | `RESEND_API_KEY` (otherwise API returns 503 with a clear message) |
+| **Early-access form** delivers requests | `RESEND_API_KEY`, `CONTACT_INBOX_EMAIL`, `CONTACT_FROM_EMAIL` (a sender on a Resend-verified domain). Without all three, `/api/early-access` returns 503 and the form shows its failure state; it never claims a request was received. |
 | **`/give` Checkout / portal** | `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, price IDs, webhook secret for webhooks |
 | **Payload `/admin`** + Payload CLI | `DATABASE_URI`, `PAYLOAD_SECRET`; follow Payload migrations |
 | **Draft preview links** | `PAYLOAD_DRAFT_SECRET` |
@@ -171,32 +162,17 @@ Primary static checks before a PR: **`lint`** and **`typecheck`**. Playwright de
 
 ## Configuration
 
-**`lib/config.ts`** is the source of truth for **site identity**, **navigation**, **footer groups**, **support links**, and **global CTAs**. Page-level copy and layout live in **`app/(app)/**`** modules. **`lib/content/site.ts`** reads `lib/config` today so components can switch to Payload later without changing import sites (Phase 2).
+**`lib/config.ts`** is the source of truth for **site identity**, **navigation**, **footer links**, **repository figures**, and the **primary CTA**. Homepage sections live in **`components/site/home/`**; other page copy lives in **`app/(app)/**`** modules. **`lib/content/site.ts`** reads `lib/config` today so components can switch to Payload later without changing import sites (Phase 2).
 
 **`app/globals.css`** holds design tokens: brand colors, surfaces, typography scale, light/dark values.
 
-## The platform (product vision — not this repo’s codebase)
+## The product
 
-The following describes **what Asym aims to be** for agencies. It is **marketing and product narrative**, not a checklist of features implemented in this repository.
-
-Asym replaces the fragmented agency stack with Mission Control: one login, one shared database, one operating surface.
-
-**Core modules (vision):**
-
-- **Partners CRM** — Missions-built on Twenty CRM. Tracks churches, households, designations, and relationship history.
-- **Contributions Hub** — Live transaction visibility, Stripe-native processing, reconciliation automation.
-- **Web Studio** — Headless Next.js + Payload CMS so agencies control their sites without change-order lock-in.
-- **Email Studio** — Branded receipts, [REDACTED] resets, and campaign emails with full ownership.
-- **Statements Studio** — Year-end tax documents and receipt packs generated automatically.
-- **Mobilize** — Visual workflow orchestration from candidate interest to field deployment via Zapier.
-
-**Supporting modules (vision):** Donor Support Hub (Chatwoot CE), Sign Studio (Documenso CE), Report Studio, Automations, Member Care, Events & Gatherings.
-
-**Typical platform stack (vision):** TypeScript · React · Next.js · Bun · PostgreSQL · Redis · Twenty CRM · Payload CMS · Chatwoot CE · Documenso CE · Supabase Auth · Stripe · Resend · Zapier · Inngest · Vercel · OpenTelemetry
+asym's code, architecture, and status live in [Asymmetric-al/core](https://github.com/Asymmetric-al/core). Its README states which modules work end to end and which are partial or planned. Keep claims on this site consistent with that repository: anything not yet in the code is labeled "In development" or "Planned".
 
 ## Contributing
 
-This project is open source as part of Asym's commitment to tenant sovereignty and transparent architecture. We welcome engineers, designers, and systems thinkers who want to use their craft for the Great Commission.
+This site is open source alongside asym itself. Engineers, designers, and writers who want to help are welcome.
 
 - Review open issues before starting new work
 - Follow the existing `app/`, `components/`, and `lib/` placement patterns
@@ -212,13 +188,11 @@ The app is a standard **Node.js** Next deployment (API routes and Payload need a
 npm run build
 ```
 
+Vercel installs with Bun 1.4.5 from `bun.lock` (`installCommand` in `vercel.json`), matching `packageManager` in `package.json`. The build image ships an older Bun that cannot read this lockfile, so the version is pinned through `npx`. Plain `npm install` fails with `ERESOLVE` (typescript-eslint declares a TypeScript `<6.1` peer; lint runs on the TS 6 API through `@typescript/typescript6`), and forcing it with `legacy-peer-deps` skips required peers such as `graphql`, so use Bun.
+
 ## License and third-party
 
 - **Repository license:** [LICENSE](./LICENSE) is the **GNU General Public License v3**.
 - **React Bits Pro** (and similar registry components) are governed by **their vendor terms** and optional keys in `.env.local` for CLI installs — that is separate from the GPLv3 in `LICENSE`. See `components.json` for configured registries.
 
----
-
-**Minimize Clicks. Maximize Ministry.**
-
-Footer links and contact addresses match **`lib/config.ts`** (`siteConfig.url`, `siteConfig.email`, nonprofit disclosure path).
+Footer links and contact addresses come from **`lib/config.ts`** (`siteConfig.url`, `siteConfig.email`, `footerLinks`).

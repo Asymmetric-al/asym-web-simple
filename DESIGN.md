@@ -1,6 +1,6 @@
 # Design System: Asymmetric.al
 
-**Project:** Asymmetric.al — Mission Operating System marketing site  
+**Project:** asym product-marketing site (asym.app), built by Asymmetric.al  
 **Stack:** Next.js 16 · Tailwind v4 · shadcn/ui `base-maia` · `@base-ui/react` · `motion/react` · `experimental.viewTransition` enabled in `next.config.ts` for cross-route transitions where supported  
 **Source of truth for tokens:** `app/globals.css` · `lib/config.ts`  
 **No Stitch project ID** — this document was synthesized directly from the codebase and running UI.
@@ -9,7 +9,9 @@
 
 ## 1. Visual Theme & Atmosphere
 
-Asymmetric.al carries the visual gravity of a quiet, mission-focused institution — not a startup, not a consumer product. The aesthetic is **serene editorial minimalism** with deliberate spiritual weight. Every surface choice reinforces calm, trust, and conviction.
+asym.app is a prelaunch product website for a company serving nonprofits, starting with missions organizations. The aesthetic is **calm, product-led editorial minimalism**: a warm light canvas, near-black ink text, one restrained navy accent, and generous space. Every surface choice should make the product easier to understand and feel trustworthy, never louder.
+
+**The site is informational.** Explain the product in words and simple structure (steps, who does what, what is built and what is in development). Do not draw mock app screens, fake dashboards, sample organizations, or invented data. Show real product visuals only when they come from the actual product and are labeled honestly.
 
 The dominant feel is **warm-muted luminosity**: a lightly antiqued parchment background suffused with soft radial glows of steely blue and sage green that emanate from fixed ambient light sources behind the page shell. The body gradient transitions from near-white at the top to a cooled bone tone at the bottom, making the page feel like it is lit from above.
 
@@ -19,7 +21,7 @@ A faint **120 px architectural grid** overlays the entire background at 20% opac
 
 The interface is **typographically restrained but not minimal to the point of emptiness**. Generous section spacing, tight negative tracking on headings, and a purposeful hierarchy between display, body, and mono-label type creates a strong editorial voice.
 
-The tone is aspirational, nonprofit-serious, and theologically grounded — language like "Soli Deo Gloria", "Great Commission", and "stewardship" coexist with engineering language like "observability", "tenant sovereignty", and "audit-grade trust". The design system must hold both registers simultaneously.
+The tone is direct, warm, and confident. Use concrete work (a gift, a receipt, a donor record) instead of slogans, keep paragraphs short, avoid em dashes in copy, and label status plainly ("In development", "Planned"). The product name is written lowercase: **asym**. The company is **Asymmetric.al**.
 
 **Key Characteristics:**
 
@@ -117,7 +119,9 @@ All three are loaded via `next/font/google` with `display: "swap"`. Google Fonts
 
 **Body (Inter):** Clean, neutral, highly legible sans-serif. Used at base `line-height: 1.5` on the body and `leading-7` (1.75) for paragraph text — generous leading that supports comfortable reading of mission/platform content.
 
-**Mono (JetBrains Mono):** Used exclusively for labeling, not for code. The `.eyebrow` class sets `0.72rem`, `letter-spacing: 0.28em`, `text-transform: uppercase`. This creates a distinctive "signal from the build" stamp aesthetic for section headers.
+**Mono (JetBrains Mono):** Used exclusively for labeling, not for code. Homepage eyebrows (`Eyebrow` in `components/site/home/section-heading.tsx`) use `text-xs` (0.75rem), `tracking-[0.24em]`, uppercase, `text-primary/75`. The legacy `.eyebrow` class (`0.72rem`, `0.28em`) remains for older pages.
+
+**Minimum size:** interface text is never smaller than 12px (`text-xs`). Lint (`react-doctor/no-tiny-text`) enforces this.
 
 ### Scale & Usage
 
@@ -162,7 +166,7 @@ All buttons use `rounded-full` (fully pill-shaped). This is a defining trait of 
 - Disabled: `disabled:opacity-50 disabled:pointer-events-none`
 - Icon placement: `data-icon="inline-end"` or `data-icon="inline-start"` adjusts padding for icon-containing buttons
 
-**Primary (default):** Deep Ink Navy (`#1e3a4f`) fill, Near-White Cloud text. Deep underside shadow `0 18px 44px -28px rgba(30,58,79,0.78)`. Hover: `bg-primary/88` (8% transparency on the fill). Used for the primary CTA "Join Waitlist".
+**Primary (default):** Deep Ink Navy (`#1e3a4f`) fill, Near-White Cloud text. Deep underside shadow `0 18px 44px -28px rgba(30,58,79,0.78)`. Hover: `bg-primary/88` (8% transparency on the fill). Used for the primary CTA "Request early access".
 
 **Outline:** Ghost background (`bg-background/72`), `border-border`, foreground text. Hover: `hover:bg-secondary/68` (Pale Sky Wash). Used for "Request a Call" CTAs alongside primary.
 
@@ -260,17 +264,18 @@ The radius system is consistently very generous — all cards feel gently rounde
 
 ### Navigation (Header)
 
-The current one-page letter site uses a **small absolute brand chip**, not a full navigation bar. It sits top-left inside the same `max-w-[76rem] px-4 sm:px-6 lg:px-8` rail as the letter content, so the first visual emphasis stays on the H1.
+A **fixed floating frosted pill** (`components/header.tsx`): `fixed inset-x-0 top-0`, inner `max-w-[80rem] rounded-full border border-foreground/10 bg-background/88 backdrop-blur-md` with a soft compact shadow. The 88% fill keeps scrolled headings from ghosting through.
 
-**Shell:** `inline-flex rounded-full border border-foreground/10 bg-background/50 px-4 py-2 backdrop-blur-md` with only a soft compact shadow. It is sized to content and must not render an empty full-width pill.
+- Left: brand lockup linking home (`aria-label="asym home"`).
+- Center (`md` and up): `nav[aria-label="Main"]` with Product, Open source, About, linking to `/#product`, `/#open-source`, `/#about` so they work from every page.
+- Right: primary pill button to `/#early-access`. Label is "Request early access" from `sm`, "Early access" below it.
+- Below `md` there is no menu button. The sections are one scroll away and the footer repeats the links.
 
 **Brand lockup:**
 
-- Mark: the supplied rounded split-window Asym mark, extracted as transparent PNG artwork.
+- Mark: the supplied rounded split-window asym mark, extracted as transparent PNG artwork.
 - Component: `SiteLogoMark` renders explicit transparent light/dark mark assets (`public/brand/asym-mark-dark.png` and `public/brand/asym-mark-light.png`) so no square background appears during theme changes.
-- Wordmark: Plus Jakarta Sans `text-sm font-semibold tracking-[-0.04em]`.
-
-There is no visible nav, no mobile menu, and no fake right-side placeholder on the one-page letter surface.
+- Wordmark: Plus Jakarta Sans `text-lg font-semibold tracking-[-0.04em]`, lowercase "asym".
 
 ---
 
@@ -293,7 +298,14 @@ There is no visible nav, no mobile menu, and no fake right-side placeholder on t
 - Styled consistently with input but with `rounded-2xl` (not full pill) for multi-line content
 - Same border, background, and focus behavior
 
-**Form Layout (`InquiryForm`):**
+**Early access form (`components/site/home/early-access-form.tsx`):**
+
+- Card: `rounded-[1.6rem] border border-foreground/10 bg-card p-5 sm:p-7`. Email and Organization side by side from `sm`; the optional message spans both columns and its label says "(optional)".
+- Visible labels on every field. Validation is shared with the API (`lib/early-access.ts`), runs on submit, shows `text-destructive` messages under each field, sets `aria-invalid`/`aria-describedby`, and focuses the first invalid field.
+- States: "Sending your request…" (button text and a polite live region), failure as a `role="alert"` box that keeps every entry, and success replacing the form with a focused "Request received" heading. Success appears only after the API returns 200.
+- Consent line under the button links to `/privacy`.
+
+**Legacy form layout (`InquiryForm`, used only by redirected legacy pages):**
 
 - Container: `surface-panel rounded-[2rem] p-6 sm:p-8`
 - Fields arranged in `grid gap-4 sm:grid-cols-2`
@@ -306,7 +318,12 @@ There is no visible nav, no mobile menu, and no fake right-side placeholder on t
 
 ### Hero Section (`PageHero` and home `HomePageHero`)
 
-**Homepage (`HomePageHero`):** A **full-bleed cinematic hero** aligned with the React Bits SaaS template language — `BG.jpg` fills the viewport behind copy as an absolute layer (`Image` `fill`, `object-cover`, slight scale), with **inset rounded canvas** on large viewports (`lg:inset-x-3 lg:top-3 lg:rounded-b-[2.35rem]`). Readability uses a **layered scrim**: parchment-to-clear vertical gradient (`from-background/90` → `to-background/60`, dark-mode variants), a **fine 5px mesh overlay** (`mix-blend-overlay`) echoing the artwork’s digital grain, a **diagonal wash** (`from-accent/30` → `to-primary/20`), and a **soft radial glow** from `--glow-primary`. Headline block is **centered** at `lg` (`max-w-4xl`, `text-center`; left-aligned on narrow viewports). The **primary CTA** uses a **split control**: Sage Green Mist accent bar behind the label (`absolute` `bg-accent` with `right-[2.75rem]`) plus a **pill primary** label and attached **icon disc** with `ArrowDownRight` (hover rotates −45°). Below, **`HeroProductPreview`** shows `dashboardmock.png` inside `surface-panel` with a **bottom fade mask** (`linear-gradient` mask to transparent ~54%) like the template’s dashboard reveal. **Site chrome:** fixed **quarter-round SVG corners** (`SiteChrome`, z-index 38) mirror the template’s corner brackets without replacing the floating nav pill.
+**Homepage (`components/site/home/hero.tsx`):** A **compact, left-aligned text hero** on the plain page gradient, no background photo.
+
+- Two status pills: "Open-source software for nonprofits" and "Launching soon" (with a small `bg-ring` dot). They wrap as separate pills on narrow screens.
+- H1 `clamp(2.6rem, 6vw, 4.4rem)`, weight 600, `tracking-[-0.06em]`, `leading-[0.98]`. Two sentences; from `lg` each sits on its own line, and the second is `text-muted-foreground`.
+- Supporting paragraph `max-w-[42rem]`, `text-lg`/`sm:text-xl`, muted.
+- Actions directly under the paragraph: primary pill "Request early access" with `ArrowRight`, outline pill "View the code" with the GitHub mark, then "Starting with missions organizations." as small muted text on the same row.
 
 **Inner pages (`PageHero`):** A **two-column grid** at `lg` breakpoint: `grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]` — slightly left-weighted.
 
@@ -404,21 +421,25 @@ The platform tabs use a **side-by-side layout** at `lg`: `grid-cols-[minmax(0,0.
 
 ### Footer
 
-The footer has **two stacked panels**:
+A **quiet, unboxed footer** (`components/footer.tsx`) separated from the page by a `border-t border-foreground/10` hairline inside the `max-w-[82rem]` container.
 
-**Upper panel (CTA):**
+- Left: brand lockup and one line, "Open-source software for nonprofits, built by Asymmetric.al."
+- Right: two short link columns: the section links (Product, Open source, About) and company links (GitHub, Contact, Privacy, Terms). Links are `text-sm text-foreground/76`, underline on hover.
+- Bottom row: `© {year} Asymmetric.al` and the theme toggle.
+- No nonprofit or EIN disclosures: Asymmetric.al is a for-profit company.
 
-- `page-shell-glow surface-hero overflow-hidden rounded-[2.35rem] p-7 sm:p-10`
-- Two-column `lg`: left-heavy (1.15fr / 0.85fr)
-- Left: large heading, body, bullet list in `rounded-[1.5rem] border border-foreground/10 bg-background/62 p-4 text-sm`
-- Right: primary + outline CTA buttons, both `rounded-full`
+---
 
-**Lower panel (sitemap):**
+### Homepage sections (`components/site/home/`)
 
-- `surface-panel rounded-[2.35rem] p-7 sm:p-10`
-- Four-column `lg`: brand statement (1.25fr) + 3 link groups (0.75fr each)
-- Link groups: mono eyebrow labels, `text-sm text-foreground/84 hover:text-foreground` links
-- Footer bar: `border-t border-foreground/10 pt-6` with legal notice left, email + copyright right
+Order: hero, product (`#product`), why connected, open source (`#open-source`), about (`#about`), early access (`#early-access`). Section headings use `Eyebrow` + `SectionTitle` (`clamp(2rem, 3.6vw, 3.1rem)`, weight 600, `tracking-[-0.055em]`). Vertical rhythm is `clamp(3.5rem, 6vw, 5.5rem)`.
+
+- **Workflow steps** (product): an ordered list of four `surface-card rounded-[1.6rem]` cards (Describe, Prepare, Review, Follow through), each with a navy number disc, a mono label for who does the step (Your team, AI, asym), a title, and one sentence. Text only, with no mock interface.
+- **Status pill** (`StatusPill`): `rounded-full border bg-card/80 font-mono text-xs` with a `bg-ring` dot. Use it wherever something is not yet live: "In development", "Planned".
+- **Principle cards** (why connected): three `surface-card` cards with a `bg-secondary` icon tile, grouped under a small "How we’re building it" label so they read as intent.
+- **Repository card** (open source): `surface-panel rounded-[2rem]` with the repo name, its GitHub description, three stats (dated, rounded down), and a "Where things stand" list split into "In the public code" (sage check) and "In development" (sky dashed circle). Only list items verified in the repository.
+- **About**: two columns. Left holds the heading and a short `border-l-2` list of ordinary work ("A donor gives. A receipt goes out."). Right holds verified team facts only.
+- **Early access**: `surface-hero page-shell-glow rounded-[2.35rem]` panel, text left and the form card right.
 
 ---
 
@@ -542,7 +563,7 @@ Use these descriptions when prompting or generating new UI for this site:
 
 ### Atmosphere Language
 
-> "Calm institutional minimalism with warm parchment surfaces, atmospheric ambient glow, and frosted-glass layered depth. The site is mission-serious and architecturally precise."
+> "Calm, product-led minimalism with warm parchment surfaces, near-black ink text, one restrained navy accent, and frosted-glass layered depth. Informational and precise; no mock product screens."
 
 ### Color References (always use descriptive name + hex)
 
@@ -595,3 +616,5 @@ Use these descriptions when prompting or generating new UI for this site:
 - Do not deviate from the three-font system (Plus Jakarta Sans / Inter / JetBrains Mono)
 - Do not override heading tracking to positive values — negative tracking is a core identity signal
 - Do not add motion that lacks a reduced-motion fallback
+- Do not draw mock product interfaces (app windows, dashboards, sample organizations or donors, invented numbers). Describe the product in text, and show only real, honestly labeled product visuals
+- Do not present planned or in-development capabilities as available; label them with a status pill

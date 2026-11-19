@@ -7,7 +7,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = createMetadata({
   title: "Privacy Policy",
   description:
-    "Simple privacy policy for the Asymmetric.al website and early Asym conversations.",
+    "How asym.app handles information from visitors and early access requests.",
   path: "/privacy",
 });
 
@@ -20,7 +20,7 @@ export default function PrivacyPage() {
           Privacy Policy
         </h1>
       }
-      description="We collect only what we need to respond, operate the website, protect the work, and understand whether Asym can serve a missions organization well."
+      description="We collect only what we need to reply to you, run the website, and understand what nonprofit teams need from asym. Last updated November 19, 2026."
       footer={
         <>
           Privacy questions can be sent to{" "}
@@ -36,16 +36,17 @@ export default function PrivacyPage() {
     >
       <DocumentSection number="01" title="What this covers">
         <p>
-          This policy covers the Asymmetric.al website and direct conversations
-          started through it. It also covers early Asym interest forms, emails,
-          and related follow-up.
+          This policy covers the asym website at asym.app, operated by
+          Asymmetric.al, and the early access requests, emails, and
+          conversations that start there.
         </p>
       </DocumentSection>
 
       <DocumentSection number="02" title="What we collect">
         <p>
-          We may collect information you choose to send us, such as your name,
-          email address, organization, role, and message.
+          When you request early access, we collect your email address, your
+          organization’s name, and anything you choose to tell us about the work
+          you’d like help with. If you email us, we receive what you send.
         </p>
         <p>
           We may also collect basic operational data such as server logs,
@@ -56,9 +57,9 @@ export default function PrivacyPage() {
 
       <DocumentSection number="03" title="How we use it">
         <p>
-          We use information to respond to you, evaluate fit, improve the
-          website, protect our systems, and understand the needs of Christian
-          missions organizations.
+          We use this information to reply to you, send launch updates and early
+          access invitations, improve the website, protect our systems, and
+          understand what nonprofit teams need from asym.
         </p>
       </DocumentSection>
 
@@ -68,9 +69,9 @@ export default function PrivacyPage() {
 
       <DocumentSection number="05" title="When we share information">
         <p>
-          We may share information with service providers who help host, secure,
-          or operate the site, or with Global Fellowship Inc. and advisors when
-          needed for governance, legal compliance, security, or stewardship.
+          We share information with service providers that host the site and
+          deliver email for us, such as Vercel and Resend, and with professional
+          advisors when needed for legal compliance or security.
         </p>
       </DocumentSection>
 
@@ -88,8 +89,9 @@ export default function PrivacyPage() {
 
       <DocumentSection number="07" title="Your choices">
         <p>
-          You may ask us to access, correct, or delete information you have sent
-          us, subject to legal and operational limits.
+          You can ask us to stop contacting you at any time by replying to one
+          of our emails. You may also ask us to access, correct, or delete
+          information you have sent us, subject to legal and operational limits.
         </p>
       </DocumentSection>
     </DocumentPage>

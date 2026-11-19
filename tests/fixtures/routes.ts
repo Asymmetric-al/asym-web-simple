@@ -20,8 +20,4 @@ export const routeFixtures: RouteFixture[] = [
     path: "/terms",
     slug: "terms",
   },
-  {
-    path: "/501c3",
-    slug: "501c3",
-  },
 ];

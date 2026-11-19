@@ -1,21 +1,25 @@
 import { expect, test } from "@playwright/test";
 import type { Locator, Page } from "@playwright/test";
 
-async function activate(locator: Locator, projectName: string) {
+const UI_READY_TIMEOUT_MS = 5000;
+const SETTLE_MS = 250;
+const SUITE_TIMEOUT_MS = 60_000;
+const REPO_URL = "https://github.com/Asymmetric-al/core";
+const EARLY_ACCESS_API = "**/api/early-access";
+
+const activate = async (locator: Locator, projectName: string) => {
   if (projectName.startsWith("mobile")) {
     await locator.tap();
     return;
   }
-
   if (projectName === "webkit") {
     await locator.evaluate((element: HTMLElement) => element.click());
     return;
   }
-
   await locator.click();
-}
+};
 
-async function waitForUi(page: Page) {
+const waitForUi = async (page: Page) => {
   try {
     await expect
       .poll(
@@ -23,27 +27,40 @@ async function waitForUi(page: Page) {
           page.evaluate(() =>
             document.documentElement.getAttribute("data-ui-ready")
           ),
-        { timeout: 5000 }
+        { timeout: UI_READY_TIMEOUT_MS }
       )
       .toBe("true");
   } catch {
     await page.waitForLoadState("load");
-    await page.waitForTimeout(250);
+    await page.waitForTimeout(SETTLE_MS);
   }
-}
+};
 
-async function expectNoHorizontalOverflow(page: Page) {
+const expectNoHorizontalOverflow = async (page: Page) => {
   await expect
     .poll(() =>
       page.evaluate(
         () => document.documentElement.scrollWidth <= window.innerWidth
       )
     )
-    .toBe(true);
-}
+    .toBeTruthy();
+};
 
-test.describe("letter site smoke tests", () => {
-  test.describe.configure({ timeout: 60_000 });
+const earlyAccessForm = (page: Page) =>
+  page.getByRole("form", { name: "Request early access" });
+
+const fillEarlyAccess = async (page: Page) => {
+  const form = earlyAccessForm(page);
+  await form.getByLabel("Email").fill("director@example.org");
+  await form.getByLabel("Organization").fill("Example Missions");
+  await form
+    .getByLabel(/What would you like asym to help with/u)
+    .fill("Year-end appeals");
+  return form;
+};
+
+test.describe("homepage smoke tests", () => {
+  test.describe.configure({ timeout: SUITE_TIMEOUT_MS });
 
   test.beforeEach(async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "reduce" });
@@ -59,11 +76,10 @@ test.describe("letter site smoke tests", () => {
     );
 
     await page.goto("/", { waitUntil: "domcontentloaded" });
-
     await page.keyboard.press("Tab");
 
     await expect(
-      page.getByRole("link", { name: /skip to main content/i })
+      page.getByRole("link", { name: /skip to main content/iu })
     ).toBeFocused();
 
     await page.keyboard.press("Enter");
@@ -71,330 +87,241 @@ test.describe("letter site smoke tests", () => {
     await expect(page.locator("#main-content")).toBeFocused();
   });
 
-  test("mobile header stays a compact brand chip without fake navigation", async ({
+  test("hero states the product, stage, and primary action", async ({
+    page,
+  }) => {
+    await page.goto("/", { waitUntil: "domcontentloaded" });
+
+    await expect(page).toHaveTitle(
+      "asym | Open-source AI software for nonprofits"
+    );
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "Your website, fundraising, and CRM. Built to work together with AI.",
+      })
+    ).toBeVisible();
+    await expect(page.getByText("Launching soon")).toBeVisible();
+    await expect(
+      page
+        .getByRole("main")
+        .getByRole("link", { name: /^Request early access/u })
+        .first()
+    ).toHaveAttribute("href", "/#early-access");
+    await expect(
+      page.getByRole("link", { name: "View the code" })
+    ).toHaveAttribute("href", REPO_URL);
+  });
+
+  test("workflow is described in text with an honest status", async ({
+    page,
+  }) => {
+    await page.goto("/", { waitUntil: "domcontentloaded" });
+    const product = page.locator("#product");
+
+    await expect(
+      product.getByRole("heading", {
+        level: 2,
+        name: "From a brief to a campaign ready for review.",
+      })
+    ).toBeVisible();
+    await expect(product.getByRole("listitem")).toHaveText([
+      /Describe/u,
+      /Prepare/u,
+      /Review/u,
+      /Follow through/u,
+    ]);
+    await expect(
+      product.getByText("In development", { exact: true })
+    ).toBeVisible();
+    await expect(page.getByText(/sample data/iu)).toHaveCount(0);
+  });
+
+  test("open source and team sections link to the public code", async ({
+    page,
+  }) => {
+    await page.goto("/", { waitUntil: "domcontentloaded" });
+
+    await expect(
+      page.getByRole("link", { name: /Explore the code on GitHub/u })
+    ).toHaveAttribute("href", REPO_URL);
+    await expect(page.locator("#open-source")).toContainText(
+      "Managed donor care"
+    );
+    await expect(page.locator("#about")).toContainText(
+      "Co-Executive Director of Global Fellowship"
+    );
+  });
+
+  test("main navigation reaches each homepage section", async ({ page }) => {
+    test.skip(
+      test.info().project.name.startsWith("mobile"),
+      "The section links are hidden in the compact mobile header."
+    );
+
+    await page.goto("/", { waitUntil: "domcontentloaded" });
+    await waitForUi(page);
+    const nav = page.getByRole("navigation", { name: "Main" });
+
+    await nav.getByRole("link", { name: "Open source" }).click();
+
+    await expect(page).toHaveURL(/#open-source$/u);
+    await expect(
+      page.getByRole("heading", {
+        level: 2,
+        name: "Open source, with a team to run it for you.",
+      })
+    ).toBeInViewport();
+  });
+
+  test("mobile header keeps the brand and early access action", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/", { waitUntil: "domcontentloaded" });
     await waitForUi(page);
+    const banner = page.getByRole("banner");
 
-    const brandLink = page
-      .getByRole("banner")
-      .getByRole("link", { name: /^Asym home$/i });
-
-    await expect(brandLink).toBeVisible();
-    await expect(page.locator("header nav")).toHaveCount(0);
-    await expect(page.getByRole("button", { name: /open menu/i })).toHaveCount(
-      0
-    );
     await expect(
-      page.getByRole("heading", { level: 1, name: /We.re building Asym\./i })
+      banner.getByRole("link", { name: /^asym home$/iu })
     ).toBeVisible();
-
-    const brandBox = await brandLink.boundingBox();
-
-    expect(brandBox?.width).toBeLessThan(180);
-    expect(brandBox?.height).toBeLessThan(64);
+    await expect(
+      banner.getByRole("link", { name: "Early access" })
+    ).toBeVisible();
+    await expect(banner.getByRole("navigation")).toBeHidden();
 
     await expectNoHorizontalOverflow(page);
   });
 
-  test("theme toggle applies dark mode", async ({ page }) => {
+  test("early access form explains missing or invalid fields", async ({
+    page,
+  }) => {
+    await page.goto("/", { waitUntil: "domcontentloaded" });
+    await waitForUi(page);
+    const form = earlyAccessForm(page);
+
+    await form.getByRole("button", { name: "Request early access" }).click();
+
+    await expect(form.getByText("Enter a valid email address.")).toBeVisible();
+    await expect(
+      form.getByText("Enter your organization’s name.")
+    ).toBeVisible();
+    await expect(form.getByLabel("Email")).toBeFocused();
+    await expect(form.getByLabel("Email")).toHaveAttribute(
+      "aria-invalid",
+      "true"
+    );
+  });
+
+  test("early access keeps entries when the request is not accepted", async ({
+    page,
+  }) => {
+    await page.route(EARLY_ACCESS_API, (route) =>
+      route.fulfill({
+        status: 503,
+        json: { ok: false, error: "not_configured" },
+      })
+    );
+    await page.goto("/", { waitUntil: "domcontentloaded" });
+    await waitForUi(page);
+    const form = await fillEarlyAccess(page);
+
+    await form.getByRole("button", { name: "Request early access" }).click();
+
+    await expect(form.getByRole("alert")).toContainText(
+      "Your request didn’t go through. Please try again."
+    );
+    await expect(form.getByLabel("Email")).toHaveValue("director@example.org");
+    await expect(form.getByLabel("Organization")).toHaveValue(
+      "Example Missions"
+    );
+  });
+
+  test("early access confirms only after the request is accepted", async ({
+    page,
+  }) => {
+    let submitted: unknown = null;
+    await page.route(EARLY_ACCESS_API, async (route) => {
+      submitted = route.request().postDataJSON();
+      await route.fulfill({ status: 200, json: { ok: true } });
+    });
+    await page.goto("/", { waitUntil: "domcontentloaded" });
+    await waitForUi(page);
+    const form = await fillEarlyAccess(page);
+
+    await form.getByRole("button", { name: "Request early access" }).click();
+
+    await expect(
+      page.getByRole("heading", { name: "Request received" })
+    ).toBeFocused();
+    await expect(page.locator("#early-access")).toContainText(
+      "We’ve received your request."
+    );
+    expect(submitted).toMatchObject({
+      email: "director@example.org",
+      organization: "Example Missions",
+      message: "Year-end appeals",
+      website: "",
+    });
+  });
+
+  test("theme toggle applies dark mode and swaps the logo artwork", async ({
+    page,
+  }) => {
     const projectName = test.info().project.name;
     await page.goto("/", { waitUntil: "domcontentloaded" });
     await waitForUi(page);
     await page.locator("footer").scrollIntoViewIfNeeded();
 
-    const themeToggle = page
-      .getByRole("button", { name: /change color theme/i })
-      .first();
-
-    await expect(async () => {
-      await expect(themeToggle).toBeVisible();
-
-      await activate(themeToggle, projectName);
-
-      await expect(page.getByRole("menuitem", { name: /dark/i })).toBeVisible();
-    }).toPass({ timeout: 6000 });
-    await expect(page.getByRole("menuitem", { name: /dark/i })).toBeVisible();
-
-    await page.getByRole("menuitem", { name: /dark/i }).click();
-
-    await expect(page.locator("html")).toHaveClass(/dark/);
-  });
-
-  test("homepage renders the founder letter and builder actions", async ({
-    page,
-  }) => {
-    await page.goto("/", { waitUntil: "domcontentloaded" });
-    await waitForUi(page);
-
-    await expect(
-      page.getByRole("heading", { level: 1, name: /We.re building Asym\./i })
-    ).toBeVisible();
-    await expect(
-      page.locator("p", { hasText: /^We.re Conrad and Blake\.$/i })
-    ).toBeVisible();
-    await expect(
-      page.getByRole("heading", { level: 2, name: "The vision is simple." })
-    ).toBeVisible();
-    await expect(
-      page.getByRole("heading", {
-        level: 2,
-        name: "One Mission Control for missions and nonprofit operations.",
-      })
-    ).toBeVisible();
-    await expect(
-      page.getByRole("heading", {
-        level: 2,
-        name: "The details matter because the mission matters.",
-      })
-    ).toBeVisible();
-    await expect(
-      page.getByRole("heading", {
-        level: 2,
-        name: "Come build the next piece.",
-      })
-    ).toBeVisible();
-    await expect(
-      page.getByText(/Some parts are still ugly\. Some parts are half wired/i)
-    ).toBeVisible();
-    await expect(
-      page.getByText(/Member care teams try to keep track/i)
-    ).toBeVisible();
-    await expect(
-      page.getByText(/finance teams entrusted with donor money/i)
-    ).toBeVisible();
-    await expect(
-      page.locator("p", { hasText: /^That bothers us\.$/ })
-    ).toHaveCSS("font-weight", /^(600|700)$/);
-    await expect(
-      page.locator(".tight-stanza", {
-        hasText: "Not by working longer hours.",
-      })
-    ).toContainText("Not by adding more admin.");
-
-    const rhythm = await page.locator(".letter-prose").evaluate((element) => {
-      const style = window.getComputedStyle(element);
-      const firstParagraph = element.querySelector(
-        ".letter-flow > p"
-      ) as HTMLElement | null;
-      const secondParagraph =
-        firstParagraph?.nextElementSibling as HTMLElement | null;
-      const stanzaLines = Array.from(
-        element.querySelectorAll(".tight-stanza p")
-      ) as HTMLElement[];
-      const firstStanzaLine = stanzaLines[0];
-      const secondStanzaLine = stanzaLines[1];
-
-      const normalGap =
-        firstParagraph && secondParagraph
-          ? secondParagraph.getBoundingClientRect().top -
-            firstParagraph.getBoundingClientRect().bottom
-          : 0;
-      const stanzaGap =
-        firstStanzaLine && secondStanzaLine
-          ? secondStanzaLine.getBoundingClientRect().top -
-            firstStanzaLine.getBoundingClientRect().bottom
-          : 0;
-
-      return {
-        lineHeightRatio:
-          Number.parseFloat(style.lineHeight) /
-          Number.parseFloat(style.fontSize),
-        normalGap,
-        stanzaGap,
-      };
-    });
-
-    expect(rhythm.lineHeightRatio).toBeGreaterThanOrEqual(1.5);
-    expect(rhythm.lineHeightRatio).toBeLessThanOrEqual(1.7);
-    expect(rhythm.normalGap).toBeGreaterThanOrEqual(12);
-    expect(rhythm.normalGap).toBeLessThanOrEqual(20);
-    expect(rhythm.stanzaGap).toBeGreaterThanOrEqual(4);
-    expect(rhythm.stanzaGap).toBeLessThan(rhythm.normalGap);
-
-    const emailLink = page.getByRole("link", { name: /^Send us an email\.$/i });
-
-    await expect(emailLink).toHaveAttribute(
-      "href",
-      "mailto:info@asymmetric.al?subject=Building%20with%20Asym"
+    await activate(
+      page.getByRole("button", { name: /change color theme/iu }).first(),
+      projectName
     );
+    await page.getByRole("menuitem", { name: /dark/iu }).click();
+
+    await expect(page.locator("html")).toHaveClass(/dark/u);
     await expect(
-      page.getByRole("link", { name: /^Contribute on GitHub\.$/i })
-    ).toHaveAttribute(
-      "href",
-      "https://github.com/Asymmetric-al/core?tab=contributing-ov-file#readme"
-    );
-  });
-
-  test("brand logo sizing and theme artwork stay correct", async ({ page }) => {
-    const consoleErrors: string[] = [];
-    const pageErrors: string[] = [];
-    const notFoundResponses: string[] = [];
-    const genericResourceLoadError =
-      "Failed to load resource: the server responded with a status of 404 (Not Found)";
-    const ignoredLocal404Paths = new Set([
-      "/_vercel/insights/script.js",
-      "/_vercel/speed-insights/script.js",
-    ]);
-
-    page.on("console", (message) => {
-      if (message.type() === "error") {
-        consoleErrors.push(message.text());
-      }
-    });
-    page.on("pageerror", (error) => {
-      pageErrors.push(error.message);
-    });
-    page.on("response", (response) => {
-      if (response.status() === 404) {
-        notFoundResponses.push(new URL(response.url()).pathname);
-      }
-    });
-
-    await page.goto("/", { waitUntil: "domcontentloaded" });
-    await waitForUi(page);
-
-    await expect(
-      page.locator('header a[aria-label="Asym home"]')
-    ).toBeVisible();
-    await expect(
-      page.locator('footer a[aria-label="Asym home"]')
-    ).toBeVisible();
-
-    const logoState = await page.evaluate(() => {
-      const readMark = (selector: string) => {
-        const mark = document.querySelector<HTMLElement>(selector);
-        if (!mark) {
-          return null;
-        }
-
-        const rect = mark.getBoundingClientRect();
-        const visibleImage = Array.from(mark.querySelectorAll("img")).find(
-          (image) => window.getComputedStyle(image).display !== "none"
-        );
-
-        return {
-          width: Math.round(rect.width),
-          height: Math.round(rect.height),
-          visibleSrc: visibleImage?.getAttribute("src") ?? "",
-        };
-      };
-
-      return {
-        footer: readMark(
-          'footer a[aria-label="Asym home"] span[aria-hidden="true"]'
-        ),
-        header: readMark(
-          'header a[aria-label="Asym home"] span[aria-hidden="true"]'
-        ),
-      };
-    });
-
-    expect(logoState.header).toMatchObject({
-      height: 28,
-      visibleSrc: expect.stringContaining("asym-mark-dark"),
-      width: 28,
-    });
-    expect(logoState.footer).toMatchObject({
-      height: 20,
-      visibleSrc: expect.stringContaining("asym-mark-dark"),
-      width: 20,
-    });
-
-    await page.locator("footer").scrollIntoViewIfNeeded();
-    const projectName = test.info().project.name;
-    const themeToggle = page
-      .getByRole("button", { name: /change color theme/i })
-      .first();
-    await activate(themeToggle, projectName);
-    await page.getByRole("menuitem", { name: /dark/i }).click();
-
-    const darkLogoState = await page.evaluate(() => {
-      const readVisibleSrc = (selector: string) => {
-        const mark = document.querySelector<HTMLElement>(selector);
-        const visibleImage = Array.from(
-          mark?.querySelectorAll("img") ?? []
-        ).find((image) => window.getComputedStyle(image).display !== "none");
-
-        return visibleImage?.getAttribute("src") ?? "";
-      };
-
-      return {
-        footer: readVisibleSrc(
-          'footer a[aria-label="Asym home"] span[aria-hidden="true"]'
-        ),
-        header: readVisibleSrc(
-          'header a[aria-label="Asym home"] span[aria-hidden="true"]'
-        ),
-      };
-    });
-
-    expect(darkLogoState.header).toContain("asym-mark-light");
-    expect(darkLogoState.footer).toContain("asym-mark-light");
-
-    await expectNoHorizontalOverflow(page);
-
-    const unexpected404s = notFoundResponses.filter(
-      (pathname) => !ignoredLocal404Paths.has(pathname)
-    );
-    const unexpectedConsoleErrors = consoleErrors.filter(
-      (message) =>
-        message !== genericResourceLoadError || unexpected404s.length > 0
-    );
-
-    expect(unexpected404s).toEqual([]);
-    expect(unexpectedConsoleErrors).toEqual([]);
-    expect(pageErrors).toEqual([]);
-  });
-
-  test("footer keeps contact, GitHub, legal links, and theme control", async ({
-    page,
-  }) => {
-    await page.goto("/", { waitUntil: "domcontentloaded" });
-    await waitForUi(page);
-    await page.locator("footer").scrollIntoViewIfNeeded();
-
-    await expect(
-      page.getByText(
-        /Asym exists to carry the operational weight for Christian missions organizations/i
+      page.locator(
+        'header a[aria-label="asym home"] img[src*="asym-mark-light"]'
       )
     ).toBeVisible();
-    await expect(
-      page.getByRole("link", { name: "info@asymmetric.al" })
-    ).toHaveAttribute(
+  });
+
+  test("footer links to code, contact, and legal pages", async ({ page }) => {
+    await page.goto("/", { waitUntil: "domcontentloaded" });
+    const footer = page.locator("footer");
+
+    await expect(footer.getByRole("link", { name: "GitHub" })).toHaveAttribute(
       "href",
-      "mailto:info@asymmetric.al?subject=Building%20with%20Asym"
+      REPO_URL
     );
-    await expect(page.getByRole("link", { name: /^GitHub$/i })).toHaveAttribute(
+    await expect(footer.getByRole("link", { name: "Contact" })).toHaveAttribute(
       "href",
-      "https://github.com/Asymmetric-al"
+      /^mailto:/u
     );
-    await expect(
-      page.getByRole("button", { name: /change color theme/i })
-    ).toBeVisible();
-    await expect(
-      page.getByRole("link", { name: /^Privacy Policy$/i })
-    ).toBeVisible();
-    await expect(
-      page.getByRole("link", { name: /^Terms of Service$/i })
-    ).toBeVisible();
+    await expect(footer.getByRole("link", { name: "Privacy" })).toHaveAttribute(
+      "href",
+      "/privacy"
+    );
+    await expect(footer).toContainText("Asymmetric.al");
+    await expect(footer).not.toContainText("EIN");
   });
 
   test("missing routes land on the custom not-found page", async ({ page }) => {
     await page.goto("/does-not-exist", { waitUntil: "domcontentloaded" });
 
     await expect(
-      page.getByRole("heading", {
-        level: 1,
-        name: /The page is missing, but the letter is still here\./i,
-      })
+      page.getByRole("heading", { level: 1, name: "This page doesn’t exist." })
     ).toBeVisible();
-    await expect(page.getByRole("link", { name: /^Letter$/i })).toBeVisible();
     await expect(
-      page.getByRole("link", { name: /^Build with us$/i })
-    ).toBeVisible();
+      page.getByRole("link", { name: "Go to the homepage" })
+    ).toHaveAttribute("href", "/");
+  });
+
+  test("legacy routes redirect to homepage sections", async ({ page }) => {
+    await page.goto("/waitlist", { waitUntil: "domcontentloaded" });
+
+    await expect(page).toHaveURL(/\/#early-access$/u);
   });
 
   test("layout omits outbound Vercel analytics collectors", async ({
@@ -408,32 +335,7 @@ test.describe("letter site smoke tests", () => {
         analyticsQueue: "vaq" in window,
         speedInsights: "si" in window,
       }))
-    ).toEqual({
-      analytics: false,
-      analyticsQueue: false,
-      speedInsights: false,
-    });
-  });
-
-  test("route errors render the boundary without Vercel telemetry", async ({
-    page,
-  }) => {
-    await page.goto("/qa/error?trigger=1", { waitUntil: "domcontentloaded" });
-
-    await expect(
-      page.getByRole("heading", {
-        level: 1,
-        name: /Something failed inside the current page\./i,
-      })
-    ).toBeVisible();
-
-    expect(
-      await page.evaluate(() => ({
-        analytics: "va" in window,
-        analyticsQueue: "vaq" in window,
-        speedInsights: "si" in window,
-      }))
-    ).toEqual({
+    ).toStrictEqual({
       analytics: false,
       analyticsQueue: false,
       speedInsights: false,

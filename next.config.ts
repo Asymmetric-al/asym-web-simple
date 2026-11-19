@@ -6,24 +6,31 @@ const withBundleAnalyzer = createBundleAnalyzer({
   enabled: process.env.ANALYZE === "true",
 });
 
+const EARLY_ACCESS = "/#early-access";
+const PRODUCT = "/#product";
+const OPEN_SOURCE = "/#open-source";
+
 const nextConfig: NextConfig = {
-  redirects: async () => [
-    { source: "/about", destination: "/#letter", permanent: false },
-    { source: "/faq", destination: "/#letter", permanent: false },
-    { source: "/waitlist", destination: "/#talk", permanent: false },
-    {
-      source: "/open-source-and-trust",
-      destination: "/#letter",
-      permanent: false,
-    },
-    { source: "/platform", destination: "/#product", permanent: false },
-    { source: "/missions", destination: "/#why", permanent: false },
-    { source: "/specs", destination: "/#product", permanent: false },
-    { source: "/manifesto", destination: "/#letter", permanent: false },
-    { source: "/give", destination: "/#talk", permanent: false },
-    { source: "/join", destination: "/#builders", permanent: false },
-    { source: "/contact", destination: "/#talk", permanent: false },
-  ],
+  redirects: () =>
+    Promise.resolve([
+      // Routes from earlier versions of the site now live as homepage sections.
+      { source: "/about", destination: "/#about", permanent: false },
+      { source: "/faq", destination: PRODUCT, permanent: false },
+      { source: "/waitlist", destination: EARLY_ACCESS, permanent: false },
+      {
+        source: "/open-source-and-trust",
+        destination: OPEN_SOURCE,
+        permanent: false,
+      },
+      { source: "/platform", destination: PRODUCT, permanent: false },
+      { source: "/missions", destination: "/#about", permanent: false },
+      { source: "/specs", destination: OPEN_SOURCE, permanent: false },
+      { source: "/manifesto", destination: "/", permanent: false },
+      { source: "/give", destination: "/", permanent: false },
+      { source: "/join", destination: EARLY_ACCESS, permanent: false },
+      { source: "/contact", destination: EARLY_ACCESS, permanent: false },
+      { source: "/501c3", destination: "/", permanent: false },
+    ]),
   images: {
     remotePatterns: [
       {
