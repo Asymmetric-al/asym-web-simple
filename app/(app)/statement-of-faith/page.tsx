@@ -48,8 +48,9 @@ const faithPoints = [
 export const metadata: Metadata = createMetadata({
   title: "Statement of Faith",
   description:
-    "The core Christian convictions behind Asym and the nonprofit ministry behind it.",
+    "The personal Christian convictions of the founders building asym at Asymmetric.al.",
   path: "/statement-of-faith",
+  noIndex: true,
 });
 
 export default function StatementOfFaithPage() {
@@ -57,11 +58,11 @@ export default function StatementOfFaithPage() {
     <DocumentPage
       eyebrow="Statement of Faith"
       title={
-        <h1 className="font-heading text-foreground mt-5 text-[clamp(3rem,6vw,5rem)] leading-[0.94] font-semibold tracking-[-0.07em] text-balance">
+        <h1 className="font-heading text-foreground mt-5 text-[clamp(2.8rem,5.5vw,4.6rem)] leading-[0.96] font-semibold tracking-[-0.055em] text-balance">
           Statement of Faith
         </h1>
       }
-      description="Asym is openly Christian. These are the core convictions behind the work and the nonprofit ministry behind it."
+      description="Asymmetric.al is a for-profit software company building asym for nonprofits, starting with missions organizations. These are the personal Christian convictions of the founders behind the work."
     >
       {faithPoints.map((point) => (
         <DocumentSection

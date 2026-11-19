@@ -8,14 +8,14 @@ export default function AppLayout({
   children: ReactNode;
 }>): ReactNode {
   return (
-    <div className="relative flex min-h-screen flex-col overflow-x-clip">
+    <div className="relative flex min-h-dvh flex-col overflow-x-clip">
       <div
         aria-hidden="true"
-        className="pointer-events-none fixed inset-x-0 top-0 -z-10 h-[32rem] bg-[radial-gradient(circle_at_top,var(--glow-primary),transparent_55%)]"
+        className="pointer-events-none fixed inset-x-0 top-0 -z-10 h-[34rem] bg-[radial-gradient(ellipse_70%_55%_at_50%_0%,var(--glow-primary),transparent_72%)]"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none fixed inset-y-0 left-[-12rem] -z-10 w-[24rem] bg-[radial-gradient(circle,var(--glow-accent),transparent_70%)] blur-2xl"
+        className="pointer-events-none fixed inset-y-0 left-[-14rem] -z-10 w-[30rem] bg-[radial-gradient(ellipse_at_center,var(--glow-accent),transparent_72%)]"
       />
       <Header />
       {children}

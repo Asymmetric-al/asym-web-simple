@@ -1,28 +1,22 @@
 "use client";
 
-import { Check, LaptopMinimal, MoonStar, SunMedium } from "lucide-react";
+import { LaptopMinimal, MoonStar, SunMedium } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useSyncExternalStore } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
 
-const emptySubscribe = () => () => {};
+const noop = () => {
+  // Intentionally empty unsubscribe for static client hydration store.
+};
 
-function useIsClient(): boolean {
-  return useSyncExternalStore(
+const emptySubscribe = () => noop;
+
+const useIsClient = (): boolean =>
+  useSyncExternalStore(
     emptySubscribe,
     () => true,
     () => false
   );
-}
 
 const themes = [
   { value: "light", label: "Light", icon: SunMedium },
@@ -30,54 +24,38 @@ const themes = [
   { value: "system", label: "System", icon: LaptopMinimal },
 ] as const;
 
-export function ThemeToggle() {
+export const ThemeToggle = () => {
   const isMounted = useIsClient();
-  const { resolvedTheme, setTheme, theme } = useTheme();
-  const activeTheme = theme ?? "system";
-
-  // Avoid hydration mismatch: resolvedTheme differs between server and first client render.
-  const TriggerIcon = isMounted
-    ? resolvedTheme === "dark"
-      ? MoonStar
-      : SunMedium
-    : LaptopMinimal;
+  const { setTheme, theme = "system" } = useTheme();
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger
-        render={
-          <Button
-            variant="outline"
-            size="icon-sm"
-            aria-label="Change color theme"
-          />
-        }
-      >
-        <TriggerIcon />
-        <span className="sr-only">Change color theme</span>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-52">
-        <DropdownMenuGroup>
-          <DropdownMenuLabel>Appearance</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          {themes.map((option) => {
-            const Icon = option.icon;
+    <div
+      role="group"
+      aria-label="Color theme"
+      className="border-foreground/14 bg-card/85 inline-flex items-center rounded-full border p-0.5"
+    >
+      {themes.map((option) => {
+        const Icon = option.icon;
+        const isActive = isMounted && theme === option.value;
 
-            return (
-              <DropdownMenuItem
-                key={option.value}
-                onClick={() => setTheme(option.value)}
-              >
-                <Icon />
-                <span>{option.label}</span>
-                {activeTheme === option.value ? (
-                  <Check className="ml-auto" />
-                ) : null}
-              </DropdownMenuItem>
-            );
-          })}
-        </DropdownMenuGroup>
-      </DropdownMenuContent>
-    </DropdownMenu>
+        return (
+          <button
+            key={option.value}
+            type="button"
+            aria-pressed={isActive}
+            onClick={() => setTheme(option.value)}
+            className={cn(
+              "focus-visible:ring-ring inline-flex min-h-11 items-center gap-1.5 rounded-full px-3 text-xs font-medium select-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-none active:scale-[0.97] sm:min-h-8 sm:px-2.5",
+              isActive
+                ? "bg-primary text-primary-foreground shadow-xs"
+                : "text-muted-foreground hover:text-foreground"
+            )}
+          >
+            <Icon className="size-3.5 shrink-0" aria-hidden="true" />
+            <span>{option.label}</span>
+          </button>
+        );
+      })}
+    </div>
   );
-}
+};

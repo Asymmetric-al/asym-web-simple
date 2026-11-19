@@ -43,7 +43,7 @@ export const OpenSourceSection = () => (
   <section
     id="open-source"
     aria-labelledby="open-source-title"
-    className="scroll-mt-24 py-[clamp(3.5rem,6vw,5.5rem)]"
+    className="scroll-mt-24 py-[clamp(3.25rem,6vw,5.25rem)]"
   >
     <Container className="grid gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-14">
       <div className="flex flex-col">
@@ -51,10 +51,11 @@ export const OpenSourceSection = () => (
         <SectionTitle id="open-source-title">
           Open source, with a team to run it for you.
         </SectionTitle>
-        <div className="text-muted-foreground mt-6 space-y-5 text-base leading-7 sm:text-lg sm:leading-8">
+        <div className="text-muted-foreground mt-6 max-w-[42rem] space-y-5 text-base leading-7 sm:text-lg sm:leading-8">
           <p>
             The code is public under the AGPL. You can read it, follow
-            development, and see how asym is being built.
+            development, and see how <span translate="no">asym</span> is being
+            built.
           </p>
           <p>
             We’ll offer a paid managed subscription for hosting, AI workflows,
@@ -66,13 +67,13 @@ export const OpenSourceSection = () => (
           href={siteConfig.repoUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-primary hover:text-foreground focus-visible:ring-ring/45 mt-6 inline-flex w-fit items-center gap-1.5 rounded-sm font-medium underline underline-offset-4 transition-colors focus-visible:ring-[3px] focus-visible:outline-none"
+          className="text-primary hover:text-foreground focus-visible:ring-ring mt-4 inline-flex min-h-11 w-fit items-center gap-1.5 rounded-sm font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none sm:min-h-10"
         >
           Explore the code on GitHub
           <ArrowUpRight className="size-4" aria-hidden="true" />
         </a>
 
-        <div className="border-foreground/10 bg-card/60 mt-10 rounded-[1.6rem] border p-5 sm:p-6">
+        <div className="border-foreground/18 bg-card/60 mt-8 rounded-[1.5rem] border border-dashed p-5 sm:p-6">
           <StatusPill>Planned</StatusPill>
           <h3 className="font-heading text-foreground mt-4 text-xl font-semibold tracking-[-0.04em]">
             Managed donor care
@@ -91,21 +92,23 @@ export const OpenSourceSection = () => (
             href={siteConfig.repoUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-foreground hover:text-primary focus-visible:ring-ring/45 inline-flex min-w-0 items-center gap-2.5 rounded-sm font-mono text-sm font-medium transition-colors focus-visible:ring-[3px] focus-visible:outline-none"
+            className="text-foreground hover:text-primary focus-visible:ring-ring inline-flex min-h-11 min-w-0 items-center gap-2.5 rounded-sm font-mono text-sm font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none sm:min-h-10"
           >
             <GitHubMark className="size-5 shrink-0" />
-            <span className="truncate">Asymmetric-al/core</span>
+            <span className="truncate" translate="no">
+              Asymmetric-al/core
+            </span>
           </a>
-          <span className="border-foreground/12 text-muted-foreground rounded-full border px-2.5 py-0.5 text-xs">
+          <span className="border-foreground/14 text-muted-foreground rounded-full border px-2.5 py-0.5 text-xs">
             Public
           </span>
         </div>
-        <p className="text-muted-foreground mt-4 text-sm leading-6">
+        <p className="text-muted-foreground mt-3 text-sm leading-6">
           An open-source platform for nonprofits, bringing CRM, fundraising,
           websites, and team operations into one connected system.
         </p>
 
-        <dl className="border-foreground/10 mt-5 grid grid-cols-3 gap-3 border-y py-5">
+        <dl className="border-foreground/12 mt-5 grid grid-cols-3 gap-3 border-y py-5">
           {stats.map((stat) => (
             <div key={stat.label} className="flex min-w-0 flex-col">
               <dt className="text-muted-foreground text-xs leading-5">

@@ -10,7 +10,7 @@ export const Eyebrow = ({
 }) => (
   <p
     className={cn(
-      "text-primary/75 font-mono text-xs tracking-[0.24em] uppercase",
+      "text-primary/80 font-mono text-xs tracking-[0.24em] uppercase",
       className
     )}
   >
@@ -30,7 +30,7 @@ export const SectionTitle = ({
   <h2
     id={id}
     className={cn(
-      "font-heading text-foreground mt-4 text-[clamp(2rem,3.6vw,3.1rem)] leading-[1.03] font-semibold tracking-[-0.055em] text-balance",
+      "font-heading text-foreground mt-4 text-[clamp(1.95rem,3.6vw,3.05rem)] leading-[1.04] font-semibold tracking-[-0.045em] text-balance",
       className
     )}
   >
@@ -39,7 +39,7 @@ export const SectionTitle = ({
 );
 
 /**
-Small status label, used wherever planned or sample content appears.
+Small status label, used wherever planned or in-development work appears.
 */
 export const StatusPill = ({
   children,
@@ -50,7 +50,7 @@ export const StatusPill = ({
 }) => (
   <p
     className={cn(
-      "border-foreground/12 bg-card/80 text-muted-foreground inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1.5 font-mono text-xs tracking-[0.08em]",
+      "border-foreground/14 bg-card/85 text-muted-foreground inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1.5 font-mono text-xs tracking-[0.08em]",
       className
     )}
   >

@@ -5,6 +5,7 @@ const UI_READY_TIMEOUT_MS = 5000;
 const SETTLE_MS = 250;
 const SUITE_TIMEOUT_MS = 60_000;
 const REPO_URL = "https://github.com/Asymmetric-al/core";
+const ISSUES_URL = "https://github.com/Asymmetric-al/core/issues";
 const EARLY_ACCESS_API = "**/api/early-access";
 
 const activate = async (locator: Locator, projectName: string) => {
@@ -105,7 +106,7 @@ test.describe("homepage smoke tests", () => {
     await expect(
       page
         .getByRole("main")
-        .getByRole("link", { name: /^Request early access/u })
+        .getByRole("link", { name: /^(Request early access|Early access)/u })
         .first()
     ).toHaveAttribute("href", "/#early-access");
     await expect(
@@ -174,7 +175,7 @@ test.describe("homepage smoke tests", () => {
     ).toBeInViewport();
   });
 
-  test("mobile header keeps the brand and early access action", async ({
+  test("mobile header keeps the brand and early access action and offers section links", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 390, height: 844 });
@@ -189,16 +190,35 @@ test.describe("homepage smoke tests", () => {
       banner.getByRole("link", { name: "Early access" })
     ).toBeVisible();
     await expect(banner.getByRole("navigation")).toBeHidden();
+    await expect(
+      page.getByRole("navigation", { name: "On this page" })
+    ).toBeVisible();
 
     await expectNoHorizontalOverflow(page);
   });
 
-  test("early access form explains missing or invalid fields", async ({
+  test("early access discloses unconfigured preview state or validates live form", async ({
     page,
   }) => {
     await page.goto("/", { waitUntil: "domcontentloaded" });
     await waitForUi(page);
+    const formCount = await earlyAccessForm(page).count();
+
+    if (formCount === 0) {
+      await expect(page.locator("#early-access")).toContainText(
+        "Early-access sign-ups open before launch."
+      );
+      await expect(
+        page
+          .locator("#early-access")
+          .getByRole("link", { name: /Ask a question on GitHub/u })
+      ).toHaveAttribute("href", ISSUES_URL);
+      return;
+    }
+
     const form = earlyAccessForm(page);
+    await expect(form).toHaveAttribute("method", "post");
+    await expect(form).toHaveAttribute("action", "/api/early-access");
 
     await form.getByRole("button", { name: "Request early access" }).click();
 
@@ -213,7 +233,7 @@ test.describe("homepage smoke tests", () => {
     );
   });
 
-  test("early access keeps entries when the request is not accepted", async ({
+  test("early access keeps entries when the request is not accepted (configured mode)", async ({
     page,
   }) => {
     await page.route(EARLY_ACCESS_API, (route) =>
@@ -224,12 +244,16 @@ test.describe("homepage smoke tests", () => {
     );
     await page.goto("/", { waitUntil: "domcontentloaded" });
     await waitForUi(page);
+    if ((await earlyAccessForm(page).count()) === 0) {
+      test.skip(true, "Deployment has no email delivery configured.");
+    }
+
     const form = await fillEarlyAccess(page);
 
     await form.getByRole("button", { name: "Request early access" }).click();
 
     await expect(form.getByRole("alert")).toContainText(
-      "Your request didn’t go through. Please try again."
+      "Early-access email delivery isn’t connected on this deployment yet."
     );
     await expect(form.getByLabel("Email")).toHaveValue("director@example.org");
     await expect(form.getByLabel("Organization")).toHaveValue(
@@ -237,7 +261,7 @@ test.describe("homepage smoke tests", () => {
     );
   });
 
-  test("early access confirms only after the request is accepted", async ({
+  test("early access confirms only after the request is accepted (configured mode)", async ({
     page,
   }) => {
     let submitted: unknown = null;
@@ -247,6 +271,10 @@ test.describe("homepage smoke tests", () => {
     });
     await page.goto("/", { waitUntil: "domcontentloaded" });
     await waitForUi(page);
+    if ((await earlyAccessForm(page).count()) === 0) {
+      test.skip(true, "Deployment has no email delivery configured.");
+    }
+
     const form = await fillEarlyAccess(page);
 
     await form.getByRole("button", { name: "Request early access" }).click();
@@ -273,11 +301,11 @@ test.describe("homepage smoke tests", () => {
     await waitForUi(page);
     await page.locator("footer").scrollIntoViewIfNeeded();
 
+    const themeGroup = page.getByRole("group", { name: /color theme/iu });
     await activate(
-      page.getByRole("button", { name: /change color theme/iu }).first(),
+      themeGroup.getByRole("button", { name: /^Dark$/u }),
       projectName
     );
-    await page.getByRole("menuitem", { name: /dark/iu }).click();
 
     await expect(page.locator("html")).toHaveClass(/dark/u);
     await expect(
@@ -287,29 +315,38 @@ test.describe("homepage smoke tests", () => {
     ).toBeVisible();
   });
 
-  test("footer links to code, contact, and legal pages", async ({ page }) => {
+  test("footer links to code, early access, and legal pages", async ({
+    page,
+  }) => {
     await page.goto("/", { waitUntil: "domcontentloaded" });
     const footer = page.locator("footer");
 
-    await expect(footer.getByRole("link", { name: "GitHub" })).toHaveAttribute(
-      "href",
-      REPO_URL
-    );
-    await expect(footer.getByRole("link", { name: "Contact" })).toHaveAttribute(
-      "href",
-      /^mailto:/u
-    );
+    await expect(
+      footer.getByRole("link", { name: "GitHub", exact: true })
+    ).toHaveAttribute("href", REPO_URL);
+    await expect(
+      footer.getByRole("link", { name: "Early access" })
+    ).toHaveAttribute("href", "/#early-access");
     await expect(footer.getByRole("link", { name: "Privacy" })).toHaveAttribute(
       "href",
       "/privacy"
+    );
+    await expect(footer.getByRole("link", { name: "Terms" })).toHaveAttribute(
+      "href",
+      "/terms"
     );
     await expect(footer).toContainText("Asymmetric.al");
     await expect(footer).not.toContainText("EIN");
   });
 
-  test("missing routes land on the custom not-found page", async ({ page }) => {
+  test("missing routes land on the custom not-found page with site chrome", async ({
+    page,
+  }) => {
     await page.goto("/does-not-exist", { waitUntil: "domcontentloaded" });
 
+    await expect(page).toHaveTitle("Page not found | asym");
+    await expect(page.getByRole("banner")).toBeVisible();
+    await expect(page.getByRole("contentinfo")).toBeVisible();
     await expect(
       page.getByRole("heading", { level: 1, name: "This page doesn’t exist." })
     ).toBeVisible();
@@ -318,7 +355,9 @@ test.describe("homepage smoke tests", () => {
     ).toHaveAttribute("href", "/");
   });
 
-  test("legacy routes redirect to homepage sections", async ({ page }) => {
+  test("legacy routes redirect permanently to homepage sections", async ({
+    page,
+  }) => {
     await page.goto("/waitlist", { waitUntil: "domcontentloaded" });
 
     await expect(page).toHaveURL(/\/#early-access$/u);

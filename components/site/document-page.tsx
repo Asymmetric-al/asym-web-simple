@@ -19,7 +19,7 @@ export function DocumentPage({
     <main id="main-content" className="relative isolate" tabIndex={-1}>
       <Container className="max-w-[76rem]">
         <article className="max-w-[48rem] pt-[clamp(7.4rem,9vw,9.5rem)] pb-14 sm:pb-18">
-          <p className="text-primary/72 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
+          <p className="text-primary/80 font-mono text-xs tracking-[0.24em] uppercase">
             {eyebrow}
           </p>
           {title}
@@ -52,7 +52,7 @@ export function DocumentSection({
   return (
     <section className={cn("grid gap-3", className)}>
       {number ? (
-        <p className="text-primary/62 font-mono text-[0.72rem] tracking-[0.24em] uppercase">
+        <p className="text-primary/80 font-mono text-xs tracking-[0.22em] uppercase">
           {number}
         </p>
       ) : null}

@@ -2,7 +2,7 @@
 
 import { ArrowRight, CircleCheck, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -24,11 +24,19 @@ import type {
 } from "@/lib/early-access";
 import type { ReactNode, SubmitEvent } from "react";
 
-const formStatuses = ["idle", "submitting", "success", "failure"] as const;
+type FormStatus =
+  | "idle"
+  | "submitting"
+  | "success"
+  | "failure"
+  | "not_configured"
+  | "rate_limited";
 
 type SubmitResult =
   | { kind: "accepted" }
   | { kind: "invalid"; errors: EarlyAccessErrors }
+  | { kind: "not_configured" }
+  | { kind: "rate_limited" }
   | { kind: "failed" };
 
 const FIELD_ORDER: readonly EarlyAccessField[] = [
@@ -36,6 +44,10 @@ const FIELD_ORDER: readonly EarlyAccessField[] = [
   "organization",
   "message",
 ];
+
+const VALIDATION_FAILED = 422;
+const RATE_LIMITED = 429;
+const NOT_CONFIGURED = 503;
 
 const errorFor = (
   errors: EarlyAccessErrors,
@@ -80,8 +92,6 @@ const readJson = async (response: Response): Promise<unknown> => {
   }
 };
 
-const VALIDATION_FAILED = 422;
-
 const submitEarlyAccess = async (
   request: EarlyAccessRequest,
   honeypot: string
@@ -92,6 +102,12 @@ const submitEarlyAccess = async (
 
   if (response?.ok) {
     return { kind: "accepted" };
+  }
+  if (response?.status === NOT_CONFIGURED) {
+    return { kind: "not_configured" };
+  }
+  if (response?.status === RATE_LIMITED) {
+    return { kind: "rate_limited" };
   }
   if (response?.status !== VALIDATION_FAILED) {
     return { kind: "failed" };
@@ -118,7 +134,41 @@ const FieldMessage = ({
   );
 };
 
-export const EarlyAccessForm = (): ReactNode => {
+const inlineLinkClassName =
+  "text-foreground hover:text-primary focus-visible:ring-ring link-resilient rounded-xs underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none";
+
+const noop = () => {
+  // Static subscription for reading initial URL status on client hydration.
+};
+
+const emptySubscribe = () => noop;
+
+const readInitialRedirectStatus = (): FormStatus => {
+  if (typeof window === "undefined") {
+    return "idle";
+  }
+  const params = new URLSearchParams(window.location.search);
+  const param = params.get("early_access");
+  if (param === "received") {
+    return "success";
+  }
+  if (param === "unavailable") {
+    return "not_configured";
+  }
+  if (param === "rate_limited") {
+    return "rate_limited";
+  }
+  if (param === "failed") {
+    return "failure";
+  }
+  return "idle";
+};
+
+export const EarlyAccessForm = ({
+  contactEmail,
+}: {
+  readonly contactEmail?: string | null;
+}): ReactNode => {
   const formId = useId();
   const ids = {
     email: `${formId}-email`,
@@ -130,26 +180,30 @@ export const EarlyAccessForm = (): ReactNode => {
   const formRef = useRef<HTMLFormElement>(null);
   const successRef = useRef<HTMLHeadingElement>(null);
 
-  const [status, setStatus] = useState<(typeof formStatuses)[number]>(
-    formStatuses[0]
+  const redirectedStatus = useSyncExternalStore(
+    emptySubscribe,
+    readInitialRedirectStatus,
+    () => "idle" as FormStatus
   );
+  const [status, setStatus] = useState<FormStatus | null>(null);
   const [errors, setErrors] = useState<EarlyAccessErrors>({});
-  const isSubmitting = status === "submitting";
+  const effectiveStatus = status ?? redirectedStatus;
+  const isSubmitting = effectiveStatus === "submitting";
 
   useEffect(() => {
-    if (status === "success") {
+    if (effectiveStatus === "success") {
       successRef.current?.focus();
     }
-  }, [status]);
+  }, [effectiveStatus]);
 
-  if (status === "success") {
+  if (effectiveStatus === "success") {
     return (
-      <div className="border-foreground/10 bg-card rounded-[1.6rem] border p-6 sm:p-8">
+      <div className="border-foreground/12 bg-card rounded-[1.6rem] border p-6 sm:p-8">
         <CircleCheck className="text-primary size-7" aria-hidden="true" />
         <h3
           ref={successRef}
           tabIndex={-1}
-          className="font-heading text-foreground focus-visible:ring-ring/45 mt-4 rounded-sm text-2xl font-semibold tracking-[-0.04em] focus-visible:ring-[3px] focus-visible:outline-none"
+          className="font-heading text-foreground focus-visible:ring-ring mt-4 rounded-sm text-2xl font-semibold tracking-[-0.04em] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
         >
           Request received
         </h3>
@@ -213,19 +267,40 @@ export const EarlyAccessForm = (): ReactNode => {
       focusFirstInvalid(result.errors);
       return;
     }
+    if (result.kind === "not_configured") {
+      setStatus("not_configured");
+      return;
+    }
+    if (result.kind === "rate_limited") {
+      setStatus("rate_limited");
+      return;
+    }
     setStatus("failure");
   };
 
   const describedBy = (field: EarlyAccessField): string | undefined =>
     errorFor(errors, field) === undefined ? undefined : `${ids[field]}-error`;
 
+  const hasAlert = ["failure", "not_configured", "rate_limited"].includes(
+    effectiveStatus
+  );
+
+  let alertHeading: string = earlyAccessCopy.failure;
+  if (effectiveStatus === "not_configured") {
+    alertHeading = earlyAccessCopy.notConfigured;
+  } else if (effectiveStatus === "rate_limited") {
+    alertHeading = earlyAccessCopy.rateLimited;
+  }
+
   return (
     <form
       ref={formRef}
+      method="post"
+      action="/api/early-access"
       noValidate
       onSubmit={handleSubmit}
       aria-label="Request early access"
-      className="border-foreground/10 bg-card relative rounded-[1.6rem] border p-5 sm:p-7"
+      className="sm:border-foreground/12 sm:bg-card relative sm:rounded-[1.6rem] sm:border sm:p-7"
     >
       <p className="sr-only" role="status" aria-live="polite">
         {isSubmitting ? earlyAccessCopy.submitting : ""}
@@ -240,6 +315,8 @@ export const EarlyAccessForm = (): ReactNode => {
             type="email"
             inputMode="email"
             autoComplete="email"
+            autoCapitalize="none"
+            spellCheck={false}
             required
             maxLength={EARLY_ACCESS_LIMITS.email}
             aria-invalid={Boolean(errors.email)}
@@ -268,8 +345,10 @@ export const EarlyAccessForm = (): ReactNode => {
           </FieldMessage>
         </div>
         <div className="sm:col-span-2">
-          <Label htmlFor={ids.message}>
-            What would you like asym to help with?
+          <Label htmlFor={ids.message} className="block leading-6">
+            <span>
+              What would you like <span translate="no">asym</span> to help with?
+            </span>{" "}
             <span className="text-muted-foreground font-normal">
               (optional)
             </span>
@@ -282,7 +361,7 @@ export const EarlyAccessForm = (): ReactNode => {
             aria-invalid={Boolean(errors.message)}
             aria-describedby={describedBy("message")}
             onChange={() => clearError("message")}
-            placeholder="For example: year-end appeals, recurring gifts, receipts, or our website"
+            placeholder="For example: year-end appeals, recurring gifts, receipts, or our website…"
             className="mt-2 min-h-28"
           />
           <FieldMessage id={`${ids.message}-error`}>
@@ -305,21 +384,39 @@ export const EarlyAccessForm = (): ReactNode => {
         />
       </div>
 
-      {status === "failure" ? (
+      {hasAlert ? (
         <div
           role="alert"
-          className="border-destructive/25 bg-destructive/8 text-foreground mt-5 rounded-2xl border px-4 py-3 text-sm leading-6"
+          className="border-destructive/30 bg-destructive/8 text-foreground mt-5 rounded-2xl border px-4 py-3 text-sm leading-6"
         >
-          <p className="font-medium">{earlyAccessCopy.failure}</p>
-          <p className="text-muted-foreground">
-            Your entries are still here. You can also email{" "}
-            <a
-              href={`mailto:${siteConfig.email}?subject=asym%20early%20access`}
-              className="text-foreground link-resilient underline underline-offset-4"
-            >
-              {siteConfig.email}
-            </a>
-            .
+          <p className="font-medium">{alertHeading}</p>
+          <p className="text-muted-foreground mt-1">
+            Your entries are still here.{" "}
+            {contactEmail ? (
+              <>
+                You can also email{" "}
+                <a
+                  href={`mailto:${contactEmail}?subject=asym%20early%20access`}
+                  className={inlineLinkClassName}
+                >
+                  {contactEmail}
+                </a>
+                .
+              </>
+            ) : (
+              <>
+                You can follow progress or open a question on{" "}
+                <a
+                  href={siteConfig.issuesUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={inlineLinkClassName}
+                >
+                  GitHub
+                </a>
+                .
+              </>
+            )}
           </p>
         </div>
       ) : null}
@@ -349,12 +446,8 @@ export const EarlyAccessForm = (): ReactNode => {
         id={ids.consent}
         className="text-muted-foreground mt-4 text-xs leading-5 sm:text-sm sm:leading-6"
       >
-        We’ll use your details only to contact you about asym and early access.
-        To stop hearing from us, reply to any of our emails. Read our{" "}
-        <Link
-          href="/privacy"
-          className="text-foreground underline underline-offset-4"
-        >
+        {earlyAccessCopy.consent} Read our{" "}
+        <Link href="/privacy" className={inlineLinkClassName}>
           privacy policy
         </Link>
         .

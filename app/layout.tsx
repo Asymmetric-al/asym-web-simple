@@ -43,10 +43,12 @@ export default function RootLayout({
   children: ReactNode;
 }>): ReactNode {
   return (
-    <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
-      <body
-        className={`${headingFont.variable} ${bodyFont.variable} ${monoFont.variable} bg-background text-foreground min-h-screen font-sans antialiased`}
-      >
+    <html
+      lang="en"
+      className={`${headingFont.variable} ${bodyFont.variable} ${monoFont.variable}`}
+      suppressHydrationWarning
+    >
+      <body className="bg-background text-foreground min-h-dvh font-sans antialiased">
         <Providers>
           <SkipToContent />
           {children}

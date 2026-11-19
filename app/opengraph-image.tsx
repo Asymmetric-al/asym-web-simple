@@ -13,13 +13,25 @@ export const size = {
 export const contentType = "image/png";
 
 const INK = "#16212B";
-const MUTED = "#5A6975";
+const MUTED = "#54636F";
+const FONT_FAMILY = "Plus Jakarta Sans";
 
 export default async function openGraphImage() {
-  const logoData = await readFile(
-    path.join(process.cwd(), "public", "brand", "asym-mark-dark.png"),
-    "base64"
-  );
+  const [logoData, mediumFont, semiBoldFont, boldFont] = await Promise.all([
+    readFile(
+      path.join(process.cwd(), "public", "brand", "asym-mark-dark.png"),
+      "base64"
+    ),
+    readFile(
+      path.join(process.cwd(), "lib", "fonts", "PlusJakartaSans-Medium.ttf")
+    ),
+    readFile(
+      path.join(process.cwd(), "lib", "fonts", "PlusJakartaSans-SemiBold.ttf")
+    ),
+    readFile(
+      path.join(process.cwd(), "lib", "fonts", "PlusJakartaSans-Bold.ttf")
+    ),
+  ]);
   const logoSrc = `data:image/png;base64,${logoData}`;
 
   return new ImageResponse(
@@ -32,7 +44,7 @@ export default async function openGraphImage() {
           "linear-gradient(160deg, #fcfbf7 0%, #f6f2ea 55%, #e8efe2 100%)",
         color: INK,
         padding: "64px 72px",
-        fontFamily: "sans-serif",
+        fontFamily: '"Plus Jakarta Sans"',
         flexDirection: "column",
         justifyContent: "space-between",
       }}
@@ -46,29 +58,29 @@ export default async function openGraphImage() {
           style={{ display: "block", objectFit: "contain" }}
         />
         <span
-          style={{ fontSize: 40, fontWeight: 700, letterSpacing: "-0.04em" }}
+          style={{ fontSize: 40, fontWeight: 600, letterSpacing: "-0.04em" }}
         >
           asym
         </span>
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
         <div
           style={{
-            fontSize: 70,
-            lineHeight: 1.02,
-            fontWeight: 700,
-            letterSpacing: "-0.055em",
+            fontSize: 64,
+            lineHeight: 1.04,
+            fontWeight: 600,
+            letterSpacing: "-0.045em",
           }}
         >
           Your website, fundraising, and CRM.
         </div>
         <div
           style={{
-            fontSize: 70,
-            lineHeight: 1.02,
-            fontWeight: 700,
-            letterSpacing: "-0.055em",
+            fontSize: 64,
+            lineHeight: 1.04,
+            fontWeight: 600,
+            letterSpacing: "-0.045em",
             color: MUTED,
           }}
         >
@@ -87,11 +99,12 @@ export default async function openGraphImage() {
             style={{
               display: "flex",
               borderRadius: "999px",
-              border: "1px solid rgba(22,33,43,0.14)",
+              border: "1px solid rgba(22,33,43,0.16)",
               padding: "10px 20px",
-              fontSize: 22,
+              fontSize: 21,
+              fontWeight: 500,
               color: INK,
-              background: "rgba(251,250,247,0.9)",
+              background: "rgba(251,250,247,0.92)",
             }}
           >
             {item}
@@ -99,6 +112,28 @@ export default async function openGraphImage() {
         ))}
       </div>
     </div>,
-    size
+    {
+      ...size,
+      fonts: [
+        {
+          name: FONT_FAMILY,
+          data: mediumFont,
+          style: "normal",
+          weight: 500,
+        },
+        {
+          name: FONT_FAMILY,
+          data: semiBoldFont,
+          style: "normal",
+          weight: 600,
+        },
+        {
+          name: FONT_FAMILY,
+          data: boldFont,
+          style: "normal",
+          weight: 700,
+        },
+      ],
+    }
   );
 }

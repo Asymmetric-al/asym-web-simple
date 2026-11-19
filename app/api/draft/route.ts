@@ -3,7 +3,7 @@ import { draftMode } from "next/headers";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-function safeEqual(a: string, b: string): boolean {
+const safeEqual = (a: string, b: string): boolean => {
   try {
     const ab = Buffer.from(a);
     const bb = Buffer.from(b);
@@ -11,14 +11,23 @@ function safeEqual(a: string, b: string): boolean {
   } catch {
     return false;
   }
-}
+};
 
-export async function GET(request: NextRequest): Promise<NextResponse> {
+// eslint-disable-next-line sonarjs/function-name -- Next.js route handlers must be named after the HTTP method.
+export const GET = async (request: NextRequest): Promise<NextResponse> => {
+  const expectedSecret = process.env.PAYLOAD_DRAFT_SECRET?.trim();
+  if (!expectedSecret) {
+    return NextResponse.json(
+      { error: "Draft mode is not configured." },
+      { status: 503 }
+    );
+  }
+
   const { searchParams } = request.nextUrl;
   const secret = searchParams.get("secret") ?? "";
   const rawSlug = searchParams.get("slug") ?? "/";
 
-  if (!safeEqual(secret, process.env.PAYLOAD_DRAFT_SECRET ?? "")) {
+  if (!safeEqual(secret, expectedSecret)) {
     return NextResponse.json({ error: "Invalid token" }, { status: 401 });
   }
 
@@ -30,4 +39,4 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   draft.enable();
 
   return NextResponse.redirect(new URL(slug, request.nextUrl.origin));
-}
+};

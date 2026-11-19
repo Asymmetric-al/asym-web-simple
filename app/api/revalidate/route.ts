@@ -3,7 +3,7 @@ import { revalidatePath, revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-function safeEqual(a: string, b: string): boolean {
+const safeEqual = (a: string, b: string): boolean => {
   try {
     const ab = Buffer.from(a);
     const bb = Buffer.from(b);
@@ -11,11 +11,20 @@ function safeEqual(a: string, b: string): boolean {
   } catch {
     return false;
   }
-}
+};
 
-export async function POST(request: NextRequest): Promise<NextResponse> {
+// eslint-disable-next-line sonarjs/function-name -- Next.js route handlers must be named after the HTTP method.
+export const POST = async (request: NextRequest): Promise<NextResponse> => {
+  const expectedSecret = process.env.REVALIDATION_SECRET?.trim();
+  if (!expectedSecret) {
+    return NextResponse.json(
+      { error: "Revalidation is not configured." },
+      { status: 503 }
+    );
+  }
+
   const authHeader = request.headers.get("authorization") ?? "";
-  const expectedToken = `Bearer ${process.env.REVALIDATION_SECRET ?? ""}`;
+  const expectedToken = `Bearer ${expectedSecret}`;
 
   if (!safeEqual(authHeader, expectedToken)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -47,4 +56,4 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     { error: "Provide either tag or path in the request body." },
     { status: 422 }
   );
-}
+};

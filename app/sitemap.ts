@@ -1,7 +1,7 @@
 import { siteConfig } from "@/lib/config";
 import type { MetadataRoute } from "next";
 
-const routes = ["/", "/statement-of-faith", "/privacy", "/terms"] as const;
+const routes = ["/", "/privacy", "/terms"] as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = siteConfig.url;
@@ -11,6 +11,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: route === "/" ? baseUrl : `${baseUrl}${route}`,
     lastModified: now,
     changeFrequency: route === "/" ? "weekly" : "monthly",
-    priority: index === 0 ? 1 : 0.8,
+    priority: index === 0 ? 1 : 0.6,
   }));
 }

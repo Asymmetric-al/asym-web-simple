@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { DocumentPage, DocumentSection } from "@/components/site/document-page";
 import { siteConfig } from "@/lib/config";
+import { getVerifiedContactEmail } from "@/lib/early-access-config";
 import { createMetadata } from "@/lib/metadata";
 import type { Metadata } from "next";
 
@@ -11,27 +12,51 @@ export const metadata: Metadata = createMetadata({
   path: "/privacy",
 });
 
+const contactLinkClassName =
+  "text-foreground hover:text-primary focus-visible:ring-ring link-resilient inline-flex min-h-11 items-center rounded-sm font-medium underline underline-offset-4 transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none sm:min-h-0";
+
 export default function PrivacyPage() {
+  const contactEmail = getVerifiedContactEmail();
+
   return (
     <DocumentPage
       eyebrow="Privacy Policy"
       title={
-        <h1 className="font-heading text-foreground mt-5 text-[clamp(3rem,6vw,5rem)] leading-[0.94] font-semibold tracking-[-0.07em] text-balance">
+        <h1 className="font-heading text-foreground mt-5 text-[clamp(2.8rem,5.5vw,4.6rem)] leading-[0.96] font-semibold tracking-[-0.055em] text-balance">
           Privacy Policy
         </h1>
       }
-      description="We collect only what we need to reply to you, run the website, and understand what nonprofit teams need from asym. Last updated November 19, 2026."
+      description="We collect only what we need to reply to you, share launch updates and early access invitations, run the website, and understand what nonprofit teams need from asym. Last updated November 20, 2026."
       footer={
-        <>
-          Privacy questions can be sent to{" "}
-          <Link
-            href={`mailto:${siteConfig.email}`}
-            className="text-foreground hover:text-primary focus-visible:ring-ring/45 link-resilient rounded-sm font-medium underline underline-offset-4 transition-colors focus-visible:ring-[3px] focus-visible:outline-none"
-          >
-            {siteConfig.email}
-          </Link>
-          .
-        </>
+        contactEmail ? (
+          <>
+            Privacy questions can be sent to{" "}
+            <a href={`mailto:${contactEmail}`} className={contactLinkClassName}>
+              {contactEmail}
+            </a>
+            .
+          </>
+        ) : (
+          <>
+            Privacy questions can be shared through the{" "}
+            <Link
+              href={siteConfig.cta.primary.href}
+              className={contactLinkClassName}
+            >
+              early access section
+            </Link>{" "}
+            or opened on{" "}
+            <a
+              href={siteConfig.issuesUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={contactLinkClassName}
+            >
+              GitHub
+            </a>
+            .
+          </>
+        )
       }
     >
       <DocumentSection number="01" title="What this covers">
@@ -46,20 +71,22 @@ export default function PrivacyPage() {
         <p>
           When you request early access, we collect your email address, your
           organization’s name, and anything you choose to tell us about the work
-          you’d like help with. If you email us, we receive what you send.
+          you’d like help with. If you email us directly, we receive what you
+          send.
         </p>
         <p>
           We may also collect basic operational data such as server logs,
-          request metadata, analytics, and security signals needed to keep the
-          site reliable and safe.
+          request metadata, and security signals needed to keep the site
+          reliable and safe.
         </p>
       </DocumentSection>
 
       <DocumentSection number="03" title="How we use it">
         <p>
-          We use this information to reply to you, send launch updates and early
-          access invitations, improve the website, protect our systems, and
-          understand what nonprofit teams need from asym.
+          We use early access details to reply to you, share launch updates and
+          early access invitations, and understand what nonprofit teams need
+          from asym. We use operational data to keep the website reliable and
+          protect our systems.
         </p>
       </DocumentSection>
 

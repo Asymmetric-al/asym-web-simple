@@ -1,59 +1,85 @@
 import Link from "next/link";
 import { DocumentPage, DocumentSection } from "@/components/site/document-page";
 import { siteConfig } from "@/lib/config";
+import { getVerifiedContactEmail } from "@/lib/early-access-config";
 import { createMetadata } from "@/lib/metadata";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = createMetadata({
   title: "Terms of Service",
   description:
-    "Simple terms for the Asymmetric.al website and early Asym access.",
+    "Simple terms for asym.app and any early access to asym provided by Asymmetric.al.",
   path: "/terms",
 });
 
+const contactLinkClassName =
+  "text-foreground hover:text-primary focus-visible:ring-ring link-resilient inline-flex min-h-11 items-center rounded-sm font-medium underline underline-offset-4 transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none sm:min-h-0";
+
 export default function TermsPage() {
+  const contactEmail = getVerifiedContactEmail();
+
   return (
     <DocumentPage
       eyebrow="Terms of Service"
       title={
-        <h1 className="font-heading text-foreground mt-5 text-[clamp(3rem,6vw,5rem)] leading-[0.94] font-semibold tracking-[-0.07em] text-balance">
+        <h1 className="font-heading text-foreground mt-5 text-[clamp(2.8rem,5.5vw,4.6rem)] leading-[0.96] font-semibold tracking-[-0.055em] text-balance">
           Terms of Service
         </h1>
       }
-      description="These terms apply to the Asymmetric.al website and any early access to Asym that we provide directly."
+      description="These terms apply to asym.app, operated by Asymmetric.al, and any early access to asym that we provide directly. Last updated November 20, 2026."
       footer={
-        <>
-          Questions about these terms can be sent to{" "}
-          <Link
-            href={`mailto:${siteConfig.email}`}
-            className="text-foreground hover:text-primary focus-visible:ring-ring/45 link-resilient rounded-sm font-medium underline underline-offset-4 transition-colors focus-visible:ring-[3px] focus-visible:outline-none"
-          >
-            {siteConfig.email}
-          </Link>
-          .
-        </>
+        contactEmail ? (
+          <>
+            Questions about these terms can be sent to{" "}
+            <a href={`mailto:${contactEmail}`} className={contactLinkClassName}>
+              {contactEmail}
+            </a>
+            .
+          </>
+        ) : (
+          <>
+            Questions about these terms can be shared through the{" "}
+            <Link
+              href={siteConfig.cta.primary.href}
+              className={contactLinkClassName}
+            >
+              early access section
+            </Link>{" "}
+            or opened on{" "}
+            <a
+              href={siteConfig.issuesUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={contactLinkClassName}
+            >
+              GitHub
+            </a>
+            .
+          </>
+        )
       }
     >
       <DocumentSection number="01" title="Acceptance">
         <p>
-          By using this website or any early Asym access we provide, you agree
-          to these terms. If you do not agree, do not use the site or the
-          product.
+          By using asym.app or any early access to asym provided by
+          Asymmetric.al, you agree to these terms. If you do not agree, do not
+          use the website or the product.
         </p>
       </DocumentSection>
 
-      <DocumentSection number="02" title="Early product">
+      <DocumentSection number="02" title="Prelaunch product">
         <p>
-          Asym is early and unfinished. Some parts may change, break, be
-          removed, or be replaced as we learn from the missions organizations
-          waiting to use it.
+          asym is open source and currently in prelaunch development. Features,
+          workflows, and hosted options may change, break, or be replaced as we
+          build and learn from missions teams and other nonprofits.
         </p>
       </DocumentSection>
 
-      <DocumentSection number="03" title="Accounts and access">
+      <DocumentSection number="03" title="Accounts and early access">
         <p>
-          If we give you access to Asym, keep account credentials secure and use
-          the product only for the organization or purpose we approved.
+          If Asymmetric.al invites your organization into early access, keep
+          account credentials secure and use the product only for the
+          organization and purposes agreed upon.
         </p>
       </DocumentSection>
 
@@ -65,25 +91,31 @@ export default function TermsPage() {
         </p>
       </DocumentSection>
 
-      <DocumentSection number="05" title="Payments and donations">
+      <DocumentSection number="05" title="Managed subscriptions and services">
         <p>
-          Any donations or payments made through Global Fellowship Inc. are
-          handled under its nonprofit oversight and applicable payment processor
-          terms.
+          Asymmetric.al is a for-profit software company. Any future paid
+          managed software subscription or managed donor-care service will be
+          governed by separate written terms and pricing agreed before billing
+          begins.
         </p>
       </DocumentSection>
 
-      <DocumentSection number="06" title="Ownership">
+      <DocumentSection number="06" title="Open-source code and ownership">
         <p>
-          The Asymmetric.al website, Asym product, design, copy, and related
-          work are owned by Global Fellowship Inc. or its licensors unless a
-          separate open-source license says otherwise.
+          The public source code in Asymmetric-al/core is licensed under the GNU
+          AGPL-3.0 license, which governs your use, modification, and
+          distribution of that code.
+        </p>
+        <p>
+          The asym.app website, brand assets, copy, and related materials are
+          owned by Asymmetric.al or its licensors, except where an open-source
+          license states otherwise.
         </p>
       </DocumentSection>
 
       <DocumentSection number="07" title="No warranties">
         <p>
-          The website and any early Asym access are provided as is. We do not
+          The website and any early access to asym are provided as is. We do not
           promise that every part will be uninterrupted, error-free, or fit for
           every use case.
         </p>
@@ -91,8 +123,9 @@ export default function TermsPage() {
 
       <DocumentSection number="08" title="Changes">
         <p>
-          We may update these terms as the website, product, and ministry
-          develop. The latest version will live on this page.
+          We may update these terms as the website, product, and company
+          develop. The latest version will live on this page with an updated
+          date.
         </p>
       </DocumentSection>
     </DocumentPage>

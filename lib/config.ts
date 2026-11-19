@@ -8,17 +8,13 @@ export const siteConfig = {
   */
   shortName: "asym",
   description:
-    "Connected websites, fundraising, donor records, and email, built to work with AI. asym is launching soon. Request early access.",
+    "Connected websites, fundraising, donor records, and email, built to work with AI. asym is launching soon, starting with missions organizations.",
   /**
   Production domain served by this project (Vercel `asym-web-simple`).
   */
   url: "https://asym.app",
-  /**
-  Public contact address. Before launch, confirm this inbox receives mail:
-  as of November 2026 asymmetric.al publishes no MX records.
-  */
-  email: "info@asymmetric.al",
   repoUrl: "https://github.com/Asymmetric-al/core",
+  issuesUrl: "https://github.com/Asymmetric-al/core/issues",
   githubOrgUrl: "https://github.com/Asymmetric-al",
   cta: {
     primary: {
@@ -49,11 +45,11 @@ export const navigationLinks = [
 
 export const footerLinks = [
   { label: "GitHub", href: siteConfig.repoUrl, external: true },
-  { label: "Contact", href: `mailto:${siteConfig.email}`, external: false },
+  { label: "Early access", href: siteConfig.cta.primary.href, external: false },
   { label: "Privacy", href: "/privacy", external: false },
   { label: "Terms", href: "/terms", external: false },
 ] as const;
 
 export const siteFeatures = {
-  smoothScroll: true,
+  smoothScroll: false,
 } as const;

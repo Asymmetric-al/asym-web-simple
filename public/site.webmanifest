@@ -1,7 +1,7 @@
 {
   "name": "Asymmetric.al",
-  "short_name": "Asym",
-  "description": "Asym is an early product for Christian missions organizations. Asymmetric.al is the nonprofit ministry behind it.",
+  "short_name": "asym",
+  "description": "Open-source connected websites, fundraising, donor records, and email for nonprofits, built by Asymmetric.al.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#f6f2ea",
@@ -11,13 +11,25 @@
       "src": "/brand/asym-icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/brand/asym-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "/brand/asym-icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/brand/asym-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }

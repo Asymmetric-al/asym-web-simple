@@ -1,7 +1,6 @@
 "use client";
 
 import { ArrowRight, Check, Copy, Loader2, Mail } from "lucide-react";
-import Link from "next/link";
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -87,9 +86,12 @@ function buildMailtoLink(kind: InquiryKind, form: FormData): string {
     message || "Not provided",
   ].join("\n");
 
-  return `mailto:${siteConfig.email}?subject=${encodeURIComponent(
-    preset.subject
-  )}&body=${encodeURIComponent(body)}`;
+  const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL?.trim() ?? "";
+  return contactEmail
+    ? `mailto:${contactEmail}?subject=${encodeURIComponent(
+        preset.subject
+      )}&body=${encodeURIComponent(body)}`
+    : siteConfig.issuesUrl;
 }
 
 function formDataToPayload(
@@ -117,9 +119,14 @@ export function InquiryForm({ kind }: { readonly kind: InquiryKind }) {
   const [copied, setCopied] = useState(false);
   const mailtoStatusRef = useRef<HTMLParagraphElement | null>(null);
 
+  const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL?.trim() ?? "";
+
   async function copyEmailAddress() {
+    if (!contactEmail) {
+      return;
+    }
     try {
-      await navigator.clipboard.writeText(siteConfig.email);
+      await navigator.clipboard.writeText(contactEmail);
       setCopied(true);
       window.setTimeout(() => setCopied(false), 2000);
     } catch {
@@ -267,16 +274,18 @@ export function InquiryForm({ kind }: { readonly kind: InquiryKind }) {
                       Message sent — thank you. We will reply to the email you
                       provided.
                     </p>
-                    <p>
-                      Prefer your own client? You can still reach us at{" "}
-                      <Link
-                        href={`mailto:${siteConfig.email}`}
-                        className="link-resilient text-foreground font-medium underline underline-offset-4"
-                      >
-                        {siteConfig.email}
-                      </Link>
-                      .
-                    </p>
+                    {contactEmail ? (
+                      <p>
+                        Prefer your own client? You can still reach us at{" "}
+                        <a
+                          href={`mailto:${contactEmail}`}
+                          className="link-resilient text-foreground font-medium underline underline-offset-4"
+                        >
+                          {contactEmail}
+                        </a>
+                        .
+                      </p>
+                    ) : null}
                   </>
                 ) : submitState === "error" ? (
                   <p className="text-foreground font-medium">{errorMessage}</p>
@@ -348,12 +357,14 @@ export function InquiryForm({ kind }: { readonly kind: InquiryKind }) {
                   )}
                   {copied ? "Copied" : "Copy email"}
                 </Button>
-                <Link
-                  href={draftMailto || `mailto:${siteConfig.email}`}
-                  className="link-resilient text-muted-foreground hover:border-foreground/10 hover:bg-background/72 hover:text-foreground inline-flex min-h-9 w-full items-center justify-center rounded-full border border-transparent px-3 py-2 text-center text-sm font-medium transition-[color,background-color,border-color] duration-200 md:w-auto md:max-w-[18rem]"
-                >
-                  Open in email app
-                </Link>
+                {contactEmail ? (
+                  <a
+                    href={draftMailto || `mailto:${contactEmail}`}
+                    className="link-resilient text-muted-foreground hover:border-foreground/10 hover:bg-background/72 hover:text-foreground inline-flex min-h-9 w-full items-center justify-center rounded-full border border-transparent px-3 py-2 text-center text-sm font-medium transition-[color,background-color,border-color] duration-200 md:w-auto md:max-w-[18rem]"
+                  >
+                    Open in email app
+                  </a>
+                ) : null}
               </div>
             </div>
           </div>

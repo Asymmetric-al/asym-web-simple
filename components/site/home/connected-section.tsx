@@ -11,19 +11,19 @@ const principles = [
   {
     icon: ListChecks,
     title: "Defined actions",
-    text: "AI will work through the same actions your staff use, with the same checks, instead of guessing inside another tool.",
+    text: "AI works through the same defined actions your staff use, with the same checks, instead of guessing across separate tools.",
   },
   {
     icon: UserCheck,
     title: "People decide",
-    text: "Your team chooses what needs sign-off, and every action leaves a record of who approved it.",
+    text: "We’re building approval rules for AI-prepared campaigns so your team reviews recipients and proposed changes before sending. Staff actions in the public code already preview their effects before running.",
   },
 ] as const;
 
 export const ConnectedSection = () => (
   <section
     aria-labelledby="connected-title"
-    className="py-[clamp(3.5rem,6vw,5.5rem)]"
+    className="section-wash-sky py-[clamp(3.25rem,6vw,5.25rem)]"
   >
     <Container>
       <div className="grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1fr)] lg:gap-16">
@@ -33,37 +33,35 @@ export const ConnectedSection = () => (
             The work stays connected after the donation.
           </SectionTitle>
         </div>
-        <div className="text-muted-foreground space-y-5 text-base leading-7 sm:text-lg sm:leading-8">
+        <div className="text-muted-foreground max-w-[42rem] space-y-5 text-base leading-7 sm:text-lg sm:leading-8">
           <p className="text-foreground">
-            A gift should land on the right campaign, connect to its receipt,
-            and update the donor’s history. Staff should be able to see what
-            happened and who approved it.
+            When the website, giving, donor records, and email live in separate
+            tools, AI can draft a message anywhere, but staff still move lists
+            around, check who gave, and match receipts by hand.
           </p>
           <p>
-            That’s hard when the website, giving, donor records, and email live
-            in separate tools. AI can draft an email in any of them, but people
-            still move lists around, check who gave, and match receipts by hand.
-          </p>
-          <p>
-            We’re building these pieces into one platform, with shared records
-            and defined actions that AI can use within your organization’s
-            permissions.
+            We’re building these pieces into one platform with shared records
+            and defined actions, so staff can see what happened, what is
+            proposed next, and who signed off.
           </p>
         </div>
       </div>
 
-      <h3 className="text-foreground mt-12 text-sm font-medium">
+      <p className="text-primary/80 mt-12 font-mono text-xs tracking-[0.22em] uppercase">
         How we’re building it
-      </h3>
-      <ul className="mt-4 grid gap-3 sm:gap-4 md:grid-cols-3">
+      </p>
+      <ul className="border-foreground/12 divide-foreground/10 mt-4 grid divide-y border-y lg:grid-cols-3 lg:divide-x lg:divide-y-0">
         {principles.map(({ icon: Icon, title, text }) => (
-          <li key={title} className="surface-card rounded-[1.6rem] p-5 sm:p-6">
+          <li
+            key={title}
+            className="flex flex-col py-6 first:pt-6 last:pb-6 lg:px-7 lg:py-7 lg:first:pl-0 lg:last:pr-0"
+          >
             <span className="bg-secondary text-primary flex size-10 items-center justify-center rounded-xl">
               <Icon className="size-5" aria-hidden="true" />
             </span>
-            <h4 className="font-heading text-foreground mt-4 text-lg font-semibold tracking-[-0.04em]">
+            <h3 className="font-heading text-foreground mt-4 text-lg font-semibold tracking-[-0.04em]">
               {title}
-            </h4>
+            </h3>
             <p className="text-muted-foreground mt-2 text-sm leading-6">
               {text}
             </p>

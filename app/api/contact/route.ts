@@ -1,27 +1,24 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
+import { readEarlyAccessDeliveryConfig } from "@/lib/early-access-config";
 import type { NextRequest } from "next/server";
 
-function isNonEmpty(value: unknown): value is string {
-  return typeof value === "string" && value.trim().length > 0;
-}
+const isNonEmpty = (value: unknown): value is string =>
+  typeof value === "string" && value.trim().length > 0;
 
-export async function POST(request: NextRequest): Promise<NextResponse> {
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
+// eslint-disable-next-line sonarjs/function-name -- Next.js route handlers must be named after the HTTP method.
+export const POST = async (request: NextRequest): Promise<NextResponse> => {
+  const config = readEarlyAccessDeliveryConfig();
+  if (!config) {
     return NextResponse.json(
       {
-        error:
-          "Email is not configured on this deployment. Use the copy or mailto options, or email us directly.",
+        error: "Email delivery is not configured on this deployment.",
       },
       { status: 503 }
     );
   }
 
-  const resend = new Resend(apiKey);
-  const toAddress = process.env.CONTACT_INBOX_EMAIL ?? "info@asymmetric.al";
-  const fromAddress =
-    process.env.CONTACT_FROM_EMAIL ?? "Website <noreply@asymmetric.al>";
+  const resend = new Resend(config.apiKey);
 
   let body: unknown;
   try {
@@ -63,7 +60,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    subject = `Asymmetric.al contact: ${topic} — ${name}`;
+    subject = `Asymmetric.al contact: ${topic} - ${name}`;
     text = [
       `From: ${name} <${email}>`,
       organization ? `Organization: ${organization}` : "",
@@ -89,7 +86,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    subject = `Asymmetric.al waitlist request — ${name}`;
+    subject = `Asymmetric.al waitlist request - ${name}`;
     text = [
       "Waitlist inquiry",
       "",
@@ -104,22 +101,26 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   }
 
   try {
-    await resend.emails.send({
-      from: fromAddress,
-      to: [toAddress],
+    const { error } = await resend.emails.send({
+      from: config.from,
+      to: [config.inbox],
       replyTo: email,
       subject,
       text,
     });
 
+    if (error !== null) {
+      return NextResponse.json(
+        { error: "Failed to send message. Please try again later." },
+        { status: 502 }
+      );
+    }
+
     return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error("[contact] email send failed", error);
+  } catch {
     return NextResponse.json(
-      {
-        error: "Failed to send message. Please try again or email us directly.",
-      },
-      { status: 500 }
+      { error: "Failed to send message. Please try again later." },
+      { status: 502 }
     );
   }
-}
+};

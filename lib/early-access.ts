@@ -30,8 +30,14 @@ export const earlyAccessCopy = {
   success:
     "Thanks. We’ve received your request. We’ll be in touch with launch updates and information about early access.",
   failure: "Your request didn’t go through. Please try again.",
+  notConfigured:
+    "Early-access email delivery isn’t connected on this deployment yet.",
+  rateLimited:
+    "Too many requests right now. Please wait a minute and try again.",
   invalidEmail: "Enter a valid email address.",
   missingOrganization: "Enter your organization’s name.",
+  consent:
+    "We’ll use your details to reply to you, share launch updates and early access invitations, and understand what nonprofit teams need from asym. To stop hearing from us, reply to any of our emails.",
 } as const;
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@.]+(?:\.[^\s@.]+)+$/u;

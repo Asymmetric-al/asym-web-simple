@@ -191,7 +191,7 @@ test.describe("responsive regression coverage", () => {
     await expect(brandLink).toBeVisible();
     await expect(mainNav).toBeVisible();
     await expect(
-      banner.getByRole("link", { name: "Request early access" })
+      banner.getByRole("link", { name: /^(Request early access|Early access)$/ })
     ).toBeVisible();
     await expectNoHorizontalOverflow(page, "home @ 1440x900");
     issues.expectNoUnexpectedIssuesSince(checkpoint, "home @ 1440x900");
@@ -228,10 +228,12 @@ test.describe("responsive regression coverage", () => {
       }
       await footer.scrollIntoViewIfNeeded();
 
-      await expect(footer.getByRole("link", { name: "GitHub" })).toBeVisible();
+      await expect(
+        footer.getByRole("link", { name: "GitHub", exact: true })
+      ).toBeVisible();
       await expect(footer.getByRole("link", { name: "Privacy" })).toBeVisible();
       await expect(
-        footer.getByRole("button", { name: /change color theme/i })
+        footer.getByRole("group", { name: /color theme/i })
       ).toBeVisible();
       await expectNoHorizontalOverflow(page, `home footer @ ${viewport.label}`);
       issues.expectNoUnexpectedIssuesSince(
