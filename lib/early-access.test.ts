@@ -10,6 +10,10 @@ import {
   normalizeEarlyAccessRequest,
   validateEarlyAccessRequest,
 } from "./early-access";
+import {
+  isEarlyAccessConfigured,
+  readEarlyAccessDeliveryConfig,
+} from "./early-access-config";
 
 const validRequest = {
   email: "director@example.org",
@@ -142,5 +146,43 @@ describe("formatRetryWait", () => {
     expect(formatRetryWait(45)).toContain("about a minute");
     expect(formatRetryWait(540)).toContain("about 9 minutes");
     expect(formatRetryWait(undefined)).toBe(earlyAccessCopy.rateLimited);
+  });
+});
+
+describe("readEarlyAccessDeliveryConfig", () => {
+  it("requires outbound Resend credentials and a verified private contact email", () => {
+    const prev = {
+      RESEND_API_KEY: process.env.RESEND_API_KEY,
+      CONTACT_INBOX_EMAIL: process.env.CONTACT_INBOX_EMAIL,
+      CONTACT_FROM_EMAIL: process.env.CONTACT_FROM_EMAIL,
+      NEXT_PUBLIC_CONTACT_EMAIL: process.env.NEXT_PUBLIC_CONTACT_EMAIL,
+    };
+
+    try {
+      process.env.RESEND_API_KEY = "re_test_key";
+      process.env.CONTACT_INBOX_EMAIL = "inbox@example.invalid";
+      process.env.CONTACT_FROM_EMAIL = "asym <from@example.invalid>";
+      delete process.env.NEXT_PUBLIC_CONTACT_EMAIL;
+
+      expect(readEarlyAccessDeliveryConfig()).toBeNull();
+      expect(isEarlyAccessConfigured()).toBeFalsy();
+
+      process.env.NEXT_PUBLIC_CONTACT_EMAIL = "hello@example.invalid";
+      expect(readEarlyAccessDeliveryConfig()).toStrictEqual({
+        apiKey: "re_test_key",
+        inbox: "inbox@example.invalid",
+        from: "asym <from@example.invalid>",
+        contactEmail: "hello@example.invalid",
+      });
+      expect(isEarlyAccessConfigured()).toBeTruthy();
+    } finally {
+      for (const [key, val] of Object.entries(prev)) {
+        if (val === undefined) {
+          delete process.env[key];
+        } else {
+          process.env[key] = val;
+        }
+      }
+    }
   });
 });

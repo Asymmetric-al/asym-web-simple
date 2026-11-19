@@ -74,7 +74,7 @@ const buildStatusContent = (
       eyebrow: "Opening soon",
       title: earlyAccessCopy.notConfigured,
       description:
-        "We haven’t opened early-access email delivery on this site yet. Follow development or ask public product questions on GitHub in the meantime.",
+        "Follow development or ask public product questions on GitHub while we prepare for early access.",
       primaryLabel: "Back to homepage",
       primaryHref: "/",
     };

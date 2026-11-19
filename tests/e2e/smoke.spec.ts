@@ -253,7 +253,7 @@ test.describe("homepage smoke tests", () => {
     await form.getByRole("button", { name: "Request early access" }).click();
 
     await expect(form.getByRole("alert")).toContainText(
-      "Early-access email delivery isn’t connected on this deployment yet."
+      "Early-access sign-ups aren’t open right now."
     );
     await expect(form.getByLabel("Email")).toHaveValue("director@example.org");
     await expect(form.getByLabel("Organization")).toHaveValue(

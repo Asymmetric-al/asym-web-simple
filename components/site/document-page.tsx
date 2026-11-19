@@ -16,7 +16,7 @@ export const DocumentPage = ({
   readonly footer?: ReactNode;
 }) => (
   <main id="main-content" className="relative isolate" tabIndex={-1}>
-    <Container className="max-w-[76rem]">
+    <Container>
       <article className="max-w-[48rem] pt-[clamp(7.4rem,9vw,9.5rem)] pb-14 sm:pb-18">
         <p className="text-primary/80 font-mono text-xs tracking-[0.24em] uppercase">
           {eyebrow}

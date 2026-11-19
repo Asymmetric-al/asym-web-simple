@@ -2,6 +2,7 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { Container } from "@/components/site/container";
 import { GitHubMark } from "@/components/site/github-mark";
+import { StatusPill } from "@/components/site/home/section-heading";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { navigationLinks, siteConfig } from "@/lib/config";
 import { isEarlyAccessConfigured } from "@/lib/early-access-config";
@@ -16,22 +17,18 @@ export const HomeHero = () => {
       className="pt-[clamp(6.75rem,9vw,8.5rem)] pb-[clamp(2.75rem,5vw,4rem)]"
     >
       <Container>
-        <ul className="flex flex-wrap gap-2 text-sm" aria-label="Status">
+        <ul className="flex flex-wrap items-center gap-2 text-sm" aria-label="Status">
           <li className="border-foreground/14 bg-card/80 text-foreground rounded-full border px-3.5 py-1.5 font-medium">
             Open-source software for nonprofits
           </li>
-          <li className="border-foreground/14 bg-card/80 text-muted-foreground inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5">
-            <span
-              className="bg-ring size-1.5 rounded-full"
-              aria-hidden="true"
-            />
-            Launching soon
+          <li>
+            <StatusPill>Launching soon</StatusPill>
           </li>
         </ul>
 
         <h1
           id="hero-title"
-          className="font-heading text-foreground mt-6 max-w-[18ch] text-[clamp(2.35rem,5.6vw,4.35rem)] leading-[1.02] font-semibold tracking-[-0.045em] text-balance sm:max-w-[24ch] lg:max-w-none"
+          className="font-heading text-foreground mt-6 max-w-[18ch] text-[clamp(2.35rem,5.6vw,4.35rem)] leading-[1.02] font-semibold tracking-[-0.03em] text-balance sm:max-w-[24ch] sm:tracking-[-0.045em] lg:max-w-none"
         >
           <span className="block">Your website, fundraising, and CRM.</span>{" "}
           <span className="text-muted-foreground mt-1 block">

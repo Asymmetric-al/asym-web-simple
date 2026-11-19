@@ -19,7 +19,6 @@ export const Header = () => {
           <SiteLogoMark
             className="size-7 transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] [@media(hover:hover)_and_(pointer:fine)]:group-hover:-translate-y-px"
             size={28}
-            eager
           />
           <span
             translate="no"

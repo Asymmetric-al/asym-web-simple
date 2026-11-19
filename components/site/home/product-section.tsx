@@ -72,9 +72,16 @@ export const ProductSection = () => (
             className="workflow-rail bg-foreground/15 pointer-events-none absolute top-4 right-10 left-10 hidden h-px lg:block"
           />
 
-          <ol className="relative grid gap-6 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4 lg:gap-6">
+          <ol className="relative grid gap-6 sm:-mx-5 sm:grid-cols-2 sm:gap-5 lg:mx-0 lg:grid-cols-4 lg:gap-6">
             {workflowSteps.map((step, index) => {
               const isLast = index === workflowSteps.length - 1;
+              const nextIsAi = workflowSteps[index + 1]?.isAiStep ?? false;
+              let railClass = "top-8 -bottom-6 left-4";
+              if (step.isAiStep) {
+                railClass = "top-12 -bottom-6 left-[calc(1.5rem-1px)]";
+              } else if (nextIsAi) {
+                railClass = "top-8 -bottom-10 left-4";
+              }
               return (
                 <li
                   key={step.title}
@@ -82,7 +89,7 @@ export const ProductSection = () => (
                   className={cn(
                     "workflow-step relative flex flex-col",
                     step.isAiStep
-                      ? "border-primary/35 bg-secondary/50 -mx-2 rounded-[1.35rem] border border-dashed py-4 pr-4 pl-14 sm:mx-0 sm:p-5 lg:-my-5 lg:p-5"
+                      ? "border-primary/35 bg-secondary/50 -mx-2 rounded-[1.35rem] border border-dashed py-4 pr-4 pl-14 sm:mx-0 sm:p-5 lg:-mt-5 lg:-mb-2 lg:p-5"
                       : "pl-12 sm:p-5 lg:p-0"
                   )}
                 >
@@ -90,10 +97,8 @@ export const ProductSection = () => (
                     <span
                       aria-hidden="true"
                       className={cn(
-                        "workflow-rail-vertical bg-foreground/15 pointer-events-none absolute w-px sm:hidden",
-                        step.isAiStep
-                          ? "top-12 -bottom-6 left-6"
-                          : "top-8 -bottom-6 left-4"
+                        "bg-foreground/15 pointer-events-none absolute w-px sm:hidden",
+                        railClass
                       )}
                     />
                   )}
@@ -102,7 +107,7 @@ export const ProductSection = () => (
                       className={cn(
                         "absolute top-0 left-0 z-10 flex size-8 shrink-0 items-center justify-center rounded-full font-mono text-sm tabular-nums sm:static",
                         step.isAiStep
-                          ? "border-primary/65 bg-background text-primary top-4 left-2 border border-dashed sm:top-auto sm:left-auto"
+                          ? "border-primary/65 bg-background text-primary top-4 left-[calc(0.5rem-1px)] border border-dashed sm:top-auto sm:left-auto"
                           : "bg-primary text-primary-foreground"
                       )}
                       aria-hidden="true"
@@ -133,7 +138,7 @@ export const ProductSection = () => (
           </ol>
         </div>
 
-        <div className="border-foreground/12 mt-7 border-t pt-5">
+        <div className="border-foreground/12 mt-7 border-t pt-5 lg:mt-9">
           <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
             <p className="text-primary/80 font-mono text-xs tracking-[0.2em] uppercase">
               One shared record
@@ -141,15 +146,15 @@ export const ProductSection = () => (
             <p className="text-foreground flex flex-wrap items-center gap-x-2 gap-y-1.5 text-sm font-medium">
               {recordChain.map((item, idx) => (
                 <span key={item} className="inline-flex items-center gap-2">
-                  <span className="border-foreground/12 bg-background/85 rounded-full border px-3 py-1 text-xs font-medium">
-                    {item}
-                  </span>
-                  {idx < recordChain.length - 1 ? (
+                  {idx > 0 ? (
                     <ArrowRight
                       className="text-muted-foreground size-3.5 shrink-0"
                       aria-hidden="true"
                     />
                   ) : null}
+                  <span className="border-foreground/12 bg-background/85 rounded-full border px-3 py-1 text-xs font-medium">
+                    {item}
+                  </span>
                 </span>
               ))}
             </p>
@@ -157,8 +162,9 @@ export const ProductSection = () => (
           <p className="text-muted-foreground mt-4 max-w-[54rem] text-sm leading-6">
             <span className="text-foreground font-medium">Example:</span> a
             year-end appeal brief becomes a draft giving page and donor email
-            for your team to edit and approve; once sent, every gift stays tied
-            to its receipt and donor record.
+            for your team to edit and approve. When a donor gives through the
+            campaign page, staff can trace the gift from the donor record to its
+            receipt.
           </p>
         </div>
       </WorkflowReveal>

@@ -7,6 +7,7 @@ import {
   StatusPill,
 } from "@/components/site/home/section-heading";
 import { repoStats, siteConfig } from "@/lib/config";
+import { cn } from "@/lib/utils";
 
 /**
 Checked against Asymmetric-al/core on develop. "In the public code" means
@@ -108,9 +109,15 @@ export const OpenSourceSection = () => (
           websites, and team operations into one connected system.
         </p>
 
-        <dl className="border-foreground/12 mt-5 grid grid-cols-3 gap-3 border-y py-5">
-          {stats.map((stat) => (
-            <div key={stat.label} className="flex min-w-0 flex-col">
+        <dl className="border-foreground/12 mt-5 grid grid-cols-2 gap-x-4 gap-y-4 border-y py-5 sm:grid-cols-3 sm:gap-3">
+          {stats.map((stat, index) => (
+            <div
+              key={stat.label}
+              className={cn(
+                "flex min-w-0 flex-col",
+                index === stats.length - 1 && "col-span-2 sm:col-span-1"
+              )}
+            >
               <dt className="text-muted-foreground text-xs leading-5">
                 {stat.label}
               </dt>

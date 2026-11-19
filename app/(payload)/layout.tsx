@@ -39,11 +39,7 @@ const isPayloadConfigured = (): boolean =>
 
 const Layout = ({ children }: Args) => {
   if (!isPayloadConfigured()) {
-    return (
-      <html lang="en">
-        <body>{children}</body>
-      </html>
-    );
+    return <>{children}</>;
   }
   return (
     <RootLayout

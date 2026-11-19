@@ -25,7 +25,7 @@ export const AboutSection = () => (
           <p className="text-muted-foreground text-sm">
             The ordinary work comes first:
           </p>
-          <ul className="font-heading text-foreground mt-3 space-y-1.5 text-lg font-medium tracking-[-0.015em] sm:text-xl">
+          <ul className="font-heading text-foreground mt-3 space-y-1.5 text-lg font-medium tracking-normal [word-spacing:0.03em] sm:text-xl">
             {ordinaryWork.map((line) => (
               <li key={line}>{line}</li>
             ))}

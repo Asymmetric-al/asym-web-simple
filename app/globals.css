@@ -218,6 +218,7 @@
     font-family: var(--font-heading);
     letter-spacing: -0.02em;
     text-wrap: balance;
+    word-spacing: 0.05em;
   }
 
   main {
@@ -415,6 +416,22 @@
   word-break: normal;
 }
 
+@keyframes surface-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.surface-enter {
+  animation: surface-enter 200ms var(--ease-out-expo) both;
+}
+
 /* Connected workflow one-time reveal: copy always stays opacity: 1 */
 .workflow-step {
   transition: transform 260ms var(--ease-out-expo);
@@ -441,20 +458,11 @@
   clip-path: inset(0 0 0 0);
 }
 
-.workflow-rail-vertical {
-  transition: clip-path 380ms var(--ease-out-expo);
-  transition-delay: var(--step-delay, 0ms);
-}
-
-[data-workflow-reveal="armed"] .workflow-rail-vertical {
-  clip-path: inset(0 0 100% 0);
-}
-
-[data-workflow-reveal="visible"] .workflow-rail-vertical {
-  clip-path: inset(0 0 0 0);
-}
-
 @media (prefers-reduced-motion: reduce) {
+  .surface-enter {
+    animation: none;
+  }
+
   .surface-interactive:hover {
     transform: none;
     transition: none;
@@ -467,9 +475,7 @@
   }
 
   [data-workflow-reveal="armed"] .workflow-rail,
-  [data-workflow-reveal="visible"] .workflow-rail,
-  [data-workflow-reveal="armed"] .workflow-rail-vertical,
-  [data-workflow-reveal="visible"] .workflow-rail-vertical {
+  [data-workflow-reveal="visible"] .workflow-rail {
     clip-path: none;
     transition: none;
   }

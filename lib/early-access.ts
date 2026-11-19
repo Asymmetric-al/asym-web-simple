@@ -30,8 +30,7 @@ export const earlyAccessCopy = {
   success:
     "Thanks. We’ve received your request. We’ll be in touch with launch updates and information about early access.",
   failure: "Your request didn’t go through. Please try again.",
-  notConfigured:
-    "Early-access email delivery isn’t connected on this deployment yet.",
+  notConfigured: "Early-access sign-ups aren’t open right now.",
   rateLimited:
     "Too many requests right now. Please wait a few minutes and try again.",
   invalidEmail: "Enter a valid email address.",

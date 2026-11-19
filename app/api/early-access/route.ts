@@ -118,16 +118,17 @@ const detectContentKind = (
 };
 
 const redirectForForm = (
-  request: Request,
   outcome: FormOutcome,
   retryAfterSeconds?: number
 ): NextResponse => {
-  const target = new URL("/early-access/status", request.url);
-  target.searchParams.set("state", outcome);
+  const params = new URLSearchParams({ state: outcome });
   if (retryAfterSeconds !== undefined) {
-    target.searchParams.set("retry", String(retryAfterSeconds));
+    params.set("retry", String(retryAfterSeconds));
   }
-  return NextResponse.redirect(target, 303);
+  return new NextResponse(null, {
+    status: 303,
+    headers: { Location: `/early-access/status?${params.toString()}` },
+  });
 };
 
 const mapStatusToOutcome = (status: number): FormOutcome => {
@@ -144,7 +145,6 @@ const mapStatusToOutcome = (status: number): FormOutcome => {
 };
 
 const respondFailure = (
-  request: Request,
   isUrlEncodedForm: boolean,
   status: number,
   error: string,
@@ -153,7 +153,6 @@ const respondFailure = (
 ): NextResponse => {
   if (isUrlEncodedForm) {
     return redirectForForm(
-      request,
       mapStatusToOutcome(status),
       extra?.retryAfterSeconds
     );
@@ -292,7 +291,6 @@ export const POST = async (request: Request): Promise<NextResponse> => {
 
   if (rateCheck.limited) {
     return respondFailure(
-      request,
       isUrlEncodedForm,
       429,
       "rate_limited",
@@ -303,27 +301,27 @@ export const POST = async (request: Request): Promise<NextResponse> => {
 
   const parsed = await parseBoundedPayload(request, isUrlEncodedForm);
   if (!parsed.ok) {
-    return respondFailure(request, isUrlEncodedForm, parsed.status, parsed.error);
+    return respondFailure(isUrlEncodedForm, parsed.status, parsed.error);
   }
 
   // Automated submissions get a normal-looking response and are dropped.
   if (isHoneypotFilled(parsed.body)) {
     return isUrlEncodedForm
-      ? redirectForForm(request, "received")
+      ? redirectForForm("received")
       : NextResponse.json({ ok: true });
   }
 
   const submission = normalizeEarlyAccessRequest(parsed.body);
   const errors = validateEarlyAccessRequest(submission);
   if (hasErrors(errors)) {
-    return respondFailure(request, isUrlEncodedForm, 422, "invalid", {
+    return respondFailure(isUrlEncodedForm, 422, "invalid", {
       errors,
     });
   }
 
   const config = readEarlyAccessDeliveryConfig();
   if (!config) {
-    return respondFailure(request, isUrlEncodedForm, 503, "not_configured");
+    return respondFailure(isUrlEncodedForm, 503, "not_configured");
   }
 
   const delivered = await wasAcceptedForDelivery(config, {
@@ -333,9 +331,9 @@ export const POST = async (request: Request): Promise<NextResponse> => {
 
   if (delivered) {
     return isUrlEncodedForm
-      ? redirectForForm(request, "received")
+      ? redirectForForm("received")
       : NextResponse.json({ ok: true });
   }
 
-  return respondFailure(request, isUrlEncodedForm, 502, "delivery_failed");
+  return respondFailure(isUrlEncodedForm, 502, "delivery_failed");
 };

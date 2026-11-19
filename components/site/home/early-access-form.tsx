@@ -203,7 +203,7 @@ export const EarlyAccessForm = ({
 
   if (status === "success") {
     return (
-      <div className="border-foreground/12 bg-card rounded-[1.6rem] border p-6 sm:p-8">
+      <div className="surface-enter border-foreground/12 bg-card rounded-[1.6rem] border p-6 sm:p-8">
         <CircleCheck className="text-primary size-7" aria-hidden="true" />
         <h3
           ref={successRef}
@@ -434,7 +434,7 @@ export const EarlyAccessForm = ({
           aria-describedby={ids.consent}
           className={cn(
             buttonVariants({ size: "lg" }),
-            "px-6",
+            "min-w-[13.5rem] px-6",
             isSubmitting && "cursor-progress"
           )}
         >
