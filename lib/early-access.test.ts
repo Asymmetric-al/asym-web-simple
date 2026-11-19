@@ -167,6 +167,12 @@ describe("readEarlyAccessDeliveryConfig", () => {
       expect(readEarlyAccessDeliveryConfig()).toBeNull();
       expect(isEarlyAccessConfigured()).toBeFalsy();
 
+      for (const badEmail of ["@", "not-an-email", "hello@localhost"]) {
+        process.env.NEXT_PUBLIC_CONTACT_EMAIL = badEmail;
+        expect(readEarlyAccessDeliveryConfig()).toBeNull();
+        expect(isEarlyAccessConfigured()).toBeFalsy();
+      }
+
       process.env.NEXT_PUBLIC_CONTACT_EMAIL = "hello@example.invalid";
       expect(readEarlyAccessDeliveryConfig()).toStrictEqual({
         apiKey: "re_test_key",

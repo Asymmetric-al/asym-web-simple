@@ -28,7 +28,7 @@ interface StatusContent {
 }
 
 const EARLY_ACCESS_HREF = "/#early-access";
-const RETURN_TO_FORM_LABEL = "Return to early access form";
+const START_NEW_REQUEST_LABEL = "Start a new request";
 
 const buildStatusContent = (
   state: string | undefined,
@@ -51,8 +51,8 @@ const buildStatusContent = (
       eyebrow: "Check your details",
       title: "Your request needs a valid email and organization.",
       description:
-        "Please return to the early access form, enter a valid email address and your organization’s name, and submit again.",
-      primaryLabel: RETURN_TO_FORM_LABEL,
+        "Use your browser’s Back button to keep and edit what you entered, or start a new request with a valid email address and organization name.",
+      primaryLabel: START_NEW_REQUEST_LABEL,
       primaryHref: EARLY_ACCESS_HREF,
     };
   }
@@ -61,9 +61,9 @@ const buildStatusContent = (
     return {
       isSuccess: false,
       eyebrow: "Please wait",
-      title: "Too many requests right now.",
-      description: formatRetryWait(retrySeconds),
-      primaryLabel: RETURN_TO_FORM_LABEL,
+      title: "Please wait before trying again.",
+      description: `${formatRetryWait(retrySeconds)} Use your browser’s Back button to keep what you entered.`,
+      primaryLabel: START_NEW_REQUEST_LABEL,
       primaryHref: EARLY_ACCESS_HREF,
     };
   }
@@ -74,7 +74,7 @@ const buildStatusContent = (
       eyebrow: "Opening soon",
       title: earlyAccessCopy.notConfigured,
       description:
-        "Follow development or ask public product questions on GitHub while we prepare for early access.",
+        "Follow commits and development progress on GitHub while we prepare for early access.",
       primaryLabel: "Back to homepage",
       primaryHref: "/",
     };
@@ -85,8 +85,8 @@ const buildStatusContent = (
     eyebrow: "Submission error",
     title: earlyAccessCopy.failure,
     description:
-      "Please return to the early access form and submit your details again.",
-    primaryLabel: RETURN_TO_FORM_LABEL,
+      "Use your browser’s Back button to keep what you entered and try again, or start a new request.",
+    primaryLabel: START_NEW_REQUEST_LABEL,
     primaryHref: EARLY_ACCESS_HREF,
   };
 };
@@ -119,7 +119,7 @@ export default async function EarlyAccessStatusPage({
               aria-hidden="true"
             />
           )}
-          <p className="text-primary/80 mt-5 font-mono text-xs tracking-[0.24em] uppercase">
+          <p className="text-primary/80 mt-5 font-mono text-xs tracking-[0.22em] uppercase">
             {content.eyebrow}
           </p>
           <h1 className="font-heading text-foreground mt-3 text-[clamp(1.9rem,4vw,2.75rem)] leading-[1.06] font-semibold tracking-[-0.035em] text-balance">
@@ -141,7 +141,7 @@ export default async function EarlyAccessStatusPage({
             </Link>
             {content.isSuccess ? null : (
               <a
-                href={siteConfig.issuesUrl}
+                href={siteConfig.repoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={cn(
@@ -149,7 +149,7 @@ export default async function EarlyAccessStatusPage({
                   "px-6"
                 )}
               >
-                Public product questions on GitHub
+                Follow on GitHub
                 <ArrowUpRight data-icon="inline-end" aria-hidden="true" />
               </a>
             )}

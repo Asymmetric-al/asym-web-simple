@@ -44,17 +44,16 @@ export default function PrivacyPage() {
               from us or request changes.
             </p>
             <p>
-              For general public product questions (never personal or donor
-              information), you can use{" "}
+              You can follow public development in{" "}
               <a
-                href={siteConfig.issuesUrl}
+                href={siteConfig.repoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={contactLinkClassName}
               >
-                public product questions on GitHub
-              </a>
-              .
+                the Asymmetric-al/core repository on GitHub
+              </a>{" "}
+              (never post personal or donor information in public repositories).
             </p>
           </div>
         )

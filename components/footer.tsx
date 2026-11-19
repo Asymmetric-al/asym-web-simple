@@ -84,7 +84,7 @@ export const Footer = () => {
                     rel="noopener noreferrer"
                     className={linkClassName}
                   >
-                    Public product questions
+                    Development issues
                   </a>
                 </li>
               )}

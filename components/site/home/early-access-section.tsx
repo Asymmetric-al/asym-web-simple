@@ -59,8 +59,8 @@ export const EarlyAccessSection = () => {
                 </h3>
                 <p className="text-muted-foreground mt-3 text-base leading-7">
                   We aren’t collecting sign-ups here until our invitation email
-                  is live. Follow development commit by commit or ask public
-                  product questions on GitHub in the meantime.
+                  is live. Follow commits and development issues on GitHub in
+                  the meantime.
                 </p>
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                   <a
@@ -82,7 +82,7 @@ export const EarlyAccessSection = () => {
                       "px-6"
                     )}
                   >
-                    Public product questions
+                    Browse development issues
                     <ArrowUpRight data-icon="inline-end" aria-hidden="true" />
                   </a>
                 </div>

@@ -432,30 +432,32 @@
   animation: surface-enter 200ms var(--ease-out-expo) both;
 }
 
-/* Connected workflow one-time reveal: copy always stays opacity: 1 */
-.workflow-step {
-  transition: transform 260ms var(--ease-out-expo);
-  transition-delay: var(--step-delay, 0ms);
-}
+/* Connected workflow one-time reveal on desktop (lg+): copy always stays opacity: 1 */
+@media (width >= 64rem) {
+  .workflow-step {
+    transition: transform 260ms var(--ease-out-expo);
+    transition-delay: var(--step-delay, 0ms);
+  }
 
-[data-workflow-reveal="armed"] .workflow-step {
-  transform: translateY(5px);
-}
+  [data-workflow-reveal="armed"] .workflow-step {
+    transform: translateY(5px);
+  }
 
-[data-workflow-reveal="visible"] .workflow-step {
-  transform: translateY(0);
-}
+  [data-workflow-reveal="visible"] .workflow-step {
+    transform: translateY(0);
+  }
 
-.workflow-rail {
-  transition: clip-path 420ms var(--ease-out-expo);
-}
+  .workflow-rail {
+    transition: clip-path 420ms var(--ease-out-expo);
+  }
 
-[data-workflow-reveal="armed"] .workflow-rail {
-  clip-path: inset(0 100% 0 0);
-}
+  [data-workflow-reveal="armed"] .workflow-rail {
+    clip-path: inset(0 100% 0 0);
+  }
 
-[data-workflow-reveal="visible"] .workflow-rail {
-  clip-path: inset(0 0 0 0);
+  [data-workflow-reveal="visible"] .workflow-rail {
+    clip-path: inset(0 0 0 0);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -487,8 +489,7 @@
     transform: none !important;
   }
 
-  [data-workflow-reveal] .workflow-rail,
-  [data-workflow-reveal] .workflow-rail-vertical {
+  [data-workflow-reveal] .workflow-rail {
     clip-path: none !important;
   }
 }

@@ -39,12 +39,12 @@ export const AboutSection = () => (
           projects across many people and places. They’re our first focus.
         </p>
         <p>
-          <span translate="no">asym</span> is built by Conrad O’Brien and Blake
-          at <span translate="no">{siteConfig.name}</span>, an independent
-          for-profit software company. Conrad is Co-Executive Director of Global
-          Fellowship, a missions organization, and that work is shaping the
-          first release. You can follow what they’re building, commit by commit,
-          in the{" "}
+          <span translate="no">asym</span> is built by Conrad and Blake at{" "}
+          <span translate="no">{siteConfig.name}</span>, an independent
+          for-profit software company. Conrad O’Brien is Co-Executive Director
+          of Global Fellowship, a missions organization, and that work is
+          shaping the first release. You can follow what they’re building,
+          commit by commit, in the{" "}
           <a
             href={siteConfig.repoUrl}
             target="_blank"

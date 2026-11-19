@@ -23,14 +23,15 @@ export const WorkflowReveal = ({
 
     if (
       typeof IntersectionObserver === "undefined" ||
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      !window.matchMedia("(min-width: 1024px)").matches
     ) {
       node.dataset.workflowReveal = "visible";
       return;
     }
 
     const rect = node.getBoundingClientRect();
-    if (rect.top < window.innerHeight * 0.96) {
+    if (rect.top < window.innerHeight * 0.85) {
       node.dataset.workflowReveal = "visible";
       return;
     }
@@ -47,7 +48,7 @@ export const WorkflowReveal = ({
           }
         }
       },
-      { threshold: 0.01, rootMargin: "0px" }
+      { threshold: 0.18, rootMargin: "0px" }
     );
 
     observer.observe(node);

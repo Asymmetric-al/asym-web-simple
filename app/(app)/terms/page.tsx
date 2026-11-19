@@ -42,17 +42,16 @@ export default function TermsPage() {
               will be listed here before early access opens.
             </p>
             <p>
-              For general public questions about the open-source codebase (never
-              private or donor information), you can use{" "}
+              You can follow public development of the open-source codebase in{" "}
               <a
-                href={siteConfig.issuesUrl}
+                href={siteConfig.repoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={contactLinkClassName}
               >
-                public product questions on GitHub
-              </a>
-              .
+                the Asymmetric-al/core repository on GitHub
+              </a>{" "}
+              (never share private or donor information in public repositories).
             </p>
           </div>
         )

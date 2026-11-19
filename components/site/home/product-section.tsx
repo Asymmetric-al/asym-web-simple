@@ -65,7 +65,7 @@ export const ProductSection = () => (
         </div>
       </div>
 
-      <WorkflowReveal className="surface-panel mt-10 rounded-[2rem] p-5 sm:p-7 lg:mt-12 lg:px-8 lg:py-9">
+      <WorkflowReveal className="surface-panel mt-10 rounded-[2rem] p-5 sm:p-9 lg:mt-12 lg:px-8 lg:py-9">
         <div className="relative">
           <div
             aria-hidden="true"
@@ -140,7 +140,7 @@ export const ProductSection = () => (
 
         <div className="border-foreground/12 mt-7 border-t pt-5 lg:mt-9">
           <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
-            <p className="text-primary/80 font-mono text-xs tracking-[0.2em] uppercase">
+            <p className="text-primary/80 font-mono text-xs tracking-[0.22em] uppercase">
               One shared record
             </p>
             <p className="text-foreground flex flex-wrap items-center gap-x-2 gap-y-1.5 text-sm font-medium">

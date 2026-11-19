@@ -21,7 +21,7 @@ export const generateMetadata = ({
 }: Args): Promise<Metadata> => {
   if (!isPayloadConfigured()) {
     return Promise.resolve({
-      title: "Not found",
+      title: "Page not found",
       robots: { index: false, follow: false },
     });
   }

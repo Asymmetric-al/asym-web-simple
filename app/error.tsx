@@ -29,7 +29,7 @@ export default function ErrorPage({
         className="flex flex-1 items-center py-24 outline-none"
       >
         <Container className="max-w-3xl">
-          <p className="text-primary/80 font-mono text-xs tracking-[0.24em] uppercase">
+          <p className="text-primary/80 font-mono text-xs tracking-[0.22em] uppercase">
             Something went wrong
           </p>
           <h1 className="font-heading text-foreground mt-4 text-[clamp(2.4rem,5vw,3.8rem)] leading-[1.02] font-semibold tracking-[-0.04em] text-balance">

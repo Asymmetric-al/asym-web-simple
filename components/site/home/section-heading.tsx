@@ -10,7 +10,7 @@ export const Eyebrow = ({
 }) => (
   <p
     className={cn(
-      "text-primary/80 font-mono text-xs tracking-[0.24em] uppercase",
+      "text-primary/80 font-mono text-xs tracking-[0.22em] uppercase",
       className
     )}
   >
@@ -50,7 +50,7 @@ export const StatusPill = ({
 }) => (
   <p
     className={cn(
-      "border-foreground/14 bg-card/85 text-muted-foreground inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1.5 font-mono text-xs tracking-[0.08em]",
+      "border-foreground/14 bg-card/85 text-muted-foreground inline-flex min-h-8 w-fit items-center gap-2 rounded-full border px-3 py-1 font-mono text-xs tracking-[0.08em]",
       className
     )}
   >

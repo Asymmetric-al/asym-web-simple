@@ -211,7 +211,7 @@ test.describe("homepage smoke tests", () => {
       await expect(
         page
           .locator("#early-access")
-          .getByRole("link", { name: /Public product questions/u })
+          .getByRole("link", { name: /Browse development issues/u })
       ).toHaveAttribute("href", ISSUES_URL);
       return;
     }

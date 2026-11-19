@@ -18,7 +18,7 @@ export const HomeHero = () => {
     >
       <Container>
         <ul className="flex flex-wrap items-center gap-2 text-sm" aria-label="Status">
-          <li className="border-foreground/14 bg-card/80 text-foreground rounded-full border px-3.5 py-1.5 font-medium">
+          <li className="border-foreground/14 bg-card/80 text-foreground inline-flex min-h-8 items-center rounded-full border px-3.5 py-1 font-medium">
             Open-source software for nonprofits
           </li>
           <li>
@@ -36,37 +36,32 @@ export const HomeHero = () => {
           </span>
         </h1>
 
-        <p className="text-muted-foreground mt-6 max-w-[42rem] text-lg leading-8 text-pretty sm:text-xl sm:leading-9">
-          We’re building one system for your website, giving, donor records, and
-          email, so AI can prepare campaigns and carry out the steps your team
-          approves.
+        <p className="text-muted-foreground mt-6 max-w-[44rem] text-lg leading-8 text-pretty sm:text-xl sm:leading-9">
+          Starting with missions organizations, we’re building one system for
+          your website, giving, donor records, and email, so AI can prepare
+          campaigns and carry out the steps your team approves.
         </p>
 
-        <div className="mt-8 flex flex-col gap-x-6 gap-y-4 sm:flex-row sm:flex-wrap sm:items-center">
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <Link
-              href={siteConfig.cta.primary.href}
-              className={cn(buttonVariants({ size: "lg" }), "px-6")}
-            >
-              {isConfigured ? siteConfig.cta.primary.label : "Early access"}
-              <ArrowRight data-icon="inline-end" aria-hidden="true" />
-            </Link>
-            <a
-              href={siteConfig.repoUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={cn(
-                buttonVariants({ variant: "outline", size: "lg" }),
-                "px-6"
-              )}
-            >
-              <GitHubMark className="size-4" />
-              View the code
-            </a>
-          </div>
-          <p className="text-muted-foreground text-sm">
-            Starting with missions organizations.
-          </p>
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+          <Link
+            href={siteConfig.cta.primary.href}
+            className={cn(buttonVariants({ size: "lg" }), "px-6")}
+          >
+            {isConfigured ? siteConfig.cta.primary.label : "Early access"}
+            <ArrowRight data-icon="inline-end" aria-hidden="true" />
+          </Link>
+          <a
+            href={siteConfig.repoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cn(
+              buttonVariants({ variant: "outline", size: "lg" }),
+              "px-6"
+            )}
+          >
+            <GitHubMark className="size-4" />
+            View the code
+          </a>
         </div>
 
         <nav

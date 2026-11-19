@@ -28,6 +28,10 @@ export const ThemeToggle = () => {
   const isMounted = useIsClient();
   const { setTheme, theme = "system" } = useTheme();
 
+  if (!isMounted) {
+    return <div className="h-11 sm:h-9" aria-hidden="true" />;
+  }
+
   return (
     <div
       role="group"
@@ -36,7 +40,7 @@ export const ThemeToggle = () => {
     >
       {themes.map((option) => {
         const Icon = option.icon;
-        const isActive = isMounted && theme === option.value;
+        const isActive = theme === option.value;
 
         return (
           <button

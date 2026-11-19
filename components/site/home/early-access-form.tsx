@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, CircleCheck, Loader2 } from "lucide-react";
+import { ArrowRight, ArrowUpRight, CircleCheck, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { buttonVariants } from "@/components/ui/button-variants";
@@ -218,6 +218,17 @@ export const EarlyAccessForm = ({
         >
           {earlyAccessCopy.success}
         </p>
+        <div className="mt-6">
+          <a
+            href={siteConfig.repoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-foreground hover:text-primary focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center gap-1.5 rounded-sm text-sm font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-9"
+          >
+            Follow development on GitHub
+            <ArrowUpRight className="size-3.5" aria-hidden="true" />
+          </a>
+        </div>
       </div>
     );
   }
@@ -340,6 +351,8 @@ export const EarlyAccessForm = ({
             type="text"
             autoComplete="organization"
             required
+            pattern=".*\S.*"
+            title={earlyAccessCopy.missingOrganization}
             maxLength={EARLY_ACCESS_LIMITS.organization}
             aria-invalid={Boolean(errors.organization)}
             aria-describedby={describedBy("organization")}
@@ -411,9 +424,9 @@ export const EarlyAccessForm = ({
               </>
             ) : (
               <>
-                You can follow development or ask public product questions on{" "}
+                You can follow development on{" "}
                 <a
-                  href={siteConfig.issuesUrl}
+                  href={siteConfig.repoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={inlineLinkClassName}
@@ -434,7 +447,7 @@ export const EarlyAccessForm = ({
           aria-describedby={ids.consent}
           className={cn(
             buttonVariants({ size: "lg" }),
-            "min-w-[13.5rem] px-6",
+            "w-full px-6 sm:w-auto sm:min-w-[15.5rem]",
             isSubmitting && "cursor-progress"
           )}
         >

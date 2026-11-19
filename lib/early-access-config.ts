@@ -1,3 +1,5 @@
+import { isValidEmail } from "@/lib/early-access";
+
 export interface EarlyAccessDeliveryConfig {
   readonly apiKey: string;
   readonly inbox: string;
@@ -7,11 +9,11 @@ export interface EarlyAccessDeliveryConfig {
 
 /**
 Only publish a direct email address once inbound mail (MX + monitored inbox)
-has been verified and explicitly configured for this deployment.
+has been verified and explicitly configured with a syntactically valid address.
 */
 export const getVerifiedContactEmail = (): string | null => {
-  const email = process.env.NEXT_PUBLIC_CONTACT_EMAIL?.trim();
-  return email && email.includes("@") ? email : null;
+  const email = process.env.NEXT_PUBLIC_CONTACT_EMAIL?.trim() ?? "";
+  return isValidEmail(email) ? email : null;
 };
 
 /**
