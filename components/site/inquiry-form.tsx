@@ -1,5 +1,8 @@
 "use client";
 
+import { ArrowRight, Check, Copy, Loader2, Mail } from "lucide-react";
+import Link from "next/link";
+import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -12,9 +15,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { siteConfig } from "@/lib/config";
 import { cn } from "@/lib/utils";
-import { ArrowRight, Check, Copy, Loader2, Mail } from "lucide-react";
-import Link from "next/link";
-import { useRef, useState } from "react";
 
 type InquiryKind = "waitlist" | "contact";
 
@@ -92,7 +92,10 @@ function buildMailtoLink(kind: InquiryKind, form: FormData): string {
   )}&body=${encodeURIComponent(body)}`;
 }
 
-function formDataToPayload(kind: InquiryKind, form: FormData): Record<string, string> {
+function formDataToPayload(
+  kind: InquiryKind,
+  form: FormData
+): Record<string, string> {
   const preset = presets[kind];
   const payload: Record<string, string> = { kind };
   for (const field of preset.fields) {
@@ -104,7 +107,7 @@ function formDataToPayload(kind: InquiryKind, form: FormData): Record<string, st
   return payload;
 }
 
-export function InquiryForm({ kind }: { kind: InquiryKind }) {
+export function InquiryForm({ kind }: { readonly kind: InquiryKind }) {
   const preset = presets[kind];
   const [submitState, setSubmitState] = useState<
     "idle" | "submitting" | "success" | "error"
@@ -144,7 +147,9 @@ export function InquiryForm({ kind }: { kind: InquiryKind }) {
 
       <form
         className="mt-8"
-        aria-label={kind === "waitlist" ? "Waitlist inquiry" : "Contact inquiry"}
+        aria-label={
+          kind === "waitlist" ? "Waitlist inquiry" : "Contact inquiry"
+        }
         onSubmit={async (event) => {
           event.preventDefault();
           const form = event.currentTarget;
@@ -164,7 +169,7 @@ export function InquiryForm({ kind }: { kind: InquiryKind }) {
 
             if (!res.ok) {
               setErrorMessage(
-                data.error ?? "Something went wrong. Please try again.",
+                data.error ?? "Something went wrong. Please try again."
               );
               setSubmitState("error");
               return;
@@ -178,7 +183,7 @@ export function InquiryForm({ kind }: { kind: InquiryKind }) {
             });
           } catch {
             setErrorMessage(
-              "Network error. Check your connection or email us directly.",
+              "Network error. Check your connection or email us directly."
             );
             setSubmitState("error");
           }
@@ -239,7 +244,10 @@ export function InquiryForm({ kind }: { kind: InquiryKind }) {
             aria-label="Send and alternatives"
           >
             <div className="flex items-start gap-3">
-              <Mail className="text-primary/70 mt-1 size-4 shrink-0" aria-hidden />
+              <Mail
+                className="text-primary/70 mt-1 size-4 shrink-0"
+                aria-hidden
+              />
               <div
                 className="flex min-w-0 flex-col gap-2"
                 role="status"
@@ -253,7 +261,7 @@ export function InquiryForm({ kind }: { kind: InquiryKind }) {
                       tabIndex={-1}
                       className={cn(
                         "text-foreground font-medium outline-none",
-                        "rounded-[0.35rem] focus-visible:ring-[3px] focus-visible:ring-ring/45",
+                        "focus-visible:ring-ring/45 rounded-[0.35rem] focus-visible:ring-[3px]"
                       )}
                     >
                       Message sent — thank you. We will reply to the email you

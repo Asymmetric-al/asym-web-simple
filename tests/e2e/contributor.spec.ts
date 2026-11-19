@@ -1,4 +1,5 @@
-import { expect, type Page, test } from "@playwright/test";
+import { expect, test } from "@playwright/test";
+import type { Page } from "@playwright/test";
 
 async function expectNoHorizontalOverflow(page: Page): Promise<void> {
   const overflow = await page.evaluate(() => {
@@ -51,6 +52,7 @@ test.describe("contributor briefing", () => {
     await expect(
       page.getByRole("link", { name: "Email Blake" })
     ).toHaveAttribute("href", "mailto:blake@globalfellowship.org");
+
     await expectNoHorizontalOverflow(page);
   });
 

@@ -6,10 +6,10 @@ This document describes **what is wired today** for [Payload CMS 3](https://payl
 
 The marketing site **does not load page copy from Payload yet**. Navigation, footer, and body content still come from `lib/config.ts` and page modules. The `lib/content/*` adapter is the intended seam: it reads from `lib/config` today and can be swapped to the Payload Local API later **without changing import sites in React** (see `lib/content/site.ts`).
 
-What *is* integrated:
+What _is_ integrated:
 
 | Area | Purpose |
-|------|---------|
+| --- | --- |
 | **`payload.config.ts`** | Payload `buildConfig`: Postgres adapter, Lexical editor, Vercel Blob storage plugin (media hookup deferred), TypeScript types output path, **`users` auth collection** for admin login. |
 | **`next.config.ts`** | `withPayload(withBundleAnalyzer(nextConfig))` so Next and Payload share one config. |
 | **`app/(payload)/layout.tsx`** | Payload admin UI shell (`RootLayout` from `@payloadcms/next/layouts`) and server function bridge. |
@@ -31,7 +31,7 @@ Collections and globals in `payload.config.ts` are **stubbed with TODOs** for Ph
 Next.js matches **more specific** `app/api/...` routes first; everything else under `/api/*` falls through to Payload’s catch-all.
 
 | Path | Implemented in |
-|------|----------------|
+| --- | --- |
 | `POST /api/contact` | `app/api/contact/route.ts` (Resend; not Payload) |
 | `GET /api/draft`, `GET /api/disable-draft` | `app/api/draft`, `app/api/disable-draft` (Next draft mode) |
 | `POST /api/revalidate` | `app/api/revalidate/route.ts` (on-demand ISR) |
@@ -43,7 +43,7 @@ The `(payload)` segment is a **route group** only; it does **not** add `/payload
 ## Environment variables
 
 | Variable | Required for | Notes |
-|----------|----------------|-------|
+| --- | --- | --- |
 | `DATABASE_URI` | Payload, migrations, CLI | Postgres connection string (e.g. Vercel Postgres, Neon, local Postgres). |
 | `PAYLOAD_SECRET` | Payload auth / sessions | Long random string; **never commit**. |
 | `PAYLOAD_DRAFT_SECRET` | `/api/draft` preview links | Shared secret in preview URLs. |
@@ -64,11 +64,11 @@ Copy **`.env.example`** to `.env.local` and fill values (`.env.local` is gitigno
 
 ### Payload CLI scripts
 
-| Script | Command |
-|--------|---------|
-| Payload CLI | `npm run payload -- …` |
-| Regenerate TS types from config | `npm run generate:types` |
-| Regenerate admin import map | `npm run generate:importmap` |
+| Script                          | Command                      |
+| ------------------------------- | ---------------------------- |
+| Payload CLI                     | `npm run payload -- …`       |
+| Regenerate TS types from config | `npm run generate:types`     |
+| Regenerate admin import map     | `npm run generate:importmap` |
 
 > **Note:** `generate:types` / `generate:importmap` load `payload.config.ts`. If the CLI fails in your environment (e.g. ESM / top-level await quirks), run the same commands in CI or from Payload’s documented Node flags, or generate types after `payload` is upgraded. The app **builds without** a checked-in `payload-types.ts` until you generate one.
 

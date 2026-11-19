@@ -1,3 +1,4 @@
+import { NextResponse } from "next/server";
 import { normalizeOptionalDonorEmail } from "@/lib/stripe-giving";
 import {
   donationSessionMetadata,
@@ -5,21 +6,24 @@ import {
   getRecurringPriceId,
   getStripe,
   ONE_TIME_AMOUNTS_CENTS,
-  type RecurringTier,
 } from "@/lib/stripe-server";
+import type { RecurringTier } from "@/lib/stripe-server";
 import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 
-type Body = {
+interface Body {
   mode: "subscription" | "payment";
-  /** Monthly tier in dollars: 25 | 50 | 100 */
+  /**
+  Monthly tier in dollars: 25 | 50 | 100
+  */
   recurringTier?: RecurringTier;
-  /** One-time amount in USD cents */
+  /**
+  One-time amount in USD cents
+  */
   amountCents?: number;
   customerEmail?: string;
-};
+}
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   let body: Body;
@@ -30,7 +34,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   }
 
   if (body.mode !== "subscription" && body.mode !== "payment") {
-    return NextResponse.json({ error: "Invalid checkout mode." }, { status: 422 });
+    return NextResponse.json(
+      { error: "Invalid checkout mode." },
+      { status: 422 }
+    );
   }
 
   const donorEmail = normalizeOptionalDonorEmail(body.customerEmail);
@@ -41,7 +48,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   ) {
     return NextResponse.json(
       { error: "Enter a valid email address, or omit it." },
-      { status: 422 },
+      { status: 422 }
     );
   }
 
@@ -51,7 +58,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         error:
           "Giving is not configured. Add Stripe keys to .env.local — see docs/STRIPE-GIVING.md.",
       },
-      { status: 503 },
+      { status: 503 }
     );
   }
 
@@ -78,7 +85,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       if (!tier || !["25", "50", "100"].includes(tier)) {
         return NextResponse.json(
           { error: "Choose a monthly support level." },
-          { status: 422 },
+          { status: 422 }
         );
       }
       const priceId = getRecurringPriceId(tier);
@@ -88,7 +95,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
             error:
               "Recurring prices are not configured. Set STRIPE_PRICE_RECURRING_* in .env.local.",
           },
-          { status: 503 },
+          { status: 503 }
         );
       }
 
@@ -102,13 +109,13 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
           metadata: { ...metadata },
         },
         custom_text: customText,
-        ...(donorEmail ? { customer_email: donorEmail } : {}),
+        ...(donorEmail && { customer_email: donorEmail }),
       });
 
       if (!session.client_secret) {
         return NextResponse.json(
           { error: "Checkout session missing client secret." },
-          { status: 500 },
+          { status: 500 }
         );
       }
 
@@ -122,11 +129,13 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     if (
       typeof cents !== "number" ||
       !Number.isInteger(cents) ||
-      !ONE_TIME_AMOUNTS_CENTS.includes(cents as (typeof ONE_TIME_AMOUNTS_CENTS)[number])
+      !ONE_TIME_AMOUNTS_CENTS.includes(
+        cents as (typeof ONE_TIME_AMOUNTS_CENTS)[number]
+      )
     ) {
       return NextResponse.json(
         { error: "Select a valid one-time gift amount." },
-        { status: 422 },
+        { status: 422 }
       );
     }
 
@@ -153,13 +162,13 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         metadata: { ...metadata },
       },
       custom_text: customText,
-      ...(donorEmail ? { customer_email: donorEmail } : {}),
+      ...(donorEmail && { customer_email: donorEmail }),
     });
 
     if (!session.client_secret) {
       return NextResponse.json(
         { error: "Checkout session missing client secret." },
-        { status: 500 },
+        { status: 500 }
       );
     }
 
@@ -167,11 +176,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       clientSecret: session.client_secret,
       sessionId: session.id,
     });
-  } catch (err) {
-    console.error("[donations/checkout-session]", err);
+  } catch (error) {
+    console.error("[donations/checkout-session]", error);
     return NextResponse.json(
-      { error: "Could not start checkout. Try again or email info@asymmetric.al." },
-      { status: 500 },
+      {
+        error:
+          "Could not start checkout. Try again or email info@asymmetric.al.",
+      },
+      { status: 500 }
     );
   }
 }

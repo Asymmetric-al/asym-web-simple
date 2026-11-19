@@ -1,3 +1,11 @@
+import {
+  ArrowRight,
+  HandCoins,
+  HeartHandshake,
+  Scale,
+  Shield,
+} from "lucide-react";
+import Link from "next/link";
 import { DonationCheckout } from "@/components/site/donation-checkout";
 import { PageHero, Section, SectionHeader } from "@/components/site/page";
 import { Reveal, StaggerItem, StaggerReveal } from "@/components/site/reveal";
@@ -11,15 +19,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { createMetadata } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
-import {
-  ArrowRight,
-  HandCoins,
-  HeartHandshake,
-  Scale,
-  Shield,
-} from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
 
 const pillars = [
   {
@@ -95,11 +95,11 @@ export const metadata: Metadata = createMetadata({
 });
 
 export default function GivePage() {
-  const stripeConfigured = Boolean(process.env.STRIPE_SECRET_KEY);
-  const recurringConfigured = Boolean(
+  const isStripeConfigured = Boolean(process.env.STRIPE_SECRET_KEY);
+  const isRecurringConfigured = Boolean(
     process.env.STRIPE_PRICE_RECURRING_25 &&
-      process.env.STRIPE_PRICE_RECURRING_50 &&
-      process.env.STRIPE_PRICE_RECURRING_100,
+    process.env.STRIPE_PRICE_RECURRING_50 &&
+    process.env.STRIPE_PRICE_RECURRING_100
   );
 
   return (
@@ -181,8 +181,8 @@ export default function GivePage() {
           <Reveal>
             <div className="flex flex-col gap-6">
               <DonationCheckout
-                stripeConfigured={stripeConfigured}
-                recurringConfigured={recurringConfigured}
+                stripeConfigured={isStripeConfigured}
+                recurringConfigured={isRecurringConfigured}
               />
               <div className="page-shell-glow surface-panel surface-interactive rounded-[2rem] p-7 sm:p-8">
                 <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
@@ -193,13 +193,14 @@ export default function GivePage() {
                 </h2>
                 <div className="text-muted-foreground mt-6 flex flex-col gap-4 text-base leading-7">
                   <p>
-                    Checks payable to “Global Fellowship Inc” with “Asymmetric.al”
-                    in the memo can be mailed to PO Box 1, Meadow Vista, CA 95722.
+                    Checks payable to “Global Fellowship Inc” with
+                    “Asymmetric.al” in the memo can be mailed to PO Box 1,
+                    Meadow Vista, CA 95722.
                   </p>
                   <p>
-                    Email info@asymmetric.al for donor-advised fund support, wire
-                    instructions, or questions about project oversight and use of
-                    funds.
+                    Email info@asymmetric.al for donor-advised fund support,
+                    wire instructions, or questions about project oversight and
+                    use of funds.
                   </p>
                   <Link
                     href="mailto:info@asymmetric.al?subject=Asymmetric.al%20giving%20inquiry"

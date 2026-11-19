@@ -1,4 +1,5 @@
-import { expect, test, type Locator, type Page } from "@playwright/test";
+import { expect, test } from "@playwright/test";
+import type { Locator, Page } from "@playwright/test";
 
 async function activate(locator: Locator, projectName: string) {
   if (projectName.startsWith("mobile")) {
@@ -22,10 +23,9 @@ async function waitForUi(page: Page) {
           page.evaluate(() =>
             document.documentElement.getAttribute("data-ui-ready")
           ),
-        { timeout: 5_000 }
+        { timeout: 5000 }
       )
       .toBe("true");
-    return;
   } catch {
     await page.waitForLoadState("load");
     await page.waitForTimeout(250);
@@ -61,11 +61,13 @@ test.describe("letter site smoke tests", () => {
     await page.goto("/", { waitUntil: "domcontentloaded" });
 
     await page.keyboard.press("Tab");
+
     await expect(
       page.getByRole("link", { name: /skip to main content/i })
     ).toBeFocused();
 
     await page.keyboard.press("Enter");
+
     await expect(page.locator("#main-content")).toBeFocused();
   });
 
@@ -90,8 +92,10 @@ test.describe("letter site smoke tests", () => {
     ).toBeVisible();
 
     const brandBox = await brandLink.boundingBox();
+
     expect(brandBox?.width).toBeLessThan(180);
     expect(brandBox?.height).toBeLessThan(64);
+
     await expectNoHorizontalOverflow(page);
   });
 
@@ -107,10 +111,13 @@ test.describe("letter site smoke tests", () => {
 
     await expect(async () => {
       await expect(themeToggle).toBeVisible();
+
       await activate(themeToggle, projectName);
+
       await expect(page.getByRole("menuitem", { name: /dark/i })).toBeVisible();
-    }).toPass({ timeout: 6_000 });
+    }).toPass({ timeout: 6000 });
     await expect(page.getByRole("menuitem", { name: /dark/i })).toBeVisible();
+
     await page.getByRole("menuitem", { name: /dark/i }).click();
 
     await expect(page.locator("html")).toHaveClass(/dark/);
@@ -208,6 +215,7 @@ test.describe("letter site smoke tests", () => {
     expect(rhythm.stanzaGap).toBeLessThan(rhythm.normalGap);
 
     const emailLink = page.getByRole("link", { name: /^Send us an email\.$/i });
+
     await expect(emailLink).toHaveAttribute(
       "href",
       "mailto:info@asymmetric.al?subject=Building%20with%20Asym"
@@ -325,6 +333,7 @@ test.describe("letter site smoke tests", () => {
 
     expect(darkLogoState.header).toContain("asym-mark-light");
     expect(darkLogoState.footer).toContain("asym-mark-light");
+
     await expectNoHorizontalOverflow(page);
 
     const unexpected404s = notFoundResponses.filter(

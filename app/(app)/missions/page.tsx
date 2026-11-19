@@ -1,10 +1,3 @@
-import { MediaStage } from "@/components/site/media-stage";
-import { PageHero, Section, SectionHeader } from "@/components/site/page";
-import { Reveal, StaggerItem, StaggerReveal } from "@/components/site/reveal";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { buttonVariants } from "@/components/ui/button-variants";
-import { createMetadata } from "@/lib/metadata";
-import { cn } from "@/lib/utils";
 import {
   ArrowRight,
   Globe,
@@ -13,8 +6,15 @@ import {
   Landmark,
   Users,
 } from "lucide-react";
-import type { Metadata } from "next";
 import Link from "next/link";
+import { MediaStage } from "@/components/site/media-stage";
+import { PageHero, Section, SectionHeader } from "@/components/site/page";
+import { Reveal, StaggerItem, StaggerReveal } from "@/components/site/reveal";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { buttonVariants } from "@/components/ui/button-variants";
+import { createMetadata } from "@/lib/metadata";
+import { cn } from "@/lib/utils";
+import type { Metadata } from "next";
 
 const differencePoints = [
   {
@@ -143,10 +143,14 @@ export default function MissionsPage() {
                 Why we give all our focus to missions agencies.
               </h2>
               <p className="text-muted-foreground mt-5 text-base leading-7">
-                Most software is built for sales teams, memberships, or generic fundraising. Missions does not fit that mold. You are sending people, not shipping products.
+                Most software is built for sales teams, memberships, or generic
+                fundraising. Missions does not fit that mold. You are sending
+                people, not shipping products.
               </p>
               <p className="text-muted-foreground mt-4 text-base leading-7">
-                That changes what the system has to hold together: donors, missionaries, churches, finance, field realities, and follow-through all at once.
+                That changes what the system has to hold together: donors,
+                missionaries, churches, finance, field realities, and
+                follow-through all at once.
               </p>
             </div>
           </Reveal>
@@ -292,10 +296,12 @@ export default function MissionsPage() {
                 </CardHeader>
                 <CardContent className="text-primary-foreground/82 space-y-4 text-sm leading-7">
                   <p>
-                    Asym is built on open-source foundations because transparency, stewardship, and long-term trust matter.
+                    Asym is built on open-source foundations because
+                    transparency, stewardship, and long-term trust matter.
                   </p>
                   <p>
-                    Most teams simply use the product as a supported system. If your team wants to extend or contribute, you can.
+                    Most teams simply use the product as a supported system. If
+                    your team wants to extend or contribute, you can.
                   </p>
                 </CardContent>
               </Card>
@@ -313,10 +319,13 @@ export default function MissionsPage() {
                 </CardHeader>
                 <CardContent className="text-muted-foreground space-y-4 text-sm leading-7">
                   <p>
-                    If your team is carrying this kind of operational drag, the waitlist is the best place to start.
+                    If your team is carrying this kind of operational drag, the
+                    waitlist is the best place to start.
                   </p>
                   <p>
-                    We use it to route walkthroughs, early access updates, and rollout conversations around the flows creating the most pressure first.
+                    We use it to route walkthroughs, early access updates, and
+                    rollout conversations around the flows creating the most
+                    pressure first.
                   </p>
                   <Link
                     href="/waitlist"

@@ -1,6 +1,6 @@
+import Link from "next/link";
 import { SiteLogoMark } from "@/components/site/site-logo-mark";
 import { siteConfig } from "@/lib/config";
-import Link from "next/link";
 
 export function Header() {
   return (
@@ -8,7 +8,7 @@ export function Header() {
       <div className="mx-auto max-w-[76rem] px-4 sm:px-6 lg:px-8">
         <Link
           href="/"
-          className="group border-foreground/10 bg-background/50 focus-visible:ring-ring focus-visible:ring-offset-background mt-3 inline-flex min-w-0 items-center gap-2.5 rounded-full border px-4 py-2.5 shadow-[0_16px_42px_-34px_rgba(22,33,43,0.44)] backdrop-blur-md transition-[background-color,border-color,transform] duration-200 ease-out hover:-translate-y-px hover:bg-background/64 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none sm:mt-4 sm:gap-3 sm:px-5"
+          className="group border-foreground/10 bg-background/50 focus-visible:ring-ring focus-visible:ring-offset-background hover:bg-background/64 mt-3 inline-flex min-w-0 items-center gap-2.5 rounded-full border px-4 py-2.5 shadow-[0_16px_42px_-34px_rgba(22,33,43,0.44)] backdrop-blur-md transition-[background-color,border-color,transform] duration-200 ease-out hover:-translate-y-px focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none sm:mt-4 sm:gap-3 sm:px-5"
           aria-label={`${siteConfig.shortName} home`}
         >
           <SiteLogoMark

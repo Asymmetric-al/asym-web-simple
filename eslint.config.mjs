@@ -1,31 +1,21 @@
-import { defineConfig, globalIgnores } from "eslint/config";
-import nextVitals from "eslint-config-next/core-web-vitals";
-import nextTs from "eslint-config-next/typescript";
+import core from "ultracite/eslint/core";
+import react from "ultracite/eslint/react";
+import next from "ultracite/eslint/next";
+import vitest from "ultracite/eslint/vitest";
+import playwright from "ultracite/eslint/playwright";
 
-const eslintConfig = defineConfig([
-  ...nextVitals,
-  ...nextTs,
+export default [
+  ...core,
+  ...react,
+  ...next,
+  ...vitest,
+  ...playwright,
   {
-    rules: {
-      // TypeScript rules (non-type-aware for simpler setup)
-      "@typescript-eslint/no-unused-vars": [
-        "error",
-        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
-      ],
-      "@typescript-eslint/no-explicit-any": "error",
-
-      // React rules
-      "react/jsx-no-target-blank": ["error", { enforceDynamicLinks: "always" }],
-    },
+    ignores: [
+      ".next-docs/**",
+      ".tmp/**",
+      "playwright-report/**",
+      "test-results/**",
+    ],
   },
-  // Override default ignores of eslint-config-next.
-  globalIgnores([
-    // Default ignores of eslint-config-next:
-    ".next/**",
-    "out/**",
-    "build/**",
-    "next-env.d.ts",
-  ]),
-]);
-
-export default eslintConfig;
+];

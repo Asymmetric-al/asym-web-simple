@@ -26,9 +26,11 @@ test.describe("route visuals", () => {
           });
 
           await page.goto(route.path, { waitUntil: "domcontentloaded" });
+
           await expect(
             page.getByRole("heading", { level: 1 }).first()
           ).toBeVisible();
+
           await page.waitForTimeout(150);
 
           await expect(page).toHaveScreenshot(

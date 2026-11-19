@@ -1,4 +1,5 @@
-import { prepare, type PrepareOptions, type PreparedText } from "@chenglou/pretext";
+import { prepare } from "@chenglou/pretext";
+import type { PrepareOptions, PreparedText } from "@chenglou/pretext";
 
 const preparedTextCache = new Map<string, PreparedText>();
 

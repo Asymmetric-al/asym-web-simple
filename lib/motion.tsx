@@ -1,12 +1,9 @@
 "use client";
 
-import { motion, type MotionProps, type Variants } from "motion/react";
-import {
-  createContext,
-  useContext,
-  useSyncExternalStore,
-  type ReactNode,
-} from "react";
+import { motion } from "motion/react";
+import { createContext, useContext, useSyncExternalStore } from "react";
+import type { MotionProps, Variants } from "motion/react";
+import type { ReactNode } from "react";
 
 function subscribeToReducedMotion(callback: () => void): () => void {
   const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -32,7 +29,7 @@ export const siteRevealScale = 0.985;
 export const siteViewportMargin = "-8% 0px -10% 0px";
 export const siteFloatTransition = {
   duration: 9,
-  repeat: Number.POSITIVE_INFINITY,
+  repeat: Infinity,
   repeatType: "mirror" as const,
   ease: "easeInOut" as const,
 };
@@ -48,7 +45,7 @@ export function useReducedMotion(): boolean {
 export function ReducedMotionProvider({
   children,
 }: {
-  children: ReactNode;
+  readonly children: ReactNode;
 }): ReactNode {
   const prefersReducedMotion = useSyncExternalStore(
     subscribeToReducedMotion,
@@ -145,13 +142,13 @@ export function getRevealStates(
       opacity: 0,
       y,
       scale,
-      ...(blur > 0 ? { filter: `blur(${blur}px)` } : {}),
+      ...(blur > 0 && { filter: `blur(${blur}px)` }),
     },
     visible: {
       opacity: 1,
       y: 0,
       scale: 1,
-      ...(blur > 0 ? { filter: "blur(0px)" } : {}),
+      ...(blur > 0 && { filter: "blur(0px)" }),
     },
   };
 }
@@ -178,9 +175,9 @@ export function getRevealTransition(
 }
 
 type MotionDivProps = {
-  variants?: Variants;
-  children?: ReactNode;
-  className?: string;
+  readonly variants?: Variants;
+  readonly children?: ReactNode;
+  readonly className?: string;
 } & MotionProps;
 
 export function MotionDiv({
@@ -189,12 +186,12 @@ export function MotionDiv({
   className,
   ...props
 }: MotionDivProps): ReactNode {
-  const prefersReducedMotion = useReducedMotion();
+  const isPrefersReducedMotion = useReducedMotion();
 
-  const activeVariants = prefersReducedMotion
+  const activeVariants = isPrefersReducedMotion
     ? reducedMotionVariants
     : variants;
-  const activeTransition = prefersReducedMotion
+  const activeTransition = isPrefersReducedMotion
     ? { duration: 0.01 }
     : defaultTransition;
 
@@ -218,12 +215,12 @@ export function MotionSection({
   className,
   ...props
 }: MotionDivProps): ReactNode {
-  const prefersReducedMotion = useReducedMotion();
+  const isPrefersReducedMotion = useReducedMotion();
 
-  const activeVariants = prefersReducedMotion
+  const activeVariants = isPrefersReducedMotion
     ? reducedMotionVariants
     : variants;
-  const activeTransition = prefersReducedMotion
+  const activeTransition = isPrefersReducedMotion
     ? { duration: 0.01 }
     : defaultTransition;
 
@@ -246,16 +243,18 @@ export function StaggerContainer({
   className,
   ...props
 }: {
-  children: ReactNode;
-  className?: string;
+  readonly children: ReactNode;
+  readonly className?: string;
 } & MotionProps): ReactNode {
-  const prefersReducedMotion = useReducedMotion();
+  const isPrefersReducedMotion = useReducedMotion();
 
   return (
     <motion.div
       initial="hidden"
       animate="visible"
-      variants={prefersReducedMotion ? reducedMotionVariants : staggerContainer}
+      variants={
+        isPrefersReducedMotion ? reducedMotionVariants : staggerContainer
+      }
       className={className}
       {...props}
     >
@@ -269,14 +268,14 @@ export function StaggerItem({
   className,
   ...props
 }: {
-  children: ReactNode;
-  className?: string;
+  readonly children: ReactNode;
+  readonly className?: string;
 } & MotionProps): ReactNode {
-  const prefersReducedMotion = useReducedMotion();
+  const isPrefersReducedMotion = useReducedMotion();
 
   return (
     <motion.div
-      variants={prefersReducedMotion ? reducedMotionVariants : fadeInUp}
+      variants={isPrefersReducedMotion ? reducedMotionVariants : fadeInUp}
       className={className}
       {...props}
     >

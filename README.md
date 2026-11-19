@@ -2,7 +2,7 @@
 
 The production website for **Asym** — a unified mission operating system for Christian sending agencies. Built in the open because the organizations we serve deserve to see the architecture.
 
-> *Simple faithfulness can still create outsized outcomes.* — 1 → ∞
+> _Simple faithfulness can still create outsized outcomes._ — 1 → ∞
 
 ## What this is
 
@@ -39,7 +39,7 @@ Visual design tokens and language live in **`DESIGN.md`**. Payload wiring and `/
 ## Pages
 
 | Route | Description |
-|---|---|
+| --- | --- |
 | `/` | Home — mission, philosophy, system capabilities |
 | `/platform` | Platform overview — Mission Control modules |
 | `/missions` | Role views for sending agency teams |
@@ -62,7 +62,7 @@ Route groups `(app)` and `(payload)` do **not** appear in URLs; they separate ma
 Next.js matches **more specific** `app/api/*` routes first; remaining `/api/*` traffic is handled by Payload’s catch-all (see [docs/PAYLOAD-CMS.md](./docs/PAYLOAD-CMS.md)).
 
 | Path | Role |
-|---|---|
+| --- | --- |
 | `POST /api/contact` | Contact / waitlist email via Resend |
 | `POST /api/donations/checkout-session` | Stripe Checkout session creation |
 | `POST /api/donations/billing-portal` | Stripe Customer Portal session |
@@ -110,7 +110,7 @@ Next.js matches **more specific** `app/api/*` routes first; remaining `/api/*` t
 
 ## Getting started
 
-**Declared package manager:** [Bun](https://bun.sh) `1.3.11` (`packageManager` in `package.json`). The repo also contains **`bun.lock`** and **`package-lock.json`**; use **one** package manager locally to avoid inconsistent installs.
+**Declared package manager:** [Bun](https://bun.sh) `1.4.5` (`packageManager` in `package.json`). The repo also contains **`bun.lock`** and **`package-lock.json`**; use **one** package manager locally to avoid inconsistent installs.
 
 ```bash
 bun install
@@ -129,7 +129,7 @@ Open [http://localhost:3000](http://localhost:3000). The dev server uses Turbopa
 ### Environment variables (what actually breaks without them)
 
 | Goal | Required env (from `.env.example`) |
-|---|---|
+| --- | --- |
 | Browse marketing pages, run `build` / `typecheck` / `lint` | None |
 | **Contact form** sends email | `RESEND_API_KEY` (otherwise API returns 503 with a clear message) |
 | **`/give` Checkout / portal** | `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, price IDs, webhook secret for webhooks |
@@ -145,7 +145,7 @@ Copy `.env.example` → `.env.local` for local secrets.
 ## Scripts
 
 | Command | Description |
-|---|---|
+| --- | --- |
 | `postinstall` | `patch-package` |
 | `dev` | Next.js dev server (port 3000) |
 | `build` | Production build |

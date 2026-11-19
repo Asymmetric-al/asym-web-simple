@@ -11,7 +11,7 @@ function require(key: string): string {
   if (!value) {
     throw new Error(
       `[env] Missing required environment variable: ${key}\n` +
-        `Check .env.example for all required variables.`,
+        `Check .env.example for all required variables.`
     );
   }
   return value;
@@ -30,7 +30,9 @@ export function validateEnv(): void {
   require("REVALIDATION_SECRET");
 }
 
-/** Typed, safe access to env vars — no throwing, use in server components. */
+/**
+Typed, safe access to env vars — no throwing, use in server components.
+*/
 export const env = {
   NEXT_PUBLIC_SITE_URL:
     process.env["NEXT_PUBLIC_SITE_URL"] ?? "https://asymmetric.al",

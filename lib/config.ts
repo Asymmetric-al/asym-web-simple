@@ -9,7 +9,9 @@ export const siteConfig = {
   nonprofit: "Global Fellowship Inc.",
   ein: "68-0214543",
   location: "Meadow Vista, California",
-  /** Primary site CTA - keep in sync with the one-page homepage anchors. */
+  /**
+  Primary site CTA - keep in sync with the one-page homepage anchors.
+  */
   cta: {
     primary: {
       label: "Build with us",

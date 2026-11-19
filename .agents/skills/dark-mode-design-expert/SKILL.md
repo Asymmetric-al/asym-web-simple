@@ -1,20 +1,19 @@
 ---
 name: dark-mode-design-expert
-description: Master dark mode UI design with atmospheric theming, WCAG accessibility, and cross-platform best practices. Specializes in weather/sky/ocean-inspired color systems that adapt to time of day
-  and environmental conditions.
+description: Master dark mode UI design with atmospheric theming, WCAG accessibility, and cross-platform best practices. Specializes in weather/sky/ocean-inspired color systems that adapt to time of day and environmental conditions.
 metadata:
   category: Design
   tags:
-  - dark-mode
-  - accessibility
-  - theming
+    - dark-mode
+    - accessibility
+    - theming
   pairs-with:
-  - skill: color-contrast-auditor
-    reason: Dark mode surfaces require careful contrast ratio verification for accessibility
-  - skill: design-system-generator
-    reason: Dark mode token generation is a core capability of design system creation
-  - skill: web-design-expert
-    reason: Dark mode is a fundamental aspect of modern web design implementation
+    - skill: color-contrast-auditor
+      reason: Dark mode surfaces require careful contrast ratio verification for accessibility
+    - skill: design-system-generator
+      reason: Dark mode token generation is a core capability of design system creation
+    - skill: web-design-expert
+      reason: Dark mode is a fundamental aspect of modern web design implementation
 ---
 
 # Dark Mode Design Expert
@@ -24,6 +23,7 @@ Master dark mode UI design with atmospheric theming, WCAG accessibility, and cro
 ## When to Use This Skill
 
 **Activate on:**
+
 - "dark mode", "dark theme", "night mode"
 - "theme switching", "light/dark toggle"
 - "atmospheric UI", "weather theme", "sky gradient"
@@ -33,6 +33,7 @@ Master dark mode UI design with atmospheric theming, WCAG accessibility, and cro
 - "contrast ratios dark mode", "accessibility dark theme"
 
 **NOT for:**
+
 - General color palette creation → `color-theory-palette-harmony-expert`
 - Typography and font selection → `typography-expert`
 - Component library architecture → `design-system-creator`
@@ -45,7 +46,7 @@ Master dark mode UI design with atmospheric theming, WCAG accessibility, and cro
 ### Why Dark Mode Exists
 
 | Factor | Light Mode | Dark Mode | Winner |
-|--------|------------|-----------|--------|
+| --- | --- | --- | --- |
 | **OLED Battery** | 100% baseline | 39-47% savings at max brightness | Dark |
 | **Low Light Comfort** | Eye strain, fatigue | Reduced glare | Dark |
 | **Bright Environment** | Better readability | Washed out | Light |
@@ -58,7 +59,7 @@ Master dark mode UI design with atmospheric theming, WCAG accessibility, and cro
 ### Contrast Requirements (WCAG 2.1)
 
 | Element Type | Minimum Ratio | Target Ratio | Notes |
-|--------------|---------------|--------------|-------|
+| --- | --- | --- | --- |
 | Body text | 4.5:1 | 7:1+ | AAA preferred for readability |
 | Large text (≥24px) | 3:1 | 4.5:1+ | Headlines, hero text |
 | UI components | 3:1 | 4.5:1+ | Borders, icons, focus rings |
@@ -112,11 +113,12 @@ Master dark mode UI design with atmospheric theming, WCAG accessibility, and cro
    ══════════════════════════════════════════════════════════════════ */
 
 /* Light Mode (Default) */
-:root, :root.theme-light {
+:root,
+:root.theme-light {
   /* Text */
-  --color-text-primary: var(--color-gray-900);      /* 15.3:1 on white */
-  --color-text-secondary: var(--color-gray-600);    /* 7.0:1 on white */
-  --color-text-muted: var(--color-gray-500);        /* 4.6:1 on white */
+  --color-text-primary: var(--color-gray-900); /* 15.3:1 on white */
+  --color-text-secondary: var(--color-gray-600); /* 7.0:1 on white */
+  --color-text-muted: var(--color-gray-500); /* 4.6:1 on white */
   --color-text-inverse: var(--color-gray-50);
 
   /* Backgrounds */
@@ -150,14 +152,14 @@ Master dark mode UI design with atmospheric theming, WCAG accessibility, and cro
 /* Dark Mode */
 :root.theme-dark {
   /* Text - slightly off-white to reduce strain */
-  --color-text-primary: var(--color-gray-50);       /* 15.3:1 on dark */
-  --color-text-secondary: var(--color-gray-300);    /* 9.3:1 on dark */
-  --color-text-muted: var(--color-gray-400);        /* 5.5:1 on dark */
+  --color-text-primary: var(--color-gray-50); /* 15.3:1 on dark */
+  --color-text-secondary: var(--color-gray-300); /* 9.3:1 on dark */
+  --color-text-muted: var(--color-gray-400); /* 5.5:1 on dark */
   --color-text-inverse: var(--color-gray-900);
 
   /* Backgrounds - NOT pure black (#000) */
-  --color-bg-primary: var(--color-twilight-deep);   /* #0c1222 */
-  --color-bg-secondary: var(--color-twilight-mid);  /* #151b2e */
+  --color-bg-primary: var(--color-twilight-deep); /* #0c1222 */
+  --color-bg-secondary: var(--color-twilight-mid); /* #151b2e */
   --color-bg-elevated: var(--color-twilight-surface); /* #1a1f3a */
   --color-bg-overlay: rgba(0, 0, 0, 0.7);
 
@@ -217,6 +219,7 @@ Master dark mode UI design with atmospheric theming, WCAG accessibility, and cro
 ### Why Shadows Fail in Dark Mode
 
 In light mode, shadows create depth by simulating light from above. In dark mode:
+
 - Shadows become invisible against dark backgrounds
 - Pure black shadows look like "holes"
 - The illusion breaks completely
@@ -234,21 +237,21 @@ Instead of shadows, use **lighter surface colors** for elevated elements:
 
 /* Dark Mode: Surface color creates elevation */
 .card-dark {
-  background: #1e1e1e;  /* Elevated from #121212 base */
-  box-shadow: none;      /* Or very subtle */
+  background: #1e1e1e; /* Elevated from #121212 base */
+  box-shadow: none; /* Or very subtle */
 }
 ```
 
 ### Elevation Scale (Material Design 3)
 
-| Level | Light Mode | Dark Mode Surface | Overlay % |
-|-------|------------|-------------------|-----------|
-| 0 (base) | #ffffff | #121212 | 0% |
-| 1 | shadow-sm | #1e1e1e | 5% white |
-| 2 | shadow-md | #232323 | 7% white |
-| 3 | shadow-lg | #282828 | 8% white |
-| 4 | shadow-xl | #2d2d2d | 9% white |
-| 5 | shadow-2xl | #323232 | 11% white |
+| Level    | Light Mode | Dark Mode Surface | Overlay % |
+| -------- | ---------- | ----------------- | --------- |
+| 0 (base) | #ffffff    | #121212           | 0%        |
+| 1        | shadow-sm  | #1e1e1e           | 5% white  |
+| 2        | shadow-md  | #232323           | 7% white  |
+| 3        | shadow-lg  | #282828           | 8% white  |
+| 4        | shadow-xl  | #2d2d2d           | 9% white  |
+| 5        | shadow-2xl | #323232           | 11% white |
 
 ### Implementation Pattern
 
@@ -291,7 +294,7 @@ Instead of shadows, use **lighter surface colors** for elevated elements:
 .card {
   background: light-dark(#ffffff, #1e1e1e);
   color: light-dark(#1f2937, #f3f4f6);
-  border: 1px solid light-dark(#e5e7eb, rgba(255,255,255,0.1));
+  border: 1px solid light-dark(#e5e7eb, rgba(255, 255, 255, 0.1));
 }
 
 /* 3. Respect system preference */
@@ -312,43 +315,44 @@ Instead of shadows, use **lighter surface colors** for elevated elements:
 
 ```typescript
 // Theme manager with persistence
-type Theme = 'light' | 'dark' | 'system';
+type Theme = "light" | "dark" | "system";
 
 function setTheme(theme: Theme) {
   const root = document.documentElement;
 
   // Remove existing theme classes
-  root.classList.remove('theme-light', 'theme-dark');
+  root.classList.remove("theme-light", "theme-dark");
 
-  if (theme === 'system') {
+  if (theme === "system") {
     // Let CSS media queries handle it
-    localStorage.removeItem('theme');
+    localStorage.removeItem("theme");
     return;
   }
 
   // Apply explicit theme
   root.classList.add(`theme-${theme}`);
-  localStorage.setItem('theme', theme);
+  localStorage.setItem("theme", theme);
 }
 
-function getSystemTheme(): 'light' | 'dark' {
-  return window.matchMedia('(prefers-color-scheme: dark)').matches
-    ? 'dark'
-    : 'light';
+function getSystemTheme(): "light" | "dark" {
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
 }
 
 // Initialize on page load (before render to prevent flash)
 function initTheme() {
-  const saved = localStorage.getItem('theme') as Theme | null;
-  if (saved && saved !== 'system') {
+  const saved = localStorage.getItem("theme") as Theme | null;
+  if (saved && saved !== "system") {
     document.documentElement.classList.add(`theme-${saved}`);
   }
 }
 
 // Listen for system changes
-window.matchMedia('(prefers-color-scheme: dark)')
-  .addEventListener('change', (e) => {
-    if (!localStorage.getItem('theme')) {
+window
+  .matchMedia("(prefers-color-scheme: dark)")
+  .addEventListener("change", (e) => {
+    if (!localStorage.getItem("theme")) {
       // Only react if user hasn't set explicit preference
       // CSS will handle via media queries
     }
@@ -360,12 +364,12 @@ window.matchMedia('(prefers-color-scheme: dark)')
 ```html
 <!-- In <head>, before any CSS -->
 <script>
-  (function() {
-    const theme = localStorage.getItem('theme');
-    if (theme === 'dark') {
-      document.documentElement.classList.add('theme-dark');
-    } else if (theme === 'light') {
-      document.documentElement.classList.add('theme-light');
+  (function () {
+    const theme = localStorage.getItem("theme");
+    if (theme === "dark") {
+      document.documentElement.classList.add("theme-dark");
+    } else if (theme === "light") {
+      document.documentElement.classList.add("theme-light");
     }
   })();
 </script>
@@ -380,6 +384,7 @@ This is the flagship example—a complete token system for a weather-inspired UI
 ### Design Philosophy
 
 The ocean and sky share a visual language:
+
 - **Dawn/Dusk**: Warm gradients, soft transitions
 - **Midday**: Bright, high contrast, clear
 - **Night**: Deep blues, subtle glows, stars
@@ -400,22 +405,22 @@ The ocean and sky share a visual language:
      ──────────────────────────────────────────────────────────────── */
 
   /* Ocean Depths */
-  --ocean-surface: #38bdf8;      /* Sunlit surface */
-  --ocean-shallow: #0ea5e9;      /* Clear shallows */
-  --ocean-mid: #0284c7;          /* Mid-depth */
-  --ocean-deep: #0369a1;         /* Deep water */
-  --ocean-abyss: #075985;        /* Abyssal zone */
-  --ocean-trench: #0c4a6e;       /* Hadal zone */
+  --ocean-surface: #38bdf8; /* Sunlit surface */
+  --ocean-shallow: #0ea5e9; /* Clear shallows */
+  --ocean-mid: #0284c7; /* Mid-depth */
+  --ocean-deep: #0369a1; /* Deep water */
+  --ocean-abyss: #075985; /* Abyssal zone */
+  --ocean-trench: #0c4a6e; /* Hadal zone */
 
   /* Sky States */
-  --sky-dawn: #fef3c7;           /* Golden hour */
-  --sky-morning: #bae6fd;        /* Clear morning */
-  --sky-midday: #7dd3fc;         /* Bright day */
-  --sky-golden: #fcd34d;         /* Golden hour */
-  --sky-sunset: #fb923c;         /* Sunset orange */
-  --sky-dusk: #a78bfa;           /* Purple dusk */
-  --sky-twilight: #6366f1;       /* Civil twilight */
-  --sky-night: #1e1b4b;          /* Night sky */
+  --sky-dawn: #fef3c7; /* Golden hour */
+  --sky-morning: #bae6fd; /* Clear morning */
+  --sky-midday: #7dd3fc; /* Bright day */
+  --sky-golden: #fcd34d; /* Golden hour */
+  --sky-sunset: #fb923c; /* Sunset orange */
+  --sky-dusk: #a78bfa; /* Purple dusk */
+  --sky-twilight: #6366f1; /* Civil twilight */
+  --sky-night: #1e1b4b; /* Night sky */
 
   /* Atmospheric Effects */
   --atmosphere-haze: rgba(186, 230, 253, 0.3);
@@ -477,7 +482,8 @@ The ocean and sky share a visual language:
 }
 
 /* DAYLIGHT THEME (8am - 5pm) - Bright, clear, energetic */
-:root.atmosphere-day, :root.theme-light {
+:root.atmosphere-day,
+:root.theme-light {
   --color-text-primary: #0f172a;
   --color-text-secondary: #334155;
   --color-text-muted: #64748b;
@@ -549,11 +555,12 @@ The ocean and sky share a visual language:
 }
 
 /* NIGHT THEME (9pm - 5am) - Deep, calm, bioluminescent */
-:root.atmosphere-night, :root.theme-dark {
-  --color-text-primary: #f1f5f9;        /* 15.3:1 ✓ AAA */
-  --color-text-secondary: #cbd5e1;      /* 9.3:1 ✓ AAA */
-  --color-text-muted: #94a3b8;          /* 5.5:1 ✓ AA */
-  --color-bg-primary: #0c1222;          /* Deep twilight navy */
+:root.atmosphere-night,
+:root.theme-dark {
+  --color-text-primary: #f1f5f9; /* 15.3:1 ✓ AAA */
+  --color-text-secondary: #cbd5e1; /* 9.3:1 ✓ AAA */
+  --color-text-muted: #94a3b8; /* 5.5:1 ✓ AA */
+  --color-bg-primary: #0c1222; /* Deep twilight navy */
   --color-bg-secondary: #151b2e;
   --color-bg-elevated: #1a1f3a;
   --color-accent: var(--bio-cyan);
@@ -653,8 +660,13 @@ The ocean and sky share a visual language:
 }
 
 @keyframes wave {
-  0%, 100% { transform: translateX(0) translateY(0); }
-  50% { transform: translateX(-25%) translateY(-10px); }
+  0%,
+  100% {
+    transform: translateX(0) translateY(0);
+  }
+  50% {
+    transform: translateX(-25%) translateY(-10px);
+  }
 }
 
 /* Bioluminescent Glow (dark mode only) */
@@ -666,7 +678,9 @@ The ocean and sky share a visual language:
 
 :root.theme-dark .glow-element:hover,
 :root.atmosphere-night .glow-element:hover {
-  box-shadow: 0 0 30px var(--bio-glow), 0 0 60px rgba(34, 211, 238, 0.2);
+  box-shadow:
+    0 0 30px var(--bio-glow),
+    0 0 60px rgba(34, 211, 238, 0.2);
 }
 
 /* Cloud Layer */
@@ -680,22 +694,26 @@ The ocean and sky share a visual language:
 }
 
 @keyframes drift {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 ```
 
 ### Time-Based Theme Switching
 
 ```typescript
-type Atmosphere = 'dawn' | 'day' | 'golden' | 'twilight' | 'night' | 'storm';
+type Atmosphere = "dawn" | "day" | "golden" | "twilight" | "night" | "storm";
 
 function getAtmosphereFromTime(hour: number): Atmosphere {
-  if (hour >= 5 && hour < 8) return 'dawn';
-  if (hour >= 8 && hour < 17) return 'day';
-  if (hour >= 17 && hour < 19) return 'golden';
-  if (hour >= 19 && hour < 21) return 'twilight';
-  return 'night';
+  if (hour >= 5 && hour < 8) return "dawn";
+  if (hour >= 8 && hour < 17) return "day";
+  if (hour >= 17 && hour < 19) return "golden";
+  if (hour >= 19 && hour < 21) return "twilight";
+  return "night";
 }
 
 function setAtmosphere(atmosphere: Atmosphere) {
@@ -703,17 +721,22 @@ function setAtmosphere(atmosphere: Atmosphere) {
 
   // Remove all atmosphere classes
   root.classList.remove(
-    'atmosphere-dawn', 'atmosphere-day', 'atmosphere-golden',
-    'atmosphere-twilight', 'atmosphere-night', 'atmosphere-storm',
-    'theme-light', 'theme-dark'
+    "atmosphere-dawn",
+    "atmosphere-day",
+    "atmosphere-golden",
+    "atmosphere-twilight",
+    "atmosphere-night",
+    "atmosphere-storm",
+    "theme-light",
+    "theme-dark"
   );
 
   // Add new atmosphere
   root.classList.add(`atmosphere-${atmosphere}`);
 
   // Also set base theme for compatibility
-  const isDark = ['twilight', 'night', 'storm'].includes(atmosphere);
-  root.classList.add(isDark ? 'theme-dark' : 'theme-light');
+  const isDark = ["twilight", "night", "storm"].includes(atmosphere);
+  root.classList.add(isDark ? "theme-dark" : "theme-light");
 }
 
 // Auto-update based on time
@@ -733,7 +756,7 @@ function initAtmosphericUI() {
 
 ```typescript
 interface WeatherCondition {
-  main: 'Clear' | 'Clouds' | 'Rain' | 'Thunderstorm' | 'Snow' | 'Mist';
+  main: "Clear" | "Clouds" | "Rain" | "Thunderstorm" | "Snow" | "Mist";
   description: string;
 }
 
@@ -742,11 +765,11 @@ function getAtmosphereFromWeather(
   hour: number
 ): Atmosphere {
   // Storm conditions override time
-  if (weather.main === 'Thunderstorm') return 'storm';
+  if (weather.main === "Thunderstorm") return "storm";
 
   // Heavy overcast dims everything
-  if (weather.main === 'Clouds' && weather.description.includes('overcast')) {
-    return hour >= 19 || hour < 6 ? 'night' : 'twilight';
+  if (weather.main === "Clouds" && weather.description.includes("overcast")) {
+    return hour >= 19 || hour < 6 ? "night" : "twilight";
   }
 
   // Default to time-based
@@ -760,38 +783,31 @@ function getAtmosphereFromWeather(
 
 ### 1. Pure Black Background (#000000)
 
-**Problem:** Causes eye strain, harsh contrast, OLED "smearing" on scroll
-**Solution:** Use near-black like #0c1222, #121212, or #1a1a2e
+**Problem:** Causes eye strain, harsh contrast, OLED "smearing" on scroll **Solution:** Use near-black like #0c1222, #121212, or #1a1a2e
 
 ### 2. Pure White Text (#FFFFFF) on Dark
 
-**Problem:** Too harsh, causes halation for astigmatism users
-**Solution:** Use off-white like #f1f5f9, #e2e8f0
+**Problem:** Too harsh, causes halation for astigmatism users **Solution:** Use off-white like #f1f5f9, #e2e8f0
 
 ### 3. Same Colors for Both Themes
 
-**Problem:** Teal that looks great on white becomes invisible on dark
-**Solution:** Use brighter variants in dark mode (ocean-400 instead of ocean-600)
+**Problem:** Teal that looks great on white becomes invisible on dark **Solution:** Use brighter variants in dark mode (ocean-400 instead of ocean-600)
 
 ### 4. Shadows in Dark Mode
 
-**Problem:** Shadows disappear against dark backgrounds
-**Solution:** Use lighter surface colors for elevation instead
+**Problem:** Shadows disappear against dark backgrounds **Solution:** Use lighter surface colors for elevation instead
 
 ### 5. Inverted Light Mode Colors
 
-**Problem:** Simply inverting creates jarring, unnatural results
-**Solution:** Design dark mode as its own coherent system
+**Problem:** Simply inverting creates jarring, unnatural results **Solution:** Design dark mode as its own coherent system
 
 ### 6. Ignoring System Preference
 
-**Problem:** Forcing dark mode ignores user's system-wide preference
-**Solution:** Default to `prefers-color-scheme`, allow override
+**Problem:** Forcing dark mode ignores user's system-wide preference **Solution:** Default to `prefers-color-scheme`, allow override
 
 ### 7. Flash of Wrong Theme
 
-**Problem:** Page loads light, then flashes to dark
-**Solution:** Inline script in `<head>` before CSS loads
+**Problem:** Page loads light, then flashes to dark **Solution:** Inline script in `<head>` before CSS loads
 
 ---
 
@@ -832,28 +848,33 @@ function getAtmosphereFromWeather(
 ## Industry References
 
 ### Material Design 3
+
 - Base dark surface: #121212
 - Tonal elevation with white overlay (5-11%)
 - Primary colors at 80% lightness for dark mode
 - 15.8:1 target contrast for elevated surfaces
 
 ### Apple Human Interface Guidelines
+
 - Respect system appearance setting
 - Semantic colors that adapt automatically
 - Increased vibrancy in dark mode
 - Base system background: dynamic (not static black)
 
 ### Figma
+
 - Background: #2c2c2c (base), #383838 (elevated)
 - Text: #ffffff (primary), #b3b3b3 (secondary)
 - Accent: #0d99ff (brand blue, brightened for dark)
 
 ### Discord
+
 - Background: #36393f (main), #2f3136 (sidebar)
 - Text: #dcddde (primary), #72767d (muted)
 - Accent: #5865f2 (blurple, same in both modes)
 
 ### Slack
+
 - Background: #1a1d21 (base), #222529 (elevated)
 - Uses colored sidebars in dark mode
 - Maintains brand identity while adapting
@@ -863,7 +884,7 @@ function getAtmosphereFromWeather(
 ## Companion Skills
 
 | Skill | Handoff Point |
-|-------|---------------|
+| --- | --- |
 | `color-contrast-auditor` | After designing tokens, audit specific pairs |
 | `design-system-creator` | Integrate dark mode into broader design system |
 | `web-design-expert` | Overall visual direction and brand alignment |
@@ -871,4 +892,4 @@ function getAtmosphereFromWeather(
 
 ---
 
-*Remember: Dark mode isn't the absence of light—it's the careful orchestration of luminance to guide attention, reduce strain, and create atmosphere.*
+_Remember: Dark mode isn't the absence of light—it's the careful orchestration of luminance to guide attention, reduce strain, and create atmosphere._

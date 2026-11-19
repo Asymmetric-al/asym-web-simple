@@ -1,11 +1,11 @@
+import Image from "next/image";
 import { Container } from "@/components/site/page";
 import { cta, heroTitle, letterBlocks } from "@/lib/content/home-letter";
-import type { LetterBlock } from "@/lib/content/home-letter";
 import { siteConfig } from "@/lib/config";
 import { createMetadata } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
+import type { LetterBlock } from "@/lib/content/home-letter";
 import type { Metadata } from "next";
-import Image from "next/image";
 
 const mailtoHref = `mailto:${siteConfig.email}?subject=Building%20with%20Asym`;
 
@@ -16,12 +16,12 @@ export const metadata: Metadata = createMetadata({
   path: "/",
 });
 
-function StructuredData({ data }: { data: Record<string, unknown> }) {
+function StructuredData({ data }: { readonly data: Record<string, unknown> }) {
   return (
     <script
       type="application/ld+json"
       dangerouslySetInnerHTML={{
-        __html: JSON.stringify(data).replace(/</g, "\\u003c"),
+        __html: JSON.stringify(data).replaceAll("<", "\\u003c"),
       }}
     />
   );
@@ -56,7 +56,7 @@ function LandscapeBackground() {
   );
 }
 
-function LetterFlowBlock({ block }: { block: LetterBlock }) {
+function LetterFlowBlock({ block }: { readonly block: LetterBlock }) {
   if (block.type === "heading") {
     return (
       <h2

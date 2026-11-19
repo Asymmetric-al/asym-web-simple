@@ -1,13 +1,15 @@
-import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 import type { ComponentPropsWithoutRef } from "react";
 
 type SiteLogoMarkProps = ComponentPropsWithoutRef<"span"> & {
-  imageSizes?: string;
-  priority?: boolean;
+  readonly imageSizes?: string;
+  readonly priority?: boolean;
 };
 
-/** Transparent Asym mark with explicit light/dark artwork. */
+/**
+Transparent Asym mark with explicit light/dark artwork.
+*/
 export function SiteLogoMark({
   className,
   imageSizes = "24px",

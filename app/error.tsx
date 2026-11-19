@@ -1,18 +1,18 @@
 "use client";
 
-import { buttonVariants } from "@/components/ui/button-variants";
-import { Container, PageHero, Section } from "@/components/site/page";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RotateCcw, ShieldAlert } from "lucide-react";
 import Link from "next/link";
 import { useEffect } from "react";
+import { buttonVariants } from "@/components/ui/button-variants";
+import { Container, PageHero, Section } from "@/components/site/page";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function ErrorPage({
   error,
   reset,
 }: {
-  error: Error & { digest?: string };
-  reset: () => void;
+  readonly error: Error & { digest?: string };
+  readonly reset: () => void;
 }) {
   useEffect(() => {
     if (process.env.NODE_ENV === "development") {

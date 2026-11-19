@@ -20,12 +20,12 @@ Material Design 3's approach: elevated surfaces are **lighter**, not shadowed.
 ```css
 :root.theme-dark {
   /* Each elevation level is progressively lighter */
-  --surface-0: #121212;   /* Base */
-  --surface-1: #1e1e1e;   /* +5% white */
-  --surface-2: #232323;   /* +7% white */
-  --surface-3: #252525;   /* +8% white */
-  --surface-4: #272727;   /* +9% white */
-  --surface-5: #2c2c2c;   /* +11% white */
+  --surface-0: #121212; /* Base */
+  --surface-1: #1e1e1e; /* +5% white */
+  --surface-2: #232323; /* +7% white */
+  --surface-3: #252525; /* +8% white */
+  --surface-4: #272727; /* +9% white */
+  --surface-5: #2c2c2c; /* +11% white */
 }
 
 /* Modal (highest elevation) */
@@ -57,7 +57,7 @@ function calculateElevation(baseColor, level) {
   const overlay = overlayPercentages[level] / 100;
 
   // Mix white into base color
-  return mixColors(baseColor, '#ffffff', overlay);
+  return mixColors(baseColor, "#ffffff", overlay);
 }
 ```
 
@@ -128,16 +128,16 @@ Combine strategies based on context.
 
 Higher z-index should correlate with higher surface elevation:
 
-| Element | Z-Index | Surface Level | Border |
-|---------|---------|---------------|--------|
-| Page | 0 | 0 | none |
-| Card | 1 | 1 | subtle |
-| Sticky header | 10 | 2 | default |
-| Dropdown | 20 | 3 | default |
-| Modal backdrop | 40 | - | - |
-| Modal | 50 | 5 | emphasis |
-| Toast | 60 | 5 | emphasis |
-| Tooltip | 70 | 4 | default |
+| Element        | Z-Index | Surface Level | Border   |
+| -------------- | ------- | ------------- | -------- |
+| Page           | 0       | 0             | none     |
+| Card           | 1       | 1             | subtle   |
+| Sticky header  | 10      | 2             | default  |
+| Dropdown       | 20      | 3             | default  |
+| Modal backdrop | 40      | -             | -        |
+| Modal          | 50      | 5             | emphasis |
+| Toast          | 60      | 5             | emphasis |
+| Tooltip        | 70      | 4             | default  |
 
 ## Animation Considerations
 
@@ -184,14 +184,22 @@ Higher z-index should correlate with higher surface elevation:
 
 ```css
 /* DON'T: Everything same surface */
-.card, .modal, .dropdown {
+.card,
+.modal,
+.dropdown {
   background: #1e1e1e;
 }
 
 /* DO: Progressive elevation */
-.card { background: var(--surface-1); }
-.dropdown { background: var(--surface-3); }
-.modal { background: var(--surface-5); }
+.card {
+  background: var(--surface-1);
+}
+.dropdown {
+  background: var(--surface-3);
+}
+.modal {
+  background: var(--surface-5);
+}
 ```
 
 ### Mistake 3: Too Much Contrast in Elevation
@@ -199,11 +207,11 @@ Higher z-index should correlate with higher surface elevation:
 ```css
 /* DON'T: Jarring jumps */
 --surface-0: #000000;
---surface-1: #444444;  /* Too bright! */
+--surface-1: #444444; /* Too bright! */
 
 /* DO: Subtle progression */
 --surface-0: #121212;
---surface-1: #1e1e1e;  /* +5% white */
+--surface-1: #1e1e1e; /* +5% white */
 ```
 
 ## Testing Elevation

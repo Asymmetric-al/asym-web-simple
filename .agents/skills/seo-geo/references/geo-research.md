@@ -20,12 +20,12 @@ Unlike traditional SEO (ranking in search results), GEO focuses on **being cited
 
 ### Core Results
 
-| Metric | Result |
-|--------|--------|
-| **Maximum Visibility Boost** | Up to 40% |
-| **Low-ranking Sites Boost** | Up to 115% with citations |
-| **GEO-bench Dataset** | 10,000+ queries across domains |
-| **Tested on** | Perplexity.ai (commercial GE) |
+| Metric                       | Result                         |
+| ---------------------------- | ------------------------------ |
+| **Maximum Visibility Boost** | Up to 40%                      |
+| **Low-ranking Sites Boost**  | Up to 115% with citations      |
+| **GEO-bench Dataset**        | 10,000+ queries across domains |
+| **Tested on**                | Perplexity.ai (commercial GE)  |
 
 ### Why GEO Matters
 
@@ -45,13 +45,15 @@ Unlike traditional SEO (ranking in search results), GEO focuses on **being cited
 **Why it works:** AI systems prefer content that appears well-researched and credible. Citations signal authority.
 
 **How to apply:**
+
 ```markdown
 # Before
+
 "Studies show that AI improves productivity."
 
 # After
-"According to a 2024 Stanford University study, AI tools improve developer 
-productivity by 55% on average (Chen et al., 2024)."
+
+"According to a 2024 Stanford University study, AI tools improve developer productivity by 55% on average (Chen et al., 2024)."
 ```
 
 **Best for:** All content types, especially academic/professional topics.
@@ -65,13 +67,15 @@ productivity by 55% on average (Chen et al., 2024)."
 **Why it works:** AI systems prioritize factual, verifiable information. Numbers make content more quotable.
 
 **How to apply:**
+
 ```markdown
 # Before
+
 "Many companies use AI for customer service."
 
 # After
-"67% of Fortune 500 companies now use AI chatbots for customer service, 
-handling an average of 85% of routine inquiries without human intervention."
+
+"67% of Fortune 500 companies now use AI chatbots for customer service, handling an average of 85% of routine inquiries without human intervention."
 ```
 
 **Best for:** Business, finance, technology, health content.
@@ -85,14 +89,15 @@ handling an average of 85% of routine inquiries without human intervention."
 **Why it works:** Quotes from recognized experts boost credibility and provide extractable content for AI.
 
 **How to apply:**
+
 ```markdown
 # Before
+
 "AI will transform the workforce."
 
 # After
-"'We're likely to see the first one-person billion-dollar company in the 
-next few years,' predicts Sam Altman, CEO of OpenAI. 'AI will be the 
-great equalizer for small businesses.'"
+
+"'We're likely to see the first one-person billion-dollar company in the next few years,' predicts Sam Altman, CEO of OpenAI. 'AI will be the great equalizer for small businesses.'"
 ```
 
 **Best for:** Law, academic, news, thought leadership content.
@@ -106,14 +111,15 @@ great equalizer for small businesses.'"
 **Why it works:** AI systems assess content quality partly through linguistic signals of authority.
 
 **How to apply:**
+
 ```markdown
 # Before
+
 "This might help with SEO, I think."
 
 # After
-"This strategy demonstrably improves SEO performance. Based on our 
-analysis of 10,000 websites, implementing structured data increases 
-organic traffic by an average of 30%."
+
+"This strategy demonstrably improves SEO performance. Based on our analysis of 10,000 websites, implementing structured data increases organic traffic by an average of 30%."
 ```
 
 **Best for:** Business, professional services, technical documentation.
@@ -127,15 +133,15 @@ organic traffic by an average of 30%."
 **Why it works:** AI aims to provide helpful answers to users of all knowledge levels.
 
 **How to apply:**
+
 ```markdown
 # Before
-"The RAG architecture utilizes vector embeddings for semantic retrieval 
-in conjunction with LLM-based generation."
+
+"The RAG architecture utilizes vector embeddings for semantic retrieval in conjunction with LLM-based generation."
 
 # After
-"RAG (Retrieval-Augmented Generation) works like a research assistant: 
-it first searches for relevant information, then uses AI to write a 
-coherent answer based on what it found."
+
+"RAG (Retrieval-Augmented Generation) works like a research assistant: it first searches for relevant information, then uses AI to write a coherent answer based on what it found."
 ```
 
 **Best for:** Health, education, general consumer content.
@@ -149,14 +155,15 @@ coherent answer based on what it found."
 **Why it works:** Technical terms signal expertise and help AI match content to specialized queries.
 
 **How to apply:**
+
 ```markdown
 # Before
+
 "The website loads slowly."
 
 # After
-"The website suffers from poor Core Web Vitals: LCP (Largest Contentful 
-Paint) exceeds 4 seconds, and CLS (Cumulative Layout Shift) scores 0.3, 
-indicating significant layout instability."
+
+"The website suffers from poor Core Web Vitals: LCP (Largest Contentful Paint) exceeds 4 seconds, and CLS (Cumulative Layout Shift) scores 0.3, indicating significant layout instability."
 ```
 
 **Best for:** Technology, science, medical, legal content.
@@ -170,6 +177,7 @@ indicating significant layout instability."
 **Why it works:** Diverse vocabulary indicates depth of knowledge and makes content more distinguishable.
 
 **How to apply:**
+
 - Use synonyms and varied terminology
 - Avoid repetitive phrasing
 - Include industry-specific jargon where appropriate
@@ -186,6 +194,7 @@ indicating significant layout instability."
 **Why it works:** Well-written content is easier for AI to parse and more likely to be selected as authoritative.
 
 **How to apply:**
+
 - Use clear sentence structure
 - Maintain logical flow between paragraphs
 - Eliminate redundancy
@@ -203,15 +212,15 @@ indicating significant layout instability."
 **Why it HURTS:** Unlike traditional SEO, keyword stuffing actively decreases AI visibility.
 
 **Avoid:**
+
 ```markdown
 # BAD - Keyword stuffing
-"SEO optimization for SEO is the best SEO strategy. Our SEO experts 
-provide SEO services for all your SEO needs. SEO is important for SEO."
+
+"SEO optimization for SEO is the best SEO strategy. Our SEO experts provide SEO services for all your SEO needs. SEO is important for SEO."
 
 # GOOD - Natural writing
-"Search engine optimization is essential for online visibility. Our 
-experts help businesses improve their search rankings through strategic 
-content development and technical improvements."
+
+"Search engine optimization is essential for online visibility. Our experts help businesses improve their search rankings through strategic content development and technical improvements."
 ```
 
 ---
@@ -220,19 +229,19 @@ content development and technical improvements."
 
 The Princeton research found that combining methods yields better results:
 
-| Combination | Effectiveness |
-|-------------|--------------|
-| **Fluency + Statistics** | Highest overall boost |
+| Combination                        | Effectiveness                 |
+| ---------------------------------- | ----------------------------- |
+| **Fluency + Statistics**           | Highest overall boost         |
 | **Citations + Authoritative Tone** | Best for professional content |
-| **Easy Language + Statistics** | Best for consumer content |
-| **Technical Terms + Citations** | Best for academic/scientific |
+| **Easy Language + Statistics**     | Best for consumer content     |
+| **Technical Terms + Citations**    | Best for academic/scientific  |
 
 ---
 
 ## Domain-Specific Recommendations
 
 | Domain | Best Methods | Avoid |
-|--------|-------------|-------|
+| --- | --- | --- |
 | **Technology** | Technical Terms, Citations, Statistics | Oversimplification |
 | **Business/Finance** | Statistics, Authoritative Tone, Citations | Vague claims |
 | **Healthcare** | Easy Language, Statistics, Citations | Jargon overload |
@@ -296,12 +305,12 @@ Percentage of AI response that comes from your content vs. competitors.
 
 The researchers validated GEO methods on **Perplexity.ai**, a commercial generative engine:
 
-| Method | Visibility Increase |
-|--------|-------------------|
-| Cite Sources | Up to 37% |
-| Statistics | Up to 35% |
-| Quotations | Up to 28% |
-| Combined methods | Up to 40% |
+| Method           | Visibility Increase |
+| ---------------- | ------------------- |
+| Cite Sources     | Up to 37%           |
+| Statistics       | Up to 35%           |
+| Quotations       | Up to 28%           |
+| Combined methods | Up to 40%           |
 
 These results confirm that GEO methods work on real-world AI search engines, not just research benchmarks.
 

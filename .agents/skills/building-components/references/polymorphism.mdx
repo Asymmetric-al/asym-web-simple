@@ -204,15 +204,15 @@ The `Slot` component:
 
 **Key differences:**
 
-| Feature                   | `as` prop           | `asChild` + Slot                 |
-| ------------------------- | ------------------- | -------------------------------- |
-| **API Style**             | `<Button as="a">`   | `<Button asChild><a /></Button>` |
-| **Element Type**          | Specified in prop   | Inferred from child              |
-| **Component Composition** | Limited             | Full support                     |
-| **Prop Merging**          | Basic spread        | Intelligent merging              |
-| **Ref Forwarding**        | Manual setup needed | Built-in                         |
-| **Event Handlers**        | May conflict        | Composed correctly               |
-| **Library Size**          | No dependency       | Requires `@radix-ui/react-slot`  |
+| Feature | `as` prop | `asChild` + Slot |
+| --- | --- | --- |
+| **API Style** | `<Button as="a">` | `<Button asChild><a /></Button>` |
+| **Element Type** | Specified in prop | Inferred from child |
+| **Component Composition** | Limited | Full support |
+| **Prop Merging** | Basic spread | Intelligent merging |
+| **Ref Forwarding** | Manual setup needed | Built-in |
+| **Event Handlers** | May conflict | Composed correctly |
+| **Library Size** | No dependency | Requires `@radix-ui/react-slot` |
 
 ### When to Use Each Approach
 
@@ -475,7 +475,7 @@ Warn when inappropriate elements are used:
 function Button({ as: Element = "button", ...props }) {
   if (__DEV__ && Element === "div" && !props.role) {
     console.warn(
-      'Button: When using as="div", provide role="button" for accessibility',
+      'Button: When using as="div", provide role="button" for accessibility'
     );
   }
 

@@ -1,14 +1,13 @@
-import { timingSafeEqual } from "crypto";
+import { timingSafeEqual } from "node:crypto";
 import { draftMode } from "next/headers";
-import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
 function safeEqual(a: string, b: string): boolean {
   try {
     const ab = Buffer.from(a);
     const bb = Buffer.from(b);
-    if (ab.length !== bb.length) return false;
-    return timingSafeEqual(ab, bb);
+    return ab.length === bb.length ? timingSafeEqual(ab, bb) : false;
   } catch {
     return false;
   }
@@ -24,7 +23,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   }
 
   // Guard against open-redirect: only allow relative paths
-  const slug = rawSlug.startsWith("/") && !rawSlug.startsWith("//") ? rawSlug : "/";
+  const slug =
+    rawSlug.startsWith("/") && !rawSlug.startsWith("//") ? rawSlug : "/";
 
   const draft = await draftMode();
   draft.enable();

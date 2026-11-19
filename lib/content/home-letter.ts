@@ -1,33 +1,30 @@
 export const heroTitle = "We’re building Asym.";
 
-type ParagraphBlock = {
+interface ParagraphBlock {
   type: "paragraph";
   text: string;
   emphasis?: boolean;
-};
+}
 
-type HeadingBlock = {
+interface HeadingBlock {
   type: "heading";
   text: string;
   id?: string;
   headingId: string;
-};
+}
 
-type StanzaBlock = {
+interface StanzaBlock {
   type: "stanza";
   lines: readonly string[];
-};
+}
 
-type SignatureBlock = {
+interface SignatureBlock {
   type: "signature";
   lines: readonly string[];
-};
+}
 
 export type LetterBlock =
-  | ParagraphBlock
-  | HeadingBlock
-  | StanzaBlock
-  | SignatureBlock;
+  ParagraphBlock | HeadingBlock | StanzaBlock | SignatureBlock;
 
 export const letterBlocks = [
   {
@@ -285,11 +282,9 @@ export const cta = {
 } as const;
 
 function blockText(block: LetterBlock) {
-  if (block.type === "stanza" || block.type === "signature") {
-    return block.lines;
-  }
-
-  return [block.text] as const;
+  return block.type === "stanza" || block.type === "signature"
+    ? block.lines
+    : ([block.text] as const);
 }
 
 export const allLetterParagraphs = letterBlocks.flatMap(blockText);

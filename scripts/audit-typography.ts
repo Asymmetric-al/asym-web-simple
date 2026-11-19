@@ -7,32 +7,32 @@ import {
   typographyAuditStrings,
 } from "../lib/content/home-letter";
 
-type HeroAuditTarget = {
+interface HeroAuditTarget {
   label: string;
   width: number;
   font: string;
   lineHeight: number;
   maxLines: number;
-};
+}
 
-type ParagraphAuditTarget = {
+interface ParagraphAuditTarget {
   label: string;
   width: number;
   font: string;
   lineHeight: number;
-};
+}
 
-type BrowserAuditPayload = {
+interface BrowserAuditPayload {
   heroText: string;
   heroTargets: HeroAuditTarget[];
   paragraphTargets: ParagraphAuditTarget[];
   paragraphs: string[];
-};
+}
 
-type BrowserAuditResult = {
+interface BrowserAuditResult {
   errors: string[];
   warnings: string[];
-};
+}
 
 const root = process.cwd();
 const errors: string[] = [];
@@ -61,18 +61,16 @@ function cssBlock(css: string, selector: string): string {
   const openBrace = css.indexOf("{", selectorIndex);
   const closeBrace = css.indexOf("}", openBrace);
 
-  if (openBrace === -1 || closeBrace === -1) {
-    return "";
-  }
-
-  return css.slice(selectorIndex, closeBrace + 1);
+  return openBrace === -1 || closeBrace === -1
+    ? ""
+    : css.slice(selectorIndex, closeBrace + 1);
 }
 
 async function auditSourceAndCss(): Promise<void> {
   const content = typographyAuditStrings.join("\n");
   const css = await readFile(resolve(root, "app/globals.css"), "utf8");
 
-  if (content.includes("\u00ad")) {
+  if (content.includes("\u{AD}")) {
     errors.push("Letter content contains a soft hyphen character.");
   }
 
@@ -94,9 +92,7 @@ async function auditSourceAndCss(): Promise<void> {
   ).map((match) => match[0]);
 
   if (
-    proseBlocks.some((block) =>
-      /overflow-wrap\s*:\s*anywhere\b/.test(block)
-    )
+    proseBlocks.some((block) => /overflow-wrap\s*:\s*anywhere\b/.test(block))
   ) {
     errors.push("A broad main/header/footer text rule still uses `anywhere`.");
   }
@@ -262,7 +258,7 @@ function runBrowserAudit(payload: BrowserAuditPayload): BrowserAuditResult {
   try {
     return JSON.parse(result.stdout.trim()) as BrowserAuditResult;
   } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
+    const message = Error.isError(error) ? error.message : String(error);
     return {
       errors: [`Unable to parse Pretext audit output: ${message}`],
       warnings: [result.stdout.trim()].filter(Boolean),

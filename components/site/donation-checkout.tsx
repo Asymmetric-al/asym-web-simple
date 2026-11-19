@@ -1,5 +1,12 @@
 "use client";
 
+import {
+  EmbeddedCheckout,
+  EmbeddedCheckoutProvider,
+} from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import { ArrowLeft, Lock } from "lucide-react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -12,35 +19,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import {
-  ONE_TIME_AMOUNTS_CENTS,
-  type RecurringTier,
-} from "@/lib/donation-tiers";
+import { ONE_TIME_AMOUNTS_CENTS } from "@/lib/donation-tiers";
 import { cn } from "@/lib/utils";
-import {
-  EmbeddedCheckout,
-  EmbeddedCheckoutProvider,
-} from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
-import { ArrowLeft, Lock } from "lucide-react";
-import { useCallback, useMemo, useRef, useState } from "react";
+import type { RecurringTier } from "@/lib/donation-tiers";
 
 const publishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? "";
 
 const stripePromise =
   publishableKey.length > 0 ? loadStripe(publishableKey) : null;
-
-type CheckoutParams =
-  | {
-      mode: "subscription";
-      recurringTier: RecurringTier;
-      customerEmail?: string | undefined;
-    }
-  | {
-      mode: "payment";
-      amountCents: number;
-      customerEmail?: string | undefined;
-    };
 
 function formatUsd(cents: number): string {
   return new Intl.NumberFormat("en-US", {
@@ -54,11 +40,22 @@ export function DonationCheckout({
   stripeConfigured,
   recurringConfigured,
 }: {
-  stripeConfigured: boolean;
-  recurringConfigured: boolean;
+  readonly stripeConfigured: boolean;
+  readonly recurringConfigured: boolean;
 }) {
+  type CheckoutParams =
+    | {
+        mode: "subscription";
+        recurringTier: RecurringTier;
+        customerEmail?: string | undefined;
+      }
+    | {
+        mode: "payment";
+        amountCents: number;
+        customerEmail?: string | undefined;
+      };
   const [giftTab, setGiftTab] = useState<"monthly" | "once">(
-    recurringConfigured ? "monthly" : "once",
+    recurringConfigured ? "monthly" : "once"
   );
   const [recurringTier, setRecurringTier] = useState<RecurringTier>("50");
   const [oneTimeCents, setOneTimeCents] =
@@ -84,16 +81,16 @@ export function DonationCheckout({
         ? {
             mode: "subscription" as const,
             recurringTier: params.recurringTier,
-            ...(params.customerEmail
-              ? { customerEmail: params.customerEmail }
-              : {}),
+            ...(params.customerEmail && {
+              customerEmail: params.customerEmail,
+            }),
           }
         : {
             mode: "payment" as const,
             amountCents: params.amountCents,
-            ...(params.customerEmail
-              ? { customerEmail: params.customerEmail }
-              : {}),
+            ...(params.customerEmail && {
+              customerEmail: params.customerEmail,
+            }),
           };
 
     const res = await fetch("/api/donations/checkout-session", {
@@ -102,7 +99,10 @@ export function DonationCheckout({
       body: JSON.stringify(payload),
     });
 
-    const data = (await res.json()) as { clientSecret?: string; error?: string };
+    const data = (await res.json()) as {
+      clientSecret?: string;
+      error?: string;
+    };
     if (!res.ok || !data.clientSecret) {
       throw new Error(data.error ?? "Could not start checkout.");
     }
@@ -126,7 +126,7 @@ export function DonationCheckout({
     if (giftTab === "monthly") {
       if (!recurringConfigured) {
         setFormError(
-          "Monthly giving is not configured yet. Choose a one-time gift or email info@asymmetric.al.",
+          "Monthly giving is not configured yet. Choose a one-time gift or email info@asymmetric.al."
         );
         return;
       }
@@ -154,7 +154,7 @@ export function DonationCheckout({
         cents,
         label: formatUsd(cents),
       })),
-    [],
+    []
   );
 
   if (!canUseStripe) {
@@ -172,7 +172,10 @@ export function DonationCheckout({
           <p>
             This preview deployment does not have Stripe keys configured. Use
             check, DAF, or email info@asymmetric.al — or add keys locally per{" "}
-            <span className="text-foreground/90 font-medium">docs/STRIPE-GIVING.md</span>.
+            <span className="text-foreground/90 font-medium">
+              docs/STRIPE-GIVING.md
+            </span>
+            .
           </p>
         </CardContent>
       </Card>
@@ -182,7 +185,7 @@ export function DonationCheckout({
   if (checkoutOpen && stripePromise) {
     return (
       <Card className="surface-panel surface-interactive border-foreground/10 overflow-hidden rounded-[2rem]">
-        <CardHeader className="flex flex-row flex-wrap items-center justify-between gap-4 border-b border-border/50 pb-6">
+        <CardHeader className="border-border/50 flex flex-row flex-wrap items-center justify-between gap-4 border-b pb-6">
           <div>
             <p className="text-primary/70 font-mono text-[0.72rem] tracking-[0.28em] uppercase">
               Secure checkout
@@ -233,7 +236,9 @@ export function DonationCheckout({
         <Tabs
           value={giftTab}
           onValueChange={(v) => {
-            if (v === "monthly" || v === "once") setGiftTab(v);
+            if (v === "monthly" || v === "once") {
+              setGiftTab(v);
+            }
           }}
           className="gap-5"
         >
@@ -251,12 +256,7 @@ export function DonationCheckout({
           </TabsList>
 
           <TabsContent value="monthly" className="mt-0 space-y-4">
-            {!recurringConfigured ? (
-              <p className="text-muted-foreground text-sm leading-7">
-                Monthly tiers are not configured on this deployment. Use
-                one-time or contact info@asymmetric.al.
-              </p>
-            ) : (
+            {recurringConfigured ? (
               <>
                 <p className="text-muted-foreground text-sm leading-7">
                   Pick a monthly support level. You can update or cancel anytime
@@ -292,12 +292,18 @@ export function DonationCheckout({
                   ))}
                 </ToggleGroup>
               </>
+            ) : (
+              <p className="text-muted-foreground text-sm leading-7">
+                Monthly tiers are not configured on this deployment. Use
+                one-time or contact info@asymmetric.al.
+              </p>
             )}
           </TabsContent>
 
           <TabsContent value="once" className="mt-0 space-y-4">
             <p className="text-muted-foreground text-sm leading-7">
-              Choose an amount. Preset tiers keep processing simple and auditable.
+              Choose an amount. Preset tiers keep processing simple and
+              auditable.
             </p>
             <ToggleGroup
               multiple={false}
@@ -307,7 +313,7 @@ export function DonationCheckout({
                 const n = Number(v);
                 if (
                   ONE_TIME_AMOUNTS_CENTS.includes(
-                    n as (typeof ONE_TIME_AMOUNTS_CENTS)[number],
+                    n as (typeof ONE_TIME_AMOUNTS_CENTS)[number]
                   )
                 ) {
                   setOneTimeCents(n as (typeof ONE_TIME_AMOUNTS_CENTS)[number]);

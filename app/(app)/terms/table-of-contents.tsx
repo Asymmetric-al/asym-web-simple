@@ -1,18 +1,19 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
-import { useEffect, useState, type MouseEvent } from "react";
+import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
+import type { MouseEvent } from "react";
 
-type TocItem = {
+interface TocItem {
   id: string;
   label: string;
-};
+}
 
 export function TermsTableOfContents({
   items,
 }: {
-  items: readonly TocItem[];
+  readonly items: readonly TocItem[];
 }) {
   const [activeId, setActiveId] = useState("");
 
@@ -30,7 +31,9 @@ export function TermsTableOfContents({
 
     items.forEach((item) => {
       const element = document.getElementById(item.id);
-      if (element) observer.observe(element);
+      if (element) {
+        observer.observe(element);
+      }
     });
 
     return () => observer.disconnect();
@@ -52,15 +55,20 @@ export function TermsTableOfContents({
           href={`#${item.id}`}
           onClick={(event) => handleClick(event, item.id)}
           className={cn(
-            "flex items-center justify-between group py-2 pr-4 border-l-[2px] transition-all duration-300",
+            "group flex items-center justify-between border-l-[2px] py-2 pr-4 transition-all duration-300",
             activeId === item.id
-              ? "border-primary text-foreground pl-4 bg-secondary/50"
-              : "border-transparent text-muted-foreground hover:text-foreground hover:border-border pl-4"
+              ? "border-primary text-foreground bg-secondary/50 pl-4"
+              : "text-muted-foreground hover:text-foreground hover:border-border border-transparent pl-4"
           )}
         >
-          <span className="font-mono text-[10px] uppercase tracking-widest truncate">{item.label}</span>
+          <span className="truncate font-mono text-[10px] tracking-widest uppercase">
+            {item.label}
+          </span>
           {activeId === item.id ? (
-            <ChevronRight size={12} className="text-primary animate-in fade-in slide-in-from-left-2 duration-300" />
+            <ChevronRight
+              size={12}
+              className="text-primary animate-in fade-in slide-in-from-left-2 duration-300"
+            />
           ) : null}
         </a>
       ))}

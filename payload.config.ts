@@ -1,15 +1,16 @@
+import path from "node:path";
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
-import path from "path";
-import type { CollectionConfig } from "payload";
 import { buildConfig } from "payload";
-import { fileURLToPath } from "url";
+import type { CollectionConfig } from "payload";
 
-const filename = fileURLToPath(import.meta.url);
-const dirname = path.dirname(filename);
+const { filename } = import.meta;
+const { dirname } = import.meta;
 
-/** Auth collection for Payload admin (`admin.user` must match slug). */
+/**
+Auth collection for Payload admin (`admin.user` must match slug).
+*/
 const users: CollectionConfig = {
   slug: "users",
   auth: true,

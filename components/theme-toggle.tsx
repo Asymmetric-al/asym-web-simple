@@ -1,5 +1,9 @@
 "use client";
 
+import { Check, LaptopMinimal, MoonStar, SunMedium } from "lucide-react";
+import { useTheme } from "next-themes";
+import { useSyncExternalStore } from "react";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,10 +13,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { Check, LaptopMinimal, MoonStar, SunMedium } from "lucide-react";
-import { useTheme } from "next-themes";
-import { useSyncExternalStore } from "react";
 
 const emptySubscribe = () => () => {};
 
@@ -20,7 +20,7 @@ function useIsClient(): boolean {
   return useSyncExternalStore(
     emptySubscribe,
     () => true,
-    () => false,
+    () => false
   );
 }
 
@@ -31,21 +31,27 @@ const themes = [
 ] as const;
 
 export function ThemeToggle() {
-  const mounted = useIsClient();
+  const isMounted = useIsClient();
   const { resolvedTheme, setTheme, theme } = useTheme();
   const activeTheme = theme ?? "system";
 
   // Avoid hydration mismatch: resolvedTheme differs between server and first client render.
-  const TriggerIcon = !mounted
-    ? LaptopMinimal
-    : resolvedTheme === "dark"
+  const TriggerIcon = isMounted
+    ? resolvedTheme === "dark"
       ? MoonStar
-      : SunMedium;
+      : SunMedium
+    : LaptopMinimal;
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        render={<Button variant="outline" size="icon-sm" aria-label="Change color theme" />}
+        render={
+          <Button
+            variant="outline"
+            size="icon-sm"
+            aria-label="Change color theme"
+          />
+        }
       >
         <TriggerIcon />
         <span className="sr-only">Change color theme</span>
@@ -64,7 +70,9 @@ export function ThemeToggle() {
               >
                 <Icon />
                 <span>{option.label}</span>
-                {activeTheme === option.value ? <Check className="ml-auto" /> : null}
+                {activeTheme === option.value ? (
+                  <Check className="ml-auto" />
+                ) : null}
               </DropdownMenuItem>
             );
           })}

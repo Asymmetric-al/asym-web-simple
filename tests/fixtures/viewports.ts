@@ -1,8 +1,8 @@
-export type ViewportFixture = {
+export interface ViewportFixture {
   label: string;
   width: number;
   height: number;
-};
+}
 
 export const routeSanityViewports: ViewportFixture[] = [
   { label: "320x900", width: 320, height: 900 },

@@ -17,8 +17,8 @@ The first rollout is intentionally narrow:
 - Framework: Next.js `16.2.0`
 - Router: App Router
 - Route groups:
-  - [app/(app)](C:/Users/Conrad/Documents/GitHub/asym-web/app/(app))
-  - [app/(payload)](C:/Users/Conrad/Documents/GitHub/asym-web/app/(payload))
+  - [app/(app)](<C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)>)
+  - [app/(payload)](<C:/Users/Conrad/Documents/GitHub/asym-web/app/(payload)>)
 - Package manager declaration: `bun@1.3.11`
 - Current scripts:
   - `npm run dev`
@@ -74,21 +74,21 @@ The first rollout is intentionally narrow:
 ## Route and Surface Inventory
 
 | Route / Surface | Files | Notes | Decision |
-|---|---|---|---|
-| Home hero and home marketing cards | [app/(app)/page.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/page.tsx), [components/site/home-page-hero.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/components/site/home-page-hero.tsx) | Static authored copy, balanced headlines already used, no repeated dynamic preview feed | GO LATER |
-| Platform module tab triggers | [app/(app)/platform/page.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/platform/page.tsx), [components/site/platform-tabs.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/components/site/platform-tabs.tsx) | Repeated client-side card triggers with variable title + summary height; existing `min-h-[9rem]` is a rough guard | GO |
-| Platform supporting module cards | [app/(app)/platform/page.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/platform/page.tsx) | Static grid cards; visually acceptable today | GO LATER |
-| Missions audience and impact cards | [app/(app)/missions/page.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/missions/page.tsx) | Static server-rendered cards, no current instability | GO LATER |
-| Specs layer and target cards | [app/(app)/specs/page.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/specs/page.tsx) | Repeated cards but static authored content | GO LATER |
-| Join / Contact / Give info cards | [app/(app)/join/page.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/join/page.tsx), [app/(app)/contact/page.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/contact/page.tsx), [app/(app)/give/page.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/give/page.tsx) | Repeated marketing/support cards; CSS is sufficient | GO LATER |
-| Manifesto section cards | [app/(app)/manifesto/page.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/manifesto/page.tsx) | Long-form authored statements, but not preview cards | GO LATER |
-| Statement of faith article cards | [app/(app)/statement-of-faith/page.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/statement-of-faith/page.tsx) | Static legal/doctrinal content cards | GO LATER |
-| FAQ accordion answers | [app/(app)/give/page.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/give/page.tsx), [components/ui/accordion.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/components/ui/accordion.tsx) | Accordion height already handled by Base UI; replacing that path is risky | GO LATER |
+| --- | --- | --- | --- |
+| Home hero and home marketing cards | [app/(app)/page.tsx](<C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/page.tsx>), [components/site/home-page-hero.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/components/site/home-page-hero.tsx) | Static authored copy, balanced headlines already used, no repeated dynamic preview feed | GO LATER |
+| Platform module tab triggers | [app/(app)/platform/page.tsx](<C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/platform/page.tsx>), [components/site/platform-tabs.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/components/site/platform-tabs.tsx) | Repeated client-side card triggers with variable title + summary height; existing `min-h-[9rem]` is a rough guard | GO |
+| Platform supporting module cards | [app/(app)/platform/page.tsx](<C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/platform/page.tsx>) | Static grid cards; visually acceptable today | GO LATER |
+| Missions audience and impact cards | [app/(app)/missions/page.tsx](<C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/missions/page.tsx>) | Static server-rendered cards, no current instability | GO LATER |
+| Specs layer and target cards | [app/(app)/specs/page.tsx](<C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/specs/page.tsx>) | Repeated cards but static authored content | GO LATER |
+| Join / Contact / Give info cards | [app/(app)/join/page.tsx](<C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/join/page.tsx>), [app/(app)/contact/page.tsx](<C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/contact/page.tsx>), [app/(app)/give/page.tsx](<C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/give/page.tsx>) | Repeated marketing/support cards; CSS is sufficient | GO LATER |
+| Manifesto section cards | [app/(app)/manifesto/page.tsx](<C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/manifesto/page.tsx>) | Long-form authored statements, but not preview cards | GO LATER |
+| Statement of faith article cards | [app/(app)/statement-of-faith/page.tsx](<C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/statement-of-faith/page.tsx>) | Static legal/doctrinal content cards | GO LATER |
+| FAQ accordion answers | [app/(app)/give/page.tsx](<C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/give/page.tsx>), [components/ui/accordion.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/components/ui/accordion.tsx) | Accordion height already handled by Base UI; replacing that path is risky | GO LATER |
 | Shared page heroes | [components/site/page.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/components/site/page.tsx) | Headline fitting is interesting, but current authored headlines are short and `text-balance` already helps | GO LATER |
 | Navigation and footer | [components/header.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/components/header.tsx), [components/footer.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/components/footer.tsx) | Not a text-layout problem | NO GO |
 | Forms and inquiry flows | [components/site/inquiry-form.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/components/site/inquiry-form.tsx) | Form UX, not text-led layout | NO GO |
 | Full document shells and legal content | [components/site/document-page.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/components/site/document-page.tsx) | Full-body content is not the v1 target | NO GO |
-| Payload admin and API routes | [app/(payload)](C:/Users/Conrad/Documents/GitHub/asym-web/app/(payload)), [app/api](C:/Users/Conrad/Documents/GitHub/asym-web/app/api) | Admin/editor and server APIs | NO GO |
+| Payload admin and API routes | [app/(payload)](<C:/Users/Conrad/Documents/GitHub/asym-web/app/(payload)>), [app/api](C:/Users/Conrad/Documents/GitHub/asym-web/app/api) | Admin/editor and server APIs | NO GO |
 
 ## Verified GO / GO LATER / NO GO
 
@@ -99,15 +99,15 @@ The first rollout is intentionally narrow:
 
 ### GO LATER
 
-- [app/(app)/page.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/page.tsx)
-- [app/(app)/platform/page.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/platform/page.tsx)
-- [app/(app)/missions/page.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/missions/page.tsx)
-- [app/(app)/specs/page.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/specs/page.tsx)
-- [app/(app)/join/page.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/join/page.tsx)
-- [app/(app)/contact/page.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/contact/page.tsx)
-- [app/(app)/give/page.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/give/page.tsx)
-- [app/(app)/manifesto/page.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/manifesto/page.tsx)
-- [app/(app)/statement-of-faith/page.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/statement-of-faith/page.tsx)
+- [app/(app)/page.tsx](<C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/page.tsx>)
+- [app/(app)/platform/page.tsx](<C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/platform/page.tsx>)
+- [app/(app)/missions/page.tsx](<C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/missions/page.tsx>)
+- [app/(app)/specs/page.tsx](<C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/specs/page.tsx>)
+- [app/(app)/join/page.tsx](<C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/join/page.tsx>)
+- [app/(app)/contact/page.tsx](<C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/contact/page.tsx>)
+- [app/(app)/give/page.tsx](<C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/give/page.tsx>)
+- [app/(app)/manifesto/page.tsx](<C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/manifesto/page.tsx>)
+- [app/(app)/statement-of-faith/page.tsx](<C:/Users/Conrad/Documents/GitHub/asym-web/app/(app)/statement-of-faith/page.tsx>)
 - [components/site/page.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/components/site/page.tsx)
 - [components/site/home-page-hero.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/components/site/home-page-hero.tsx)
 - [components/ui/accordion.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/components/ui/accordion.tsx)
@@ -125,7 +125,7 @@ Revisit when at least one of these becomes true:
 - [components/footer.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/components/footer.tsx)
 - [components/site/inquiry-form.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/components/site/inquiry-form.tsx)
 - [components/site/document-page.tsx](C:/Users/Conrad/Documents/GitHub/asym-web/components/site/document-page.tsx)
-- [app/(payload)](C:/Users/Conrad/Documents/GitHub/asym-web/app/(payload))
+- [app/(payload)](<C:/Users/Conrad/Documents/GitHub/asym-web/app/(payload)>)
 - [app/api](C:/Users/Conrad/Documents/GitHub/asym-web/app/api)
 
 These become revisit candidates only if the product itself changes shape materially.

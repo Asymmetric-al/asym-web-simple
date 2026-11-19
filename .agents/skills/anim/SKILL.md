@@ -11,7 +11,7 @@ In this codebase, prefer importing Motion from `motion/react` (same component AP
 
 ## Core Philosophy
 
-**Animation should be invisible.** When done right, users don't notice animation - they notice that the interface feels *good*. The moment someone says "nice animation," you've probably overdone it.
+**Animation should be invisible.** When done right, users don't notice animation - they notice that the interface feels _good_. The moment someone says "nice animation," you've probably overdone it.
 
 > "The best animations are the ones you don't notice." — Emil Kowalski
 
@@ -117,7 +117,9 @@ In this codebase, prefer importing Motion from `motion/react` (same component AP
 
 ```css
 .element {
-  transition: transform 200ms ease-out, opacity 200ms ease-out;
+  transition:
+    transform 200ms ease-out,
+    opacity 200ms ease-out;
 }
 
 /* Hover: instant on, fade off */
@@ -163,19 +165,33 @@ In this codebase, prefer importing Motion from `motion/react` (same component AP
 ### Stagger Pattern
 
 ```css
-.item { animation: fadeInUp 200ms ease-out backwards; }
-.item:nth-child(1) { animation-delay: 0ms; }
-.item:nth-child(2) { animation-delay: 40ms; }
-.item:nth-child(3) { animation-delay: 80ms; }
-.item:nth-child(4) { animation-delay: 120ms; }
-.item:nth-child(5) { animation-delay: 160ms; }
+.item {
+  animation: fadeInUp 200ms ease-out backwards;
+}
+.item:nth-child(1) {
+  animation-delay: 0ms;
+}
+.item:nth-child(2) {
+  animation-delay: 40ms;
+}
+.item:nth-child(3) {
+  animation-delay: 80ms;
+}
+.item:nth-child(4) {
+  animation-delay: 120ms;
+}
+.item:nth-child(5) {
+  animation-delay: 160ms;
+}
 ```
 
 ### Reduced Motion
 
 ```css
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
@@ -216,7 +232,7 @@ In this codebase, prefer importing Motion from `motion/react` (same component AP
     visible: { transition: { staggerChildren: 0.04 } },
   }}
 >
-  {items.map(item => (
+  {items.map((item) => (
     <motion.li
       key={item.id}
       variants={{
@@ -272,4 +288,4 @@ In this codebase, prefer importing Motion from `motion/react` (same component AP
 
 ---
 
-*"Animation is not about moving things. It's about not making users wait."* — Emil Kowalski
+_"Animation is not about moving things. It's about not making users wait."_ — Emil Kowalski

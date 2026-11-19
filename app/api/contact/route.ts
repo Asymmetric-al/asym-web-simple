@@ -1,6 +1,6 @@
-import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
+import type { NextRequest } from "next/server";
 
 function isNonEmpty(value: unknown): value is string {
   return typeof value === "string" && value.trim().length > 0;
@@ -14,7 +14,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         error:
           "Email is not configured on this deployment. Use the copy or mailto options, or email us directly.",
       },
-      { status: 503 },
+      { status: 503 }
     );
   }
 
@@ -27,7 +27,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Invalid request body" },
+      { status: 400 }
+    );
   }
 
   const record = body as Record<string, unknown>;
@@ -39,7 +42,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   if (!name || !email) {
     return NextResponse.json(
       { error: "Name and email are required." },
-      { status: 422 },
+      { status: 422 }
     );
   }
 
@@ -56,7 +59,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     if (!topic || !message) {
       return NextResponse.json(
         { error: "Topic and message are required." },
-        { status: 422 },
+        { status: 422 }
       );
     }
 
@@ -75,12 +78,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       ? record.organization.trim()
       : "";
     const role = isNonEmpty(record.role) ? record.role.trim() : "";
-    const challenge = isNonEmpty(record.challenge) ? record.challenge.trim() : "";
+    const challenge = isNonEmpty(record.challenge)
+      ? record.challenge.trim()
+      : "";
 
     if (!organization || !role || !challenge) {
       return NextResponse.json(
         { error: "Organization, role, and challenge fields are required." },
-        { status: 422 },
+        { status: 422 }
       );
     }
 
@@ -108,11 +113,13 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     });
 
     return NextResponse.json({ success: true });
-  } catch (err) {
-    console.error("[contact] email send failed", err);
+  } catch (error) {
+    console.error("[contact] email send failed", error);
     return NextResponse.json(
-      { error: "Failed to send message. Please try again or email us directly." },
-      { status: 500 },
+      {
+        error: "Failed to send message. Please try again or email us directly.",
+      },
+      { status: 500 }
     );
   }
 }

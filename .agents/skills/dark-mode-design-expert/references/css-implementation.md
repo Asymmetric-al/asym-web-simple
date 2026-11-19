@@ -55,7 +55,7 @@ New in 2024 - inline theme switching:
   /* First value for light, second for dark */
   background: light-dark(#ffffff, #1e1e1e);
   color: light-dark(#1f2937, #f3f4f6);
-  border: 1px solid light-dark(#e5e7eb, rgba(255,255,255,0.1));
+  border: 1px solid light-dark(#e5e7eb, rgba(255, 255, 255, 0.1));
 }
 ```
 
@@ -136,7 +136,7 @@ New in 2024 - inline theme switching:
 
 ```javascript
 // Toggle theme
-document.documentElement.dataset.theme = 'dark';
+document.documentElement.dataset.theme = "dark";
 ```
 
 ### Pattern C: Class-Based (Simple)
@@ -170,34 +170,35 @@ document.documentElement.dataset.theme = 'dark';
 ```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
 
-  <!-- BLOCKING: Runs before CSS renders -->
-  <script>
-    (function() {
-      // Check localStorage first
-      const saved = localStorage.getItem('theme');
-      if (saved === 'dark') {
-        document.documentElement.classList.add('theme-dark');
-      } else if (saved === 'light') {
-        document.documentElement.classList.add('theme-light');
-      }
-      // If no saved preference, CSS media queries handle it
-    })();
-  </script>
+    <!-- BLOCKING: Runs before CSS renders -->
+    <script>
+      (function () {
+        // Check localStorage first
+        const saved = localStorage.getItem("theme");
+        if (saved === "dark") {
+          document.documentElement.classList.add("theme-dark");
+        } else if (saved === "light") {
+          document.documentElement.classList.add("theme-light");
+        }
+        // If no saved preference, CSS media queries handle it
+      })();
+    </script>
 
-  <!-- CSS loads after theme class is set -->
-  <link rel="stylesheet" href="styles.css">
-</head>
+    <!-- CSS loads after theme class is set -->
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+</html>
 ```
 
 ### Alternative: CSS-Only with `@import`
 
 ```css
 /* Import theme based on system preference */
-@import url('light.css') (prefers-color-scheme: light);
-@import url('dark.css') (prefers-color-scheme: dark);
+@import url("light.css") (prefers-color-scheme: light);
+@import url("dark.css") (prefers-color-scheme: dark);
 ```
 
 ## Theme Switching JavaScript
@@ -205,33 +206,34 @@ document.documentElement.dataset.theme = 'dark';
 ### Complete Implementation
 
 ```typescript
-type Theme = 'light' | 'dark' | 'system';
+type Theme = "light" | "dark" | "system";
 
 class ThemeManager {
-  private static STORAGE_KEY = 'theme';
+  private static STORAGE_KEY = "theme";
 
   static init() {
     // Apply saved theme immediately (called from head script)
     const saved = localStorage.getItem(this.STORAGE_KEY) as Theme | null;
-    if (saved && saved !== 'system') {
+    if (saved && saved !== "system") {
       document.documentElement.classList.add(`theme-${saved}`);
     }
 
     // Listen for system changes
-    window.matchMedia('(prefers-color-scheme: dark)')
-      .addEventListener('change', (e) => {
+    window
+      .matchMedia("(prefers-color-scheme: dark)")
+      .addEventListener("change", (e) => {
         if (!localStorage.getItem(this.STORAGE_KEY)) {
           // Only react if user hasn't set explicit preference
-          this.updateMetaThemeColor(e.matches ? 'dark' : 'light');
+          this.updateMetaThemeColor(e.matches ? "dark" : "light");
         }
       });
   }
 
   static setTheme(theme: Theme) {
     const root = document.documentElement;
-    root.classList.remove('theme-light', 'theme-dark');
+    root.classList.remove("theme-light", "theme-dark");
 
-    if (theme === 'system') {
+    if (theme === "system") {
       localStorage.removeItem(this.STORAGE_KEY);
     } else {
       root.classList.add(`theme-${theme}`);
@@ -242,29 +244,29 @@ class ThemeManager {
   }
 
   static getTheme(): Theme {
-    return (localStorage.getItem(this.STORAGE_KEY) as Theme) || 'system';
+    return (localStorage.getItem(this.STORAGE_KEY) as Theme) || "system";
   }
 
-  static getEffectiveTheme(): 'light' | 'dark' {
+  static getEffectiveTheme(): "light" | "dark" {
     const saved = this.getTheme();
-    if (saved !== 'system') return saved;
+    if (saved !== "system") return saved;
 
-    return window.matchMedia('(prefers-color-scheme: dark)').matches
-      ? 'dark'
-      : 'light';
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
   }
 
-  private static updateMetaThemeColor(theme: 'light' | 'dark') {
-    const color = theme === 'dark' ? '#0c1222' : '#ffffff';
+  private static updateMetaThemeColor(theme: "light" | "dark") {
+    const color = theme === "dark" ? "#0c1222" : "#ffffff";
     let meta = document.querySelector('meta[name="theme-color"]');
 
     if (!meta) {
-      meta = document.createElement('meta');
-      meta.setAttribute('name', 'theme-color');
+      meta = document.createElement("meta");
+      meta.setAttribute("name", "theme-color");
       document.head.appendChild(meta);
     }
 
-    meta.setAttribute('content', color);
+    meta.setAttribute("content", color);
   }
 }
 ```
@@ -272,60 +274,60 @@ class ThemeManager {
 ### React Hook
 
 ```typescript
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-type Theme = 'light' | 'dark' | 'system';
+type Theme = "light" | "dark" | "system";
 
 export function useTheme() {
   const [theme, setThemeState] = useState<Theme>(() => {
-    if (typeof window === 'undefined') return 'system';
-    return (localStorage.getItem('theme') as Theme) || 'system';
+    if (typeof window === "undefined") return "system";
+    return (localStorage.getItem("theme") as Theme) || "system";
   });
 
-  const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>(() => {
-    if (typeof window === 'undefined') return 'light';
-    return window.matchMedia('(prefers-color-scheme: dark)').matches
-      ? 'dark'
-      : 'light';
+  const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">(() => {
+    if (typeof window === "undefined") return "light";
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
   });
 
   useEffect(() => {
     const root = document.documentElement;
-    root.classList.remove('theme-light', 'theme-dark');
+    root.classList.remove("theme-light", "theme-dark");
 
-    if (theme === 'system') {
-      localStorage.removeItem('theme');
+    if (theme === "system") {
+      localStorage.removeItem("theme");
       setResolvedTheme(
-        window.matchMedia('(prefers-color-scheme: dark)').matches
-          ? 'dark'
-          : 'light'
+        window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light"
       );
     } else {
       root.classList.add(`theme-${theme}`);
-      localStorage.setItem('theme', theme);
+      localStorage.setItem("theme", theme);
       setResolvedTheme(theme);
     }
   }, [theme]);
 
   // Listen for system preference changes
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
     const handler = (e: MediaQueryListEvent) => {
-      if (theme === 'system') {
-        setResolvedTheme(e.matches ? 'dark' : 'light');
+      if (theme === "system") {
+        setResolvedTheme(e.matches ? "dark" : "light");
       }
     };
 
-    mediaQuery.addEventListener('change', handler);
-    return () => mediaQuery.removeEventListener('change', handler);
+    mediaQuery.addEventListener("change", handler);
+    return () => mediaQuery.removeEventListener("change", handler);
   }, [theme]);
 
   return {
     theme,
     resolvedTheme,
     setTheme: setThemeState,
-    isDark: resolvedTheme === 'dark',
+    isDark: resolvedTheme === "dark",
   };
 }
 ```
@@ -350,8 +352,8 @@ export function useTheme() {
 
 ```html
 <picture>
-  <source srcset="hero-dark.jpg" media="(prefers-color-scheme: dark)">
-  <img src="hero-light.jpg" alt="Hero image">
+  <source srcset="hero-dark.jpg" media="(prefers-color-scheme: dark)" />
+  <img src="hero-light.jpg" alt="Hero image" />
 </picture>
 ```
 
@@ -359,12 +361,12 @@ export function useTheme() {
 
 ```css
 .hero {
-  background-image: url('hero-light.jpg');
+  background-image: url("hero-light.jpg");
 }
 
 @media (prefers-color-scheme: dark) {
   .hero {
-    background-image: url('hero-dark.jpg');
+    background-image: url("hero-dark.jpg");
   }
 }
 ```
@@ -378,7 +380,9 @@ export function useTheme() {
 }
 
 /* Custom form styling */
-input, textarea, select {
+input,
+textarea,
+select {
   background: var(--color-bg-primary);
   color: var(--color-text-primary);
   border: 1px solid var(--color-border);
@@ -411,9 +415,11 @@ input:focus {
 ```javascript
 // Test all theme states
 const testThemes = () => {
-  ['light', 'dark', 'system'].forEach(theme => {
+  ["light", "dark", "system"].forEach((theme) => {
     ThemeManager.setTheme(theme);
-    console.log(`Theme: ${theme}, Effective: ${ThemeManager.getEffectiveTheme()}`);
+    console.log(
+      `Theme: ${theme}, Effective: ${ThemeManager.getEffectiveTheme()}`
+    );
     // Visual inspection or screenshot
   });
 };

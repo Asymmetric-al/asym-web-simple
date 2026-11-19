@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { PageHero, Section } from "@/components/site/page";
 import { Reveal } from "@/components/site/reveal";
 import {
@@ -9,7 +10,6 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { createMetadata } from "@/lib/metadata";
 import type { Metadata } from "next";
-import Link from "next/link";
 
 const faqItems = [
   {
@@ -137,13 +137,19 @@ export default function FAQPage() {
             <CardContent className="text-primary-foreground/82 flex flex-col gap-3 text-sm leading-7">
               <p>
                 Product walkthrough:{" "}
-                <Link href="/platform#portal-walkthrough" className="underline underline-offset-4">
+                <Link
+                  href="/platform#portal-walkthrough"
+                  className="underline underline-offset-4"
+                >
                   Platform walkthrough
                 </Link>
               </p>
               <p>
                 Faith and doctrine:{" "}
-                <Link href="/statement-of-faith" className="underline underline-offset-4">
+                <Link
+                  href="/statement-of-faith"
+                  className="underline underline-offset-4"
+                >
                   Statement of Faith
                 </Link>
               </p>
@@ -169,7 +175,7 @@ export default function FAQPage() {
                 <AccordionTrigger className="px-5 py-5 text-base font-semibold sm:px-6">
                   {item.question}
                 </AccordionTrigger>
-                <AccordionContent className="px-5 text-sm leading-7 text-muted-foreground sm:px-6">
+                <AccordionContent className="text-muted-foreground px-5 text-sm leading-7 sm:px-6">
                   {item.answer}
                 </AccordionContent>
               </AccordionItem>
@@ -200,7 +206,10 @@ export default function FAQPage() {
                 "Reach out directly if you want the Mission Tech Stack Audit or have a general question for the team.",
             },
           ].map((item) => (
-            <Card key={item.href} className="surface-card surface-interactive rounded-[1.8rem]">
+            <Card
+              key={item.href}
+              className="surface-card surface-interactive rounded-[1.8rem]"
+            >
               <CardHeader>
                 <CardTitle className="font-heading text-xl font-semibold tracking-[-0.04em]">
                   <Link href={item.href} className="link-resilient">

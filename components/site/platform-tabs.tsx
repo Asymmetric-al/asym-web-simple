@@ -1,33 +1,28 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
+import { startTransition, useEffect, useRef, useState } from "react";
 import {
   canUseTextLayout,
   measurePlatformTabTrigger,
   platformTabTriggerPreset,
   waitForTextLayoutFontsReady,
-  type PlatformTabTriggerElements,
 } from "@/lib/text-layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getRevealTransition, useReducedMotion } from "@/lib/motion";
-import {
-  startTransition,
-  useEffect,
-  useRef,
-  useState,
-  type CSSProperties,
-} from "react";
+import type { PlatformTabTriggerElements } from "@/lib/text-layout";
+import type { CSSProperties } from "react";
 
-export type PlatformTabItem = {
+export interface PlatformTabItem {
   id: string;
   title: string;
   tag: string;
   summary: string;
   details: string[];
-};
+}
 
-export function PlatformTabs({ items }: { items: PlatformTabItem[] }) {
+export function PlatformTabs({ items }: { readonly items: PlatformTabItem[] }) {
   const prefersReducedMotion = useReducedMotion();
   const [activeTab, setActiveTab] = useState(items[0]?.id);
   const [sharedTriggerMinHeight, setSharedTriggerMinHeight] = useState<
@@ -42,9 +37,11 @@ export function PlatformTabs({ items }: { items: PlatformTabItem[] }) {
   const summaryRefs = useRef<(HTMLParagraphElement | null)[]>([]);
 
   useEffect(() => {
-    if (!canUseTextLayout()) return;
+    if (!canUseTextLayout()) {
+      return;
+    }
 
-    let cancelled = false;
+    let isCancelled = false;
     let animationFrame = 0;
     let resizeObserver: ResizeObserver | null = null;
 
@@ -56,7 +53,9 @@ export function PlatformTabs({ items }: { items: PlatformTabItem[] }) {
     const scheduleMeasurement = () => {
       window.cancelAnimationFrame(animationFrame);
       animationFrame = window.requestAnimationFrame(() => {
-        if (cancelled) return;
+        if (isCancelled) {
+          return;
+        }
 
         const elements: PlatformTabTriggerElements[] = [];
 
@@ -100,8 +99,8 @@ export function PlatformTabs({ items }: { items: PlatformTabItem[] }) {
           setSharedTriggerMinHeight(
             Math.max(
               measurement.sharedMinHeightPx,
-              platformTabTriggerPreset.fallbackMinHeightPx,
-            ),
+              platformTabTriggerPreset.fallbackMinHeightPx
+            )
           );
           setPretextReady(true);
         });
@@ -109,7 +108,9 @@ export function PlatformTabs({ items }: { items: PlatformTabItem[] }) {
     };
 
     void waitForTextLayoutFontsReady().then(() => {
-      if (cancelled) return;
+      if (isCancelled) {
+        return;
+      }
 
       scheduleMeasurement();
 
@@ -125,7 +126,7 @@ export function PlatformTabs({ items }: { items: PlatformTabItem[] }) {
     });
 
     return () => {
-      cancelled = true;
+      isCancelled = true;
       window.cancelAnimationFrame(animationFrame);
       resizeObserver?.disconnect();
       window.removeEventListener("resize", scheduleMeasurement);

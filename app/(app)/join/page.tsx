@@ -1,9 +1,3 @@
-import { PageHero, Section, SectionHeader } from "@/components/site/page";
-import { Reveal, StaggerItem, StaggerReveal } from "@/components/site/reveal";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { buttonVariants } from "@/components/ui/button-variants";
-import { createMetadata } from "@/lib/metadata";
-import { cn } from "@/lib/utils";
 import {
   ArrowRight,
   BookOpen,
@@ -14,8 +8,14 @@ import {
   Users,
   Zap,
 } from "lucide-react";
-import type { Metadata } from "next";
 import Link from "next/link";
+import { PageHero, Section, SectionHeader } from "@/components/site/page";
+import { Reveal, StaggerItem, StaggerReveal } from "@/components/site/reveal";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { buttonVariants } from "@/components/ui/button-variants";
+import { createMetadata } from "@/lib/metadata";
+import { cn } from "@/lib/utils";
+import type { Metadata } from "next";
 
 const pathways = [
   {
@@ -183,13 +183,13 @@ export default function JoinPage() {
           <StaggerReveal>
             {pathways.map((pathway) => (
               <StaggerItem key={pathway.title}>
-                <Card className="surface-card surface-interactive h-full rounded-[1.85rem] transition-all duration-300 hover:border-foreground/20">
+                <Card className="surface-card surface-interactive hover:border-foreground/20 h-full rounded-[1.85rem] transition-all duration-300">
                   <CardHeader>
                     <div className="bg-secondary text-primary flex size-11 items-center justify-center rounded-2xl shadow-sm">
                       <pathway.icon className="size-5" />
                     </div>
                     <div className="mt-4">
-                      <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                      <p className="text-muted-foreground font-mono text-[10px] tracking-widest uppercase">
                         {pathway.subtitle}
                       </p>
                       <CardTitle className="font-heading mt-2 text-2xl font-semibold tracking-[-0.05em]">
@@ -199,12 +199,20 @@ export default function JoinPage() {
                   </CardHeader>
                   <CardContent className="text-muted-foreground text-sm leading-7">
                     <p>{pathway.description}</p>
-                    <div className="mt-6 border-t border-border pt-4">
+                    <div className="border-border mt-6 border-t pt-4">
                       <Link
                         href={pathway.link}
-                        target={!pathway.internal && pathway.link.startsWith("http") ? "_blank" : undefined}
-                        rel={!pathway.internal && pathway.link.startsWith("http") ? "noopener noreferrer" : undefined}
-                        className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-foreground transition-colors hover:text-primary"
+                        target={
+                          !pathway.internal && pathway.link.startsWith("http")
+                            ? "_blank"
+                            : undefined
+                        }
+                        rel={
+                          !pathway.internal && pathway.link.startsWith("http")
+                            ? "noopener noreferrer"
+                            : undefined
+                        }
+                        className="text-foreground hover:text-primary inline-flex items-center gap-2 font-mono text-xs tracking-widest uppercase transition-colors"
                       >
                         {pathway.action}
                         <ArrowRight className="size-3" />
@@ -228,7 +236,7 @@ export default function JoinPage() {
           <StaggerReveal>
             {values.map((value) => (
               <StaggerItem key={value.title}>
-                <Card className="surface-card surface-interactive h-full rounded-[1.8rem] transition-all duration-300 hover:border-foreground/20">
+                <Card className="surface-card surface-interactive hover:border-foreground/20 h-full rounded-[1.8rem] transition-all duration-300">
                   <CardHeader>
                     <div className="bg-secondary text-primary flex size-11 items-center justify-center rounded-2xl shadow-sm">
                       <value.icon className="size-5" />
@@ -257,32 +265,32 @@ export default function JoinPage() {
           <StaggerReveal>
             {roles.map((role) => (
               <StaggerItem key={role.id}>
-                <Card className="surface-card surface-interactive rounded-[1.8rem] transition-all duration-300 hover:border-foreground/20">
+                <Card className="surface-card surface-interactive hover:border-foreground/20 rounded-[1.8rem] transition-all duration-300">
                   <div className="flex flex-col items-start justify-between gap-6 p-6 md:flex-row md:items-center">
                     <div className="flex-1 space-y-3">
                       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
-                        <h3 className="font-heading text-xl font-semibold tracking-[-0.04em] text-foreground">
+                        <h3 className="font-heading text-foreground text-xl font-semibold tracking-[-0.04em]">
                           {role.title}
                         </h3>
-                        <span className="w-fit rounded-sm border border-border bg-secondary px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                        <span className="border-border bg-secondary text-muted-foreground w-fit rounded-sm border px-2 py-0.5 font-mono text-[10px] tracking-widest uppercase">
                           {role.type}
                         </span>
                       </div>
-                      <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
+                      <p className="text-muted-foreground max-w-2xl text-sm leading-relaxed">
                         {role.description}
                       </p>
                       <div className="flex flex-wrap items-center gap-3 pt-2">
-                        <div className="flex items-center gap-1.5 rounded-sm border border-border bg-secondary px-2 py-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                        <div className="border-border bg-secondary text-muted-foreground flex items-center gap-1.5 rounded-sm border px-2 py-1 font-mono text-[10px] tracking-widest uppercase">
                           <Code className="size-2.5" />
                           {role.stack}
                         </div>
-                        <div className="flex items-center gap-1.5 rounded-sm border border-border bg-secondary px-2 py-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                        <div className="border-border bg-secondary text-muted-foreground flex items-center gap-1.5 rounded-sm border px-2 py-1 font-mono text-[10px] tracking-widest uppercase">
                           <Globe className="size-2.5" />
                           {role.location}
                         </div>
                       </div>
                     </div>
-                    <div className="flex w-full items-center justify-end border-t border-border pt-4 md:w-auto md:border-0 md:pt-0">
+                    <div className="border-border flex w-full items-center justify-end border-t pt-4 md:w-auto md:border-0 md:pt-0">
                       <Link
                         href="/contact"
                         className={cn(
@@ -301,15 +309,20 @@ export default function JoinPage() {
           </StaggerReveal>
         </div>
 
-        <div className="relative mt-20 mb-24 overflow-hidden rounded-[1.8rem] border border-dashed border-border bg-card p-12 text-center">
+        <div className="border-border bg-card relative mt-20 mb-24 overflow-hidden rounded-[1.8rem] border border-dashed p-12 text-center">
           <div className="relative z-10">
-            <h4 className="font-heading mb-4 text-2xl font-semibold tracking-[-0.05em] text-foreground">
+            <h4 className="font-heading text-foreground mb-4 text-2xl font-semibold tracking-[-0.05em]">
               Do not see the exact role yet?
             </h4>
-            <p className="mx-auto mb-8 max-w-lg text-sm leading-relaxed text-muted-foreground">
-              We are always open to hearing from strong builders who want to serve Christian missions, even if the right role is not listed yet.
+            <p className="text-muted-foreground mx-auto mb-8 max-w-lg text-sm leading-relaxed">
+              We are always open to hearing from strong builders who want to
+              serve Christian missions, even if the right role is not listed
+              yet.
             </p>
-            <Link href="/contact" className={cn(buttonVariants({ size: "lg" }), "px-5")}>
+            <Link
+              href="/contact"
+              className={cn(buttonVariants({ size: "lg" }), "px-5")}
+            >
               Start a conversation
               <ArrowRight data-icon="inline-end" />
             </Link>

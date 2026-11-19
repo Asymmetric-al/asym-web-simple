@@ -31,7 +31,7 @@ export function measurePlatformTabTrigger(input: {
 }): PlatformTabTriggerMeasurement {
   const fallbackMinHeightPx =
     input.fallbackMinHeightPx ?? platformTabTriggerPreset.fallbackMinHeightPx;
-  const measurementSafetyPx = platformTabTriggerPreset.measurementSafetyPx;
+  const { measurementSafetyPx } = platformTabTriggerPreset;
 
   if (input.items.length === 0 || input.elements.length === 0) {
     return {

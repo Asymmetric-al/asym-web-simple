@@ -119,13 +119,11 @@ export function createMetadata({
       description: description ?? siteMetadata.description,
       images: [ogImage],
     },
-    ...(noIndex
-      ? {
-          robots: {
-            index: false,
-            follow: false,
-          },
-        }
-      : {}),
+    ...(noIndex && {
+      robots: {
+        index: false,
+        follow: false,
+      },
+    }),
   };
 }

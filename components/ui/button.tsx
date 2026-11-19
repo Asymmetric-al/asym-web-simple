@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import { Button as ButtonPrimitive } from "@base-ui/react/button"
-import { type VariantProps } from "class-variance-authority"
+import { Button as ButtonPrimitive } from "@base-ui/react/button";
 
-import { buttonVariants } from "@/components/ui/button-variants"
-import { cn } from "@/lib/utils"
+import { buttonVariants } from "@/components/ui/button-variants";
+import { cn } from "@/lib/utils";
+import type { VariantProps } from "class-variance-authority";
 
 function Button({
   className,
@@ -18,7 +18,9 @@ function Button({
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
     />
-  )
+  );
 }
 
-export { Button, buttonVariants }
+export { Button };
+
+export { buttonVariants } from "@/components/ui/button-variants";

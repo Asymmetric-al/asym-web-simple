@@ -9,11 +9,11 @@ export function DocumentPage({
   children,
   footer,
 }: {
-  eyebrow: string;
-  title: ReactNode;
-  description: ReactNode;
-  children: ReactNode;
-  footer?: ReactNode;
+  readonly eyebrow: string;
+  readonly title: ReactNode;
+  readonly description: ReactNode;
+  readonly children: ReactNode;
+  readonly footer?: ReactNode;
 }) {
   return (
     <main id="main-content" className="relative isolate" tabIndex={-1}>
@@ -44,10 +44,10 @@ export function DocumentSection({
   children,
   className,
 }: {
-  number?: string;
-  title: ReactNode;
-  children: ReactNode;
-  className?: string;
+  readonly number?: string;
+  readonly title: ReactNode;
+  readonly children: ReactNode;
+  readonly className?: string;
 }) {
   return (
     <section className={cn("grid gap-3", className)}>
