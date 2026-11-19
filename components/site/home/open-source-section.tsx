@@ -1,11 +1,11 @@
 import { ArrowUpRight, Check, CircleDashed } from "lucide-react";
+import { Container } from "@/components/site/container";
 import { GitHubMark } from "@/components/site/github-mark";
 import {
   Eyebrow,
   SectionTitle,
   StatusPill,
 } from "@/components/site/home/section-heading";
-import { Container } from "@/components/site/page";
 import { repoStats, siteConfig } from "@/lib/config";
 
 /**
@@ -43,7 +43,7 @@ export const OpenSourceSection = () => (
   <section
     id="open-source"
     aria-labelledby="open-source-title"
-    className="scroll-mt-24 py-[clamp(3.25rem,6vw,5.25rem)]"
+    className="py-[clamp(3.25rem,6vw,5.25rem)]"
   >
     <Container className="grid gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-14">
       <div className="flex flex-col">
@@ -67,15 +67,15 @@ export const OpenSourceSection = () => (
           href={siteConfig.repoUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-primary hover:text-foreground focus-visible:ring-ring mt-4 inline-flex min-h-11 w-fit items-center gap-1.5 rounded-sm font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none sm:min-h-10"
+          className="text-primary hover:text-foreground focus-visible:ring-ring focus-visible:ring-offset-background mt-4 inline-flex min-h-11 w-fit items-center gap-1.5 rounded-sm font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-10"
         >
           Explore the code on GitHub
           <ArrowUpRight className="size-4" aria-hidden="true" />
         </a>
 
-        <div className="border-foreground/18 bg-card/60 mt-8 rounded-[1.5rem] border border-dashed p-5 sm:p-6">
+        <div className="border-foreground/18 bg-card/70 mt-8 rounded-[1.5rem] border border-dashed p-5 sm:p-6">
           <StatusPill>Planned</StatusPill>
-          <h3 className="font-heading text-foreground mt-4 text-xl font-semibold tracking-[-0.04em]">
+          <h3 className="font-heading text-foreground mt-4 text-xl font-semibold tracking-[-0.015em]">
             Managed donor care
           </h3>
           <p className="text-muted-foreground mt-2 text-sm leading-6 sm:text-base sm:leading-7">
@@ -92,7 +92,7 @@ export const OpenSourceSection = () => (
             href={siteConfig.repoUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-foreground hover:text-primary focus-visible:ring-ring inline-flex min-h-11 min-w-0 items-center gap-2.5 rounded-sm font-mono text-sm font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none sm:min-h-10"
+            className="text-foreground hover:text-primary focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 min-w-0 items-center gap-2.5 rounded-sm font-mono text-sm font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-10"
           >
             <GitHubMark className="size-5 shrink-0" />
             <span className="truncate" translate="no">
@@ -114,7 +114,7 @@ export const OpenSourceSection = () => (
               <dt className="text-muted-foreground text-xs leading-5">
                 {stat.label}
               </dt>
-              <dd className="font-heading text-foreground order-first text-xl font-semibold tracking-[-0.04em] tabular-nums sm:text-2xl">
+              <dd className="font-heading text-foreground order-first text-lg font-semibold tracking-[-0.025em] tabular-nums sm:text-2xl">
                 {stat.value}
               </dd>
             </div>
@@ -124,7 +124,7 @@ export const OpenSourceSection = () => (
           Since {repoStats.since}, as of {repoStats.asOf}.
         </p>
 
-        <h3 className="text-foreground mt-7 text-sm font-medium">
+        <h3 className="text-foreground mt-7 font-sans text-sm font-medium tracking-normal">
           Where things stand
         </h3>
         <div className="mt-4 grid gap-5 sm:grid-cols-2">

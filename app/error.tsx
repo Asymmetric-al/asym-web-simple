@@ -3,7 +3,7 @@
 import { ArrowRight, RotateCcw } from "lucide-react";
 import Link from "next/link";
 import { useEffect } from "react";
-import { Container } from "@/components/site/page";
+import { Container } from "@/components/site/container";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { siteConfig } from "@/lib/config";
 import { cn } from "@/lib/utils";
@@ -32,7 +32,7 @@ export default function ErrorPage({
           <p className="text-primary/80 font-mono text-xs tracking-[0.24em] uppercase">
             Something went wrong
           </p>
-          <h1 className="font-heading text-foreground mt-4 text-[clamp(2.4rem,5vw,3.8rem)] leading-[1.02] font-semibold tracking-[-0.055em] text-balance">
+          <h1 className="font-heading text-foreground mt-4 text-[clamp(2.4rem,5vw,3.8rem)] leading-[1.02] font-semibold tracking-[-0.04em] text-balance">
             This page couldn’t finish loading.
           </h1>
           <p className="text-muted-foreground mt-5 max-w-[38rem] text-lg leading-8">

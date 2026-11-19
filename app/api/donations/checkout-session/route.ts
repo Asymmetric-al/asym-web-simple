@@ -55,8 +55,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   if (!process.env.STRIPE_SECRET_KEY) {
     return NextResponse.json(
       {
-        error:
-          "Giving is not configured. Add Stripe keys to .env.local — see docs/STRIPE-GIVING.md.",
+        error: "Giving is not configured.",
       },
       { status: 503 }
     );
@@ -150,9 +149,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
             currency: "usd",
             unit_amount: cents,
             product_data: {
-              name: "One-time gift — Asymmetric.al",
-              description:
-                "Tax-deductible donation to Global Fellowship Inc. (EIN 68-0214543) for the Asymmetric.al nonprofit project.",
+              name: "One-time contribution - Asymmetric.al",
+              description: "One-time contribution via Stripe Checkout.",
             },
           },
         },
@@ -180,8 +178,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     console.error("[donations/checkout-session]", error);
     return NextResponse.json(
       {
-        error:
-          "Could not start checkout. Try again or email info@asymmetric.al.",
+        error: "Could not start checkout. Please try again later.",
       },
       { status: 500 }
     );

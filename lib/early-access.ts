@@ -33,12 +33,22 @@ export const earlyAccessCopy = {
   notConfigured:
     "Early-access email delivery isn’t connected on this deployment yet.",
   rateLimited:
-    "Too many requests right now. Please wait a minute and try again.",
+    "Too many requests right now. Please wait a few minutes and try again.",
   invalidEmail: "Enter a valid email address.",
   missingOrganization: "Enter your organization’s name.",
   consent:
     "We’ll use your details to reply to you, share launch updates and early access invitations, and understand what nonprofit teams need from asym. To stop hearing from us, reply to any of our emails.",
 } as const;
+
+export const formatRetryWait = (retryAfterSeconds?: number): string => {
+  if (!retryAfterSeconds || !Number.isFinite(retryAfterSeconds)) {
+    return earlyAccessCopy.rateLimited;
+  }
+  const minutes = Math.max(1, Math.ceil(retryAfterSeconds / 60));
+  return minutes === 1
+    ? "Too many requests right now. Please wait about a minute and try again."
+    : `Too many requests right now. Please wait about ${minutes} minutes and try again.`;
+};
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@.]+(?:\.[^\s@.]+)+$/u;
 const WHITESPACE_RUN = /\s+/gu;

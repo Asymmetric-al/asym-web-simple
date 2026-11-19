@@ -82,7 +82,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       return NextResponse.json(
         {
           error:
-            "The donor portal applies to monthly gifts. For one-time gifts, use your Stripe receipt or email info@asymmetric.al.",
+            "The billing portal applies to recurring subscriptions only. For one-time payments, refer to your Stripe receipt.",
         },
         { status: 422 }
       );
@@ -103,8 +103,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     console.error("[donations/billing-portal]", error);
     return NextResponse.json(
       {
-        error:
-          "Could not open donor portal. Email info@asymmetric.al for help.",
+        error: "Could not open the billing portal. Please try again later.",
       },
       { status: 500 }
     );

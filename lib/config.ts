@@ -34,7 +34,7 @@ export const repoStats = {
   since: "January 2026",
   commits: "4,900+",
   mergedPullRequests: "590+",
-  license: "AGPL-3.0",
+  license: "AGPL-3.0-only",
 } as const;
 
 export const navigationLinks = [

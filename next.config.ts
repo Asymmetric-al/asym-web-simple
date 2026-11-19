@@ -10,7 +10,20 @@ const EARLY_ACCESS = "/#early-access";
 const PRODUCT = "/#product";
 const OPEN_SOURCE = "/#open-source";
 
+const contentSecurityPolicy = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob:",
+  "font-src 'self' data:",
+  "connect-src 'self'",
+  "frame-ancestors 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+].join("; ");
+
 const securityHeaders = [
+  { key: "Content-Security-Policy", value: contentSecurityPolicy },
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "X-Frame-Options", value: "DENY" },
@@ -84,4 +97,16 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withPayload(withBundleAnalyzer(nextConfig));
+const wrappedConfig = withPayload(withBundleAnalyzer(nextConfig));
+const originalHeaders = wrappedConfig.headers;
+
+// Avoid Chromium cold-load connection restarts from Payload's Critical-CH header.
+wrappedConfig.headers = async () => {
+  const rules = originalHeaders ? await originalHeaders() : [];
+  return rules.map((rule) => ({
+    ...rule,
+    headers: rule.headers.filter((header) => header.key !== "Critical-CH"),
+  }));
+};
+
+export default wrappedConfig;

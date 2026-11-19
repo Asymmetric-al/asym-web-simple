@@ -18,35 +18,39 @@
   --accent: #e8efe2;
   --accent-foreground: #243025;
   --destructive: #c03d2c;
-  --destructive-foreground: #fff;
+  --destructive-foreground: #fdfcf9;
   --border: rgb(22 33 43 / 12%);
   --input: rgb(22 33 43 / 50%);
   --ring: #235d85;
   --frame: #fbfaf7;
-  --surface-1: rgb(251 250 247 / 92%);
-  --surface-2: rgb(246 250 253 / 90%);
-  --surface-3: rgb(238 243 245 / 92%);
+  --surface-1: rgb(251 250 247 / 96%);
+  --surface-2: rgb(246 250 253 / 94%);
+  --surface-3: rgb(238 243 245 / 94%);
   --surface-4: rgb(232 239 226 / 94%);
   --radius: 1.25rem;
   --shadow-soft: 0 30px 90px -55px rgb(22 33 43 / 36%);
   --shadow-card: 0 22px 64px -46px rgb(22 33 43 / 24%);
   --shadow-strong: 0 34px 92px -58px rgb(22 33 43 / 38%);
   --page-gradient:
-    radial-gradient(circle at top, rgb(221 242 255 / 64%), transparent 44%),
-    radial-gradient(circle at 84% 12%, rgb(231 238 225 / 58%), transparent 28%),
-    linear-gradient(180deg, #fcfbf7 0%, #f6f2ea 44%, #efeae0 100%);
+    radial-gradient(ellipse 72% 62% at 50% 0%, rgb(221 242 255 / 72%), transparent 74%),
+    radial-gradient(ellipse 40% 42% at 84% 16%, rgb(231 238 225 / 64%), transparent 74%),
+    linear-gradient(180deg, rgb(252 251 247 / 65%) 0%, transparent 100%);
   --grid-stroke: rgb(22 33 43 / 5.5%);
   --glow-primary: rgb(118 171 207 / 20%);
   --glow-accent: rgb(168 190 152 / 22%);
   --wash-sky: linear-gradient(
     180deg,
-    rgb(230 241 249 / 58%) 0%,
-    rgb(246 242 234 / 0%) 86%
+    transparent 0%,
+    rgb(230 241 249 / 52%) 7rem,
+    rgb(230 241 249 / 34%) 55%,
+    transparent 96%
   );
   --wash-accent: linear-gradient(
     180deg,
-    rgb(232 239 226 / 54%) 0%,
-    rgb(246 242 234 / 0%) 86%
+    transparent 0%,
+    rgb(232 239 226 / 50%) 7rem,
+    rgb(232 239 226 / 32%) 55%,
+    transparent 96%
   );
   --ease-out-expo: cubic-bezier(0.23, 1, 0.32, 1);
   --space-hero-marketing-top: clamp(7rem, 9.2vw, 9rem);
@@ -74,33 +78,38 @@
   --accent: #223127;
   --accent-foreground: #edf4eb;
   --destructive: #ff8d79;
+  --destructive-foreground: #16212b;
   --border: rgb(243 246 248 / 14%);
   --input: rgb(243 246 248 / 38%);
   --ring: #78aed3;
   --frame: #0d141a;
-  --surface-1: rgb(17 27 35 / 84%);
-  --surface-2: rgb(22 35 45 / 86%);
-  --surface-3: rgb(28 45 57 / 88%);
-  --surface-4: rgb(35 49 39 / 92%);
+  --surface-1: rgb(17 27 35 / 94%);
+  --surface-2: rgb(22 35 45 / 92%);
+  --surface-3: rgb(28 45 57 / 92%);
+  --surface-4: rgb(35 49 39 / 94%);
   --shadow-soft: 0 30px 90px -55px rgb(0 0 0 / 72%);
   --shadow-card: 0 28px 80px -56px rgb(0 0 0 / 74%);
   --shadow-strong: 0 38px 104px -60px rgb(0 0 0 / 82%);
   --page-gradient:
-    radial-gradient(circle at top, rgb(45 83 112 / 38%), transparent 44%),
-    radial-gradient(circle at 82% 12%, rgb(48 71 52 / 28%), transparent 28%),
-    linear-gradient(180deg, #0b1217 0%, #0d141a 45%, #101820 100%);
+    radial-gradient(ellipse 72% 62% at 50% 0%, rgb(45 83 112 / 42%), transparent 74%),
+    radial-gradient(ellipse 40% 42% at 82% 16%, rgb(48 71 52 / 32%), transparent 74%),
+    linear-gradient(180deg, rgb(11 18 23 / 55%) 0%, transparent 100%);
   --grid-stroke: rgb(237 243 247 / 6.5%);
   --glow-primary: rgb(118 171 207 / 18%);
   --glow-accent: rgb(122 160 118 / 13%);
   --wash-sky: linear-gradient(
     180deg,
-    rgb(26 44 57 / 54%) 0%,
-    rgb(13 20 26 / 0%) 86%
+    transparent 0%,
+    rgb(26 44 57 / 50%) 7rem,
+    rgb(26 44 57 / 32%) 55%,
+    transparent 96%
   );
   --wash-accent: linear-gradient(
     180deg,
-    rgb(34 49 39 / 52%) 0%,
-    rgb(13 20 26 / 0%) 86%
+    transparent 0%,
+    rgb(34 49 39 / 46%) 7rem,
+    rgb(34 49 39 / 28%) 55%,
+    transparent 96%
   );
 }
 
@@ -140,59 +149,118 @@
   --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
 }
 
-html {
-  background: var(--background);
-  color-scheme: light dark;
-  overflow-x: clip;
-  scroll-padding-top: 7rem;
-}
-
-@media (prefers-reduced-motion: no-preference) {
+@layer base {
   html {
-    scroll-behavior: smooth;
+    background: var(--background);
+    color-scheme: light dark;
+    overflow-x: clip;
+    scroll-padding-top: 5.5rem;
   }
-}
 
-body {
-  background: var(--page-gradient);
-  color: var(--foreground);
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  line-height: 1.5;
-  overflow-x: clip;
-  text-rendering: optimizelegibility;
-}
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
 
-body::before {
-  position: fixed;
-  z-index: -20;
-  background-image:
-    linear-gradient(var(--grid-stroke) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-stroke) 1px, transparent 1px);
-  background-size: 120px 120px;
-  content: "";
-  inset: 0;
-  mask-image: radial-gradient(circle at 50% 24%, black 22%, transparent 82%);
-  opacity: 0.72;
-  pointer-events: none;
-}
+  body {
+    position: relative;
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.5;
+    overflow-x: clip;
+    text-rendering: optimizelegibility;
+  }
 
-body::after {
-  position: fixed;
-  z-index: -30;
-  height: 26rem;
-  background:
-    radial-gradient(ellipse 46% 72% at 14% 75%, var(--glow-primary), transparent 70%),
-    radial-gradient(ellipse 46% 72% at 86% 75%, var(--glow-accent), transparent 72%);
-  content: "";
-  inset: auto 0 0;
-  pointer-events: none;
-}
+  body::after {
+    position: absolute;
+    z-index: -30;
+    height: 58rem;
+    background: var(--page-gradient);
+    content: "";
+    inset: 0 0 auto;
+    pointer-events: none;
+  }
 
-::selection {
-  background-color: color-mix(in srgb, var(--ring) 32%, transparent);
-  color: var(--foreground);
+  body::before {
+    position: absolute;
+    z-index: -20;
+    height: 54rem;
+    background-image:
+      linear-gradient(var(--grid-stroke) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-stroke) 1px, transparent 1px);
+    background-size: 120px 120px;
+    content: "";
+    inset: 0 0 auto;
+    mask-image: radial-gradient(
+      ellipse 75% 80% at 50% 24%,
+      black 22%,
+      transparent 86%
+    );
+    opacity: 0.72;
+    pointer-events: none;
+  }
+
+  ::selection {
+    background-color: color-mix(in srgb, var(--ring) 32%, transparent);
+    color: var(--foreground);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  main {
+    position: relative;
+    flex: 1;
+  }
+
+  :where(main, header, footer)
+    :is(p, li, dd, dt, blockquote, h1, h2, h3, h4, h5, h6) {
+    hyphens: none;
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+
+  :where(main, header, footer) :is(a, button, label) {
+    hyphens: none;
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+
+  a,
+  button,
+  input,
+  textarea {
+    --tw-ring-offset-color: var(--background);
+
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  a,
+  button {
+    transition:
+      color 160ms var(--ease-out-expo),
+      background-color 160ms var(--ease-out-expo),
+      border-color 160ms var(--ease-out-expo),
+      transform 160ms var(--ease-out-expo);
+  }
+
+  :is(a, button, input, textarea):focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -204,57 +272,6 @@ body::after {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
   }
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: var(--font-heading);
-  letter-spacing: -0.04em;
-  text-wrap: balance;
-}
-
-main {
-  position: relative;
-  flex: 1;
-}
-
-:where(main, header, footer)
-  :is(p, li, dd, dt, blockquote, h1, h2, h3, h4, h5, h6) {
-  hyphens: none;
-  overflow-wrap: normal;
-  word-break: normal;
-}
-
-:where(main, header, footer) :is(a, button, label) {
-  hyphens: none;
-  overflow-wrap: normal;
-  word-break: normal;
-}
-
-a,
-button,
-input,
-textarea {
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-}
-
-a,
-button {
-  transition:
-    color 160ms var(--ease-out-expo),
-    background-color 160ms var(--ease-out-expo),
-    border-color 160ms var(--ease-out-expo),
-    transform 160ms var(--ease-out-expo);
-}
-
-:is(a, button, input, textarea):focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
 }
 
 .skip-to-content {
@@ -292,14 +309,13 @@ button {
 
 .surface-panel {
   border: 1px solid var(--border);
-  backdrop-filter: blur(14px);
-  background: color-mix(in srgb, var(--surface-1) 90%, transparent);
+  background: var(--surface-1);
   box-shadow: var(--shadow-card);
 }
 
 .surface-card {
   border: 1px solid var(--border);
-  background: color-mix(in srgb, var(--card) 86%, transparent);
+  background: color-mix(in srgb, var(--card) 92%, transparent);
   box-shadow: var(--shadow-card);
 }
 
@@ -319,13 +335,8 @@ button {
 }
 
 .surface-hero {
-  border: 1px solid color-mix(in srgb, var(--border) 90%, transparent);
-  backdrop-filter: blur(16px);
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--surface-1) 94%, transparent),
-    color-mix(in srgb, var(--surface-2) 82%, transparent)
-  );
+  border: 1px solid color-mix(in srgb, var(--border) 92%, transparent);
+  background: linear-gradient(180deg, var(--surface-1), var(--surface-2));
   box-shadow: var(--shadow-strong);
 }
 
@@ -386,44 +397,8 @@ button {
     color-mix(in srgb, var(--glow-accent) 82%, transparent)
   );
   content: "";
-  filter: blur(12px);
-  inset: -1px;
-  opacity: 0.6;
-}
-
-.document-shell {
-  position: relative;
-  overflow: hidden;
-}
-
-.document-shell::before {
-  position: absolute;
-  height: 11rem;
-  background:
-    radial-gradient(circle at top left, var(--glow-primary), transparent 56%),
-    radial-gradient(circle at top right, var(--glow-accent), transparent 54%);
-  content: "";
-  inset: 0 0 auto;
-  opacity: 0.58;
-  pointer-events: none;
-}
-
-.document-section {
-  position: relative;
-  display: grid;
-  gap: 0.9rem;
-  padding-block: clamp(1.15rem, 2vw, 1.6rem);
-}
-
-.document-section + .document-section {
-  border-top: 1px solid color-mix(in srgb, var(--border) 92%, transparent);
-}
-
-.document-section[data-tone="accent"] {
-  border-radius: 1.75rem;
-  border-top-color: transparent;
-  background: color-mix(in srgb, var(--secondary) 42%, transparent);
-  padding-inline: clamp(1rem, 2vw, 1.4rem);
+  inset: -4px;
+  opacity: 0.55;
 }
 
 .text-resilient {
@@ -440,21 +415,17 @@ button {
   word-break: normal;
 }
 
-/* Connected workflow progressive one-time reveal (compositor-only) */
+/* Connected workflow one-time reveal: copy always stays opacity: 1 */
 .workflow-step {
-  transition:
-    opacity 260ms var(--ease-out-expo),
-    transform 260ms var(--ease-out-expo);
+  transition: transform 260ms var(--ease-out-expo);
   transition-delay: var(--step-delay, 0ms);
 }
 
 [data-workflow-reveal="armed"] .workflow-step {
-  opacity: 0;
-  transform: translateY(8px);
+  transform: translateY(5px);
 }
 
 [data-workflow-reveal="visible"] .workflow-step {
-  opacity: 1;
   transform: translateY(0);
 }
 
@@ -470,6 +441,19 @@ button {
   clip-path: inset(0 0 0 0);
 }
 
+.workflow-rail-vertical {
+  transition: clip-path 380ms var(--ease-out-expo);
+  transition-delay: var(--step-delay, 0ms);
+}
+
+[data-workflow-reveal="armed"] .workflow-rail-vertical {
+  clip-path: inset(0 0 100% 0);
+}
+
+[data-workflow-reveal="visible"] .workflow-rail-vertical {
+  clip-path: inset(0 0 0 0);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .surface-interactive:hover {
     transform: none;
@@ -478,14 +462,27 @@ button {
 
   [data-workflow-reveal="armed"] .workflow-step,
   [data-workflow-reveal="visible"] .workflow-step {
-    opacity: 1;
     transform: none;
     transition: none;
   }
 
   [data-workflow-reveal="armed"] .workflow-rail,
-  [data-workflow-reveal="visible"] .workflow-rail {
+  [data-workflow-reveal="visible"] .workflow-rail,
+  [data-workflow-reveal="armed"] .workflow-rail-vertical,
+  [data-workflow-reveal="visible"] .workflow-rail-vertical {
     clip-path: none;
     transition: none;
+  }
+}
+
+@media print {
+  [data-workflow-reveal] .workflow-step {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  [data-workflow-reveal] .workflow-rail,
+  [data-workflow-reveal] .workflow-rail-vertical {
+    clip-path: none !important;
   }
 }

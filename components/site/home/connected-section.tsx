@@ -1,6 +1,6 @@
 import { Database, ListChecks, UserCheck } from "lucide-react";
+import { Container } from "@/components/site/container";
 import { Eyebrow, SectionTitle } from "@/components/site/home/section-heading";
-import { Container } from "@/components/site/page";
 
 const principles = [
   {
@@ -11,12 +11,12 @@ const principles = [
   {
     icon: ListChecks,
     title: "Defined actions",
-    text: "AI works through the same defined actions your staff use, with the same checks, instead of guessing across separate tools.",
+    text: "We’re building campaign AI to use the same permission checks as staff, instead of guessing across separate tools. Some staff actions in the public code already preview which records will change.",
   },
   {
     icon: UserCheck,
     title: "People decide",
-    text: "We’re building approval rules for AI-prepared campaigns so your team reviews recipients and proposed changes before sending. Staff actions in the public code already preview their effects before running.",
+    text: "We’re building approval rules for AI-prepared campaigns so your team reviews recipients and proposed changes before anything sends.",
   },
 ] as const;
 
@@ -54,15 +54,15 @@ export const ConnectedSection = () => (
         {principles.map(({ icon: Icon, title, text }) => (
           <li
             key={title}
-            className="flex flex-col py-6 first:pt-6 last:pb-6 lg:px-7 lg:py-7 lg:first:pl-0 lg:last:pr-0"
+            className="flex flex-col py-6 lg:px-7 lg:py-7 lg:first:pl-0 lg:last:pr-0"
           >
             <span className="bg-secondary text-primary flex size-10 items-center justify-center rounded-xl">
               <Icon className="size-5" aria-hidden="true" />
             </span>
-            <h3 className="font-heading text-foreground mt-4 text-lg font-semibold tracking-[-0.04em]">
+            <h3 className="font-heading text-foreground mt-4 text-lg font-semibold tracking-[-0.015em]">
               {title}
             </h3>
-            <p className="text-muted-foreground mt-2 text-sm leading-6">
+            <p className="text-muted-foreground mt-2 max-w-[60ch] text-sm leading-6">
               {text}
             </p>
           </li>

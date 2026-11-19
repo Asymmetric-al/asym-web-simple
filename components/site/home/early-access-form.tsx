@@ -3,7 +3,7 @@
 import { ArrowRight, CircleCheck, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button-variants";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,6 +12,7 @@ import {
   EARLY_ACCESS_HONEYPOT_FIELD,
   EARLY_ACCESS_LIMITS,
   earlyAccessCopy,
+  formatRetryWait,
   hasErrors,
   normalizeEarlyAccessRequest,
   validateEarlyAccessRequest,
@@ -36,7 +37,7 @@ type SubmitResult =
   | { kind: "accepted" }
   | { kind: "invalid"; errors: EarlyAccessErrors }
   | { kind: "not_configured" }
-  | { kind: "rate_limited" }
+  | { kind: "rate_limited"; retryAfterSeconds?: number }
   | { kind: "failed" };
 
 const FIELD_ORDER: readonly EarlyAccessField[] = [
@@ -48,6 +49,19 @@ const FIELD_ORDER: readonly EarlyAccessField[] = [
 const VALIDATION_FAILED = 422;
 const RATE_LIMITED = 429;
 const NOT_CONFIGURED = 503;
+
+const noop = () => {
+  // Static subscription for client hydration flag.
+};
+
+const emptySubscribe = () => noop;
+
+const useIsClient = (): boolean =>
+  useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  );
 
 const errorFor = (
   errors: EarlyAccessErrors,
@@ -70,6 +84,24 @@ const readServerErrors = (payload: unknown): EarlyAccessErrors => {
   return typeof errors !== "object" || errors === null
     ? {}
     : (errors as EarlyAccessErrors);
+};
+
+const readRetryAfter = (
+  response: Response,
+  payload: unknown
+): number | undefined => {
+  if (typeof payload === "object" && payload !== null) {
+    const { retryAfterSeconds } = payload as { retryAfterSeconds?: unknown };
+    if (
+      typeof retryAfterSeconds === "number" &&
+      Number.isFinite(retryAfterSeconds) &&
+      retryAfterSeconds > 0
+    ) {
+      return retryAfterSeconds;
+    }
+  }
+  const headerVal = Number(response.headers.get("retry-after") ?? "");
+  return Number.isFinite(headerVal) && headerVal > 0 ? headerVal : undefined;
 };
 
 const postEarlyAccess = async (body: string): Promise<Response | null> => {
@@ -107,7 +139,11 @@ const submitEarlyAccess = async (
     return { kind: "not_configured" };
   }
   if (response?.status === RATE_LIMITED) {
-    return { kind: "rate_limited" };
+    const payload = await readJson(response);
+    const retryAfterSeconds = readRetryAfter(response, payload);
+    return retryAfterSeconds === undefined
+      ? { kind: "rate_limited" }
+      : { kind: "rate_limited", retryAfterSeconds };
   }
   if (response?.status !== VALIDATION_FAILED) {
     return { kind: "failed" };
@@ -135,40 +171,14 @@ const FieldMessage = ({
 };
 
 const inlineLinkClassName =
-  "text-foreground hover:text-primary focus-visible:ring-ring link-resilient rounded-xs underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none";
-
-const noop = () => {
-  // Static subscription for reading initial URL status on client hydration.
-};
-
-const emptySubscribe = () => noop;
-
-const readInitialRedirectStatus = (): FormStatus => {
-  if (typeof window === "undefined") {
-    return "idle";
-  }
-  const params = new URLSearchParams(window.location.search);
-  const param = params.get("early_access");
-  if (param === "received") {
-    return "success";
-  }
-  if (param === "unavailable") {
-    return "not_configured";
-  }
-  if (param === "rate_limited") {
-    return "rate_limited";
-  }
-  if (param === "failed") {
-    return "failure";
-  }
-  return "idle";
-};
+  "text-foreground hover:text-primary focus-visible:ring-ring focus-visible:ring-offset-background link-resilient rounded-xs underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent";
 
 export const EarlyAccessForm = ({
   contactEmail,
 }: {
   readonly contactEmail?: string | null;
 }): ReactNode => {
+  const isHydrated = useIsClient();
   const formId = useId();
   const ids = {
     email: `${formId}-email`,
@@ -180,30 +190,25 @@ export const EarlyAccessForm = ({
   const formRef = useRef<HTMLFormElement>(null);
   const successRef = useRef<HTMLHeadingElement>(null);
 
-  const redirectedStatus = useSyncExternalStore(
-    emptySubscribe,
-    readInitialRedirectStatus,
-    () => "idle" as FormStatus
-  );
-  const [status, setStatus] = useState<FormStatus | null>(null);
+  const [status, setStatus] = useState<FormStatus>("idle");
+  const [retrySeconds, setRetrySeconds] = useState<number | undefined>();
   const [errors, setErrors] = useState<EarlyAccessErrors>({});
-  const effectiveStatus = status ?? redirectedStatus;
-  const isSubmitting = effectiveStatus === "submitting";
+  const isSubmitting = status === "submitting";
 
   useEffect(() => {
-    if (effectiveStatus === "success") {
+    if (status === "success") {
       successRef.current?.focus();
     }
-  }, [effectiveStatus]);
+  }, [status]);
 
-  if (effectiveStatus === "success") {
+  if (status === "success") {
     return (
       <div className="border-foreground/12 bg-card rounded-[1.6rem] border p-6 sm:p-8">
         <CircleCheck className="text-primary size-7" aria-hidden="true" />
         <h3
           ref={successRef}
           tabIndex={-1}
-          className="font-heading text-foreground focus-visible:ring-ring mt-4 rounded-sm text-2xl font-semibold tracking-[-0.04em] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+          className="font-heading text-foreground focus-visible:ring-ring focus-visible:ring-offset-background mt-4 rounded-sm text-2xl font-semibold tracking-[-0.025em] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent"
         >
           Request received
         </h3>
@@ -272,6 +277,7 @@ export const EarlyAccessForm = ({
       return;
     }
     if (result.kind === "rate_limited") {
+      setRetrySeconds(result.retryAfterSeconds);
       setStatus("rate_limited");
       return;
     }
@@ -282,14 +288,14 @@ export const EarlyAccessForm = ({
     errorFor(errors, field) === undefined ? undefined : `${ids[field]}-error`;
 
   const hasAlert = ["failure", "not_configured", "rate_limited"].includes(
-    effectiveStatus
+    status
   );
 
   let alertHeading: string = earlyAccessCopy.failure;
-  if (effectiveStatus === "not_configured") {
+  if (status === "not_configured") {
     alertHeading = earlyAccessCopy.notConfigured;
-  } else if (effectiveStatus === "rate_limited") {
-    alertHeading = earlyAccessCopy.rateLimited;
+  } else if (status === "rate_limited") {
+    alertHeading = formatRetryWait(retrySeconds);
   }
 
   return (
@@ -297,7 +303,7 @@ export const EarlyAccessForm = ({
       ref={formRef}
       method="post"
       action="/api/early-access"
-      noValidate
+      noValidate={isHydrated}
       onSubmit={handleSubmit}
       aria-label="Request early access"
       className="sm:border-foreground/12 sm:bg-card relative sm:rounded-[1.6rem] sm:border sm:p-7"
@@ -405,7 +411,7 @@ export const EarlyAccessForm = ({
               </>
             ) : (
               <>
-                You can follow progress or open a question on{" "}
+                You can follow development or ask public product questions on{" "}
                 <a
                   href={siteConfig.issuesUrl}
                   target="_blank"
@@ -422,12 +428,15 @@ export const EarlyAccessForm = ({
       ) : null}
 
       <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <Button
+        <button
           type="submit"
-          size="lg"
           aria-disabled={isSubmitting}
           aria-describedby={ids.consent}
-          className={cn("px-6", isSubmitting && "cursor-progress")}
+          className={cn(
+            buttonVariants({ size: "lg" }),
+            "px-6",
+            isSubmitting && "cursor-progress"
+          )}
         >
           {isSubmitting ? (
             <>
@@ -440,7 +449,7 @@ export const EarlyAccessForm = ({
               <ArrowRight data-icon="inline-end" aria-hidden="true" />
             </>
           )}
-        </Button>
+        </button>
       </div>
       <p
         id={ids.consent}

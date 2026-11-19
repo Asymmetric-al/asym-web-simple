@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { DocumentPage, DocumentSection } from "@/components/site/document-page";
 import { siteConfig } from "@/lib/config";
 import { getVerifiedContactEmail } from "@/lib/early-access-config";
@@ -13,7 +12,7 @@ export const metadata: Metadata = createMetadata({
 });
 
 const contactLinkClassName =
-  "text-foreground hover:text-primary focus-visible:ring-ring link-resilient inline-flex min-h-11 items-center rounded-sm font-medium underline underline-offset-4 transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none sm:min-h-0";
+  "text-foreground hover:text-primary focus-visible:ring-ring focus-visible:ring-offset-background link-resilient inline-flex min-h-11 items-center rounded-sm font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-0";
 
 export default function PrivacyPage() {
   const contactEmail = getVerifiedContactEmail();
@@ -22,7 +21,7 @@ export default function PrivacyPage() {
     <DocumentPage
       eyebrow="Privacy Policy"
       title={
-        <h1 className="font-heading text-foreground mt-5 text-[clamp(2.8rem,5.5vw,4.6rem)] leading-[0.96] font-semibold tracking-[-0.055em] text-balance">
+        <h1 className="font-heading text-foreground mt-5 text-[clamp(2.8rem,5.5vw,4.6rem)] leading-[0.98] font-semibold tracking-[-0.04em] text-balance">
           Privacy Policy
         </h1>
       }
@@ -30,32 +29,34 @@ export default function PrivacyPage() {
       footer={
         contactEmail ? (
           <>
-            Privacy questions can be sent to{" "}
+            Private privacy, access, or deletion requests can be sent to{" "}
             <a href={`mailto:${contactEmail}`} className={contactLinkClassName}>
               {contactEmail}
             </a>
             .
           </>
         ) : (
-          <>
-            Privacy questions can be shared through the{" "}
-            <Link
-              href={siteConfig.cta.primary.href}
-              className={contactLinkClassName}
-            >
-              early access section
-            </Link>{" "}
-            or opened on{" "}
-            <a
-              href={siteConfig.issuesUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={contactLinkClassName}
-            >
-              GitHub
-            </a>
-            .
-          </>
+          <div className="space-y-2">
+            <p>
+              Direct private email contact for new privacy or deletion requests
+              will be listed here before early access opens. If you already
+              correspond with us by email, reply to any message to stop hearing
+              from us or request changes.
+            </p>
+            <p>
+              For general public product questions (never personal or donor
+              information), you can use{" "}
+              <a
+                href={siteConfig.issuesUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={contactLinkClassName}
+              >
+                public product questions on GitHub
+              </a>
+              .
+            </p>
+          </div>
         )
       }
     >

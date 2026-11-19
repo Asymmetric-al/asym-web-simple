@@ -1,11 +1,11 @@
 import { ArrowRight } from "lucide-react";
+import { Container } from "@/components/site/container";
 import {
   Eyebrow,
   SectionTitle,
   StatusPill,
 } from "@/components/site/home/section-heading";
 import { WorkflowReveal } from "@/components/site/home/workflow-sequence";
-import { Container } from "@/components/site/page";
 import { cn } from "@/lib/utils";
 import type { CSSProperties } from "react";
 
@@ -14,24 +14,28 @@ const workflowSteps = [
     title: "Describe",
     actor: "Your team",
     isAiStep: false,
+    delayMs: 0,
     text: "Set the fundraising goal, the project it supports, and who you want to reach.",
   },
   {
     title: "Prepare",
     actor: "AI",
     isAiStep: true,
+    delayMs: 40,
     text: "AI drafts the giving page and email, suggests a donor audience, and prepares the follow-up.",
   },
   {
     title: "Review",
     actor: "Your team",
     isAiStep: false,
+    delayMs: 70,
     text: "See the content, recipients, and proposed changes together. Edit the work and approve the next steps.",
   },
   {
     title: "Follow through",
     actor: "asym",
     isAiStep: false,
+    delayMs: 95,
     text: "Gifts, receipts, and donor activity stay connected to the campaign and the people behind it.",
   },
 ] as const;
@@ -42,7 +46,7 @@ export const ProductSection = () => (
   <section
     id="product"
     aria-labelledby="product-title"
-    className="scroll-mt-24 pb-[clamp(3.25rem,6vw,5.25rem)]"
+    className="pb-[clamp(3.25rem,6vw,5.25rem)]"
   >
     <Container>
       <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] lg:items-end lg:gap-12">
@@ -67,55 +71,65 @@ export const ProductSection = () => (
             aria-hidden="true"
             className="workflow-rail bg-foreground/15 pointer-events-none absolute top-4 right-10 left-10 hidden h-px lg:block"
           />
-          <div
-            aria-hidden="true"
-            className="bg-foreground/15 pointer-events-none absolute top-4 bottom-4 left-4 w-px sm:hidden"
-          />
 
           <ol className="relative grid gap-6 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4 lg:gap-6">
-            {workflowSteps.map((step, index) => (
-              <li
-                key={step.title}
-                style={{ "--step-delay": `${index * 45}ms` } as CSSProperties}
-                className={cn(
-                  "workflow-step relative flex flex-col",
-                  step.isAiStep
-                    ? "border-primary/35 bg-secondary/50 -mx-2 rounded-[1.35rem] border border-dashed py-4 pr-4 pl-14 sm:mx-0 sm:p-5 lg:-my-5 lg:p-5"
-                    : "pl-12 sm:p-2 sm:pl-2 lg:p-0"
-                )}
-              >
-                <div className="flex items-center justify-between gap-3">
-                  <span
-                    className={cn(
-                      "absolute top-0 left-0 z-10 flex size-8 shrink-0 items-center justify-center rounded-full font-mono text-sm tabular-nums sm:static",
-                      step.isAiStep
-                        ? "border-primary/65 bg-background text-primary top-4 left-2 border border-dashed sm:top-auto sm:left-auto"
-                        : "bg-primary text-primary-foreground"
-                    )}
-                    aria-hidden="true"
-                  >
-                    {index + 1}
-                  </span>
-                  <span
-                    translate={step.actor === "asym" ? "no" : undefined}
-                    className={cn(
-                      "relative z-10 rounded-full font-mono text-xs tracking-[0.14em] uppercase lg:px-2",
-                      step.isAiStep
-                        ? "text-primary bg-secondary/90 font-medium"
-                        : "text-muted-foreground lg:bg-card"
-                    )}
-                  >
-                    {step.actor}
-                  </span>
-                </div>
-                <h3 className="font-heading text-foreground mt-3 text-xl font-semibold tracking-[-0.04em] sm:mt-4">
-                  {step.title}
-                </h3>
-                <p className="text-muted-foreground mt-2 text-sm leading-6 sm:text-base sm:leading-7">
-                  {step.text}
-                </p>
-              </li>
-            ))}
+            {workflowSteps.map((step, index) => {
+              const isLast = index === workflowSteps.length - 1;
+              return (
+                <li
+                  key={step.title}
+                  style={{ "--step-delay": `${step.delayMs}ms` } as CSSProperties}
+                  className={cn(
+                    "workflow-step relative flex flex-col",
+                    step.isAiStep
+                      ? "border-primary/35 bg-secondary/50 -mx-2 rounded-[1.35rem] border border-dashed py-4 pr-4 pl-14 sm:mx-0 sm:p-5 lg:-my-5 lg:p-5"
+                      : "pl-12 sm:p-5 lg:p-0"
+                  )}
+                >
+                  {isLast ? null : (
+                    <span
+                      aria-hidden="true"
+                      className={cn(
+                        "workflow-rail-vertical bg-foreground/15 pointer-events-none absolute w-px sm:hidden",
+                        step.isAiStep
+                          ? "top-12 -bottom-6 left-6"
+                          : "top-8 -bottom-6 left-4"
+                      )}
+                    />
+                  )}
+                  <div className="flex items-center justify-between gap-3">
+                    <span
+                      className={cn(
+                        "absolute top-0 left-0 z-10 flex size-8 shrink-0 items-center justify-center rounded-full font-mono text-sm tabular-nums sm:static",
+                        step.isAiStep
+                          ? "border-primary/65 bg-background text-primary top-4 left-2 border border-dashed sm:top-auto sm:left-auto"
+                          : "bg-primary text-primary-foreground"
+                      )}
+                      aria-hidden="true"
+                    >
+                      {index + 1}
+                    </span>
+                    <span
+                      translate={step.actor === "asym" ? "no" : undefined}
+                      className={cn(
+                        "relative z-10 rounded-full font-mono text-xs tracking-[0.14em] uppercase lg:px-2",
+                        step.isAiStep
+                          ? "text-primary bg-secondary/90 font-medium"
+                          : "text-muted-foreground lg:bg-card"
+                      )}
+                    >
+                      {step.actor}
+                    </span>
+                  </div>
+                  <h3 className="font-heading text-foreground mt-3 text-xl font-semibold tracking-[-0.015em] sm:mt-4">
+                    {step.title}
+                  </h3>
+                  <p className="text-muted-foreground mt-2 text-sm leading-6 sm:text-base sm:leading-7">
+                    {step.text}
+                  </p>
+                </li>
+              );
+            })}
           </ol>
         </div>
 
@@ -127,7 +141,7 @@ export const ProductSection = () => (
             <p className="text-foreground flex flex-wrap items-center gap-x-2 gap-y-1.5 text-sm font-medium">
               {recordChain.map((item, idx) => (
                 <span key={item} className="inline-flex items-center gap-2">
-                  <span className="border-foreground/12 bg-background/80 rounded-full border px-3 py-1 text-xs font-medium">
+                  <span className="border-foreground/12 bg-background/85 rounded-full border px-3 py-1 text-xs font-medium">
                     {item}
                   </span>
                   {idx < recordChain.length - 1 ? (

@@ -3,6 +3,7 @@ import {
   EARLY_ACCESS_LIMITS,
   buildEarlyAccessNotification,
   earlyAccessCopy,
+  formatRetryWait,
   hasErrors,
   isHoneypotFilled,
   isValidEmail,
@@ -133,5 +134,13 @@ describe("buildEarlyAccessNotification", () => {
     );
 
     expect(notification.text).toContain("(left blank)");
+  });
+});
+
+describe("formatRetryWait", () => {
+  it("rounds retry durations honestly to minutes", () => {
+    expect(formatRetryWait(45)).toContain("about a minute");
+    expect(formatRetryWait(540)).toContain("about 9 minutes");
+    expect(formatRetryWait(undefined)).toBe(earlyAccessCopy.rateLimited);
   });
 });

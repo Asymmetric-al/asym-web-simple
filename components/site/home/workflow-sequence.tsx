@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import type { ReactNode } from "react";
 
 /**
-Progressive one-time reveal for the connected workflow sequence. Elements stay visible by default for SSR and no-JS visitors, only arming when the container starts below the viewport fold on motion-enabled devices.
+Progressive one-time rail reveal for the connected workflow sequence. Copy always stays at opacity 1 for SSR, print, and full-page captures; only the connecting rail and a subtle step settle trigger when scrolled into view on motion-enabled devices.
 */
 export const WorkflowReveal = ({
   children,
@@ -18,7 +18,7 @@ export const WorkflowReveal = ({
   useEffect(() => {
     const node = containerRef.current;
     if (!node) {
-      return undefined;
+      return;
     }
 
     if (
@@ -26,13 +26,13 @@ export const WorkflowReveal = ({
       window.matchMedia("(prefers-reduced-motion: reduce)").matches
     ) {
       node.dataset.workflowReveal = "visible";
-      return undefined;
+      return;
     }
 
     const rect = node.getBoundingClientRect();
-    if (rect.top < window.innerHeight * 0.92) {
+    if (rect.top < window.innerHeight * 0.96) {
       node.dataset.workflowReveal = "visible";
-      return undefined;
+      return;
     }
 
     node.dataset.workflowReveal = "armed";
@@ -47,7 +47,7 @@ export const WorkflowReveal = ({
           }
         }
       },
-      { threshold: 0.16, rootMargin: "0px 0px -6% 0px" }
+      { threshold: 0.01, rootMargin: "0px" }
     );
 
     observer.observe(node);

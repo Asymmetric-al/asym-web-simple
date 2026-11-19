@@ -3,41 +3,50 @@ import { cn } from "@/lib/utils";
 import type { ComponentPropsWithoutRef } from "react";
 
 type SiteLogoMarkProps = ComponentPropsWithoutRef<"span"> & {
-  readonly imageSizes?: string;
+  readonly size?: number;
+  readonly eager?: boolean;
   readonly priority?: boolean;
 };
 
 /**
-Transparent Asym mark with explicit light/dark artwork.
+Transparent asym mark with explicit light/dark artwork and fixed intrinsic dimensions.
 */
-export function SiteLogoMark({
+export const SiteLogoMark = ({
   className,
-  imageSizes = "24px",
+  size = 24,
+  eager = false,
   priority = false,
   ...props
-}: SiteLogoMarkProps) {
+}: SiteLogoMarkProps) => {
+  let loading: "eager" | undefined;
+  if (!priority && eager) {
+    loading = "eager";
+  }
+
   return (
     <span
-      className={cn("relative inline-block shrink-0", className)}
+      className={cn("relative inline-flex shrink-0 items-center", className)}
       aria-hidden="true"
       {...props}
     >
       <Image
         src="/brand/asym-mark-dark.png"
         alt=""
-        fill
+        width={size}
+        height={size}
         priority={priority}
-        sizes={imageSizes}
-        className="object-contain dark:hidden"
+        loading={loading}
+        className="size-full object-contain dark:hidden"
       />
       <Image
         src="/brand/asym-mark-light.png"
         alt=""
-        fill
+        width={size}
+        height={size}
         priority={priority}
-        sizes={imageSizes}
-        className="hidden object-contain dark:block"
+        loading={loading}
+        className="hidden size-full object-contain dark:block"
       />
     </span>
   );
-}
+};

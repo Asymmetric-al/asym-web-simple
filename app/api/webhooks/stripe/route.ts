@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
+import { readEarlyAccessDeliveryConfig } from "@/lib/early-access-config";
 import { GIVE_PAGE_METADATA_SOURCE } from "@/lib/stripe-giving";
 import { getStripe } from "@/lib/stripe-server";
 import type { NextRequest } from "next/server";
@@ -8,20 +9,16 @@ import type Stripe from "stripe";
 export const runtime = "nodejs";
 
 async function notifyGivingInbox(payload: string): Promise<void> {
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
+  const config = readEarlyAccessDeliveryConfig();
+  if (!config) {
     return;
   }
 
-  const toAddress = process.env.CONTACT_INBOX_EMAIL ?? "info@asymmetric.al";
-  const fromAddress =
-    process.env.CONTACT_FROM_EMAIL ?? "Website <noreply@asymmetric.al>";
-
   try {
-    const resend = new Resend(apiKey);
+    const resend = new Resend(config.apiKey);
     await resend.emails.send({
-      from: fromAddress,
-      to: [toAddress],
+      from: config.from,
+      to: [config.inbox],
       subject: "Stripe giving event (webhook)",
       text: payload,
     });

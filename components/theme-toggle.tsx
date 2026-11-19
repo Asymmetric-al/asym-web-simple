@@ -32,7 +32,7 @@ export const ThemeToggle = () => {
     <div
       role="group"
       aria-label="Color theme"
-      className="border-foreground/14 bg-card/85 inline-flex items-center rounded-full border p-0.5"
+      className="border-foreground/14 bg-card/90 inline-flex w-fit self-start items-center rounded-full border p-0.5 sm:self-auto"
     >
       {themes.map((option) => {
         const Icon = option.icon;
@@ -45,7 +45,7 @@ export const ThemeToggle = () => {
             aria-pressed={isActive}
             onClick={() => setTheme(option.value)}
             className={cn(
-              "focus-visible:ring-ring inline-flex min-h-11 items-center gap-1.5 rounded-full px-3 text-xs font-medium select-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-none active:scale-[0.97] sm:min-h-8 sm:px-2.5",
+              "focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center gap-1.5 rounded-full px-3 text-xs font-medium select-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-2 focus-visible:outline-transparent active:scale-[0.97] sm:min-h-8 sm:px-2.5",
               isActive
                 ? "bg-primary text-primary-foreground shadow-xs"
                 : "text-muted-foreground hover:text-foreground"

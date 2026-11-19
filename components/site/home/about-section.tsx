@@ -1,5 +1,5 @@
+import { Container } from "@/components/site/container";
 import { Eyebrow, SectionTitle } from "@/components/site/home/section-heading";
-import { Container } from "@/components/site/page";
 import { siteConfig } from "@/lib/config";
 
 const ordinaryWork = [
@@ -13,7 +13,7 @@ export const AboutSection = () => (
   <section
     id="about"
     aria-labelledby="about-title"
-    className="section-wash-accent scroll-mt-24 py-[clamp(3.25rem,6vw,5.25rem)]"
+    className="section-wash-accent py-[clamp(3.25rem,6vw,5.25rem)]"
   >
     <Container className="grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1fr)] lg:gap-16">
       <div>
@@ -25,7 +25,7 @@ export const AboutSection = () => (
           <p className="text-muted-foreground text-sm">
             The ordinary work comes first:
           </p>
-          <ul className="font-heading text-foreground mt-3 space-y-1.5 text-lg font-medium tracking-[-0.03em] sm:text-xl">
+          <ul className="font-heading text-foreground mt-3 space-y-1.5 text-lg font-medium tracking-[-0.015em] sm:text-xl">
             {ordinaryWork.map((line) => (
               <li key={line}>{line}</li>
             ))}
@@ -49,7 +49,7 @@ export const AboutSection = () => (
             href={siteConfig.repoUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-foreground hover:text-primary focus-visible:ring-ring rounded-xs underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+            className="text-foreground hover:text-primary focus-visible:ring-ring focus-visible:ring-offset-background rounded-xs underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent"
           >
             public repository
           </a>

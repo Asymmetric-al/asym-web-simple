@@ -17,86 +17,146 @@ const MAX_BODY_BYTES = 16_000;
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 const RATE_LIMIT_MAX_REQUESTS = 8;
 const MAX_TRACKED_KEYS = 2000;
-const RETRY_AFTER_SECONDS = 60;
 
 interface RateLimitBucket {
   count: number;
   resetAt: number;
 }
 
-const rateLimitStore = new Map<string, RateLimitBucket>();
+type FormOutcome =
+  | "received"
+  | "invalid"
+  | "rate_limited"
+  | "unavailable"
+  | "failed";
 
-const readClientIp = (request: Request): string => {
-  const forwarded = request.headers.get("x-forwarded-for");
-  if (forwarded) {
-    const first = forwarded.split(",")[0]?.trim();
-    if (first) {
-      return first;
-    }
+let rateLimitStore: Map<string, RateLimitBucket> | null = null;
+
+const getRateLimitStore = (): Map<string, RateLimitBucket> => {
+  if (!rateLimitStore) {
+    rateLimitStore = new Map();
   }
-  const realIp = request.headers.get("x-real-ip")?.trim();
-  return realIp && realIp.length > 0 ? realIp : "unknown";
+  return rateLimitStore;
 };
 
-const isRateLimited = (clientIp: string, now: number): boolean => {
-  if (rateLimitStore.size > MAX_TRACKED_KEYS) {
-    for (const [key, entry] of rateLimitStore) {
+/**
+Prefer edge-injected headers over client-supplied leading X-Forwarded-For hops.
+Note: in-memory Map buckets apply per serverless isolate (documented for prelaunch).
+*/
+const readClientIp = (request: Request): string => {
+  const vercelIp = request.headers.get("x-vercel-forwarded-for")?.trim();
+  if (vercelIp) {
+    return vercelIp;
+  }
+
+  const realIp = request.headers.get("x-real-ip")?.trim();
+  if (realIp) {
+    return realIp;
+  }
+
+  const forwarded = request.headers.get("x-forwarded-for");
+  if (forwarded) {
+    const parts = forwarded.split(",");
+    const rightmost = parts.at(-1)?.trim();
+    if (rightmost) {
+      return rightmost;
+    }
+  }
+
+  return "unknown";
+};
+
+const checkRateLimit = (
+  clientIp: string,
+  now: number
+): { limited: false } | { limited: true; retryAfterSeconds: number } => {
+  const store = getRateLimitStore();
+
+  if (store.size > MAX_TRACKED_KEYS) {
+    for (const [key, entry] of store) {
       if (entry.resetAt <= now) {
-        rateLimitStore.delete(key);
+        store.delete(key);
       }
     }
   }
 
-  const current = rateLimitStore.get(clientIp);
+  const current = store.get(clientIp);
   if (!current || current.resetAt <= now) {
-    rateLimitStore.set(clientIp, {
+    store.set(clientIp, {
       count: 1,
       resetAt: now + RATE_LIMIT_WINDOW_MS,
     });
-    return false;
+    return { limited: false };
   }
 
   current.count += 1;
-  return current.count > RATE_LIMIT_MAX_REQUESTS;
+  if (current.count > RATE_LIMIT_MAX_REQUESTS) {
+    const retryAfterSeconds = Math.max(
+      1,
+      Math.ceil((current.resetAt - now) / 1000)
+    );
+    return { limited: true, retryAfterSeconds };
+  }
+
+  return { limited: false };
 };
 
-const isFormSubmission = (request: Request): boolean => {
+const detectContentKind = (
+  request: Request
+): "json" | "urlencoded" | "unsupported" => {
   const contentType = request.headers.get("content-type")?.toLowerCase() ?? "";
-  return (
-    contentType.includes("application/x-www-form-urlencoded") ||
-    contentType.includes("multipart/form-data")
-  );
+  if (contentType.includes("application/x-www-form-urlencoded")) {
+    return "urlencoded";
+  }
+  if (
+    contentType.includes("application/json") ||
+    contentType.trim().length === 0
+  ) {
+    return "json";
+  }
+  return "unsupported";
 };
 
 const redirectForForm = (
   request: Request,
-  outcome: "received" | "invalid" | "rate_limited" | "unavailable" | "failed"
+  outcome: FormOutcome,
+  retryAfterSeconds?: number
 ): NextResponse => {
-  const target = new URL("/", request.url);
-  target.searchParams.set("early_access", outcome);
-  target.hash = "early-access";
+  const target = new URL("/early-access/status", request.url);
+  target.searchParams.set("state", outcome);
+  if (retryAfterSeconds !== undefined) {
+    target.searchParams.set("retry", String(retryAfterSeconds));
+  }
   return NextResponse.redirect(target, 303);
 };
 
-const failure = (
+const mapStatusToOutcome = (status: number): FormOutcome => {
+  if (status === 422) {
+    return "invalid";
+  }
+  if (status === 429) {
+    return "rate_limited";
+  }
+  if (status === 503) {
+    return "unavailable";
+  }
+  return "failed";
+};
+
+const respondFailure = (
   request: Request,
-  asForm: boolean,
+  isUrlEncodedForm: boolean,
   status: number,
   error: string,
-  extra?: object,
+  extra?: { errors?: unknown; retryAfterSeconds?: number },
   headers?: HeadersInit
 ): NextResponse => {
-  if (asForm) {
-    if (status === 422) {
-      return redirectForForm(request, "invalid");
-    }
-    if (status === 429) {
-      return redirectForForm(request, "rate_limited");
-    }
-    if (status === 503) {
-      return redirectForForm(request, "unavailable");
-    }
-    return redirectForForm(request, "failed");
+  if (isUrlEncodedForm) {
+    return redirectForForm(
+      request,
+      mapStatusToOutcome(status),
+      extra?.retryAfterSeconds
+    );
   }
 
   return NextResponse.json(
@@ -109,6 +169,47 @@ const failure = (
 Reads the raw request stream with a hard byte ceiling so chunked bodies
 without `content-length` cannot exceed `MAX_BODY_BYTES`.
 */
+const readStreamBounded = (
+  stream: ReadableStream<Uint8Array>
+): Promise<Uint8Array | "too_large"> => {
+  const reader = stream.getReader();
+  const chunks: Uint8Array[] = [];
+  let totalBytes = 0;
+
+  const nextChunk = async (): Promise<Uint8Array | "too_large"> => {
+    const { done, value } = await reader.read();
+    if (done) {
+      const merged = new Uint8Array(totalBytes);
+      let offset = 0;
+      for (const chunk of chunks) {
+        merged.set(chunk, offset);
+        offset += chunk.byteLength;
+      }
+      return merged;
+    }
+    totalBytes += value.byteLength;
+    if (totalBytes > MAX_BODY_BYTES) {
+      await reader.cancel();
+      return "too_large";
+    }
+    chunks.push(value);
+    return nextChunk();
+  };
+
+  return nextChunk();
+};
+
+const decodeStreamBounded = async (
+  stream: ReadableStream<Uint8Array>
+): Promise<{ ok: true; text: string } | { ok: false; reason: "too_large" }> => {
+  const bytes = await readStreamBounded(stream);
+  if (bytes === "too_large") {
+    return { ok: false, reason: "too_large" };
+  }
+  const decoder = new TextDecoder();
+  return { ok: true, text: decoder.decode(bytes) };
+};
+
 const readBoundedText = async (
   request: Request
 ): Promise<
@@ -119,75 +220,23 @@ const readBoundedText = async (
     return { ok: false, reason: "too_large" };
   }
 
-  const stream = request.body;
-  if (!stream) {
+  if (!request.body) {
     return { ok: true, text: "" };
   }
 
-  const reader = stream.getReader();
-  const chunks: Uint8Array[] = [];
-  let totalBytes = 0;
-
   try {
-    for (;;) {
-      const { done, value } = await reader.read();
-      if (done) {
-        break;
-      }
-      totalBytes += value.byteLength;
-      if (totalBytes > MAX_BODY_BYTES) {
-        await reader.cancel();
-        return { ok: false, reason: "too_large" };
-      }
-      chunks.push(value);
-    }
+    return await decodeStreamBounded(request.body);
   } catch {
     return { ok: false, reason: "unreadable" };
   }
-
-  const merged = new Uint8Array(totalBytes);
-  let offset = 0;
-  for (const chunk of chunks) {
-    merged.set(chunk, offset);
-    offset += chunk.byteLength;
-  }
-
-  return { ok: true, text: new TextDecoder().decode(merged) };
 };
 
-const parsePayload = async (
+const parseBoundedPayload = async (
   request: Request,
-  asForm: boolean
+  isUrlEncodedForm: boolean
 ): Promise<
-  | { ok: true; body: unknown }
-  | { ok: false; status: number; error: string }
+  { ok: true; body: unknown } | { ok: false; status: number; error: string }
 > => {
-  const contentType = request.headers.get("content-type")?.toLowerCase() ?? "";
-
-  if (contentType.includes("multipart/form-data")) {
-    const declaredLength = Number(request.headers.get("content-length") ?? 0);
-    if (Number.isFinite(declaredLength) && declaredLength > MAX_BODY_BYTES) {
-      return { ok: false, status: 413, error: "too_large" };
-    }
-    try {
-      const formData = await request.formData();
-      const record: Record<string, string> = {};
-      let charCount = 0;
-      for (const [key, value] of formData.entries()) {
-        if (typeof value === "string") {
-          charCount += key.length + value.length;
-          if (charCount > MAX_BODY_BYTES) {
-            return { ok: false, status: 413, error: "too_large" };
-          }
-          record[key] = value;
-        }
-      }
-      return { ok: true, body: record };
-    } catch {
-      return { ok: false, status: 400, error: "invalid_form" };
-    }
-  }
-
   const raw = await readBoundedText(request);
   if (!raw.ok) {
     return raw.reason === "too_large"
@@ -195,13 +244,9 @@ const parsePayload = async (
       : { ok: false, status: 400, error: "invalid_body" };
   }
 
-  if (asForm) {
+  if (isUrlEncodedForm) {
     const params = new URLSearchParams(raw.text);
-    const record: Record<string, string> = {};
-    for (const [key, value] of params.entries()) {
-      record[key] = value;
-    }
-    return { ok: true, body: record };
+    return { ok: true, body: Object.fromEntries(params) };
   }
 
   try {
@@ -234,27 +279,36 @@ const wasAcceptedForDelivery = async (
 
 // eslint-disable-next-line sonarjs/function-name -- Next.js route handlers must be named after the HTTP method.
 export const POST = async (request: Request): Promise<NextResponse> => {
-  const asForm = isFormSubmission(request);
-
-  if (isRateLimited(readClientIp(request), Date.now())) {
-    return failure(
-      request,
-      asForm,
-      429,
-      "rate_limited",
-      undefined,
-      { "Retry-After": String(RETRY_AFTER_SECONDS) }
+  const contentKind = detectContentKind(request);
+  if (contentKind === "unsupported") {
+    return NextResponse.json(
+      { ok: false, error: "unsupported_media_type" },
+      { status: 415 }
     );
   }
 
-  const parsed = await parsePayload(request, asForm);
+  const isUrlEncodedForm = contentKind === "urlencoded";
+  const rateCheck = checkRateLimit(readClientIp(request), Date.now());
+
+  if (rateCheck.limited) {
+    return respondFailure(
+      request,
+      isUrlEncodedForm,
+      429,
+      "rate_limited",
+      { retryAfterSeconds: rateCheck.retryAfterSeconds },
+      { "Retry-After": String(rateCheck.retryAfterSeconds) }
+    );
+  }
+
+  const parsed = await parseBoundedPayload(request, isUrlEncodedForm);
   if (!parsed.ok) {
-    return failure(request, asForm, parsed.status, parsed.error);
+    return respondFailure(request, isUrlEncodedForm, parsed.status, parsed.error);
   }
 
   // Automated submissions get a normal-looking response and are dropped.
   if (isHoneypotFilled(parsed.body)) {
-    return asForm
+    return isUrlEncodedForm
       ? redirectForForm(request, "received")
       : NextResponse.json({ ok: true });
   }
@@ -262,12 +316,14 @@ export const POST = async (request: Request): Promise<NextResponse> => {
   const submission = normalizeEarlyAccessRequest(parsed.body);
   const errors = validateEarlyAccessRequest(submission);
   if (hasErrors(errors)) {
-    return failure(request, asForm, 422, "invalid", { errors });
+    return respondFailure(request, isUrlEncodedForm, 422, "invalid", {
+      errors,
+    });
   }
 
   const config = readEarlyAccessDeliveryConfig();
   if (!config) {
-    return failure(request, asForm, 503, "not_configured");
+    return respondFailure(request, isUrlEncodedForm, 503, "not_configured");
   }
 
   const delivered = await wasAcceptedForDelivery(config, {
@@ -276,10 +332,10 @@ export const POST = async (request: Request): Promise<NextResponse> => {
   });
 
   if (delivered) {
-    return asForm
+    return isUrlEncodedForm
       ? redirectForForm(request, "received")
       : NextResponse.json({ ok: true });
   }
 
-  return failure(request, asForm, 502, "delivery_failed");
+  return respondFailure(request, isUrlEncodedForm, 502, "delivery_failed");
 };

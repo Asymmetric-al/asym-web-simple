@@ -30,7 +30,7 @@ export const SectionTitle = ({
   <h2
     id={id}
     className={cn(
-      "font-heading text-foreground mt-4 text-[clamp(1.95rem,3.6vw,3.05rem)] leading-[1.04] font-semibold tracking-[-0.045em] text-balance",
+      "font-heading text-foreground mt-4 text-[clamp(1.95rem,3.6vw,3.05rem)] leading-[1.04] font-semibold tracking-[-0.04em] text-balance",
       className
     )}
   >
