@@ -113,82 +113,66 @@ test.describe("homepage smoke tests", () => {
           name: /^(?:Request early access|See what’s built)$/u,
         })
         .first()
-    ).toHaveAttribute("href", /^\/#(?:early-access|open-source)$/u);
+    ).toHaveAttribute("href", /^\/#(?:early-access|product)$/u);
     await expect(
       page.getByRole("link", { name: /^View the code/u })
     ).toHaveAttribute("href", REPO_URL);
   });
 
-  test("three-hand specimen switches roles with keyboard, redacts anonymous donor on missionary roster, and stamps approval", async ({
+  test("surface explorer switches real core surfaces with keyboard and governance sequence explains human approval", async ({
     page,
   }) => {
     await page.goto("/", { waitUntil: "domcontentloaded" });
     await waitForUi(page);
 
-    const specimen = page.getByRole("region", {
-      name: /Illustrative sample gift across donor, missionary, and office views/iu,
+    const architecture = page.getByRole("region", {
+      name: /Three surfaces, one shared record/iu,
     });
-    await expect(specimen).toContainText("GIFT-0418");
+    await expect(architecture).toContainText("apps/donor");
     await expect(
-      specimen.getByRole("heading", { level: 3, name: "Official Gift Receipt" })
+      architecture.getByRole("heading", {
+        level: 3,
+        name: /Giving pages, receipts, and self-service history/iu,
+      })
     ).toBeVisible();
 
-    await specimen.getByRole("button", { name: "$250" }).click();
-    await expect(specimen).toContainText("$250.00");
-
-    const anonToggle = specimen.getByRole("button", {
-      name: "Anonymous to field",
-    });
-    await expect(anonToggle).toHaveAttribute("aria-pressed", "false");
-    await anonToggle.click();
-    await expect(anonToggle).toHaveAttribute("aria-pressed", "true");
-
-    const missionaryTab = specimen.getByRole("tab", { name: "Missionary" });
+    const missionaryTab = architecture.getByRole("tab", { name: "Missionary" });
     await missionaryTab.click();
     await expect(
-      specimen.getByRole("heading", { level: 3, name: "Anonymous partner" })
+      architecture.getByRole("heading", {
+        level: 3,
+        name: /Assigned supporter progress, with server-enforced privacy/iu,
+      })
     ).toBeVisible();
-    await expect(specimen).toContainText(
-      "Individual gift amount & ID hidden on roster"
-    );
-    await expect(specimen).toContainText("Name, email, phone & notes redacted");
+    await expect(architecture).toContainText("Anonymous partner");
 
     await missionaryTab.focus();
     await page.keyboard.press("ArrowRight");
-    await expect(specimen.getByRole("tab", { name: "Office" })).toHaveAttribute(
-      "aria-selected",
-      "true"
-    );
     await expect(
-      specimen.getByRole("heading", {
+      architecture.getByRole("tab", { name: "Office" })
+    ).toHaveAttribute("aria-selected", "true");
+    await expect(
+      architecture.getByRole("heading", {
         level: 3,
-        name: "Contribution Ledger Entry",
+        name: /Full stewardship record, templates, and action previews/iu,
       })
     ).toBeVisible();
-    await expect(specimen).toContainText("Rivera Household");
 
-    const product = page.locator("#product");
+    const appeals = page.locator("#appeals");
     await expect(
-      product.getByRole("heading", {
+      appeals.getByRole("heading", {
         level: 2,
         name: "Before an appeal goes out.",
       })
     ).toBeVisible();
-    await expect(product).toContainText("Drafted by AI");
-
-    await product.getByRole("button", { name: "Apply sample edit" }).click();
-    await expect(product).toContainText("Two new wells funded");
-
-    await product.getByRole("button", { name: "Approve sample draft" }).click();
-    await expect(product).toContainText("Sample approved");
-    await expect(product).toContainText("Ready after sign-off");
-    await expect(
-      product.getByRole("button", { name: "Reset sample draft" })
-    ).toBeVisible();
-    await product.getByRole("button", { name: "Reset sample draft" }).click();
-    await expect(
-      product.getByRole("button", { name: "Approve sample draft" })
-    ).toBeVisible();
+    await appeals
+      .getByRole("button", { name: /Prepare page, email & recipient scope/iu })
+      .click();
+    await expect(appeals).toContainText("Permission boundary:");
+    await appeals
+      .getByRole("button", { name: /Review, edit & approve/iu })
+      .click();
+    await expect(appeals).toContainText("Hard stop:");
   });
 
   test("homepage maintains near-zero CLS across hydration and unconfigured API returns 503", async ({

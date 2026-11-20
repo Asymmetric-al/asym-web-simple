@@ -1,12 +1,18 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/site/container";
 import { GitHubMark } from "@/components/site/github-mark";
-import { GiftSpecimen } from "@/components/site/home/gift-specimen";
 import { ArrowRightIcon } from "@/components/site/icons";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { mobileNavigationLinks, siteConfig } from "@/lib/config";
 import { isEarlyAccessConfigured } from "@/lib/early-access-config";
 import { cn } from "@/lib/utils";
+
+const plateIndex = [
+  { num: "01", role: "Donor", detail: "Giving & receipts" },
+  { num: "02", role: "Missionary", detail: "Scoped roster" },
+  { num: "03", role: "Office", detail: "Full ledger" },
+] as const;
 
 export const HomeHero = () => {
   const isConfigured = isEarlyAccessConfigured();
@@ -17,7 +23,7 @@ export const HomeHero = () => {
       className="pt-22 pb-12 sm:pt-26 sm:pb-16 xl:flex xl:min-h-[min(56.25rem,100svh)] xl:items-center xl:pt-24 xl:pb-14"
     >
       <Container>
-        <div className="grid gap-8 sm:gap-10 xl:grid-cols-[minmax(0,43fr)_minmax(0,57fr)] xl:items-center xl:gap-12">
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,45fr)_minmax(0,55fr)] lg:items-center lg:gap-12 xl:gap-16">
           <div className="min-w-0">
             <p className="text-pine font-sans text-sm font-medium">
               Open-source software for missions organizations
@@ -25,23 +31,22 @@ export const HomeHero = () => {
 
             <h1
               id="hero-title"
-              className="font-heading text-foreground mt-3.5 text-[clamp(2.75rem,5.4vw,4.75rem)] leading-[0.97] font-medium tracking-[-0.03em]"
+              className="font-heading text-foreground mt-3.5 text-[clamp(2.85rem,5.6vw,4.9rem)] leading-[0.96] font-medium tracking-[-0.03em]"
             >
               <span className="block">One gift.</span>
               <span className="block italic">Three hands.</span>
             </h1>
 
-            <p className="text-muted-foreground mt-4 max-w-[34rem] text-base leading-7 text-pretty sm:mt-5 sm:text-[1.09375rem] sm:leading-8">
+            <p className="text-muted-foreground mt-5 max-w-[33rem] text-base leading-7 text-pretty sm:text-[1.09375rem] sm:leading-8">
               <span translate="no" className="text-foreground font-medium">
                 asym
               </span>{" "}
-              keeps giving pages, receipts, donor records, and missionary
-              updates on one shared record. Donors get receipts, missionaries
-              see supporter progress, and your office keeps the full picture,
-              with human&#8209;approved AI appeal drafting in development.
+              connects giving pages, receipts, donor records, and missionary
+              updates on one shared open&#8209;source platform, with
+              human&#8209;approved AI appeal drafting in development.
             </p>
 
-            <div className="mt-5 flex flex-col gap-2.5 sm:mt-6 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
+            <div className="mt-6 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
               {isConfigured ? (
                 <Link
                   href={siteConfig.cta.primary.href}
@@ -53,7 +58,7 @@ export const HomeHero = () => {
                 </Link>
               ) : (
                 <Link
-                  href="/#open-source"
+                  href="/#product"
                   prefetch={false}
                   className={cn(
                     buttonVariants({ variant: "ink", size: "lg" }),
@@ -83,20 +88,70 @@ export const HomeHero = () => {
               <p className="text-muted-foreground mt-4 text-sm leading-6">
                 Also in development:{" "}
                 <Link
-                  href="/#product"
+                  href="/#appeals"
                   prefetch={false}
                   className="text-foreground hover:text-pine focus-visible:ring-ring focus-visible:ring-offset-background rounded-xs font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent"
                 >
-                  try the sample AI appeal approval
+                  how AI drafting stops for human sign-off
                 </Link>
                 .
               </p>
             )}
           </div>
 
-          <div className="min-w-0">
-            <GiftSpecimen />
-          </div>
+          {/* Bespoke editorial printmaking plate — zero fake product screens or fictional data */}
+          <figure className="relative min-w-0">
+            <span
+              aria-hidden="true"
+              className="text-rule-strong pointer-events-none absolute -top-3 -left-2 hidden font-mono text-xs select-none sm:block"
+            >
+              +
+            </span>
+            <span
+              aria-hidden="true"
+              className="text-rule-strong pointer-events-none absolute -top-3 -right-2 hidden font-mono text-xs select-none sm:block"
+            >
+              +
+            </span>
+
+            <div className="surface-hero overflow-hidden rounded-2xl p-3 sm:p-4">
+              <div className="border-rule aspect-[4/3] overflow-hidden rounded-xl border bg-[#f3eee3] dark:bg-[#111e28]">
+                <Image
+                  src="/art/three-hands-plate.webp"
+                  alt="Editorial pen-and-ink print showing a single continuous ink line connecting three framed panes: a blank correspondence envelope, a distant pine hillside, and an open ruled ledger book sealed with a vermilion mark."
+                  width={1200}
+                  height={900}
+                  priority
+                  unoptimized
+                  className="block h-full w-full object-cover dark:hidden"
+                />
+                <Image
+                  src="/art/three-hands-plate-dark.webp"
+                  alt="Editorial pen-and-ink print showing a single continuous ink line connecting three framed panes: a blank correspondence envelope, a distant pine hillside, and an open ruled ledger book sealed with a vermilion mark."
+                  width={1200}
+                  height={900}
+                  unoptimized
+                  className="hidden h-full w-full object-cover dark:block"
+                />
+              </div>
+
+              <figcaption className="mt-3 grid grid-cols-3 gap-2 px-1 pt-1 text-xs">
+                {plateIndex.map((item) => (
+                  <div key={item.num} className="min-w-0">
+                    <p className="text-foreground font-sans leading-4 font-semibold">
+                      <span className="text-pine mr-1.5 font-mono font-medium tabular-nums">
+                        {item.num}
+                      </span>
+                      {item.role}
+                    </p>
+                    <p className="text-muted-foreground mt-0.5 text-[0.75rem] leading-4">
+                      {item.detail}
+                    </p>
+                  </div>
+                ))}
+              </figcaption>
+            </div>
+          </figure>
         </div>
 
         <noscript>

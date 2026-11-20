@@ -6,7 +6,7 @@ The product website for **asym**, open-source software for nonprofits built by *
 
 This repository is the marketing site served at [asym.app](https://asym.app) (Vercel project `asym-web-simple`, production branch `main`). The product itself lives in [Asymmetric-al/core](https://github.com/Asymmetric-al/core) (AGPL-3.0-only). Product name, URL, navigation, and repository figures live in `lib/config.ts`; the optional private contact address comes from `NEXT_PUBLIC_CONTACT_EMAIL` via `lib/early-access-config.ts`.
 
-The homepage uses clearly labeled illustrative specimens (`Sample record · fictional · no payment` and `Sample draft · nothing sends`) to explain how one gift crosses donor, missionary, and office records and how human approval works for AI drafts in development—never real customer data or unverified claims. See `DESIGN.md`.
+The homepage is purely editorial and architectural: it uses custom pen-and-ink printmaking plates and real `Asymmetric-al/core` architecture specs—never mock product screens or fictional donor records. See `DESIGN.md`.
 
 ### What lives in this repository
 

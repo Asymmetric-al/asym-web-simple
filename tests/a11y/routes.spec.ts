@@ -54,7 +54,7 @@ test.describe("route accessibility", () => {
     });
   }
 
-  test("interactive specimen, approval stamp, and 404 menu states pass WCAG 2.2 AA", async ({
+  test("interactive surface explorer, governance steps, and 404 menu states pass WCAG 2.2 AA", async ({
     page,
   }) => {
     await page.emulateMedia({
@@ -66,23 +66,23 @@ test.describe("route accessibility", () => {
       () => document.documentElement.getAttribute("data-ui-ready") === "true"
     );
 
-    const specimen = page.getByRole("region", {
-      name: /Illustrative sample gift across donor, missionary, and office views/iu,
+    const architecture = page.getByRole("region", {
+      name: /Three surfaces, one shared record/iu,
     });
-    await specimen.getByRole("button", { name: "Anonymous to field" }).click();
-    await specimen.getByRole("tab", { name: "Missionary" }).click();
-    const anonResults = await new AxeBuilder({ page })
+    await architecture.getByRole("tab", { name: "Missionary" }).click();
+    const missionaryResults = await new AxeBuilder({ page })
       .withTags(WCAG_TAGS)
       .analyze();
-    expect(anonResults.violations).toEqual([]);
+    expect(missionaryResults.violations).toEqual([]);
 
-    const product = page.locator("#product");
-    await product.getByRole("button", { name: "Apply sample edit" }).click();
-    await product.getByRole("button", { name: "Approve sample draft" }).click();
-    const stampedResults = await new AxeBuilder({ page })
+    const appeals = page.locator("#appeals");
+    await appeals
+      .getByRole("button", { name: /Prepare page, email & recipient scope/iu })
+      .click();
+    const governanceResults = await new AxeBuilder({ page })
       .withTags(WCAG_TAGS)
       .analyze();
-    expect(stampedResults.violations).toEqual([]);
+    expect(governanceResults.violations).toEqual([]);
 
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/does-not-exist", { waitUntil: "domcontentloaded" });

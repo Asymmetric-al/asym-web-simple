@@ -94,8 +94,8 @@ export const createMetadata = ({
   const socialTitle = title ?? siteMetadata.socialTitle;
 
   return {
-    title,
-    description,
+    ...(title && { title }),
+    ...(description && { description }),
     alternates: {
       canonical: canonicalPath,
     },

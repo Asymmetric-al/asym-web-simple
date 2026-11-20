@@ -19,6 +19,7 @@ const INK = "#12202B";
 const MUTED = "#485763";
 const PINE = "#1B574C";
 const PINE_SOFT = "#E3EEE9";
+const VERMILION = "#B33A22";
 const RULE = "rgba(18,32,43,0.18)";
 const SPACE_BETWEEN = "space-between";
 const FONT_NEWSREADER = '"Newsreader"';
@@ -64,12 +65,12 @@ export default async function openGraphImage() {
         width: "100%",
         height: "100%",
         background: PAPER,
-        padding: "46px 54px",
+        padding: "48px 56px",
         fontFamily: '"Instrument Sans"',
         color: INK,
         justifyContent: SPACE_BETWEEN,
         alignItems: "stretch",
-        gap: "44px",
+        gap: "48px",
       }}
     >
       {/* Left editorial column */}
@@ -78,7 +79,7 @@ export default async function openGraphImage() {
           display: "flex",
           flexDirection: "column",
           justifyContent: SPACE_BETWEEN,
-          width: "540px",
+          width: "560px",
           paddingTop: "4px",
           paddingBottom: "4px",
         }}
@@ -110,7 +111,7 @@ export default async function openGraphImage() {
           <div
             style={{
               fontFamily: FONT_NEWSREADER,
-              fontSize: 86,
+              fontSize: 88,
               lineHeight: 0.96,
               fontWeight: 600,
               letterSpacing: "-0.03em",
@@ -122,7 +123,7 @@ export default async function openGraphImage() {
             style={{
               fontFamily: FONT_NEWSREADER,
               fontStyle: "italic",
-              fontSize: 86,
+              fontSize: 88,
               lineHeight: 1,
               fontWeight: 500,
               letterSpacing: "-0.03em",
@@ -141,7 +142,7 @@ export default async function openGraphImage() {
             }}
           >
             Giving pages, receipts, donor records, and missionary updates on one
-            shared record.
+            shared platform.
           </div>
         </div>
 
@@ -163,7 +164,7 @@ export default async function openGraphImage() {
         </div>
       </div>
 
-      {/* Right specimen card — legible at social thumbnail widths */}
+      {/* Right architectural brand plate (real monorepo surfaces, zero fake UI or fictional records) */}
       <div
         style={{
           display: "flex",
@@ -182,11 +183,11 @@ export default async function openGraphImage() {
             justifyContent: SPACE_BETWEEN,
             alignItems: "center",
             fontFamily: FONT_MONO,
-            fontSize: 15,
+            fontSize: 14,
             color: MUTED,
           }}
         >
-          <span>SAMPLE &middot; GIFT-0418</span>
+          <span>Asymmetric-al/core</span>
           <span
             style={{
               background: PINE_SOFT,
@@ -207,7 +208,7 @@ export default async function openGraphImage() {
             background: SHEET,
             border: `1.5px solid rgba(18,32,43,0.22)`,
             borderRadius: "16px",
-            padding: "28px",
+            padding: "26px",
             marginTop: "16px",
             flex: 1,
             justifyContent: SPACE_BETWEEN,
@@ -216,74 +217,44 @@ export default async function openGraphImage() {
           <div
             style={{
               display: "flex",
-              justifyContent: SPACE_BETWEEN,
-              alignItems: "flex-start",
+              flexDirection: "column",
               borderBottom: `1px solid ${RULE}`,
-              paddingBottom: "20px",
+              paddingBottom: "18px",
             }}
           >
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <span
-                style={{
-                  fontFamily: FONT_MONO,
-                  fontSize: 15,
-                  color: PINE,
-                }}
-              >
-                RECEIPT #R-0418 &middot; SETTLED
-              </span>
-              <span
-                style={{
-                  fontFamily: FONT_NEWSREADER,
-                  fontSize: 30,
-                  fontWeight: 600,
-                  marginTop: "6px",
-                }}
-              >
-                Official Gift Receipt
-              </span>
-            </div>
-            <div
+            <span
               style={{
-                display: "flex",
-                alignItems: "baseline",
-                gap: "3px",
-                flexShrink: 0,
+                fontFamily: FONT_MONO,
+                fontSize: 13,
+                color: PINE,
               }}
             >
-              <span
-                style={{
-                  fontFamily: FONT_NEWSREADER,
-                  fontSize: 34,
-                  fontWeight: 600,
-                }}
-              >
-                $100
-              </span>
-              <span
-                style={{
-                  fontFamily: FONT_MONO,
-                  fontSize: 15,
-                  color: MUTED,
-                }}
-              >
-                /mo
-              </span>
-            </div>
+              THREE CONNECTED SURFACES
+            </span>
+            <span
+              style={{
+                fontFamily: FONT_NEWSREADER,
+                fontSize: 32,
+                fontWeight: 600,
+                marginTop: "8px",
+              }}
+            >
+              One shared record.
+            </span>
           </div>
 
           <div
             style={{
               display: "flex",
               flexDirection: "column",
-              gap: "14px",
-              marginTop: "20px",
+              gap: "12px",
+              marginTop: "18px",
             }}
           >
             {[
-              { role: "Donor", detail: "Receipt & portal history" },
-              { role: "Missionary", detail: "Partner roster & redaction" },
-              { role: "Office", detail: "Fund 310-EAST-WATER & CRM" },
+              { index: "01", role: "Donor", path: "apps/donor" },
+              { index: "02", role: "Missionary", path: "apps/missionary" },
+              { index: "03", role: "Office", path: "apps/admin" },
             ].map((item) => (
               <div
                 key={item.role}
@@ -293,14 +264,35 @@ export default async function openGraphImage() {
                   alignItems: "center",
                   background: PAPER,
                   borderRadius: "12px",
-                  padding: "14px 18px",
+                  padding: "15px 18px",
                 }}
               >
-                <span style={{ fontSize: 20, fontWeight: 600, color: INK }}>
-                  {item.role}
-                </span>
-                <span style={{ fontSize: 18, fontWeight: 500, color: MUTED }}>
-                  {item.detail}
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "12px" }}
+                >
+                  <span
+                    style={{
+                      fontFamily: FONT_MONO,
+                      fontSize: 15,
+                      color: PINE,
+                      fontWeight: 500,
+                    }}
+                  >
+                    {item.index}
+                  </span>
+                  <span style={{ fontSize: 21, fontWeight: 600, color: INK }}>
+                    {item.role}
+                  </span>
+                </div>
+                <span
+                  style={{
+                    fontFamily: FONT_MONO,
+                    fontSize: 15,
+                    fontWeight: 500,
+                    color: MUTED,
+                  }}
+                >
+                  {item.path}
                 </span>
               </div>
             ))}
@@ -311,16 +303,28 @@ export default async function openGraphImage() {
               display: "flex",
               justifyContent: SPACE_BETWEEN,
               alignItems: "center",
+              gap: "16px",
               marginTop: "18px",
               paddingTop: "16px",
-              borderTop: `1px solid ${RULE}`,
-              fontFamily: FONT_MONO,
-              fontSize: 12,
-              color: PINE,
+              borderTop: `1px dashed rgba(74,89,102,0.45)`,
+              fontSize: 15,
+              color: MUTED,
             }}
           >
-            <span>apps/donor &middot; apps/missionary &middot; apps/admin</span>
-            <span style={{ color: MUTED, flexShrink: 0 }}>asym.app</span>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <span
+                style={{
+                  width: "8px",
+                  height: "8px",
+                  borderRadius: "999px",
+                  background: VERMILION,
+                }}
+              />
+              <span>AI appeal drafting in development</span>
+            </div>
+            <span style={{ fontFamily: FONT_MONO, fontSize: 13 }}>
+              asym.app
+            </span>
           </div>
         </div>
       </div>

@@ -53,9 +53,8 @@ export const EarlyAccessSection = () => {
                   In the meantime
                 </h3>
                 <p className="text-muted-foreground mt-2.5 text-base leading-7 text-pretty">
-                  Inspect the public code inventory above, try the sample gift
-                  and approval draft, or follow progress in the repository
-                  README.
+                  Inspect the three-surface architecture and public code
+                  inventory above, or follow progress in the repository README.
                 </p>
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                   <Link
