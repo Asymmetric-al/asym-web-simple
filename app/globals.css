@@ -46,17 +46,27 @@
   --surface-2: rgb(246 250 253 / 94%);
   --radius: 1.25rem;
   --shadow-card:
-    0 1px 0 0 rgb(255 255 255 / 72%) inset,
-    0 1px 2px rgb(22 33 43 / 5%),
+    0 1px 0 0 rgb(255 255 255 / 72%) inset, 0 1px 2px rgb(22 33 43 / 5%),
     0 20px 52px -34px rgb(22 33 43 / 19%);
   --shadow-strong:
-    0 1px 0 0 rgb(255 255 255 / 82%) inset,
-    0 2px 6px rgb(22 33 43 / 5%),
+    0 1px 0 0 rgb(255 255 255 / 82%) inset, 0 2px 6px rgb(22 33 43 / 5%),
     0 30px 76px -42px rgb(22 33 43 / 26%);
   --page-gradient:
-    radial-gradient(ellipse 68% 58% at 38% 0%, rgb(212 236 252 / 78%), transparent 72%),
-    radial-gradient(ellipse 48% 48% at 84% 12%, rgb(223 236 214 / 72%), transparent 72%),
-    radial-gradient(ellipse 44% 38% at 14% 24%, rgb(252 248 238 / 76%), transparent 70%),
+    radial-gradient(
+      ellipse 68% 58% at 38% 0%,
+      rgb(212 236 252 / 78%),
+      transparent 72%
+    ),
+    radial-gradient(
+      ellipse 48% 48% at 84% 12%,
+      rgb(223 236 214 / 72%),
+      transparent 72%
+    ),
+    radial-gradient(
+      ellipse 44% 38% at 14% 24%,
+      rgb(252 248 238 / 76%),
+      transparent 70%
+    ),
     linear-gradient(180deg, rgb(252 251 247 / 60%) 0%, transparent 100%);
   --grain-opacity: 0.055;
   --wash-sky: linear-gradient(
@@ -105,17 +115,27 @@
   --surface-1: rgb(17 27 35 / 94%);
   --surface-2: rgb(22 35 45 / 92%);
   --shadow-card:
-    0 1px 0 0 rgb(237 243 247 / 7%) inset,
-    0 1px 2px rgb(0 0 0 / 34%),
+    0 1px 0 0 rgb(237 243 247 / 7%) inset, 0 1px 2px rgb(0 0 0 / 34%),
     0 26px 60px -36px rgb(0 0 0 / 70%);
   --shadow-strong:
-    0 1px 0 0 rgb(237 243 247 / 10%) inset,
-    0 2px 6px rgb(0 0 0 / 40%),
+    0 1px 0 0 rgb(237 243 247 / 10%) inset, 0 2px 6px rgb(0 0 0 / 40%),
     0 34px 80px -44px rgb(0 0 0 / 80%);
   --page-gradient:
-    radial-gradient(ellipse 68% 58% at 40% 0%, rgb(42 82 114 / 46%), transparent 72%),
-    radial-gradient(ellipse 46% 46% at 82% 14%, rgb(44 74 54 / 36%), transparent 72%),
-    radial-gradient(ellipse 40% 34% at 16% 24%, rgb(24 52 70 / 34%), transparent 70%),
+    radial-gradient(
+      ellipse 68% 58% at 40% 0%,
+      rgb(42 82 114 / 46%),
+      transparent 72%
+    ),
+    radial-gradient(
+      ellipse 46% 46% at 82% 14%,
+      rgb(44 74 54 / 36%),
+      transparent 72%
+    ),
+    radial-gradient(
+      ellipse 40% 34% at 16% 24%,
+      rgb(24 52 70 / 34%),
+      transparent 70%
+    ),
     linear-gradient(180deg, rgb(11 18 23 / 52%) 0%, transparent 100%);
   --grain-opacity: 0.065;
   --wash-sky: linear-gradient(
@@ -238,11 +258,18 @@
 
   a,
   button {
-    transition:
-      color 160ms var(--ease-out-expo),
-      background-color 160ms var(--ease-out-expo),
-      border-color 160ms var(--ease-out-expo),
-      transform 160ms var(--ease-out-expo);
+    transition: transform 160ms var(--ease-out-expo);
+  }
+
+  @media (hover: hover) {
+    a,
+    button {
+      transition:
+        color 160ms var(--ease-out-expo),
+        background-color 160ms var(--ease-out-expo),
+        border-color 160ms var(--ease-out-expo),
+        transform 160ms var(--ease-out-expo);
+    }
   }
 
   :is(a, button, input, textarea):focus-visible {
@@ -529,7 +556,9 @@
 .wf-plate[data-pinned="true"][data-active="1"] .wf-step[data-step="1"] .wf-disc,
 .wf-plate[data-pinned="true"][data-active="2"] .wf-step[data-step="2"] .wf-disc,
 .wf-plate[data-pinned="true"][data-active="3"] .wf-step[data-step="3"] .wf-disc,
-.wf-plate[data-pinned="true"][data-active="4"] .wf-step[data-step="4"] .wf-disc {
+.wf-plate[data-pinned="true"][data-active="4"]
+  .wf-step[data-step="4"]
+  .wf-disc {
   box-shadow:
     0 0 0 3px var(--card),
     0 0 0 4.5px var(--ink);
@@ -553,10 +582,18 @@
   .wf-plate[data-active="2"] .wf-node[data-steps~="2"],
   .wf-plate[data-active="3"] .wf-node[data-steps~="3"],
   .wf-plate[data-active="4"] .wf-node[data-steps~="4"],
-  .wf-plate[data-pinned="true"][data-active="1"] .wf-step[data-step="1"] .wf-disc,
-  .wf-plate[data-pinned="true"][data-active="2"] .wf-step[data-step="2"] .wf-disc,
-  .wf-plate[data-pinned="true"][data-active="3"] .wf-step[data-step="3"] .wf-disc,
-  .wf-plate[data-pinned="true"][data-active="4"] .wf-step[data-step="4"] .wf-disc {
+  .wf-plate[data-pinned="true"][data-active="1"]
+    .wf-step[data-step="1"]
+    .wf-disc,
+  .wf-plate[data-pinned="true"][data-active="2"]
+    .wf-step[data-step="2"]
+    .wf-disc,
+  .wf-plate[data-pinned="true"][data-active="3"]
+    .wf-step[data-step="3"]
+    .wf-disc,
+  .wf-plate[data-pinned="true"][data-active="4"]
+    .wf-step[data-step="4"]
+    .wf-disc {
     outline: 2px solid Highlight;
     outline-offset: 2px;
   }
