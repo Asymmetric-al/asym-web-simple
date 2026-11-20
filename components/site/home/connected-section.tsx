@@ -48,8 +48,10 @@ export const ConnectedSection = () => (
             </p>
             <p>
               Putting website pages, giving, donor records, and email on one
-              data model lets staff inspect every proposed change and see who
-              signed off.
+              data model keeps every team working from the same facts. Several
+              staff actions in the public code already preview which records
+              will change; we’re building review and approval history into
+              campaign publishing.
             </p>
           </div>
 

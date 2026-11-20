@@ -17,10 +17,10 @@ const useIsClient = (): boolean =>
   );
 
 const STEP_ANNOUNCEMENTS: Record<string, string> = {
-  "1": "Describe (Your team) selected. Record: Campaign.",
-  "2": "Prepare (AI, in development) selected. Records: Campaign and Donor history.",
-  "3": "Review (Your team) selected. Records: Campaign and Donor history.",
-  "4": "Publish (asym, in development) selected. Will publish the approved page and link gifts, receipts, and Donor history.",
+  "1": "Describe (Your team) selected. Records: Campaign.",
+  "2": "Prepare (AI, in development) selected. Records: Campaign, Donor history.",
+  "3": "Review (Your team) selected. Records: Campaign, Donor history.",
+  "4": "Publish (asym, in development) selected. Records: Campaign, Gift, Receipt, Donor history.",
 };
 
 const NODE_STAGGER_MS = 40;
@@ -123,7 +123,7 @@ export const WorkflowPlate = ({
         const datumRect = datumInk.getBoundingClientRect();
         const stemRect = stem.getBoundingClientRect();
         if (datumRect.width > 0) {
-          landPx = stemRect.right;
+          landPx = stemRect.right - 1;
           const landPct = clampPct(
             ((landPx - datumRect.left) / datumRect.width) * 100
           );
@@ -371,7 +371,7 @@ export const WorkflowStepTitle = ({
       data-wf-trigger={String(stepNumber)}
       aria-pressed="false"
       aria-describedby={describedById}
-      className="decoration-rule group-hover/step:decoration-ink -my-2 inline-flex min-h-11 cursor-pointer items-center py-2 text-left underline decoration-dashed underline-offset-[5px] focus-visible:outline-2 focus-visible:outline-transparent sm:my-0 sm:min-h-0 sm:py-0"
+      className="decoration-rule group-hover/step:decoration-ink -my-2 inline-flex min-h-11 cursor-pointer items-center py-2 text-left underline underline-offset-[5px] focus-visible:outline-2 focus-visible:outline-transparent sm:my-0 sm:min-h-0 sm:py-0"
     >
       {title}
     </button>

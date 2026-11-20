@@ -5,7 +5,7 @@ import {
   SegmentedControlItem,
 } from "@ui-sdk/react/segmented-control";
 import { useTheme } from "next-themes";
-import { useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { cn } from "@/lib/utils";
 import type { ReactNode } from "react";
 
@@ -83,17 +83,49 @@ const isThemeValue = (value: string | null): value is ThemeValue =>
 export const ThemeToggle = () => {
   const isMounted = useIsClient();
   const { setTheme, theme = "system" } = useTheme();
+  const [pendingTheme, setPendingTheme] = useState<ThemeValue | null>(null);
+  const rafRef = useRef<number | null>(null);
+  const timerRef = useRef<number | null>(null);
+
+  useEffect(
+    () => () => {
+      if (rafRef.current !== null) {
+        window.cancelAnimationFrame(rafRef.current);
+      }
+      if (timerRef.current !== null) {
+        window.clearTimeout(timerRef.current);
+      }
+    },
+    []
+  );
 
   if (!isMounted) {
     return <div className="h-[3.375rem] sm:h-[2.625rem]" aria-hidden="true" />;
   }
 
-  const activeTheme: ThemeValue = isThemeValue(theme) ? theme : "system";
+  const currentTheme: ThemeValue = isThemeValue(theme) ? theme : "system";
+  const activeTheme: ThemeValue = pendingTheme ?? currentTheme;
 
   const handleValueChange = (nextValue: string | null) => {
-    if (isThemeValue(nextValue)) {
-      setTheme(nextValue);
+    if (!isThemeValue(nextValue)) {
+      return;
     }
+    if (rafRef.current !== null) {
+      window.cancelAnimationFrame(rafRef.current);
+    }
+    if (timerRef.current !== null) {
+      window.clearTimeout(timerRef.current);
+    }
+    // Paint the active pill state immediately, then commit the root theme swap on the next frame so mobile INP stays responsive.
+    setPendingTheme(nextValue);
+    rafRef.current = window.requestAnimationFrame(() => {
+      rafRef.current = null;
+      timerRef.current = window.setTimeout(() => {
+        timerRef.current = null;
+        setTheme(nextValue);
+        setPendingTheme(null);
+      }, 0);
+    });
   };
 
   return (
@@ -109,7 +141,7 @@ export const ThemeToggle = () => {
           value={option.value}
           className={cn(
             "text-muted-foreground hover:text-foreground inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-full border border-transparent px-3 text-xs font-medium select-none focus-visible:outline-2 focus-visible:outline-transparent active:scale-[0.97] sm:min-h-8 sm:px-2.5",
-            "data-checked:border-input data-checked:bg-card data-checked:text-foreground data-checked:hover:text-foreground dark:data-checked:border-ring/70 dark:data-checked:bg-secondary data-checked:shadow-xs",
+            "data-checked:border-foreground/58 data-checked:bg-card data-checked:text-foreground data-checked:hover:text-foreground dark:data-checked:border-ring/70 dark:data-checked:bg-secondary data-checked:shadow-xs",
             "forced-colors:data-checked:border-[Highlight] forced-colors:data-checked:bg-[Highlight] forced-colors:data-checked:text-[HighlightText] forced-colors:data-checked:forced-color-adjust-none"
           )}
         >

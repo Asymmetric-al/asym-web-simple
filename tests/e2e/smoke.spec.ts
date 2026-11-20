@@ -93,7 +93,7 @@ test.describe("homepage smoke tests", () => {
     await page.goto("/", { waitUntil: "domcontentloaded" });
 
     await expect(page).toHaveTitle(
-      "asym | Open-source AI software for nonprofits"
+      "asym | Open-source giving and donor records for nonprofits"
     );
     await expect(
       page.getByRole("heading", {
@@ -101,7 +101,9 @@ test.describe("homepage smoke tests", () => {
         name: "Website, giving, and donor records. One platform built to work with AI.",
       })
     ).toBeVisible();
-    await expect(page.getByText("Launching soon")).toBeVisible();
+    await expect(
+      page.getByText("Open-source software for nonprofits", { exact: true })
+    ).toBeVisible();
     await expect(
       page
         .getByRole("main")
@@ -164,7 +166,7 @@ test.describe("homepage smoke tests", () => {
       page.getByRole("link", { name: /Explore the code on GitHub/u })
     ).toHaveAttribute("href", REPO_URL);
     await expect(page.locator("#open-source")).toContainText(
-      "Managed donor care"
+      "managed donor care"
     );
     await expect(page.locator("#about")).toContainText("Global Fellowship");
   });
@@ -205,9 +207,15 @@ test.describe("homepage smoke tests", () => {
       banner.getByRole("link", { name: /^(Early access|Access status)$/u })
     ).toBeVisible();
     await expect(banner.getByRole("navigation")).toBeHidden();
+    const menuTrigger = banner.getByRole("button", { name: "Page sections" });
+    await expect(menuTrigger).toBeVisible();
+    await menuTrigger.focus();
+    await page.keyboard.press("Enter");
     await expect(
-      page.getByRole("navigation", { name: "On this page" })
+      page.getByRole("navigation", { name: "Page sections" })
     ).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(menuTrigger).toBeFocused();
 
     await expectNoHorizontalOverflow(page);
   });
@@ -221,7 +229,7 @@ test.describe("homepage smoke tests", () => {
 
     if (formCount === 0) {
       await expect(page.locator("#early-access")).toContainText(
-        "Early access opens soon."
+        "Early access isn’t open yet."
       );
       await expect(
         page

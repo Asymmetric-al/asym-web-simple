@@ -37,12 +37,12 @@ export const EarlyAccessSection = () => {
               <div className="min-w-0">
                 <Eyebrow>Early access</Eyebrow>
                 <SectionTitle id="early-access-title">
-                  Early access opens soon.
+                  Early access isn’t open yet.
                 </SectionTitle>
                 <p className="text-muted-foreground mt-5 max-w-[34rem] text-base leading-7 text-pretty sm:text-lg sm:leading-8">
                   We’re finishing the first campaign workflow for missions
-                  organizations. Check back here to request access for your team
-                  once sign&#8209;ups open.
+                  organizations. When sign&#8209;ups open, you’ll be able to
+                  request access for your team here.
                 </p>
               </div>
               <div className="min-w-0">

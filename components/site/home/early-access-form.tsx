@@ -694,12 +694,12 @@ export const EarlyAccessConfigured = ({
           className="font-heading text-foreground mt-3.5 text-[clamp(1.95rem,3.6vw,3.05rem)] leading-[1.04] font-semibold tracking-[-0.04em] text-balance"
         >
           {submitted
-            ? "Thanks for reaching out."
+            ? "You’re on the list."
             : "Request early access for your team."}
         </h2>
         <p className="text-muted-foreground mt-5 max-w-[34rem] text-base leading-7 text-pretty sm:text-lg sm:leading-8">
           {submitted
-            ? "Your organization’s details are with our team. We’ll follow up by email as early access opens."
+            ? "We review requests from missions organizations as we finish the first campaign workflow."
             : "Tell us which organization you’re with and what part of fundraising or donor care you’d like help with. We’ll be in touch with launch updates and invitations as early access opens."}
         </p>
       </div>

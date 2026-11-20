@@ -7,6 +7,8 @@ import {
 } from "@/components/site/home/workflow-plate";
 import { cn } from "@/lib/utils";
 
+const DONOR_HISTORY_LABEL = "Donor\u{00A0}history";
+
 const workflowSteps = [
   {
     number: 1,
@@ -14,8 +16,7 @@ const workflowSteps = [
     actor: "Your team",
     isAiStep: false,
     inDevelopment: false,
-    recordsLabel: "Record:",
-    recordsDetail: "Campaign.",
+    records: ["Campaign"],
     text: "Set the fundraising goal, the project it supports, and who you want to reach.",
   },
   {
@@ -24,9 +25,8 @@ const workflowSteps = [
     actor: "AI",
     isAiStep: true,
     inDevelopment: true,
-    recordsLabel: "Records:",
-    recordsDetail: "Campaign and Donor\u{00A0}history.",
-    text: "AI drafts the giving page and email, suggests a donor audience, and prepares the follow\u{2011}up.",
+    records: ["Campaign", DONOR_HISTORY_LABEL],
+    text: "AI will draft the giving page and email, suggest a donor audience, and prepare the follow\u{2011}up.",
   },
   {
     number: 3,
@@ -34,8 +34,7 @@ const workflowSteps = [
     actor: "Your team",
     isAiStep: false,
     inDevelopment: false,
-    recordsLabel: "Records:",
-    recordsDetail: "Campaign and Donor\u{00A0}history.",
+    records: ["Campaign", DONOR_HISTORY_LABEL],
     text: "Edit the draft page and email, verify the recipient list, and decide what goes live.",
   },
   {
@@ -44,10 +43,8 @@ const workflowSteps = [
     actor: "asym",
     isAiStep: false,
     inDevelopment: true,
-    recordsLabel: "Records:",
-    recordsDetail:
-      "Will publish the approved page and link gifts, receipts, and Donor\u{00A0}history.",
-    text: "Once your team approves, asym would publish the giving page on your website and tie each gift and receipt to donor history.",
+    records: ["Campaign", "Gift", "Receipt", DONOR_HISTORY_LABEL],
+    text: "Once your team approves, asym will publish the giving page on your website and tie each gift and receipt to donor history.",
   },
 ] as const;
 
@@ -55,7 +52,7 @@ const recordNodes = [
   { label: "Campaign", steps: "1 2 3 4" },
   { label: "Gift", steps: "4" },
   { label: "Receipt", steps: "4" },
-  { label: "Donor\u{00A0}history", steps: "2 3 4" },
+  { label: DONOR_HISTORY_LABEL, steps: "2 3 4" },
 ] as const;
 
 export const ProductSection = () => (
@@ -65,7 +62,7 @@ export const ProductSection = () => (
     className="pb-[clamp(3.25rem,6vw,5.25rem)]"
   >
     <Container>
-      <div className="md:border-rule pt-2 md:border-t md:pt-[clamp(1.75rem,3vw,2.5rem)]">
+      <div className="border-rule border-t pt-6 sm:pt-7">
         <div className="grid gap-4 lg:grid-cols-[minmax(0,58fr)_minmax(0,42fr)] lg:items-start lg:gap-12">
           <div>
             <Eyebrow>The first workflow</Eyebrow>
@@ -80,10 +77,13 @@ export const ProductSection = () => (
           </p>
         </div>
 
-        <WorkflowPlate className="wf-plate surface-panel mt-7 overflow-hidden rounded-[2rem] lg:mt-8">
+        <WorkflowPlate className="wf-plate surface-panel mt-6 overflow-hidden rounded-[2rem] lg:mt-7">
           <div className="border-rule/80 bg-record/45 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-b px-5 py-3 sm:px-8">
             <p className="text-muted-foreground font-mono text-[0.8125rem] tracking-[0.02em]">
-              <span className="hidden [.wf-plate[data-interactive='true']_&]:inline">
+              <span className="hidden [.wf-plate[data-interactive='true']_&]:inline xl:[.wf-plate[data-interactive='true']_&]:hidden">
+                Tap a step to highlight its records.
+              </span>
+              <span className="hidden xl:[.wf-plate[data-interactive='true']_&]:inline">
                 Select a step to trace records.
               </span>
               <span className="[.wf-plate[data-interactive='true']_&]:hidden">
@@ -193,20 +193,27 @@ export const ProductSection = () => (
                         />
                       </h3>
                       <p id={describedById} className="sr-only">
-                        {`${step.recordsLabel} ${step.recordsDetail}`}
+                        {`Records: ${step.records.join(", ")}`}
                       </p>
                       <p className="text-muted-foreground mt-2 text-sm leading-6 text-pretty sm:text-[0.96875rem] sm:leading-[1.68]">
                         {step.text}
                       </p>
-                      <p
+                      <div
                         aria-hidden="true"
-                        className="wf-step-records text-muted-foreground mt-2.5 text-xs leading-5 text-pretty xl:hidden"
+                        className="wf-step-records mt-3 flex flex-wrap items-center gap-1.5 text-xs xl:hidden"
                       >
-                        <span className="font-mono tracking-[0.02em]">
-                          {step.recordsLabel}
-                        </span>{" "}
-                        {step.recordsDetail}
-                      </p>
+                        <span className="text-muted-foreground font-mono tracking-[0.02em]">
+                          Records:
+                        </span>
+                        {step.records.map((record) => (
+                          <span
+                            key={record}
+                            className="wf-inline-chip border-rule bg-card/85 text-foreground/85 inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium"
+                          >
+                            {record}
+                          </span>
+                        ))}
+                      </div>
                     </div>
 
                     {/* Desktop Datum & Sweep curved stem connecting step into the record band */}
@@ -239,11 +246,13 @@ export const ProductSection = () => (
             </div>
 
             <p className="text-muted-foreground mt-5 max-w-[54rem] text-sm leading-6 text-pretty">
-              <span className="text-foreground font-medium">Example:</span> For
-              a year&#8209;end appeal, your team reviews the draft before{" "}
+              <span className="text-foreground font-medium">
+                Planned workflow:
+              </span>{" "}
+              For a year&#8209;end appeal, your team reviews the draft before{" "}
               <span translate="no">asym</span> publishes the giving page. When a
-              donor gives through it, the gift, its receipt, the missionary’s
-              view, and donor history stay linked.
+              donor gives, the missionary can see the gift and staff can find
+              its receipt in the donor’s history.
             </p>
           </div>
         </WorkflowPlate>

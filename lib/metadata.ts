@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 
 export const siteMetadata = {
   name: siteConfig.shortName,
-  title: "asym | Open-source AI software for nonprofits",
+  title: "asym | Open-source giving and donor records for nonprofits",
   description: siteConfig.description,
   socialTitle:
     "Website, giving, and donor records. One platform built to work with AI.",

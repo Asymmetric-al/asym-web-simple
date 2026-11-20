@@ -108,7 +108,7 @@ export default async function openGraphImage() {
                 background: RING,
               }}
             />
-            <span>Launching soon</span>
+            <span>In development</span>
           </div>
         </div>
 

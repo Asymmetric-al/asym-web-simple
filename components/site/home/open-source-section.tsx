@@ -1,11 +1,7 @@
 import { Container } from "@/components/site/container";
 import { GitHubMark } from "@/components/site/github-mark";
 import { ArrowUpRightIcon } from "@/components/site/icons";
-import {
-  Eyebrow,
-  SectionTitle,
-  StatusPill,
-} from "@/components/site/home/section-heading";
+import { Eyebrow, SectionTitle } from "@/components/site/home/section-heading";
 import { repoStats, siteConfig } from "@/lib/config";
 import { cn } from "@/lib/utils";
 
@@ -73,7 +69,9 @@ export const OpenSourceSection = () => (
           <p>
             At launch, our paid managed subscription will cover hosting, AI
             workflows, updates, and product support, so your team never has to
-            run servers.
+            run servers. Later, we also plan to offer optional managed donor
+            care as a separate service for routine requests like receipt copies
+            and recurring&#8209;gift updates.
           </p>
         </div>
         <a
@@ -89,7 +87,7 @@ export const OpenSourceSection = () => (
 
       <div
         id="where-things-stand"
-        className="surface-panel flex min-w-0 flex-col overflow-hidden rounded-[2rem] lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-start"
+        className="surface-panel flex min-w-0 flex-col overflow-hidden rounded-[2rem] lg:col-start-2 lg:row-start-1 lg:self-start"
       >
         <div className="p-5 pb-6 sm:p-7 sm:pb-7">
           <h3 className="font-heading text-foreground text-xl font-semibold tracking-[-0.02em]">
@@ -188,18 +186,6 @@ export const OpenSourceSection = () => (
             Since {repoStats.since}, as of {repoStats.asOf}.
           </p>
         </div>
-      </div>
-
-      <div className="border-foreground/18 bg-card/70 rounded-[1.5rem] border border-dashed p-5 sm:p-6 lg:col-start-1 lg:row-start-2">
-        <StatusPill>Planned</StatusPill>
-        <h3 className="font-heading text-foreground mt-3.5 text-xl font-semibold tracking-[-0.015em]">
-          Managed donor care
-        </h3>
-        <p className="text-muted-foreground mt-2 text-sm leading-6 text-pretty sm:text-base sm:leading-7">
-          A planned separate service pairing AI with our team for routine donor
-          requests like receipt copies and recurring&#8209;gift updates,
-          escalating to your chosen staff contact.
-        </p>
       </div>
     </Container>
   </section>

@@ -415,7 +415,7 @@
 /* Datum & Sweep workflow plate (interactive step-to-record highlighting) */
 .wf-stem {
   position: relative;
-  width: 3.5rem;
+  width: 1.875rem;
   min-height: 3.25rem;
   flex: 1;
   border-bottom: 1px solid var(--rule);
@@ -562,12 +562,25 @@
   text-decoration-thickness: 2px;
 }
 
-.wf-plate[data-active="1"] .wf-step[data-step="1"] .wf-step-records,
-.wf-plate[data-active="2"] .wf-step[data-step="2"] .wf-step-records,
-.wf-plate[data-active="3"] .wf-step[data-step="3"] .wf-step-records,
-.wf-plate[data-active="4"] .wf-step[data-step="4"] .wf-step-records {
-  color: var(--ink);
-  font-weight: 500;
+.wf-plate[data-active="1"] .wf-step[data-step="1"] .wf-inline-chip,
+.wf-plate[data-active="2"] .wf-step[data-step="2"] .wf-inline-chip,
+.wf-plate[data-active="3"] .wf-step[data-step="3"] .wf-inline-chip,
+.wf-plate[data-active="4"] .wf-step[data-step="4"] .wf-inline-chip {
+  border-color: var(--ink);
+  background: var(--node-lit);
+  color: var(--primary);
+}
+
+.wf-plate[data-active="2"] .wf-step[data-step="2"] .wf-inline-chip,
+.wf-plate[data-active="4"] .wf-step[data-step="4"] .wf-inline-chip {
+  border-style: dashed;
+}
+
+.dark .wf-plate[data-active="1"] .wf-step[data-step="1"] .wf-inline-chip,
+.dark .wf-plate[data-active="2"] .wf-step[data-step="2"] .wf-inline-chip,
+.dark .wf-plate[data-active="3"] .wf-step[data-step="3"] .wf-inline-chip,
+.dark .wf-plate[data-active="4"] .wf-step[data-step="4"] .wf-inline-chip {
+  color: var(--foreground);
 }
 
 .wf-plate[data-active="1"] .wf-node[data-steps~="1"],
@@ -644,6 +657,10 @@
 
 @media (forced-colors: active) {
   .wf-step-card:has(button:focus-visible),
+  .wf-plate[data-active="1"] .wf-step[data-step="1"] .wf-inline-chip,
+  .wf-plate[data-active="2"] .wf-step[data-step="2"] .wf-inline-chip,
+  .wf-plate[data-active="3"] .wf-step[data-step="3"] .wf-inline-chip,
+  .wf-plate[data-active="4"] .wf-step[data-step="4"] .wf-inline-chip,
   .wf-plate[data-active="1"] .wf-node[data-steps~="1"],
   .wf-plate[data-active="2"] .wf-node[data-steps~="2"],
   .wf-plate[data-active="3"] .wf-node[data-steps~="3"],

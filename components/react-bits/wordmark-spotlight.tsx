@@ -232,19 +232,19 @@ export const WordmarkSpotlight = ({
             cy={REST_Y}
             r={340}
           >
-            <stop offset="0%" stopColor="var(--ink)" stopOpacity="0.28" />
-            <stop offset="46%" stopColor="var(--ink)" stopOpacity="0.14" />
+            <stop offset="0%" stopColor="var(--ink)" stopOpacity="0.32" />
+            <stop offset="46%" stopColor="var(--ink)" stopOpacity="0.17" />
             <stop
               offset="100%"
               stopColor="var(--foreground)"
-              stopOpacity="0.065"
+              stopOpacity="0.095"
             />
           </radialGradient>
         </defs>
 
         <path
           d={ASYM_WORDMARK_PATH}
-          className="fill-foreground/[0.065] dark:fill-foreground/[0.085] sm:fill-[url(#asym-wordmark-fill)] sm:dark:fill-[url(#asym-wordmark-fill)]"
+          className="fill-foreground/[0.095] dark:fill-foreground/[0.115] sm:fill-[url(#asym-wordmark-fill)] sm:dark:fill-[url(#asym-wordmark-fill)]"
         />
       </svg>
     </div>
