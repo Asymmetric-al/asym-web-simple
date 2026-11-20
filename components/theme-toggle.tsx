@@ -109,7 +109,7 @@ export const ThemeToggle = () => {
           value={option.value}
           className={cn(
             "text-muted-foreground hover:text-foreground inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-full border border-transparent px-3 text-xs font-medium select-none focus-visible:outline-2 focus-visible:outline-transparent active:scale-[0.97] sm:min-h-8 sm:px-2.5",
-            "data-checked:border-rule data-checked:bg-card data-checked:text-foreground data-checked:hover:text-foreground dark:data-checked:border-foreground/16 dark:data-checked:bg-secondary data-checked:shadow-xs",
+            "data-checked:border-input data-checked:bg-card data-checked:text-foreground data-checked:hover:text-foreground dark:data-checked:border-ring/70 dark:data-checked:bg-secondary data-checked:shadow-xs",
             "forced-colors:data-checked:border-[Highlight] forced-colors:data-checked:bg-[Highlight] forced-colors:data-checked:text-[HighlightText] forced-colors:data-checked:forced-color-adjust-none"
           )}
         >

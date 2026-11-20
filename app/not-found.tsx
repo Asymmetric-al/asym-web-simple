@@ -1,8 +1,8 @@
-import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { Container } from "@/components/site/container";
+import { ArrowRightIcon } from "@/components/site/icons";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { navigationLinks, siteConfig } from "@/lib/config";
 import { isEarlyAccessConfigured } from "@/lib/early-access-config";
@@ -48,7 +48,7 @@ export default function NotFound() {
               className={cn(buttonVariants({ size: "lg" }), "px-6")}
             >
               Go to the homepage
-              <ArrowRight data-icon="inline-end" aria-hidden="true" />
+              <ArrowRightIcon dataIcon="inline-end" />
             </Link>
             <Link
               href={siteConfig.cta.primary.href}

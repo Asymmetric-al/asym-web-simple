@@ -47,17 +47,15 @@ export const WordmarkSpotlight = ({
       return noopCleanup;
     }
 
-    const isReducedMotion = window.matchMedia(
+    const reducedMotionQuery = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
-    ).matches;
-    const isFinePointer = window.matchMedia(
+    );
+    const finePointerQuery = window.matchMedia(
       "(hover: hover) and (pointer: fine)"
-    ).matches;
+    );
 
-    if (isReducedMotion || !isFinePointer) {
-      return noopCleanup;
-    }
-
+    let isReducedMotion = reducedMotionQuery.matches;
+    let isFinePointer = finePointerQuery.matches;
     let rafId = 0;
     let isInView = false;
     let cachedRect: DOMRect | null = null;
@@ -77,9 +75,21 @@ export const WordmarkSpotlight = ({
       );
     };
 
+    const resetToRest = () => {
+      if (rafId !== 0) {
+        window.cancelAnimationFrame(rafId);
+        rafId = 0;
+      }
+      currentDx = 0;
+      currentDy = 0;
+      targetDx = 0;
+      targetDy = 0;
+      grad.removeAttribute("gradientTransform");
+    };
+
     const tick = () => {
       rafId = 0;
-      if (!isInView || document.hidden) {
+      if (isReducedMotion || !isFinePointer || !isInView || document.hidden) {
         return;
       }
 
@@ -99,17 +109,34 @@ export const WordmarkSpotlight = ({
     };
 
     const wake = () => {
-      if (rafId === 0 && isInView && !document.hidden) {
+      if (
+        rafId === 0 &&
+        !isReducedMotion &&
+        isFinePointer &&
+        isInView &&
+        !document.hidden
+      ) {
         rafId = window.requestAnimationFrame(tick);
       }
     };
 
+    const handlePreferenceChange = () => {
+      isReducedMotion = reducedMotionQuery.matches;
+      isFinePointer = finePointerQuery.matches;
+      if (isReducedMotion || !isFinePointer) {
+        resetToRest();
+      }
+    };
+
     const handlePointerEnter = () => {
+      if (isReducedMotion || !isFinePointer) {
+        return;
+      }
       refreshRect();
     };
 
     const handlePointerMove = (event: PointerEvent) => {
-      if (event.pointerType !== "mouse") {
+      if (isReducedMotion || !isFinePointer || event.pointerType !== "mouse") {
         return;
       }
       if (!cachedRect || cachedRect.width === 0 || cachedRect.height === 0) {
@@ -128,6 +155,9 @@ export const WordmarkSpotlight = ({
     };
 
     const handlePointerLeave = () => {
+      if (isReducedMotion || !isFinePointer) {
+        return;
+      }
       targetDx = 0;
       targetDy = 0;
       wake();
@@ -155,6 +185,8 @@ export const WordmarkSpotlight = ({
     });
     resizeObserver.observe(container);
 
+    reducedMotionQuery.addEventListener("change", handlePreferenceChange);
+    finePointerQuery.addEventListener("change", handlePreferenceChange);
     container.addEventListener("pointerenter", handlePointerEnter);
     container.addEventListener("pointermove", handlePointerMove);
     container.addEventListener("pointerleave", handlePointerLeave);
@@ -163,6 +195,8 @@ export const WordmarkSpotlight = ({
     return () => {
       intersectionObserver.disconnect();
       resizeObserver.disconnect();
+      reducedMotionQuery.removeEventListener("change", handlePreferenceChange);
+      finePointerQuery.removeEventListener("change", handlePreferenceChange);
       if (rafId !== 0) {
         window.cancelAnimationFrame(rafId);
       }

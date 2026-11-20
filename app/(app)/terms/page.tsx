@@ -5,7 +5,7 @@ import { createMetadata } from "@/lib/metadata";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = createMetadata({
-  title: "Terms of Service",
+  title: "Terms of service",
   description:
     "Simple terms for asym.app and any early access to asym provided by Asymmetric.al.",
   path: "/terms",
@@ -22,7 +22,7 @@ export default function TermsPage() {
       eyebrow="Updated November 20, 2026"
       title={
         <h1 className="font-heading text-foreground mt-5 text-[clamp(2.8rem,5.5vw,4.6rem)] leading-[0.98] font-semibold tracking-[-0.04em] text-balance">
-          Terms of Service
+          Terms of service
         </h1>
       }
       description="These terms apply to asym.app, operated by Asymmetric.al, and any early access to asym that we provide directly."

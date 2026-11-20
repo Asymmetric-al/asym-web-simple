@@ -1,7 +1,8 @@
-import { ArrowUpRight } from "lucide-react";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { Container } from "@/components/site/container";
 import { GitHubMark } from "@/components/site/github-mark";
+import { ArrowUpRightIcon } from "@/components/site/icons";
 import { Eyebrow, SectionTitle } from "@/components/site/home/section-heading";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { siteConfig } from "@/lib/config";
@@ -11,9 +12,9 @@ import {
 } from "@/lib/early-access-config";
 import { cn } from "@/lib/utils";
 
-const EarlyAccessForm = dynamic(() =>
+const EarlyAccessConfigured = dynamic(() =>
   import("@/components/site/home/early-access-form").then(
-    (mod) => mod.EarlyAccessForm
+    (mod) => mod.EarlyAccessConfigured
   )
 );
 
@@ -29,57 +30,41 @@ export const EarlyAccessSection = () => {
     >
       <Container>
         <div className="surface-hero relative overflow-hidden rounded-[2.25rem] p-5 sm:p-9 lg:p-12">
-          <div className="relative z-10 grid gap-8 lg:grid-cols-[minmax(0,42fr)_minmax(0,58fr)] lg:items-start lg:gap-12">
-            <div className="min-w-0">
-              <Eyebrow>Early access</Eyebrow>
-              <SectionTitle id="early-access-title">
-                {isConfigured
-                  ? "Request early access for your team."
-                  : "Early access opens soon."}
-              </SectionTitle>
-              <p className="text-muted-foreground mt-5 max-w-[34rem] text-base leading-7 sm:text-lg sm:leading-8">
-                {isConfigured ? (
-                  <>
-                    Tell us which organization you’re with and what part of
-                    fundraising or donor care you’d like help with. We’ll be in
-                    touch with launch updates and invitations as early access
-                    opens.
-                  </>
-                ) : (
-                  <>
-                    We’re finishing the first campaign workflow in the open,
-                    starting with missions teams. Once sign&#8209;ups open,
-                    you’ll be able to request access for your organization here.
-                  </>
-                )}
-              </p>
-            </div>
-            <div className="min-w-0">
-              {isConfigured ? (
-                <EarlyAccessForm contactEmail={contactEmail} />
-              ) : (
+          {isConfigured ? (
+            <EarlyAccessConfigured contactEmail={contactEmail} />
+          ) : (
+            <div className="relative z-10 grid gap-8 lg:grid-cols-[minmax(0,42fr)_minmax(0,58fr)] lg:items-start lg:gap-12">
+              <div className="min-w-0">
+                <Eyebrow>Early access</Eyebrow>
+                <SectionTitle id="early-access-title">
+                  Early access opens soon.
+                </SectionTitle>
+                <p className="text-muted-foreground mt-5 max-w-[34rem] text-base leading-7 text-pretty sm:text-lg sm:leading-8">
+                  We’re finishing the first campaign workflow for missions
+                  organizations. Check back here to request access for your team
+                  once sign&#8209;ups open.
+                </p>
+              </div>
+              <div className="min-w-0">
                 <div className="sm:border-rule sm:bg-card sm:rounded-[1.6rem] sm:border sm:p-8">
                   <h3 className="font-heading text-foreground text-2xl font-semibold tracking-[-0.025em]">
-                    Follow progress on GitHub
+                    While sign&#8209;ups are closed
                   </h3>
-                  <p className="text-muted-foreground mt-3 text-base leading-7">
-                    While sign&#8209;ups are closed, you can read the source
-                    code, explore the architecture, and see what we’re working
-                    on next.
+                  <p className="text-muted-foreground mt-3 text-base leading-7 text-pretty">
+                    You can check what is already built and what is in
+                    development right on this page, or follow public progress in
+                    the repository README on GitHub.
                   </p>
                   <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                    <a
-                      href={siteConfig.repoUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <Link
+                      href="/#where-things-stand"
+                      prefetch={false}
                       className={cn(buttonVariants({ size: "lg" }), "px-6")}
                     >
-                      <GitHubMark className="size-4" />
-                      View the code on GitHub
-                      <ArrowUpRight data-icon="inline-end" aria-hidden="true" />
-                    </a>
+                      See what’s built
+                    </Link>
                     <a
-                      href={siteConfig.issuesUrl}
+                      href={siteConfig.repoUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       className={cn(
@@ -87,8 +72,9 @@ export const EarlyAccessSection = () => {
                         "px-6"
                       )}
                     >
-                      Browse open issues
-                      <ArrowUpRight data-icon="inline-end" aria-hidden="true" />
+                      <GitHubMark className="size-4" />
+                      Follow progress on GitHub
+                      <ArrowUpRightIcon dataIcon="inline-end" />
                     </a>
                   </div>
                   {contactEmail ? (
@@ -104,9 +90,9 @@ export const EarlyAccessSection = () => {
                     </p>
                   ) : null}
                 </div>
-              )}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </Container>
     </section>

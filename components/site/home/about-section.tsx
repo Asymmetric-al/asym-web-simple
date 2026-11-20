@@ -8,7 +8,7 @@ const ordinaryWork = [
   { line: "A receipt goes out.", indentClass: "sm:pl-[4.5rem]" },
   { line: "A missionary sees the gift.", indentClass: "sm:pl-[7rem]" },
   {
-    line: "Staff can find the donor and see what happened.",
+    line: "Staff have the full picture.",
     indentClass: "sm:pl-[9.5rem]",
   },
 ] as const;
@@ -24,23 +24,31 @@ export const AboutSection = () => (
         <div>
           <Eyebrow>About</Eyebrow>
           <SectionTitle id="about-title">
-            Why we’re starting with missions teams.
+            Why we’re starting with missions organizations.
           </SectionTitle>
         </div>
 
-        <div className="text-muted-foreground max-w-[42rem] space-y-5 text-base leading-7 sm:text-lg sm:leading-8">
+        <div className="text-muted-foreground max-w-[42rem] space-y-5 text-base leading-7 text-pretty sm:text-lg sm:leading-8">
           <p className="text-foreground">
             Missions organizations coordinate recurring donor support, field
             workers, and projects across many people and places. Starting with
             that complexity builds a stronger foundation for nonprofits broadly.
           </p>
           <p>
-            We’re Conrad and Blake. We’re building{" "}
+            We’re Conrad O’Brien and Blake. We’re building{" "}
             <span translate="no">asym</span> at{" "}
-            <span translate="no">{siteConfig.name}</span>, an independent,
-            for-profit software company serving nonprofits. Conrad’s experience
-            co-leading Global Fellowship, a missions organization, shapes what
-            we build first.
+            <a
+              href={siteConfig.githubOrgUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              translate="no"
+              className="text-foreground hover:text-primary focus-visible:ring-ring focus-visible:ring-offset-background rounded-[0.375rem] font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent"
+            >
+              {siteConfig.name}
+            </a>
+            , an independent, for&#8209;profit software company serving
+            nonprofits. Conrad’s experience co&#8209;leading Global Fellowship,
+            a missions organization, shapes what we build first.
           </p>
         </div>
       </div>

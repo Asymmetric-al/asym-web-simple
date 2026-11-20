@@ -470,7 +470,7 @@
     color 160ms var(--ease-out-expo) var(--d, 0ms);
 }
 
-@media (width >= 48rem) {
+@media (width >= 80rem) {
   .wf-node::before {
     position: absolute;
     bottom: 100%;
@@ -509,8 +509,24 @@
   clip-path: inset(0);
 }
 
+.wf-step-card {
+  background-color: color-mix(in srgb, var(--card) 45%, transparent);
+}
+
+.wf-step-dev .wf-step-card {
+  background-color: color-mix(in srgb, var(--card) 65%, transparent);
+}
+
+@media (width >= 80rem) {
+  .wf-step-card,
+  .wf-actor-mask {
+    background-color: var(--card);
+  }
+}
+
 @media (hover: hover) and (pointer: fine) {
-  .wf-plate:not([data-instant="true"]) .wf-step-card {
+  .wf-plate:not([data-instant="true"]) .wf-step-card,
+  .wf-plate:not([data-instant="true"]) .wf-actor-mask {
     transition: background-color 140ms var(--ease-out-expo);
   }
 }
@@ -518,14 +534,22 @@
 .wf-plate[data-active="1"] .wf-step[data-step="1"] .wf-step-card,
 .wf-plate[data-active="2"] .wf-step[data-step="2"] .wf-step-card,
 .wf-plate[data-active="3"] .wf-step[data-step="3"] .wf-step-card,
-.wf-plate[data-active="4"] .wf-step[data-step="4"] .wf-step-card {
+.wf-plate[data-active="4"] .wf-step[data-step="4"] .wf-step-card,
+.wf-plate[data-active="1"] .wf-step[data-step="1"] .wf-actor-mask,
+.wf-plate[data-active="2"] .wf-step[data-step="2"] .wf-actor-mask,
+.wf-plate[data-active="3"] .wf-step[data-step="3"] .wf-actor-mask,
+.wf-plate[data-active="4"] .wf-step[data-step="4"] .wf-actor-mask {
   background-color: color-mix(in srgb, var(--node-lit) 52%, var(--card));
 }
 
 .dark .wf-plate[data-active="1"] .wf-step[data-step="1"] .wf-step-card,
 .dark .wf-plate[data-active="2"] .wf-step[data-step="2"] .wf-step-card,
 .dark .wf-plate[data-active="3"] .wf-step[data-step="3"] .wf-step-card,
-.dark .wf-plate[data-active="4"] .wf-step[data-step="4"] .wf-step-card {
+.dark .wf-plate[data-active="4"] .wf-step[data-step="4"] .wf-step-card,
+.dark .wf-plate[data-active="1"] .wf-step[data-step="1"] .wf-actor-mask,
+.dark .wf-plate[data-active="2"] .wf-step[data-step="2"] .wf-actor-mask,
+.dark .wf-plate[data-active="3"] .wf-step[data-step="3"] .wf-actor-mask,
+.dark .wf-plate[data-active="4"] .wf-step[data-step="4"] .wf-actor-mask {
   background-color: color-mix(in srgb, var(--node-lit) 65%, var(--card));
 }
 
@@ -581,7 +605,28 @@
   .wf-step[data-step="4"]
   .wf-disc {
   box-shadow:
-    0 0 0 3px var(--card),
+    0 0 0 3px color-mix(in srgb, var(--node-lit) 52%, var(--card)),
+    0 0 0 4.5px var(--ink);
+}
+
+.dark
+  .wf-plate[data-pinned="true"][data-active="1"]
+  .wf-step[data-step="1"]
+  .wf-disc,
+.dark
+  .wf-plate[data-pinned="true"][data-active="2"]
+  .wf-step[data-step="2"]
+  .wf-disc,
+.dark
+  .wf-plate[data-pinned="true"][data-active="3"]
+  .wf-step[data-step="3"]
+  .wf-disc,
+.dark
+  .wf-plate[data-pinned="true"][data-active="4"]
+  .wf-step[data-step="4"]
+  .wf-disc {
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--node-lit) 65%, var(--card)),
     0 0 0 4.5px var(--ink);
 }
 

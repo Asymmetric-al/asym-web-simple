@@ -25,7 +25,7 @@ export const MarkGlyph = ({
   const isDatumHighlighted = highlight === "datum";
   const isSweepHighlighted = highlight === "sweep";
 
-  const baseClass = "stroke-rule forced-colors:stroke-[GrayText]";
+  const baseClass = "stroke-sweep-hairline forced-colors:stroke-[GrayText]";
   const activeClass = "stroke-ink forced-colors:stroke-[CanvasText]";
 
   return (

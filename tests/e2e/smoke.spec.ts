@@ -5,7 +5,6 @@ const UI_READY_TIMEOUT_MS = 5000;
 const SETTLE_MS = 250;
 const SUITE_TIMEOUT_MS = 60_000;
 const REPO_URL = "https://github.com/Asymmetric-al/core";
-const ISSUES_URL = "https://github.com/Asymmetric-al/core/issues";
 const EARLY_ACCESS_API = "**/api/early-access";
 
 const activate = async (locator: Locator, projectName: string) => {
@@ -99,7 +98,7 @@ test.describe("homepage smoke tests", () => {
     await expect(
       page.getByRole("heading", {
         level: 1,
-        name: "Your website, fundraising, and CRM. Built to work together with AI.",
+        name: "Website, giving, and donor records. One platform built to work with AI.",
       })
     ).toBeVisible();
     await expect(page.getByText("Launching soon")).toBeVisible();
@@ -186,7 +185,7 @@ test.describe("homepage smoke tests", () => {
     await expect(
       page.getByRole("heading", {
         level: 2,
-        name: "The code is public. Hosting will be a paid subscription.",
+        name: "The code is public. The hosted platform will be a paid subscription.",
       })
     ).toBeInViewport();
   });
@@ -227,8 +226,13 @@ test.describe("homepage smoke tests", () => {
       await expect(
         page
           .locator("#early-access")
-          .getByRole("link", { name: /Browse open issues/u })
-      ).toHaveAttribute("href", ISSUES_URL);
+          .getByRole("link", { name: "See what’s built" })
+      ).toHaveAttribute("href", "/#where-things-stand");
+      await expect(
+        page
+          .locator("#early-access")
+          .getByRole("link", { name: /Follow progress on GitHub/u })
+      ).toHaveAttribute("href", REPO_URL);
       return;
     }
 
@@ -355,9 +359,7 @@ test.describe("homepage smoke tests", () => {
     await expect(darkOption).toHaveAttribute("aria-checked", "true");
     await expect(page.locator("html")).toHaveClass(/dark/u);
     await expect(
-      page.locator(
-        'header a[aria-label="asym home"] img[src*="asym-mark-light"]'
-      )
+      page.locator('header a[aria-label="asym home"] svg')
     ).toBeVisible();
 
     await darkOption.focus();

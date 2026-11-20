@@ -1,6 +1,6 @@
-import { ArrowUpRight } from "lucide-react";
 import { Container } from "@/components/site/container";
 import { GitHubMark } from "@/components/site/github-mark";
+import { ArrowUpRightIcon } from "@/components/site/icons";
 import {
   Eyebrow,
   SectionTitle,
@@ -18,20 +18,20 @@ const buildStatus = [
     label: "In the public code",
     dashed: false,
     items: [
-      "Giving pages and checkout",
-      "Gifts, funds, and receipts",
-      "Donor records and a donor portal",
+      "Website and giving pages",
+      "Giving checkout, funds, and receipts",
+      "Donor records and donor portal",
       "Email templates",
-      "Staff actions that show their effects before they run",
+      "Staff actions that preview changes",
     ],
   },
   {
     label: "In development",
     dashed: true,
     items: [
-      "AI that prepares campaign work",
+      "AI campaign preparation",
       "Approval rules for AI actions",
-      "Publishing approved giving pages",
+      "Publishing approved pages",
     ],
   },
 ] as const;
@@ -58,22 +58,22 @@ export const OpenSourceSection = () => (
         <SectionTitle id="open-source-title">
           <span className="block">The code is public.</span>{" "}
           <span className="block">
-            Hosting will be a{"\u{00A0}"}paid subscription.
+            The hosted platform will be a{"\u{00A0}"}paid subscription.
           </span>
         </SectionTitle>
-        <div className="text-muted-foreground mt-6 max-w-[42rem] space-y-5 text-base leading-7 sm:text-lg sm:leading-8">
+        <div className="text-muted-foreground mt-6 max-w-[42rem] space-y-5 text-base leading-7 text-pretty sm:text-lg sm:leading-8">
           <p>
             The platform is published under{" "}
             <span className="text-foreground font-mono text-[0.92em] whitespace-nowrap">
               {repoStats.license}
             </span>
-            , so you can read the code, follow development, and see how{" "}
-            <span translate="no">asym</span> is being built.
+            , so you can inspect the code, follow development, and see how{" "}
+            <span translate="no">asym</span> is built.
           </p>
           <p>
-            When <span translate="no">asym</span> launches, our paid managed
-            subscription will cover hosting, AI workflows, updates, and product
-            support, so your team doesn’t have to run any of it.
+            At launch, our paid managed subscription will cover hosting, AI
+            workflows, updates, and product support, so your team never has to
+            run servers.
           </p>
         </div>
         <a
@@ -83,12 +83,62 @@ export const OpenSourceSection = () => (
           className="text-primary hover:text-foreground focus-visible:ring-ring focus-visible:ring-offset-background mt-4 inline-flex min-h-11 w-fit items-center gap-1.5 rounded-[0.375rem] font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-10"
         >
           Explore the code on GitHub
-          <ArrowUpRight className="size-4" aria-hidden="true" />
+          <ArrowUpRightIcon className="size-4" />
         </a>
       </div>
 
-      <div className="surface-panel flex min-w-0 flex-col overflow-hidden rounded-[2rem] lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-start">
-        <div className="p-5 pb-0 sm:p-7 sm:pb-0">
+      <div
+        id="where-things-stand"
+        className="surface-panel flex min-w-0 flex-col overflow-hidden rounded-[2rem] lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-start"
+      >
+        <div className="p-5 pb-6 sm:p-7 sm:pb-7">
+          <h3 className="font-heading text-foreground text-xl font-semibold tracking-[-0.02em]">
+            Where things stand
+          </h3>
+          <div className="mt-5 grid gap-6 sm:grid-cols-2">
+            {buildStatus.map((group) => (
+              <div key={group.label}>
+                <p className="text-muted-foreground flex items-center gap-2 font-mono text-xs font-medium tracking-[0.02em]">
+                  <span
+                    aria-hidden="true"
+                    className={cn(
+                      "border-ink inline-block w-[1.125rem] border-t-[1.5px]",
+                      group.dashed && "border-dashed"
+                    )}
+                  />
+                  {group.label}
+                </p>
+                <ul className="mt-3.5 space-y-2.5">
+                  {group.items.map((item) => (
+                    <li
+                      key={item}
+                      className={cn(
+                        "border-ink/55 text-foreground border-l-[1.5px] pl-3.5 text-sm leading-5 text-balance",
+                        group.dashed && "border-dashed"
+                      )}
+                    >
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+          <p className="border-rule text-muted-foreground mt-6 border-t pt-4 text-xs leading-5 text-pretty">
+            Module maturity varies across the repository. Read{" "}
+            <a
+              href={`${siteConfig.repoUrl}#readme`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-foreground hover:text-primary focus-visible:ring-ring focus-visible:ring-offset-background rounded-xs font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent"
+            >
+              the README on GitHub
+            </a>{" "}
+            for current status.
+          </p>
+        </div>
+
+        <div className="datum-lid bg-record flex-1 px-5 pt-7 pb-6 sm:px-7 sm:pt-[1.875rem] sm:pb-7">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <a
               href={siteConfig.repoUrl}
@@ -101,16 +151,12 @@ export const OpenSourceSection = () => (
                 Asymmetric-al/core
               </span>
             </a>
-            <span className="border-rule text-muted-foreground rounded-full border px-2.5 py-0.5 text-xs">
+            <span className="border-rule text-muted-foreground rounded-full border px-2.5 py-0.5 font-mono text-xs tracking-[0.02em]">
               Public
             </span>
           </div>
-          <p className="text-muted-foreground mt-3 text-sm leading-6">
-            An open-source platform for nonprofits, bringing CRM, fundraising,
-            websites, and team operations into one connected system.
-          </p>
 
-          <dl className="border-rule mt-5 grid grid-cols-2 border-t sm:grid-cols-[minmax(0,0.9fr)_minmax(0,1fr)_minmax(0,1.4fr)]">
+          <dl className="border-rule mt-4 grid grid-cols-2 border-t sm:grid-cols-[minmax(0,0.9fr)_minmax(0,1.05fr)_minmax(0,1.4fr)]">
             {stats.map((stat, index) => (
               <div
                 key={stat.label}
@@ -122,14 +168,14 @@ export const OpenSourceSection = () => (
                     "border-rule col-span-2 border-t pt-4 sm:col-span-1 sm:border-t-0 sm:pt-5 sm:pl-5"
                 )}
               >
-                <dt className="text-muted-foreground mt-2 text-xs leading-5">
+                <dt className="text-muted-foreground mt-2 text-xs leading-5 text-balance">
                   {stat.label}
                 </dt>
                 <dd
                   className={cn(
-                    "font-heading text-foreground order-first leading-none font-semibold tracking-[-0.03em] tabular-nums",
+                    "font-heading text-foreground order-first leading-none font-semibold tracking-[-0.03em] tabular-nums sm:flex sm:min-h-[1.875rem] sm:items-end",
                     stat.isLicense
-                      ? "text-lg whitespace-nowrap sm:pt-1 xl:text-[1.4rem]"
+                      ? "text-lg whitespace-nowrap xl:text-[1.4rem]"
                       : "text-2xl sm:text-[1.875rem]"
                   )}
                 >
@@ -138,47 +184,8 @@ export const OpenSourceSection = () => (
               </div>
             ))}
           </dl>
-          <p className="text-muted-foreground pb-6 text-xs">
+          <p className="text-muted-foreground text-xs">
             Since {repoStats.since}, as of {repoStats.asOf}.
-          </p>
-        </div>
-
-        <div className="datum-lid bg-record flex-1 px-5 pt-7 pb-6 sm:px-7 sm:pt-[1.875rem] sm:pb-7">
-          <h3 className="text-foreground font-sans text-[0.9375rem] font-semibold tracking-normal">
-            Where things stand
-          </h3>
-          <div className="mt-4 grid gap-6 sm:grid-cols-2">
-            {buildStatus.map((group) => (
-              <div key={group.label}>
-                <p className="text-muted-foreground flex items-center gap-2 text-[0.8125rem] font-medium">
-                  <span
-                    aria-hidden="true"
-                    className={cn(
-                      "border-ink inline-block w-[1.125rem] border-t-[1.5px]",
-                      group.dashed && "border-dashed"
-                    )}
-                  />
-                  {group.label}
-                </p>
-                <ul className="mt-3 space-y-2.5">
-                  {group.items.map((item) => (
-                    <li
-                      key={item}
-                      className={cn(
-                        "border-ink/55 text-foreground border-l-[1.5px] pl-3.5 text-sm leading-5",
-                        group.dashed && "border-dashed"
-                      )}
-                    >
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-          <p className="border-rule text-muted-foreground mt-5 border-t pt-4 text-xs leading-5">
-            Module maturity varies across the repository. See the README on
-            GitHub for current status.
           </p>
         </div>
       </div>
@@ -188,10 +195,10 @@ export const OpenSourceSection = () => (
         <h3 className="font-heading text-foreground mt-3.5 text-xl font-semibold tracking-[-0.015em]">
           Managed donor care
         </h3>
-        <p className="text-muted-foreground mt-2 text-sm leading-6 sm:text-base sm:leading-7">
+        <p className="text-muted-foreground mt-2 text-sm leading-6 text-pretty sm:text-base sm:leading-7">
           A planned separate service pairing AI with our team for routine donor
-          requests like receipt copies and recurring-gift changes, escalating to
-          your chosen staff contact when needed.
+          requests like receipt copies and recurring&#8209;gift updates,
+          escalating to your chosen staff contact.
         </p>
       </div>
     </Container>

@@ -56,7 +56,7 @@ export default function HomePage() {
       <AboutSection />
       <EarlyAccessSection />
       <Container className="pb-2 sm:pb-4">
-        <WordmarkSpotlight />
+        <WordmarkSpotlight className="mx-auto max-w-[44rem]" />
       </Container>
     </main>
   );

@@ -84,18 +84,7 @@ export const Footer = () => {
                     Contact
                   </a>
                 </li>
-              ) : (
-                <li>
-                  <a
-                    href={siteConfig.issuesUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={linkClassName}
-                  >
-                    Open issues
-                  </a>
-                </li>
-              )}
+              ) : null}
             </ul>
           </div>
         </div>

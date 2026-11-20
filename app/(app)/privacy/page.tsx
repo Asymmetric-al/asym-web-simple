@@ -5,7 +5,7 @@ import { createMetadata } from "@/lib/metadata";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = createMetadata({
-  title: "Privacy Policy",
+  title: "Privacy policy",
   description:
     "How asym.app handles information from visitors and early access requests.",
   path: "/privacy",
@@ -22,7 +22,7 @@ export default function PrivacyPage() {
       eyebrow="Updated November 20, 2026"
       title={
         <h1 className="font-heading text-foreground mt-5 text-[clamp(2.8rem,5.5vw,4.6rem)] leading-[0.98] font-semibold tracking-[-0.04em] text-balance">
-          Privacy Policy
+          Privacy policy
         </h1>
       }
       description="We collect only what we need to reply to you, share launch updates and early access invitations, run the website, and understand what nonprofit teams need from asym."

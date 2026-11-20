@@ -6,9 +6,9 @@ export const siteMetadata = {
   title: "asym | Open-source AI software for nonprofits",
   description: siteConfig.description,
   socialTitle:
-    "Your website, fundraising, and CRM. Built to work together with AI.",
+    "Website, giving, and donor records. One platform built to work with AI.",
   socialDescription:
-    "An open-source platform for nonprofit work. Launching soon, starting with missions organizations.",
+    "Public code for website pages, giving, receipts, and donor records. AI campaign workflows in development for missions organizations.",
   url: siteConfig.url,
   ogImage: "/opengraph-image",
   keywords: [

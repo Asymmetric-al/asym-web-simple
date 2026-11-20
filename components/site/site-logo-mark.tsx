@@ -1,4 +1,9 @@
-import Image from "next/image";
+import {
+  MARK_DATUM_PATH,
+  MARK_FRAME_RECT,
+  MARK_SWEEP_PATH,
+  MARK_VIEWBOX,
+} from "@/components/site/brand/mark-geometry";
 import { cn } from "@/lib/utils";
 import type { ComponentPropsWithoutRef } from "react";
 
@@ -8,45 +13,52 @@ type SiteLogoMarkProps = ComponentPropsWithoutRef<"span"> & {
   readonly priority?: boolean;
 };
 
+const MARK_STROKE_WIDTH = 44;
+
 /**
-Transparent asym mark with explicit light/dark artwork and fixed intrinsic dimensions.
+Inline vector asym mark built directly from the measured official mark geometry.
+Adapts instantaneously to light, dark, and Forced Colors themes with zero image
+requests or `<head>` preload tags.
 */
 export const SiteLogoMark = ({
   className,
   size = 24,
-  eager = false,
-  priority = false,
+  eager: _eager,
+  priority: _priority,
   ...props
-}: SiteLogoMarkProps) => {
-  let loading: "eager" | undefined;
-  if (!priority && eager) {
-    loading = "eager";
-  }
-
-  return (
-    <span
-      className={cn("relative inline-flex shrink-0 items-center", className)}
+}: SiteLogoMarkProps) => (
+  <span
+    className={cn(
+      "text-foreground relative inline-flex shrink-0 items-center justify-center",
+      className
+    )}
+    aria-hidden="true"
+    {...props}
+  >
+    <svg
+      width={size}
+      height={size}
+      viewBox={MARK_VIEWBOX}
+      fill="none"
       aria-hidden="true"
-      {...props}
+      focusable="false"
+      className="size-full overflow-visible"
     >
-      <Image
-        src="/brand/asym-mark-dark.png"
-        alt=""
-        width={size}
-        height={size}
-        priority={priority}
-        loading={loading}
-        className="size-full object-contain dark:hidden"
+      <rect
+        {...MARK_FRAME_RECT}
+        stroke="currentColor"
+        strokeWidth={MARK_STROKE_WIDTH}
       />
-      <Image
-        src="/brand/asym-mark-light.png"
-        alt=""
-        width={size}
-        height={size}
-        priority={priority}
-        loading={loading}
-        className="hidden size-full object-contain dark:block"
+      <path
+        d={MARK_DATUM_PATH}
+        stroke="currentColor"
+        strokeWidth={MARK_STROKE_WIDTH}
       />
-    </span>
-  );
-};
+      <path
+        d={MARK_SWEEP_PATH}
+        stroke="currentColor"
+        strokeWidth={MARK_STROKE_WIDTH}
+      />
+    </svg>
+  </span>
+);

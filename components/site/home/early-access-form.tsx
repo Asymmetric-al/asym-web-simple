@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
+import {
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -289,8 +295,10 @@ const inlineLinkClassName =
 
 export const EarlyAccessForm = ({
   contactEmail,
+  onSuccess,
 }: {
   readonly contactEmail?: string | null;
+  readonly onSuccess?: () => void;
 }): ReactNode => {
   const isHydrated = useIsClient();
   const formId = useId();
@@ -303,6 +311,7 @@ export const EarlyAccessForm = ({
   };
   const formRef = useRef<HTMLFormElement>(null);
   const successRef = useRef<HTMLHeadingElement>(null);
+  const submittingRef = useRef(false);
 
   const [status, setStatus] = useState<FormStatus>("idle");
   const [retrySeconds, setRetrySeconds] = useState<number | undefined>();
@@ -382,7 +391,18 @@ export const EarlyAccessForm = ({
     }
   };
 
+  const clearTransientAlert = () => {
+    setStatus((current) =>
+      current === "failure" ||
+      current === "rate_limited" ||
+      current === "not_configured"
+        ? "idle"
+        : current
+    );
+  };
+
   const clearError = (field: EarlyAccessField) => {
+    clearTransientAlert();
     setErrors((current) =>
       errorFor(current, field) === undefined
         ? current
@@ -391,6 +411,7 @@ export const EarlyAccessForm = ({
   };
 
   const handleDraftInput = () => {
+    clearTransientAlert();
     const form = formRef.current;
     if (!form) {
       return;
@@ -405,7 +426,7 @@ export const EarlyAccessForm = ({
 
   const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (isSubmitting) {
+    if (submittingRef.current || isSubmitting) {
       return;
     }
 
@@ -420,13 +441,16 @@ export const EarlyAccessForm = ({
       return;
     }
 
+    submittingRef.current = true;
     setStatus("submitting");
     const honeypot = String(formData.get(EARLY_ACCESS_HONEYPOT_FIELD) ?? "");
     const result = await submitEarlyAccess(request, honeypot);
+    submittingRef.current = false;
 
     if (result.kind === "accepted") {
       clearStoredDraft();
       setStatus("success");
+      onSuccess?.();
       return;
     }
     if (result.kind === "invalid") {
@@ -467,6 +491,7 @@ export const EarlyAccessForm = ({
       method="post"
       action="/api/early-access"
       noValidate={isHydrated}
+      aria-busy={isSubmitting}
       onInput={handleDraftInput}
       onSubmit={handleSubmit}
       aria-label="Request early access"
@@ -488,6 +513,7 @@ export const EarlyAccessForm = ({
             autoCapitalize="none"
             spellCheck={false}
             required
+            readOnly={isSubmitting}
             pattern={EMAIL_HTML_PATTERN}
             title={earlyAccessCopy.invalidEmail}
             maxLength={EARLY_ACCESS_LIMITS.email}
@@ -506,6 +532,7 @@ export const EarlyAccessForm = ({
             type="text"
             autoComplete="organization"
             required
+            readOnly={isSubmitting}
             pattern=".*\S.*"
             title={earlyAccessCopy.missingOrganization}
             maxLength={EARLY_ACCESS_LIMITS.organization}
@@ -531,6 +558,7 @@ export const EarlyAccessForm = ({
             id={ids.message}
             name="message"
             rows={4}
+            readOnly={isSubmitting}
             maxLength={EARLY_ACCESS_LIMITS.message}
             aria-invalid={Boolean(errors.message)}
             aria-describedby={describedBy("message")}
@@ -561,7 +589,12 @@ export const EarlyAccessForm = ({
       {hasAlert ? (
         <div
           role="alert"
-          className="border-destructive/30 bg-destructive/8 text-foreground mt-5 rounded-2xl border px-4 py-3 text-sm leading-6"
+          className={cn(
+            "text-foreground mt-5 rounded-2xl border px-4 py-3 text-sm leading-6",
+            status === "not_configured"
+              ? "border-rule bg-record/85"
+              : "border-destructive/30 bg-destructive/8"
+          )}
         >
           <p className="font-medium">{alertHeading}</p>
           <p className="text-muted-foreground mt-1">
@@ -633,11 +666,49 @@ export const EarlyAccessForm = ({
             "inline-flex items-baseline gap-0.5"
           )}
         >
-          Privacy policy (opens in a new tab)
+          Privacy policy
+          <span className="sr-only"> (opens in a new tab)</span>
           <ArrowUpRightIcon className="size-3 shrink-0 self-center" />
         </a>
         .
       </p>
     </form>
+  );
+};
+
+export const EarlyAccessConfigured = ({
+  contactEmail,
+}: {
+  readonly contactEmail?: string | null;
+}): ReactNode => {
+  const [submitted, setSubmitted] = useState(false);
+
+  return (
+    <div className="relative z-10 grid gap-8 lg:grid-cols-[minmax(0,42fr)_minmax(0,58fr)] lg:items-start lg:gap-12">
+      <div className="min-w-0">
+        <p className="text-primary/82 dark:text-ring font-mono text-[0.8125rem] font-medium tracking-[0.02em]">
+          Early access
+        </p>
+        <h2
+          id="early-access-title"
+          className="font-heading text-foreground mt-3.5 text-[clamp(1.95rem,3.6vw,3.05rem)] leading-[1.04] font-semibold tracking-[-0.04em] text-balance"
+        >
+          {submitted
+            ? "Thanks for reaching out."
+            : "Request early access for your team."}
+        </h2>
+        <p className="text-muted-foreground mt-5 max-w-[34rem] text-base leading-7 text-pretty sm:text-lg sm:leading-8">
+          {submitted
+            ? "Your organization’s details are with our team. We’ll follow up by email as early access opens."
+            : "Tell us which organization you’re with and what part of fundraising or donor care you’d like help with. We’ll be in touch with launch updates and invitations as early access opens."}
+        </p>
+      </div>
+      <div className="min-w-0">
+        <EarlyAccessForm
+          contactEmail={contactEmail ?? null}
+          onSuccess={() => setSubmitted(true)}
+        />
+      </div>
+    </div>
   );
 };

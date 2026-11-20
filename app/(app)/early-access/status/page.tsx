@@ -1,13 +1,13 @@
-import {
-  ArrowLeft,
-  ArrowUpRight,
-  CircleAlert,
-  CircleCheck,
-} from "lucide-react";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { Container } from "@/components/site/container";
 import { StatusPill } from "@/components/site/home/section-heading";
+import {
+  ArrowLeftIcon,
+  ArrowUpRightIcon,
+  CircleAlertIcon,
+  CircleCheckIcon,
+} from "@/components/site/icons";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { siteConfig } from "@/lib/config";
 import {
@@ -171,13 +171,9 @@ export default async function EarlyAccessStatusPage({
     <StatusPill>{content.eyebrow}</StatusPill>
   ) : null;
   if (content.tone === "success") {
-    statusIcon = (
-      <CircleCheck className="text-primary size-7" aria-hidden="true" />
-    );
+    statusIcon = <CircleCheckIcon className="text-primary size-7" />;
   } else if (content.tone === "error") {
-    statusIcon = (
-      <CircleAlert className="text-destructive size-7" aria-hidden="true" />
-    );
+    statusIcon = <CircleAlertIcon className="text-destructive size-7" />;
   }
 
   let headingSpacing = "mt-0";
@@ -219,7 +215,7 @@ export default async function EarlyAccessStatusPage({
               className={cn(buttonVariants({ size: "lg" }), "px-6")}
             >
               {content.primaryIcon === "back" ? (
-                <ArrowLeft data-icon="inline-start" aria-hidden="true" />
+                <ArrowLeftIcon dataIcon="inline-start" />
               ) : null}
               {content.primaryLabel}
             </Link>
@@ -232,8 +228,8 @@ export default async function EarlyAccessStatusPage({
                 "px-6"
               )}
             >
-              Follow development on GitHub
-              <ArrowUpRight data-icon="inline-end" aria-hidden="true" />
+              Follow progress on GitHub
+              <ArrowUpRightIcon dataIcon="inline-end" />
             </a>
           </div>
           {contactEmail && content.tone !== "success" ? (

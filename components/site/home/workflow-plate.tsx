@@ -20,7 +20,7 @@ const STEP_ANNOUNCEMENTS: Record<string, string> = {
   "1": "Describe (Your team) selected. Record: Campaign.",
   "2": "Prepare (AI, in development) selected. Records: Campaign and Donor history.",
   "3": "Review (Your team) selected. Records: Campaign and Donor history.",
-  "4": "Publish (asym, in development) selected. Publishes the campaign page. Gifts made through it link to receipts and donor history.",
+  "4": "Publish (asym, in development) selected. Will publish the approved page and link gifts, receipts, and Donor history.",
 };
 
 const NODE_STAGGER_MS = 40;
@@ -244,6 +244,7 @@ export const WorkflowPlate = ({
 
     const handleFocusIn = (event: FocusEvent) => {
       if (
+        pinnedStep !== null ||
         !(event.target instanceof HTMLElement) ||
         !event.target.matches(":focus-visible")
       ) {
@@ -253,7 +254,7 @@ export const WorkflowPlate = ({
       if (!step) {
         return;
       }
-      applyState(step, { isInstant: true, isPinned: pinnedStep === step });
+      applyState(step, { isInstant: true, isPinned: false });
     };
 
     const handleFocusOut = (event: FocusEvent) => {

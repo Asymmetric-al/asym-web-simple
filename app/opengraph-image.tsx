@@ -133,24 +133,36 @@ export default async function openGraphImage() {
           <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
             <div
               style={{
-                fontSize: 60,
+                fontSize: 56,
                 lineHeight: 1.06,
                 fontWeight: 600,
-                letterSpacing: "-0.032em",
+                letterSpacing: "-0.03em",
               }}
             >
-              Your website, fundraising, and CRM.
+              Website, giving, and donor records.
             </div>
             <div
               style={{
-                fontSize: 60,
+                fontSize: 56,
                 lineHeight: 1.06,
                 fontWeight: 600,
-                letterSpacing: "-0.032em",
+                letterSpacing: "-0.03em",
                 color: MUTED,
               }}
             >
-              Built to work together with AI.
+              One platform built to work with AI.
+            </div>
+            <div
+              style={{
+                marginTop: "12px",
+                fontSize: 23,
+                lineHeight: 1.4,
+                fontWeight: 500,
+                color: MUTED,
+              }}
+            >
+              Website, giving, receipts, and donor records in public code. AI
+              workflows in development.
             </div>
           </div>
 
