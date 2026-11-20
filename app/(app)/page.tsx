@@ -1,5 +1,3 @@
-import { WordmarkSpotlight } from "@/components/react-bits/wordmark-spotlight";
-import { Container } from "@/components/site/container";
 import { AboutSection } from "@/components/site/home/about-section";
 import { ConnectedSection } from "@/components/site/home/connected-section";
 import { EarlyAccessSection } from "@/components/site/home/early-access-section";
@@ -52,12 +50,9 @@ export default function HomePage() {
       <HomeHero />
       <ProductSection />
       <ConnectedSection />
-      <OpenSourceSection />
       <AboutSection />
+      <OpenSourceSection />
       <EarlyAccessSection />
-      <Container className="pb-2 sm:pb-4">
-        <WordmarkSpotlight className="mx-auto max-w-[32rem]" />
-      </Container>
     </main>
   );
 }

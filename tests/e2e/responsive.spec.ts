@@ -211,20 +211,8 @@ test.describe("responsive regression coverage", () => {
     issues.expectNoUnexpectedIssuesSince(checkpoint, "home @ 390x844");
 
     await setViewport(page, { label: "640x900", width: 640, height: 900 });
-    const clipCheck = await page.evaluate(() => {
-      const plate = document.querySelector(".wf-plate");
-      const nodes = [...document.querySelectorAll(".wf-inline-chip")];
-      if (!plate || nodes.length === 0) return { ok: false, overflowPx: 999 };
-      const plateRight = plate.getBoundingClientRect().right;
-      const maxNodeRight = Math.max(
-        ...nodes.map((node) => node.getBoundingClientRect().right)
-      );
-      return {
-        ok: maxNodeRight <= plateRight - 8,
-        overflowPx: Math.round(maxNodeRight - plateRight),
-      };
-    });
-    expect(clipCheck.ok).toBeTruthy();
+    await expectNoHorizontalOverflow(page, "home @ 640x900");
+    await expect(page.getByRole("tab", { name: "Donor" })).toBeVisible();
   });
 
   test("home footer remains accessible after repeated viewport changes", async ({

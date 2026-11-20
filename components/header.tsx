@@ -10,24 +10,33 @@ export const Header = () => {
   const isConfigured = isEarlyAccessConfigured();
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 pt-[max(0.75rem,env(safe-area-inset-top))] pr-[max(0.75rem,env(safe-area-inset-right))] pl-[max(0.75rem,env(safe-area-inset-left))] sm:pr-[max(1rem,env(safe-area-inset-right))] sm:pl-[max(1rem,env(safe-area-inset-left))]">
-      <div className="border-foreground/12 bg-background/92 mx-auto flex max-w-[80rem] items-center justify-between gap-2 rounded-full border py-1.5 pr-1.5 pl-3.5 shadow-[0_16px_42px_-34px_rgba(22,33,43,0.4)] backdrop-blur-md sm:gap-3 sm:pl-5">
-        <Link
-          href="/"
-          className="group focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 min-w-0 items-center gap-2.5 rounded-full px-1 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-10"
-          aria-label={`${siteConfig.shortName} home`}
-        >
-          <SiteLogoMark
-            className="size-7 transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] [@media(hover:hover)_and_(pointer:fine)]:group-hover:-translate-y-px"
-            size={28}
-          />
-          <span
-            translate="no"
-            className="font-heading text-foreground -translate-y-px text-lg leading-none font-semibold tracking-[-0.03em]"
+    <header className="border-rule bg-background/94 fixed inset-x-0 top-0 z-50 border-b pt-[env(safe-area-inset-top)] pr-[env(safe-area-inset-right)] pl-[env(safe-area-inset-left)] backdrop-blur-md">
+      <div className="mx-auto flex h-16 max-w-[80rem] items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
+        <div className="flex min-w-0 items-center gap-3.5">
+          <Link
+            href="/"
+            className="group focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 min-w-0 items-center gap-2.5 rounded-md px-1 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-10"
+            aria-label={`${siteConfig.shortName} home`}
           >
-            {siteConfig.shortName}
+            <SiteLogoMark
+              className="size-7 transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] [@media(hover:hover)_and_(pointer:fine)]:group-hover:-translate-y-px"
+              size={28}
+            />
+            <span
+              translate="no"
+              className="text-foreground -translate-y-px font-sans text-[1.125rem] leading-none font-semibold tracking-[-0.03em]"
+            >
+              {siteConfig.shortName}
+            </span>
+          </Link>
+          <span
+            aria-hidden="true"
+            className="bg-rule hidden h-4 w-px lg:block"
+          />
+          <span className="text-muted-foreground hidden text-xs lg:inline">
+            For missions organizations
           </span>
-        </Link>
+        </div>
 
         <nav aria-label="Main" className="hidden md:block">
           <ul className="flex items-center gap-1">
@@ -36,7 +45,7 @@ export const Header = () => {
                 <Link
                   href={link.href}
                   prefetch={false}
-                  className="text-foreground/78 hover:text-foreground hover:bg-muted/75 focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-10 items-center rounded-full px-4 text-sm font-medium focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-2 focus-visible:outline-transparent"
+                  className="text-foreground/82 hover:text-foreground focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-10 items-center rounded-md px-3.5 text-sm font-medium underline-offset-[6px] hover:underline focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-2 focus-visible:outline-transparent"
                 >
                   {link.label}
                 </Link>
@@ -45,7 +54,7 @@ export const Header = () => {
           </ul>
         </nav>
 
-        <div className="flex shrink-0 items-center gap-1.5">
+        <div className="flex shrink-0 items-center gap-2">
           <Link
             href={siteConfig.cta.primary.href}
             prefetch={false}
@@ -66,7 +75,7 @@ export const Header = () => {
               </>
             ) : (
               <>
-                <span className="sm:hidden">Early access</span>
+                <span className="sm:hidden">Access status</span>
                 <span className="hidden sm:inline">Early access status</span>
               </>
             )}

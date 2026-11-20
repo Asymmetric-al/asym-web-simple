@@ -31,10 +31,10 @@ export default function NotFound() {
         className="flex flex-1 items-center pt-32 pb-20 outline-none sm:pt-36"
       >
         <Container className="max-w-3xl">
-          <p className="text-primary/82 dark:text-ring font-mono text-[0.8125rem] font-medium tracking-[0.02em]">
+          <p className="text-pine font-mono text-xs font-medium tracking-[0.02em]">
             404
           </p>
-          <h1 className="font-heading text-foreground mt-4 text-[clamp(2.4rem,5vw,3.8rem)] leading-[1.02] font-semibold tracking-[-0.04em] text-balance">
+          <h1 className="font-heading text-foreground mt-4 text-[clamp(2.5rem,5vw,3.9rem)] leading-[1.02] font-medium tracking-[-0.03em] text-balance">
             This page doesn’t exist.
           </h1>
           <p className="text-muted-foreground mt-5 max-w-[38rem] text-lg leading-8">

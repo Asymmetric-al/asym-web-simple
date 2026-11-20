@@ -350,12 +350,17 @@ export const EarlyAccessForm = ({
 
   if (status === "success") {
     return (
-      <div className="surface-enter border-foreground/12 bg-card rounded-[1.6rem] border p-6 sm:p-8">
-        <CircleCheckIcon className="text-primary size-7" />
+      <div className="surface-enter border-rule-strong bg-background/70 relative rounded-xl border p-6 sm:p-8">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <CircleCheckIcon className="text-pine size-7" />
+          <span className="approval-stamp inline-block px-2.5 py-1 font-mono text-xs font-medium tracking-[0.06em] uppercase">
+            Received
+          </span>
+        </div>
         <h3
           ref={successRef}
           tabIndex={-1}
-          className="font-heading text-foreground focus-visible:ring-ring focus-visible:ring-offset-background mt-4 rounded-[0.375rem] text-2xl font-semibold tracking-[-0.025em] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent"
+          className="font-heading text-foreground focus-visible:ring-ring focus-visible:ring-offset-background mt-4 rounded-md text-2xl font-medium tracking-[-0.02em] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent"
         >
           Request received
         </h3>
@@ -364,14 +369,14 @@ export const EarlyAccessForm = ({
           role="status"
         >
           Thanks for telling us about your team. Until early access opens, you
-          can follow public progress in the repository.
+          can follow public progress in the repository README.
         </p>
         <div className="mt-6">
           <a
-            href={siteConfig.repoUrl}
+            href={`${siteConfig.repoUrl}#readme`}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-foreground hover:text-primary focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center gap-1.5 rounded-[0.375rem] text-sm font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-9"
+            className="text-foreground hover:text-pine focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center gap-1.5 rounded-md text-sm font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-9"
           >
             Follow development on GitHub
             <span className="sr-only"> (opens in a new tab)</span>
@@ -497,7 +502,7 @@ export const EarlyAccessForm = ({
       onInput={handleDraftInput}
       onSubmit={handleSubmit}
       aria-label="Request early access"
-      className="sm:border-foreground/12 sm:bg-card relative sm:rounded-[1.6rem] sm:border sm:p-7"
+      className="sm:border-rule sm:bg-background/60 relative sm:rounded-xl sm:border sm:p-7"
     >
       <p className="sr-only" role="status" aria-live="polite">
         {isSubmitting ? earlyAccessCopy.submitting : ""}
@@ -687,23 +692,21 @@ export const EarlyAccessConfigured = ({
   const [submitted, setSubmitted] = useState(false);
 
   return (
-    <div className="relative z-10 grid gap-8 lg:grid-cols-[minmax(0,42fr)_minmax(0,58fr)] lg:items-start lg:gap-12">
+    <div className="relative z-10 grid gap-8 lg:grid-cols-[minmax(0,44fr)_minmax(0,56fr)] lg:items-start lg:gap-12">
       <div className="min-w-0">
-        <p className="text-primary/82 dark:text-ring font-mono text-[0.8125rem] font-medium tracking-[0.02em]">
-          Early access
-        </p>
+        <p className="text-pine font-sans text-sm font-medium">Early access</p>
         <h2
           id="early-access-title"
-          className="font-heading text-foreground mt-3.5 text-[clamp(1.95rem,3.6vw,3.05rem)] leading-[1.04] font-semibold tracking-[-0.04em] text-balance"
+          className="font-heading text-foreground mt-3 text-[clamp(2rem,3.8vw,3.25rem)] leading-[1.03] font-medium tracking-[-0.025em] text-balance"
         >
           {submitted
             ? "What happens next."
             : "Request early access for your team."}
         </h2>
-        <p className="text-muted-foreground mt-5 max-w-[34rem] text-base leading-7 text-pretty sm:text-lg sm:leading-8">
+        <p className="text-muted-foreground mt-4 max-w-[34rem] text-base leading-7 text-pretty sm:text-[1.0625rem] sm:leading-8">
           {submitted
-            ? "We review requests from missions organizations and follow up by email as early access opens."
-            : "Tell us which organization you’re with and what part of fundraising or donor care you’d like help with. We’ll be in touch with launch updates and invitations as early access opens."}
+            ? "We review requests from missions organizations as onboarding capacity opens and follow up by email."
+            : "Tell us which organization you’re with and what part of fundraising or donor care you’d like help with. We review requests as capacity opens; submitting does not guarantee immediate access."}
         </p>
       </div>
       <div className="min-w-0">

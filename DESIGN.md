@@ -1,169 +1,93 @@
 # Design System: Asymmetric.al
 
-**Project:** asym product-marketing site (asym.app), built by Asymmetric.al  
-**Stack:** Next.js 16 · Tailwind v4 (`source(none)` + explicit active `@source`, `@layer ui-sdk;`) · Vercel UI SDK (`@ui-sdk/react`, `@ui-sdk/core`) · shadcn/ui `base-maia` · React Bits Pro (`@reactbits-pro`, adapted locally under `components/react-bits/`) · Native CSS transitions & direct-DOM interactive workflow plate  
-**Source of truth for tokens:** `app/globals.css` · `lib/config.ts` · `components/site/brand/mark-geometry.ts`  
-**No Stitch project ID** — this document was synthesized directly from the codebase and running UI.
+**Project:** asym product website (`asym.app`), built by Asymmetric.al  
+**Stack:** Next.js 16 · Tailwind v4 (`source(none)` + explicit active `@source`, `@layer ui-sdk;`) · Vercel UI SDK (`@ui-sdk/react`, `@ui-sdk/core`) · shadcn/ui `base-maia` · Native CSS transitions & direct-DOM interactive instruments  
+**Source of truth for tokens:** `app/globals.css` · `lib/config.ts` · `components/site/brand/mark-geometry.ts` · `components/site/brand/editorial-glyphs.tsx`  
+**No Stitch project ID** — synthesized directly from the codebase and running UI.
 
 ---
 
-## 1. Visual Theme & Atmosphere
+## 1. Visual Theme & Brand Concept: "One Gift, Three Hands — The Living Editorial Ledger"
 
-asym.app is a prelaunch product website for Asymmetric.al, a for-profit company serving nonprofits, starting with missions organizations. The aesthetic is **calm, product-led editorial minimalism**: a warm parchment canvas, near-black ink text, one restrained navy accent, subtle printmaking textures, and generous breathing room. Every surface choice makes the product easier to understand and feel trustworthy, never louder.
+`asym.app` is the prelaunch product website for **Asymmetric.al**, an independent, for-profit software company serving nonprofits, starting with missions organizations.
 
-**The site is informational.** Explain the product in words and honest structure (connected steps, who does what, shared records, what is built, and what is in development). Do not draw mock app screens, fake dashboards, sample organizations, or invented metrics. Show real product visuals only when they come from the actual product and are labeled honestly.
+Missions organizations run on a recurring paper trail — gift receipts, donor records, field supporter rosters, and fund ledgers — that normally fractures across disconnected tools. `Asymmetric-al/core` solves this with three real connected surfaces (`apps/donor`, `apps/missionary`, `apps/admin`) reading from one shared record, with human-approved AI appeal drafting in development on top of those same permissions.
 
-The dominant feel is **warm-muted luminosity**: a lightly antiqued parchment canvas (`background-color: var(--background)`) paired with a strictly contained top-anchored atmosphere shell (`.page-atmosphere` at `z-index: -10` inside each route shell's `relative isolate` wrapper, `contain: strict`, `height: 48rem`) layering atmospheric watercolor radial lobes of steely blue and sage green (`--page-gradient`), a lightweight static **128 px neutral paper-grain PNG tile** (`public/brand/grain-neutral.png` at `0.055` light / `0.065` dark, no SVG `<feTurbulence>` filter, no CSS `mask-image`, no theme-toggle image swap), and a smooth vertical fade back into `--background` so the wash and grain stay visible above the canvas while culling completely offscreen during footer theme toggles.
+The website expresses that architecture directly through **editorial printmaking & documentary ledger craft**:
 
-### Signature Motif: Datum & Sweep
-
-Measured directly from the official `asym` mark (`public/brand/asym-mark-dark.png`, `viewBox="102 65 820 897"` in `components/site/brand/mark-geometry.ts`), the brand's visual grammar comes from three architectural primitives:
-
-| Primitive | Measured Ratio | Where Used (and Nowhere Else) |
-| --- | --- | --- |
-| **Datum lid** (`.datum-lid`) | Horizontal crossbar at `29%` from top with arched `16%` shoulders curving down into the outer frame | Lower record band of the `#product` workflow plate (brought cleanly above the desktop fold), flush lower `"Where things stand"` band of the `#open-source` specification plate, and the Open Graph social card (`app/opengraph-image.tsx`) |
-| **Stem & sweep** | Vertical stem at `42%` from left bending along a quarter-ellipse (`0.73` ratio) into the baseline | Desktop (`xl+`) workflow stems (`border-bottom-left-radius: 30px 44px`) sweeping into the datum lid, and the full-width About cascade (`.about-sweep`, `7.5rem 8.5rem` elliptical curve aligned with even `2.5rem` steps) |
-| **42 / 58 split** | Derived from the mark's stem position (`42%` left / `58%` right) | Unified structural two-column ratio across Connected, Open source, About, and Early access (`58 / 42` in Product so the headline holds the wider column) |
-| **Mark glyphs** (`MarkGlyph`) | Full official mark at `44×48px` with two primitives in Ledger Rule (`--rule`) and one inked (`--ink`) | Replaces generic icon tiles in Connected (`datum` = Shared records, `sweep` = Defined actions, `frame` = People decide) |
-
-**Placement rules:**
-
-- Never draw the mark's geometry behind headline text or as generic full-page background decoration.
-- Never combine more than one structural primitive in the same sub-component.
-- Rest-state structural rules stay hairline (`1px`, `--rule`); only user interaction inks them (`1.5px`, `--ink`).
-
-Surfaces are **layered with clear structural intent**:
-
-- Solid hairline borders represent shipped foundation and human-owned steps.
-- Dashed hairline borders (`border-dashed`) distinguish in-development AI/publishing workflow steps (`Prepare`, `Publish`), their active trace lines, and in-development capabilities in the Hero and Open source status ledgers at a glance — keeping the entire site strictly to two maturity states (`In the public code` and `In development`). Neither in-development workflow step carries a pre-selected fill at rest.
-- Seamless alternating section washes (`.section-wash-sky`, `.section-wash-accent`, fading in from `transparent 0%` to peak at `7rem` and back to `transparent 96%`) create gentle vertical cadence without hard horizontal seams.
-- Two-stage tactile vellum shadows (`--shadow-card`, `--shadow-strong`) pair a `1px` specular top inner highlight with crisp contact and ambient depth — zero `backdrop-filter: blur` on static below-fold containers.
-- `backdrop-filter: blur` (`backdrop-blur-md`) is reserved strictly for the floating fixed Header.
-
-The tone is direct, warm, and confident. Use concrete work (a gift, a receipt, a donor record, publishing a giving page) instead of slogans, keep paragraphs short, avoid em dashes in copy, and label status plainly (`In the public code`, `In development`, `Sign‑ups closed`). The product name is written lowercase: **asym** (never uppercased). The company is **Asymmetric.al**.
+- **Show typeset documents, never fake SaaS dashboards:** Rather than drawing deceptive app chrome or abstract boxes, the site typesets real documentary artifacts (a perforated cotton gift receipt, a missionary supporter notice, a staff ledger entry, and a dashed AI appeal draft) — **every sample clearly labeled** (`Illustrative specimen · fictional record · no payment taken` / `Sample draft · nothing sends`) so no reasonable visitor mistakes an illustration for live customer data or already-shipped AI automation.
+- **Three-ink semantic system (states visual grammar once):**
+  - **Field Pine (`--pine`) & solid hairlines** encode what exists in the public open-source code (`Asymmetric-al/core`: `apps/donor`, `apps/missionary`, `apps/admin`) and settled receipts.
+  - **Dashed Graphite (`--draft`, `border-dashed`)** encodes AI drafts and planned workflows in development.
+  - **Postmark Vermilion (`--vermilion`)** is reserved strictly for **human acts**: primary CTAs, the tactile **Approve draft** rubber stamp, and signature rules (_"If it’s vermilion, a person decided."_).
+- **Dramatic tonal pacing:** Warm unbleached cotton ledger paper (`#F3EEE3`) gives way mid-page to a full-bleed **Prussian Midnight** (`#0F1D29`) manifesto & signed founder letter before returning to the archival code inventory and correspondence folio.
+- **Tone:** Direct, warm, concrete, and candid. Zero em dashes in visible copy, zero invented customers/testimonials/pricing, lowercase `asym` (`translate="no"`), company name `Asymmetric.al`.
 
 ---
 
 ## 2. Color Palette & Roles
 
-All tokens live in `app/globals.css` as CSS custom properties and map to Tailwind via `@theme inline`.
+All tokens live in `app/globals.css` as direct precomputed CSS custom properties (zero runtime nested `color-mix()` cascades) mapped into Tailwind via `@theme inline`, paired with `disableTransitionOnChange` on `ThemeProvider` for single-frame light/dark switching on both desktop and constrained mobile.
 
-### Light & Dark Token Matrix
+### Light (_Ledger Paper & Prussian Press_) & Dark (_Night Ledger_) Token Matrix
 
 | Role | Light | Dark | Contrast / Usage Notes |
 | --- | --- | --- | --- |
-| Page background (`--background`) | `#f6f2ea` — Warm Parchment Canvas | `#0d141a` — **Near-Black Deep Ocean** | Never pure `#ffffff` or `#000000` |
-| Card surface (`--card`) | `#fbfaf7` — Antiqued Near-White | `#111b23` — **Dark Ink Card** | Subtle stratification over canvas |
-| Record band (`--record`) | `#f3eee4` — **Pressed Parchment** | `#0f1920` — **Sounding Deep** | Datum-lid thresholds and lower bands (`>= 5.36:1` muted, `14.1:1` ink) |
-| Primary accent (`--primary`) | `#1e3a4f` — Deep Ink Navy | `#dbeaf7` — **Pale Ice Blue** | Primary CTAs, numbered discs, active pill |
-| Ink line (`--ink`) | `#1e3a4f` — **Ink Line** | `#78aed3` — **Ice Steel Blue** | Active workflow stems/datum, mark glyphs (`>= 7.5:1` on `--record`) |
-| Ledger rule (`--rule`) | `rgb(30 58 79 / 17%)` — **Ledger Rule** | `rgb(237 243 247 / 18%)` | Rest-state structural hairlines, table dividers, datum lid |
-| Sweep hairline (`--sweep-hairline`) | `rgb(30 58 79 / 30%)` | `rgb(120 174 211 / 38%)` | About sweep cascade only |
-| Secondary (`--secondary`) | `#e6f1f9` — Pale Sky Wash | `#1a2c39` — **Dark Steel Teal** | Lit record pills (`--node-lit`), subtle outline hover tint |
-| Accent (`--accent`) | `#e8efe2` — Sage Green Mist | `#223127` — **Dark Forest Moss** | About section wash |
-| Foreground text (`--foreground`) | `#16212b` — Deep Ink Charcoal | `#edf3f7` — **Near-White Vapor** | Headings and primary copy |
-| Muted text (`--muted-foreground`) | `#54636f` — Slate Muted Gray | `#b6c3cb` — **Cool Light Gray** | Supporting prose (`>= 5.4:1` AA) |
-| Control border (`--input`) | `rgb(22 33 43 / 50%)` (`3.17:1`) | `rgb(243 246 248 / 38%)` (`3.37:1`) | Inputs, textareas, outline buttons (WCAG 1.4.11) |
-| Focus ring (`--ring`) | `#235d85` (`6.32:1`) | `#78aed3` — **Ice Steel Blue** (`7.77:1`) | Focus indicators; `--tw-ring-offset-color: var(--background)` |
-| Destructive (`--destructive`) | `#c03d2c` — Crimson Alert | `#ff8d79` — **Coral Peach Alert** | `--destructive-foreground`: `#fdfcf9` / `#16212b` |
+| Page canvas (`--background`) | `#f3eee3` — Unbleached Rag Paper | `#0b131a` — Deep Night Folio | Warm paper & deep ink canvas (never `#fff` or `#000`) |
+| Specimen sheet (`--card`) | `#fcfbf7` — Clean Cotton Stock | `#121e28` — Dark Ledger Sheet | Documentary cards, receipts, form folios |
+| Archive band (`--record`) | `#e9e2d2` — Pressed Ledger Linen | `#0e1821` — Pressed Night Linen | Specimen trays, inventory footnotes, theme track |
+| Primary ink (`--foreground`) | `#12202b` — Prussian Ink | `#efe9dd` — Warm Cream Ink | Headings, primary copy (`>= 13.4:1`) |
+| Secondary ink (`--muted-foreground`) | `#485763` — Slate Ink | `#b2bfc8` — Silver Slate | Supporting copy (`>= 5.8:1` on record, `>= 6.5:1` on canvas) |
+| **Postmark Vermilion** (`--primary` / `--vermilion`) | `#b33a22` (`#fcfbf7` text `5.86:1`) | `#e56a4e` (`#0b131a` text `6.55:1`) | Primary CTAs, Approve draft rubber stamp, human decisions |
+| **Field Pine** (`--pine` / `--ring`) | `#1b574c` (`7.22:1` on paper) | `#62bda8` (`8.2:1` on card) | Public code status, settled receipts, focus rings, links |
+| **Draft Graphite** (`--draft`) | `#4a5966` (`6.2:1` on paper) | `#96a6b4` (`6.8:1` on card) | Dashed outlines & labels for AI drafts / in-development work |
+| **Prussian Midnight** (`--night`) | `#0f1d29` (`#f3eee3` ink `14.8:1`) | `#12212e` (`#efe9dd` ink `13.4:1`) | Full-bleed editorial manifesto & founder letter band |
+| Ledger hairline (`--rule` / `--rule-strong`) | `rgb(18 32 43 / 18% · 30%)` | `rgb(239 233 221 / 16% · 28%)` | Structural dividers, specimen frames, corner ticks |
+| Control border (`--input`) | `rgb(18 32 43 / 48%)` (`>= 3.2:1`) | `rgb(239 233 221 / 38%)` (`>= 3.4:1`) | Inputs, textareas, outline buttons (WCAG 1.4.11) |
+| Destructive (`--destructive`) | `#b52d1d` | `#ff8a75` | Validation errors and destructive alerts |
 
 ---
 
 ## 3. Typography Rules
 
-### Font Stack
+### Font Stack (`next/font/google`, 3 families)
 
-| Role | Family | Source | CSS Variable (`<html>` + `@theme inline`) | Utility |
+| Role | Family | CSS Variable | Utility | Usage |
 | --- | --- | --- | --- | --- |
-| **Headings** | Plus Jakarta Sans | `next/font/google` | `--font-plus-jakarta` -> `--font-heading` | `font-heading` |
-| **Body** | Inter | `next/font/google` | `--font-inter` -> `--font-sans` | `font-sans` |
-| **Kickers / Actors / Status** | JetBrains Mono | `next/font/google` | `--font-jetbrains-mono` -> `--font-mono` | `font-mono` |
+| **Editorial Display** | **Newsreader** (variable `opsz 6..72`, upright + true _italic_) | `--font-newsreader` -> `--font-heading` | `font-heading` | H1, H2, documentary headings, manifesto interlude, founder signatures |
+| **UI & Reading Body** | **Instrument Sans** (variable) | `--font-instrument-sans` -> `--font-sans` | `font-sans` | Navigation, buttons, body prose, lowercase `asym` wordmark, sentence-case section eyebrows |
+| **Ledger & Code Metadata** | **IBM Plex Mono** (`400`, `500`) | `--font-ibm-plex-mono` -> `--font-mono` | `font-mono` | Strictly for Gift IDs (`GIFT-0418`), tabular amounts, dates, repo paths (`apps/donor`), and commit counts |
 
-Font `.variable` classes MUST sit on `<html>` in `app/layout.tsx`, and element base rules in `app/globals.css` MUST sit inside `@layer base` so Tailwind v4 utility classes win cleanly. `app/opengraph-image.tsx` loads bundled Plus Jakarta Sans TTFs (`lib/fonts/`) for server-rendered social cards.
+`app/opengraph-image.tsx` bundles matching TTF files (`lib/fonts/Newsreader-*.ttf`, `InstrumentSans-*.ttf`, `IBMPlexMono-Medium.ttf`) so social preview cards share the exact same typographic identity.
 
-### Optical Tracking, Word Spacing & Scale
+### Scale & Discipline
 
-Tight negative tracking scales optically with heading size, paired with **`word-spacing: 0.05em`** on the base heading rule (`h1–h6`) so Plus Jakarta Sans semibold preserves crisp word separation even under tight letter-spacing:
-
-| Element | Size | Weight | Tracking | Line Height | Notes |
-| --- | --- | --- | --- | --- | --- |
-| **Hero H1** | `clamp(1.9rem, 5.1vw, 4rem)` | 600 | `-0.025em` (`sm:` `-0.035em`) | `1.03` | Two block-level sentences; second sentence `text-muted-foreground` and slightly stepped below `sm` so `320px` stays compact above the CTA |
-| **Section H2 / Document H1** | `clamp(1.95rem, 3.6vw, 3.05rem)` / `clamp(2.8rem, 5.5vw, 4.6rem)` | 600 | `-0.04em` | `1.04` / `0.98` | `SectionTitle` / Legal pages; two-sentence H2s use block spans so lines never break mid-sentence |
-| **Status Page H1** | `clamp(1.9rem, 4vw, 2.75rem)` | 600 | `-0.035em` | `1.06` | Server-rendered `/early-access/status` heading |
-| **About Cascade (`<ol>`)** | `clamp(1.375rem, 2.5vw, 2.25rem)` | 600 | `-0.03em` | `1.2` | Plus Jakarta Sans sequence stepping in even `2.5rem` increments along `.about-sweep` |
-| **Panel H3 / Document H2** | `text-2xl` (`24px`) / `clamp(1.5rem, 2.4vw, 2rem)` | 600 | `-0.025em` | default | Early access status, Request received, Legal section H2 |
-| **Workflow / Spec / Principle H3** | `text-xl` (`20px`) / `text-lg` (`18px`) | 600 | `-0.02em` / `-0.015em` | default | Crisp Plus Jakarta Sans headings ("Describe", "Prepare", "Review", "Publish", "Where things stand", principle titles) |
-| **Body paragraph** | `text-base` / `sm:text-lg` | 400 | default | `leading-7` / `leading-8` | Max width `42rem` (≤ `72ch`); principle rows capped at `56ch` |
-| **Section Kicker (`Eyebrow`)** | `0.8125rem` (`13px`) | 500 | `0.02em` | default | JetBrains Mono **sentence case** uniformly across all five homepage sections (`The first workflow`, `Why connected`, `Open source`, `About`, `Early access`) and legal numbers; `text-primary/82 dark:text-ring` |
-| **Workflow Actor Label** | `text-xs` (`12px`) | 400–500 | `0.02em` | default | JetBrains Mono **sentence case / lowercase-safe** (`Your team`, `AI`, `asym` with `translate="no"`) — never uppercased |
-| **StatusPill** | `text-xs` (`12px`) | 400 | `0.04em` | default | JetBrains Mono **sentence case** (`Sign‑ups closed`) with `min-h-8` pill border and `bg-ring` dot; `text-muted-foreground` |
-| **Brand wordmark** | `text-lg` | 600 | `-0.03em` | `none` | Plus Jakarta Sans, lowercase `asym`, `translate="no"` |
-
-**Minimum size:** Interface text is never smaller than `12px` (`text-xs`). Normal prose keeps `hyphens: none`, `overflow-wrap: normal`, and `word-break: normal`; compound terms such as `sign‑ups` and `early‑access` use non-breaking hyphens (`U+2011`) where line wraps could otherwise strand a short syllable.
+- **Hero H1 (`Newsreader`):** `clamp(2.85rem, 5.6vw, 4.75rem)`, `leading-[0.98]`, `font-medium`, `-0.03em` tracking (`One gift.` upright / _`Three hands.`_ italic).
+- **Section H2 (`Newsreader`):** `clamp(2rem, 3.8vw, 3.25rem)`, `leading-[1.03]`, `font-medium`, `-0.025em`.
+- **Manifesto Interlude (`Newsreader`):** `clamp(1.95rem, 4vw, 3.5rem)`, `leading-[1.1]`, alternating upright and italic cadence.
+- **Section Eyebrows (`Instrument Sans`):** Sentence case (`text-pine text-sm font-medium`), never tracked-out all-caps decoration.
+- **Minimum size floor:** Never smaller than `12px` (`text-xs`). Normal prose preserves `hyphens: none`, `overflow-wrap: normal`, and `word-break: normal`.
 
 ---
 
-## 4. Component Stylings
+## 4. Component & Page Architecture
 
-### Buttons & Inputs
+### Homepage Narrative Sequence (`app/(app)/page.tsx`)
 
-- All buttons are fully pill-shaped (`rounded-full`) via `components/ui/button-variants.ts`, with compositor-only press and icon transforms (`transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.97]`) and immediate hover color feedback so root theme switches synchronize in a single frame on both desktop and constrained mobile without forced style flushes.
-- Filled variants (`default`) use `bg-clip-border`, `font-semibold` (giving crisp, authoritative primary button weight in both light and dark modes with zero theme-toggle font-weight reflow), and `border border-transparent` so their optical outer height matches adjacent `outline` buttons (`44.0px`) while preserving high-contrast borders in Forced Colors Mode. Primary buttons carry an **ink-press specular edge** (`inset 0 1px 0` top highlight + `inset 0 -1px 0` base bevel).
-- Outline buttons use `border-input` (`>= 3.17:1` light / `3.37:1` dark, WCAG 1.4.11) on `bg-background/85`.
-- Auto-growing `Textarea` (`components/ui/textarea.tsx`) pairs `field-sizing-content` with `max-h-[min(22rem,50svh)] overflow-y-auto` so long notes scroll internally without pushing the submit button off-screen.
-- Focus indicators across buttons, inline links (`rounded-[0.375rem]` or `rounded-xs`, never `rounded-sm` which resolves to a `16px` pill oval), inputs (including explicit `aria-invalid:focus-visible:ring-destructive aria-invalid:focus-visible:ring-offset-2` so focused invalid controls remain unmistakably distinct from resting invalid fields), workflow cards (`has-[button:focus-visible]:ring-2`), and the theme control track (`has-[:focus-visible]:ring-2`) use `ring-ring ring-offset-background` plus Forced-Colors-safe outlines (`outline-2 outline-transparent` or `@media (forced-colors: active) { outline: 2px solid Highlight }`).
-- Touch targets meet `min-h-11` (`44px`) on mobile and `>= 24px` natively everywhere, with `touch-action: manipulation`.
-
-### Navigation, Brand Mark & Footer
-
-- **Floating Header (`components/header.tsx`) & Mobile Section Menu (`components/site/mobile-nav-menu.tsx`):** Fixed pill (`backdrop-blur-md bg-background/92`) with safe-area padding across portrait and landscape breakpoints and `prefetch={false}` on `/#...` hash links. Displays filled primary `"Request early access"` (`"Early access"` below `sm`) when configured, and a restrained `outline` `"Early access status"` pill (`"Early access"` below `sm`) when unconfigured so visitors know up front it leads to status rather than an open form, matched by `"Early access status"` in the Footer and 404 route. Below `md`, pairs with `MobileNavMenu` powered by `@ui-sdk/react/popover` (`Popover`, `PopoverTrigger` styled with `border-input bg-background/85` matching adjacent outline controls and naming the popover cleanly via `aria-label="Page sections"`, `PopoverContent`, `finalFocus` returning to `"trigger"` on Escape, trigger close, and non-interactive blank-space outside presses while leaving link navigation and interactive outside controls unobstructed, exact `size-11` pre-hydration spacer for `0px` CLS and `0` inert no-JS buttons). Shares the exact four destinations (`mobileNavigationLinks`: `Product`, `Open source`, `About`, `Where things stand`) and landmark name (`aria-label="Homepage sections"`) with the `<noscript>` fallback for complete no-JS parity, while `/not-found` names its in-page section list `aria-label="Explore the homepage"` to avoid duplicate mobile landmarks.
-- **`SiteLogoMark` (`components/site/site-logo-mark.tsx`):** Pure inline vector SVG rendered directly from `components/site/brand/mark-geometry.ts` using `stroke="currentColor"` (`size={28}` in header, `size={20}` in footer) — zero PNG image requests, zero `<head>` preload tags, and instant single-frame theme adaptation in light, dark, and Forced Colors modes.
-- **Homepage Colophon (`components/react-bits/wordmark-spotlight.tsx`):** Adapted from React Bits Pro (`@reactbits-pro/cta-8`). Rendered ONLY on the homepage (`/`) in a restrained `max-w-[32rem]` colophon container with tactile resting opacity (`0.095` light / `0.115` dark) so the page closes with editorial intention. Exact `Plus Jakarta Sans` SemiBold single vector `<path>` (`viewBox="0 0 1000 322"`, zero webfont flash, zero LCP hijacking, zero SVG `<mask>`), flat on `<sm` mobile and illuminated in both light and dark themes (`sm:fill-[url(#asym-wordmark-fill)] sm:dark:fill-[url(#asym-wordmark-fill)]`) under fine pointers via a direct SVG `<radialGradient>` fill updated with `gradientTransform="translate(...)"` resting at the `42%` stem ratio (zero mount-time layout read, passive scroll + `ResizeObserver` rect invalidation, live `prefers-reduced-motion` `change` listener that immediately cancels rAF and resets to rest, paused offscreen via `IntersectionObserver`, hidden in `forced-colors: active` and print).
-- **Footer (`components/footer.tsx`) & Segmented Theme Control (`components/theme-toggle.tsx`):**
-  - Quiet hairline-separated footer across all pages (`prefetch={false}` on hash links; omits redundant GitHub issue links when unconfigured).
-  - `ThemeToggle` uses `@ui-sdk/react/segmented-control` (`SegmentedControl`, `SegmentedControlItem`) for WAI-ARIA `radiogroup`/`radio` semantics, single roving tab stop, and arrow-key switching, styling the active pill directly via `data-checked:` on a quiet tactile Pressed Parchment / Sounding Deep (`bg-record`, `p-1`) track with a raised vellum active pill (`data-checked:bg-card data-checked:border-foreground/58` light / `dark:data-checked:bg-secondary dark:data-checked:border-ring/70` dark, `>= 3.5:1` boundary contrast on both inner and outer edges). Paints immediate optimistic pill selection and yields one animation frame before committing the root theme class so mobile Event Timing INP stays firmly in the `< 200ms` Good band even on constrained devices. Keyboard focus rings sit cleanly around the outer track (`has-[:focus-visible]:ring-2`) with zero border collision. Renders an exact-height `h-[3.375rem] sm:h-[2.625rem]` placeholder until hydrated (`0px` layout shift, zero inert no-JS controls), uses inline SVGs (zero `lucide-react` imported across any active route or client chunk), and pairs `forced-colors:data-checked:border-[Highlight] forced-colors:data-checked:bg-[Highlight] forced-colors:data-checked:text-[HighlightText]`.
-
-### Homepage Section Patterns (`components/site/home/`)
-
-Order: Hero -> Product (`#product`) -> Why connected -> Open source (`#open-source` / `#where-things-stand`) -> About (`#about`) -> Early access (`#early-access`) -> Homepage Colophon.
-
-1. **Hero (`HomeHero`):** Single-line pill eyebrow (`Open-source software for nonprofits`), plain-English two-line optical H1 (_"Website, giving, and donor records."_ in `font-semibold text-foreground` / _"One platform built to work with AI."_ in `font-medium text-muted-foreground`, stepped below `sm` for `320px` fold fit and matched at `sm:text-[1em]` from `640px` upward), and a `58 / 42` `lg:items-start` asymmetric lower band pairing the problem/consequence lead and CTAs (`"Request early access"` when configured, `"See how it works"` scrolling to `#product` when closed, plus `"View the code"`) with a top-aligned hairlined architectural status ledger introducing the page's two-state solid-vs-dashed visual language (`In the public code` vs. `In development`). Compact enough that the Workflow Plate header, key, and all four step cards enter cleanly above the `1440×900` fold. Zero infinite autoplay loops and zero redundant notice bars.
-2. **Datum & Sweep Workflow Plate (`#product`):** `border-t` `58 / 42` heading split (`lg:items-start`, intro aligned optically with the H2 top, framing the campaign workflow in development) + `WorkflowPlate` (`surface-panel overflow-hidden rounded-[2rem]`):
-   - Top header bar inside the plate displays the pointer-agnostic Inter instruction cue (`Select a step to trace records.` on `xl+`, `Select a step to highlight its records.` below `xl`, and `Campaign workflow in development` without JS) alongside the JetBrains Mono solid (`Your team`) vs. dashed (`AI / asym (in development)`) visual key before Step 1.
-   - Four steps (`1 Describe · Your team`, `2 Prepare · AI · In development`, `3 Review · Your team`, `4 Publish · asym · In development`) with parallel noun-list record bindings and unified future tense on in-development steps. Recomposes cleanly: vertical timeline on mobile, CSS-subgrid `2×2` grid (`sm:row-span-2 sm:grid sm:grid-rows-subgrid`) at `sm` through `lg` (`640px–1024px`) so paired cards top-align their `Records:` labels on one shared baseline regardless of chip wrapping, and equal-height `4`-across Datum & Sweep layout (`xl:grid-rows-[1fr_auto]`) at `xl+` (`1280px+`) so all four curved stems drop from one horizontal baseline.
-   - Human steps (`Describe`, `Review`) carry solid `border-rule` enclosures and Forced-Colors-bordered discs; in-development automated steps (`Prepare`, `Publish`) carry dashed `border-primary/34` enclosures, dashed discs, dashed `xl+` stems, and visible `"In development"` badges. Active styling matches card, `xl` actor mask, and pinned disc halo seamlessly.
-   - `xl+` stems are pure `30px`-wide quarter-ellipse curves (`border-bottom-left-radius: 30px 44px`) landing flush (`landPx = stemRect.right - 1`) into the arched **Datum Lid** (`.datum-lid`) separating the **Pressed Parchment / Sounding Deep** (`bg-record`) lower band. At `xl+`, the lower band aligns the four `Connected records` pills (`Campaign`, `Gift`, `Receipt`, `Donor history`) directly onto the `grid-cols-4` card rhythm (`pl-4` flush with each card's inner edge) with the mono `Connected records` caption directly underneath and zero stray resting ticks; selecting any step traces solid (Steps 1 & 3) or dashed (Steps 2 & 4) ink along the datum arch, drops centered vertical ticks (`translateX(-50%) scaleY(1)`) strictly onto connected records, and subtly quiets unconnected pills at full `opacity: 1` (`color: var(--muted-foreground)` over softened card/record tint, maintaining `>= 5.36:1` light / `>= 9.3:1` dark WCAG 2.2 AA contrast across every active step). Below `xl`, the tray omits duplicate record pills and leads directly with the concise `"Planned workflow:"` caption while each step card renders aligned inline `.wf-inline-chip` pills (`grid-cols-[auto_1fr]`) that highlight immediately in-viewport.
-   - Progressive-enhancement interactive highlighting (`WorkflowPlate` + `WorkflowStepTitle`): plain `<h3>` pre-hydration / no-JS; upgrades in-place to a native `<button type="button" aria-pressed>` without a resting hyperlink underline (showing its solid underline on hover, focus, or active/pinned state alongside full-card pointer affordance while keeping card text freely selectable), with `min-h-11` mobile touch box, card-level `has-[button:focus-visible]:ring-2`, and `:focus-visible`-gated `focusin` that preserves an existing pin until Enter/Space/Escape.
-3. **Why connected (`.section-wash-sky`):** `42 / 58` split with `lg:sticky` left heading (`Eyebrow`: `Why connected`) and right ruled editorial list (`Shared records`, `Same permissions as staff`, `Human approval before action`) anchored by bespoke `44×48` **`MarkGlyph`** SVGs (resting strokes in `--sweep-hairline` `30%` / `38%`, one official mark primitive inked in `--ink` per principle), clearly separating existing staff preview actions from in-development campaign approval history without repeating claims.
-4. **Open source Specification Plate (`#open-source` / `#where-things-stand`):** `42 / 58` split (`Eyebrow`: `Open source`) with concise H2 (_"The code is public."_), opening the lead with the paid managed subscription model and incorporating the planned optional managed donor care service cleanly in prose so the entire page maintains strictly two maturity states (`In the public code` and `In development`). The `Asymmetric-al/core` specification plate leads in its upper chamber with **`Where things stand`** (`20px` Plus Jakarta Sans H3, `Website and giving pages` first, unified JetBrains Mono group labels, clickable GitHub README maturity link) above the flush `.datum-lid` repository activity band (`Asymmetric-al/core`, mono `Public` badge, baseline-aligned `4,900+`, `590+`, `AGPL-3.0-only` stats).
-5. **About + Sweep Cascade (`.section-wash-accent`):** `42 / 58` first-person founder story (`Eyebrow`: `About`; `Conrad O’Brien and Blake`, linked `Asymmetric.al` GitHub organization, `Global Fellowship` context) followed by the full-width pure-CSS **`.about-sweep`** ordered manifesto cascade stepping in even `2.5rem` increments alongside the `7.5rem 8.5rem` elliptical curve.
-6. **Early access (`#early-access`):** Server-aware `surface-hero` panel (`42 / 58` split, `Eyebrow`: `Early access`) carrying a soft sky/sage editorial corner wash that bookends the Hero's warm-muted luminosity:
-   - Configured (`EarlyAccessConfigured`): updates the left column cleanly to `"What happens next."` on submission (describing team review and email follow-up without unverified enrollment claims), pairing with `<EarlyAccessForm method="post" action="/api/early-access" />` focusing `"Request received"` on success, plus a synchronous `submittingRef` double-submit lock, `readOnly={isSubmitting}` pending fields, automatic stale-alert dismissal on field edit, neutral styling for non-error `"not_configured"` notices, strict RFC-5321-safe local-part and DNS-label parity, `"Privacy policy"` new-tab link with screen-reader hint + ephemeral `sessionStorage` draft sync, width-stable submit button, capped auto-growing textarea, clamped `Retry-After` `(0, 600]`, and confirmation-cookie-verified relative `303` PRG redirect to `/early-access/status` (using `"Sign‑ups closed"` on unavailable states).
-   - Unconfigured (`Early access isn’t open yet.`): non-developer-first `"In the meantime"` card with primary `"See what’s built"` (`/#where-things-stand`) and secondary `"Follow progress on GitHub"` (`Asymmetric-al/core#readme`) actions.
+1. **Architectural Masthead (`components/header.tsx`):** Fixed full-width hairline-ruled bar (`backdrop-blur-md bg-background/94`), pure inline SVG `SiteLogoMark` + lowercase `asym` + subtle `For missions organizations` folio note (`lg+`), clean horizontal `Main` nav, honest dual-mode CTA (`Request early access` / `Early access` when configured; `Early access status` / `Access status` when unconfigured), and `@ui-sdk/react/popover` `MobileNavMenu` (`aria-label="Homepage sections"`, `0px` CLS spacer pre-hydration, full focus restoration across Escape/trigger/mouse/touch blank-space dismissal, exact 4-link `<noscript>` parity).
+2. **Hero & Living Three-Hand Specimen (`components/site/home/hero.tsx`, `gift-specimen.tsx`):** Asymmetric `44 / 56` opening spread. Left column presents the `Newsreader` headline, concrete standfirst, Vermilion primary CTA, GitHub link, and unified 3-ink visual key. Right column immediately displays the interactive **Three-Hand Specimen** powered by `@ui-sdk/react/tabs` (`Donor` · `Missionary` · `Office`) with a **fixed-position `GIFT-0418` anchor**, live amount (`$50`/`$100`/`$250`), cadence (`Monthly`/`One-time`), and `Test anonymous gift` controls (grounded in `Asymmetric-al/core`'s `is_anonymous` missionary redaction), CSS perforated receipt tear edge (`.receipt-perforation`) on the Donor view, polite `aria-live` updates, and a full static 3-view `<noscript>` triptych.
+3. **Act Two — Playable AI Appeal Approval Bench (`components/site/home/product-section.tsx`, `approval-bench.tsx`, `#product`):** Asymmetric `40 / 60` split framed in **Dashed Graphite** (`In development`) continuing the exact same `Field Team East` / `Rivera Household` scenario. Visitors inspect the permission-scoped donor audience, toggle a realistic staff edit (`Make a staff edit`), and press the **Postmark Vermilion `Approve draft` button** to stamp an embossed `-3.5deg` `APPROVED · STAFF REVIEW` seal (`150ms cubic-bezier(0.22, 1, 0.36, 1)`), transitioning the dashed draft to solid ink (`Sample only · nothing sent`) with a `Reset sample draft` control and a static `<noscript>` before/after explanation.
+4. **Why One Record (`components/site/home/connected-section.tsx`):** Sticky `40 / 60` ruled editorial list anchored by three bespoke `52×52` monoline object drawings (`components/site/brand/editorial-glyphs.tsx`: perforated receipt stub, redacted permission folio, vermilion approval seal).
+5. **Prussian Midnight Manifesto & Signed Founder Letter (`components/site/home/about-section.tsx`, `#about`):** Full-bleed dark interlude elevating the four-line cadence (_"A donor gives. A receipt goes out. A missionary sees the gift. Staff have the full picture."_) above Conrad O’Brien and Blake’s candid first-person letter (`Asymmetric.al`, Global Fellowship context, Newsreader italic signatures with vermilion hairline).
+6. **Archival Code Inventory & Commercial Model (`components/site/home/open-source-section.tsx`, `#open-source` / `#where-things-stand`):** Scannable ledger table mapping real `Asymmetric-al/core` modules (`apps/donor`, `apps/missionary`, `apps/admin`) against dashed in-development AI modules, dated activity stats (`4,900+` commits · `590+` merged PRs · `AGPL-3.0-only`, as of Nov 2026) linked to `Asymmetric-al/core#readme`, paired with `"How we’ll charge."` (paid hosted subscription + optional planned managed donor care; pricing not yet published).
+7. **Early Access Correspondence Folio (`components/site/home/early-access-section.tsx`, `early-access-form.tsx`, `#early-access`):** Cotton-paper folio crowned by a `3px` Postmark Vermilion hairline. Unconfigured mode (`:3100`) offers honest closed status with direct paths to the on-site inventory and README; configured mode (`:3101`) renders the progressive-enhancement form (`POST /api/early-access`, RFC-5321 validation, `sessionStorage` draft sync, honeypot, rate limit, anti-spoof `303` PRG redirect to `/early-access/status`, and a Postmark Vermilion stamped `"Request received"` confirmation card).
+8. **Archival Colophon Footer (`components/footer.tsx`) & Segmented Theme Control (`components/theme-toggle.tsx`):** Clean hairline footer with print colophon (_"Set in Newsreader, Instrument Sans, and IBM Plex Mono"_) and `@ui-sdk/react/segmented-control` theme selector (`Light` / `Dark` / `System`, `>= 3.7:1` active pill contrast, single roving tab stop, zero inert no-JS controls).
 
 ---
 
-## 5. Scrolling & Purposeful Motion
+## 5. Motion, Accessibility & Technical Floor
 
-- **Scrolling:** Native browser scrolling with a single `scroll-padding-top: 5.5rem` on `html` and `@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }`. Zero scroll-triggered entrance hides (`opacity: 0` reveals) and zero infinite autoplay loops anywhere on the site.
-- **Workflow Plate Choreography (user-triggered, `xl+`, `cubic-bezier(0.23, 1, 0.32, 1)`):**
-  - Phase 1: Active stem ink draws downward via `clip-path` (`180ms`, `0ms` delay) — solid for human steps (1, 3) and dashed for in-development steps (2, 4).
-  - Phase 2: Matching solid or dashed datum ink clips accurately via `clip-path` from `--land` ONLY to the farthest connected record node (`240ms`, `90ms` delay) while unconnected record pills shift smoothly to softened `--muted-foreground` styling at `opacity: 1` (WCAG 2.2 AA `>= 5.36:1` light / `>= 9.3:1` dark) with zero stray ticks.
-  - Phase 3: Matching solid or dashed vertical drop ticks (`translateX(-50%) scaleY(1)`) and connected pills illuminate outward from `--land` (`160ms`, `150ms + 40ms × rank`).
-  - **Keyboard focus, Enter/Space toggle/unpin & step switching (`[data-instant="true"]`):** Stem and datum snap immediately (`0.01ms`) and pills settle in `100ms` with `0ms` stagger, honoring Emil Kowalski's rule never to lag keyboard actions.
-  - **Reduced motion & print:** Global `prefers-reduced-motion: reduce` collapses both transition durations (`0.01ms`) and transition delays (`0s`); `@media print` hides active ink overlays so printed output stays crisp.
-- **Wordmark Spotlight (`WordmarkSpotlight`):** Smoothly updates its SVG `<radialGradient>` via `gradientTransform="translate(...)"` (`lerp 0.1`) only on fine pointers while intersecting the viewport (`IntersectionObserver`), invalidates its cached rect on `ResizeObserver` and passive scroll while in view, and runs zero work when offscreen, tab-hidden, touch-only, or under `prefers-reduced-motion: reduce`.
-
----
-
-## 6. Do Not
-
-- Do not use pure white (`#ffffff`) or pure black (`#000000`) for surfaces, text, or focus ring offsets.
-- Do not uppercase the product name (`asym` is always lowercase with `translate="no"`).
-- Do not draw the `asym` mark geometry behind headline text or as full-page background decoration.
-- Do not place global element rules outside `@layer base` where they override Tailwind v4 `@layer utilities`.
-- Do not remove `relative isolate` from the route shell wrapping `.page-atmosphere` (it keeps the negative-`z-index` watercolor wash and grain painted above `body`'s opaque canvas while staying offscreen-cullable).
-- Do not use `rounded-sm` (`16px`) on inline text links; use `rounded-[0.375rem]` or `rounded-xs`.
-- Do not add infinite autoplay loops (> 5 s without pause/stop controls) or hide core product copy at `opacity: 0` behind scroll-triggered reveals.
-- Do not apply `backdrop-filter: blur` to large static below-fold containers, use SVG `<feTurbulence>` filters over large canvases, or animate `box-shadow` on focusable controls.
-- Do not draw mock product interfaces, invent metrics/customers, route private privacy requests to public issue trackers, or portray Asymmetric.al as a nonprofit ministry.
+- **Purposeful motion only:** Sliding `@ui-sdk/react/tabs` indicator (`180ms cubic-bezier(0.23, 1, 0.32, 1)`), compositor-only stamp landing (`150ms cubic-bezier(0.22, 1, 0.36, 1)`), button press micro-scale (`active:scale-[0.97]`, `150ms`), and zero scroll-hijacking, zero autoplay loops, and zero `opacity: 0` content reveals.
+- **Reduced motion:** Global `@media (prefers-reduced-motion: reduce)` collapses both `transition-duration` (`0.01ms`) and `transition-delay` (`0s`) so every state snaps cleanly without delay residue.
+- **Accessibility & no-JS:** WCAG 2.2 AA contrast in light and dark modes across resting and active states, `>= 44px` mobile touch targets, distinct focused-invalid input rings, `(opens in a new tab)` SR hints on every `target="_blank"` link, unique `<nav>` landmarks across all routes (`Main`, `Homepage sections`, `Explore the homepage`, `Footer`), Forced Colors Mode fallbacks, and zero inert buttons without JavaScript.
+- **Security & hygiene:** Hardened CSP/HSTS/`X-Frame-Options: DENY`/`nosniff`/Permissions-Policy headers, fail-closed Payload/API gating, bounded 16 KB body cap, `415` multipart rejection, and anti-spoof confirmation cookie on `/early-access/status`.

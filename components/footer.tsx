@@ -8,7 +8,7 @@ import {
 } from "@/lib/early-access-config";
 
 const linkClassName =
-  "text-foreground/78 hover:text-foreground focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center rounded-[0.375rem] underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-9";
+  "text-foreground/82 hover:text-foreground focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center rounded-md underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-9";
 
 const currentYear = (): number => {
   const now = new Date();
@@ -20,26 +20,30 @@ export const Footer = () => {
   const isConfigured = isEarlyAccessConfigured();
 
   return (
-    <footer className="pb-8 sm:pb-10">
-      <div className="mx-auto max-w-[82rem] px-4 sm:px-6 lg:px-8">
-        <div className="border-foreground/12 flex flex-col gap-8 border-t pt-8 lg:flex-row lg:items-start lg:justify-between">
-          <div className="max-w-sm min-w-0">
+    <footer className="pb-10 sm:pb-12">
+      <div className="mx-auto max-w-[80rem] px-4 sm:px-6 lg:px-8">
+        <div className="border-rule-strong flex flex-col gap-8 border-t pt-9 lg:flex-row lg:items-start lg:justify-between">
+          <div className="max-w-md min-w-0">
             <Link
               href="/"
-              className="focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center gap-2 rounded-[0.375rem] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-9"
+              className="focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center gap-2 rounded-md focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-9"
               aria-label={`${siteConfig.shortName} home`}
             >
               <SiteLogoMark className="size-5" size={20} />
               <span
                 translate="no"
-                className="font-heading text-foreground -translate-y-px text-base leading-none font-semibold tracking-[-0.03em]"
+                className="text-foreground -translate-y-px font-sans text-base leading-none font-semibold tracking-[-0.03em]"
               >
                 {siteConfig.shortName}
               </span>
             </Link>
-            <p className="text-muted-foreground mt-2 text-sm leading-6">
-              Open-source software for nonprofits, built by{" "}
-              <span translate="no">{siteConfig.name}</span>.
+            <p className="text-muted-foreground mt-2.5 text-sm leading-6 text-pretty">
+              Open-source software for nonprofits, starting with missions
+              organizations. Built by{" "}
+              <span translate="no" className="text-foreground font-medium">
+                {siteConfig.name}
+              </span>
+              , an independent, for&#8209;profit software company.
             </p>
           </div>
 
@@ -101,10 +105,21 @@ export const Footer = () => {
           </div>
         </div>
 
+        {/* Archival colophon + theme selector */}
         <div className="border-rule text-muted-foreground mt-8 flex flex-col items-start gap-4 border-t pt-6 text-xs sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            &copy; {currentYear()} <span translate="no">{siteConfig.name}</span>
-          </p>
+          <div className="space-y-1">
+            <p>
+              &copy; {currentYear()}{" "}
+              <span translate="no">{siteConfig.name}</span> · Code:{" "}
+              <span translate="no" className="font-mono">
+                Asymmetric-al/core
+              </span>{" "}
+              (AGPL-3.0-only)
+            </p>
+            <p className="text-muted-foreground/85">
+              Set in Newsreader, Instrument Sans, and IBM Plex Mono.
+            </p>
+          </div>
           <ThemeToggle />
         </div>
       </div>

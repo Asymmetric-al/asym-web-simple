@@ -10,7 +10,7 @@ export const Eyebrow = ({
 }) => (
   <p
     className={cn(
-      "text-primary/82 dark:text-ring font-mono text-[0.8125rem] font-medium tracking-[0.02em]",
+      "text-pine font-sans text-sm font-medium tracking-[0.005em]",
       className
     )}
   >
@@ -30,7 +30,7 @@ export const SectionTitle = ({
   <h2
     id={id}
     className={cn(
-      "font-heading text-foreground mt-3.5 text-[clamp(1.95rem,3.6vw,3.05rem)] leading-[1.04] font-semibold tracking-[-0.04em] text-balance",
+      "font-heading text-foreground mt-3 text-[clamp(2rem,3.8vw,3.25rem)] leading-[1.03] font-medium tracking-[-0.025em] text-balance",
       className
     )}
   >
@@ -39,7 +39,7 @@ export const SectionTitle = ({
 );
 
 /**
-Small status label, used wherever planned or in-development work appears.
+Small status label used on standalone status routes.
 */
 export const StatusPill = ({
   children,
@@ -50,12 +50,12 @@ export const StatusPill = ({
 }) => (
   <p
     className={cn(
-      "border-foreground/14 bg-card/85 text-muted-foreground inline-flex min-h-8 w-fit items-center gap-2 rounded-full border px-3 py-1 font-mono text-xs tracking-[0.04em]",
+      "border-rule-strong bg-card text-muted-foreground inline-flex min-h-8 w-fit items-center gap-2 rounded-full border px-3 py-1 font-mono text-xs tracking-[0.02em]",
       className
     )}
   >
     <span
-      className="bg-ring size-1.5 shrink-0 rounded-full"
+      className="bg-vermilion size-1.5 shrink-0 rounded-full"
       aria-hidden="true"
     />
     {children}

@@ -8,7 +8,7 @@ export const siteConfig = {
   */
   shortName: "asym",
   description:
-    "Open-source platform for websites, giving, receipts, and donor records. AI campaign workflows in development, starting with missions organizations.",
+    "Open-source software for missions organizations: giving pages, receipts, donor records, and missionary updates on one shared record, with human-approved AI appeal drafting in development.",
   /**
   Production domain served by this project (Vercel `asym-web-simple`).
   */

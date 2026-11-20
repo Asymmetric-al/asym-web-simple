@@ -1,11 +1,11 @@
 {
   "name": "Asymmetric.al",
   "short_name": "asym",
-  "description": "Open-source connected websites, fundraising, donor records, and email for nonprofits, built by Asymmetric.al.",
+  "description": "Open-source software for missions organizations: giving pages, receipts, donor records, and missionary updates on one shared record, built by Asymmetric.al.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f6f2ea",
-  "theme_color": "#1e3a4f",
+  "background_color": "#f3eee3",
+  "theme_color": "#12202b",
   "icons": [
     {
       "src": "/brand/asym-icon-192.png",

@@ -2,8 +2,8 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { Container } from "@/components/site/container";
 import { GitHubMark } from "@/components/site/github-mark";
-import { ArrowUpRightIcon } from "@/components/site/icons";
 import { Eyebrow, SectionTitle } from "@/components/site/home/section-heading";
+import { ArrowUpRightIcon } from "@/components/site/icons";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { siteConfig } from "@/lib/config";
 import {
@@ -26,70 +26,75 @@ export const EarlyAccessSection = () => {
     <section
       id="early-access"
       aria-labelledby="early-access-title"
-      className="pt-[clamp(2rem,4vw,3rem)] pb-[clamp(2.5rem,5vw,4rem)]"
+      className="pb-[clamp(3.5rem,6vw,5.5rem)]"
     >
       <Container>
-        <div className="surface-hero relative overflow-hidden rounded-[2.25rem] p-5 sm:p-9 lg:p-12">
+        <div className="surface-folio relative overflow-hidden rounded-2xl p-6 sm:p-10 lg:p-12">
+          {/* Subtle top correspondence accent bar */}
+          <div
+            aria-hidden="true"
+            className="bg-vermilion/85 absolute inset-x-0 top-0 h-[3px]"
+          />
+
           {isConfigured ? (
             <EarlyAccessConfigured contactEmail={contactEmail} />
           ) : (
-            <div className="relative z-10 grid gap-8 lg:grid-cols-[minmax(0,42fr)_minmax(0,58fr)] lg:items-start lg:gap-12">
+            <div className="grid gap-8 lg:grid-cols-[minmax(0,44fr)_minmax(0,56fr)] lg:items-start lg:gap-12">
               <div className="min-w-0">
                 <Eyebrow>Early access</Eyebrow>
                 <SectionTitle id="early-access-title">
                   Early access isn’t open yet.
                 </SectionTitle>
-                <p className="text-muted-foreground mt-5 max-w-[34rem] text-base leading-7 text-pretty sm:text-lg sm:leading-8">
+                <p className="text-muted-foreground mt-4 max-w-[32rem] text-base leading-7 text-pretty sm:text-[1.0625rem] sm:leading-8">
                   We’re finishing the first campaign workflow for missions
                   organizations. When sign&#8209;ups open, you’ll be able to
                   request access for your team here.
                 </p>
               </div>
-              <div className="min-w-0">
-                <div className="sm:border-rule sm:bg-card sm:rounded-[1.6rem] sm:border sm:p-8">
-                  <h3 className="font-heading text-foreground text-2xl font-semibold tracking-[-0.025em]">
-                    In the meantime
-                  </h3>
-                  <p className="text-muted-foreground mt-3 text-base leading-7 text-pretty">
-                    See what’s built and what’s in development, or follow public
-                    progress in the repository README.
-                  </p>
-                  <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                    <Link
-                      href="/#where-things-stand"
-                      prefetch={false}
-                      className={cn(buttonVariants({ size: "lg" }), "px-6")}
-                    >
-                      See what’s built
-                    </Link>
-                    <a
-                      href={`${siteConfig.repoUrl}#readme`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={cn(
-                        buttonVariants({ variant: "outline", size: "lg" }),
-                        "px-6"
-                      )}
-                    >
-                      <GitHubMark className="size-4" />
-                      Follow progress on GitHub
-                      <span className="sr-only"> (opens in a new tab)</span>
-                      <ArrowUpRightIcon dataIcon="inline-end" />
-                    </a>
-                  </div>
-                  {contactEmail ? (
-                    <p className="text-muted-foreground mt-5 text-sm leading-6">
-                      Or email{" "}
-                      <a
-                        href={`mailto:${contactEmail}?subject=asym%20early%20access`}
-                        className="text-foreground hover:text-primary focus-visible:ring-ring focus-visible:ring-offset-background link-resilient rounded-xs underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent"
-                      >
-                        {contactEmail}
-                      </a>
-                      .
-                    </p>
-                  ) : null}
+              <div className="border-rule min-w-0 border-t pt-6 lg:border-t-0 lg:border-l lg:pt-1 lg:pl-10">
+                <h3 className="font-heading text-foreground text-2xl font-medium tracking-[-0.02em]">
+                  In the meantime
+                </h3>
+                <p className="text-muted-foreground mt-2.5 text-base leading-7 text-pretty">
+                  Inspect the public code inventory above, try the sample gift
+                  and approval draft, or follow progress in the repository
+                  README.
+                </p>
+                <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                  <Link
+                    href="/#where-things-stand"
+                    prefetch={false}
+                    className={cn(buttonVariants({ size: "lg" }), "px-6")}
+                  >
+                    See what’s built
+                  </Link>
+                  <a
+                    href={`${siteConfig.repoUrl}#readme`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={cn(
+                      buttonVariants({ variant: "outline", size: "lg" }),
+                      "px-6"
+                    )}
+                  >
+                    <GitHubMark className="size-4" />
+                    Follow progress on GitHub
+                    <span className="sr-only"> (opens in a new tab)</span>
+                    <ArrowUpRightIcon dataIcon="inline-end" />
+                  </a>
                 </div>
+                {contactEmail ? (
+                  <p className="text-muted-foreground mt-5 text-sm leading-6">
+                    Or email{" "}
+                    <a
+                      href={`mailto:${contactEmail}?subject=asym%20early%20access`}
+                      className="text-foreground hover:text-pine focus-visible:ring-ring focus-visible:ring-offset-card link-resilient rounded-xs underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent"
+                    >
+                      {contactEmail}
+                    </a>
+                    .
+                  </p>
+                ) : null}
               </div>
             </div>
           )}

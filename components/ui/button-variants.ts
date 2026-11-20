@@ -7,15 +7,16 @@ export const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground hover:bg-primary/90 bg-clip-border font-semibold shadow-[inset_0_1px_0_rgb(255_255_255/12%),inset_0_-1px_0_rgb(0_0_0/18%),0_18px_44px_-28px_rgb(30_58_79/72%)] dark:shadow-[inset_0_1px_0_rgb(255_255_255/55%),inset_0_-1px_0_rgb(13_20_26/16%),0_16px_38px_-24px_rgb(0_0_0/75%)]",
+          "bg-primary text-primary-foreground hover:bg-primary/92 bg-clip-border font-semibold shadow-[inset_0_1px_0_rgb(255_255_255/18%),inset_0_-1px_0_rgb(18_32_43/24%),0_14px_32px_-20px_rgb(179_58_34/52%)] dark:shadow-[inset_0_1px_0_rgb(255_255_255/32%),inset_0_-1px_0_rgb(11_19_26/22%),0_14px_32px_-20px_rgb(0_0_0/75%)]",
+        ink: "bg-foreground text-background hover:bg-foreground/90 bg-clip-border font-semibold shadow-sm",
         outline:
-          "border-input bg-background/85 text-foreground hover:bg-secondary/72 shadow-sm",
+          "border-input bg-card text-foreground hover:bg-secondary shadow-xs",
         ghost: "hover:bg-muted hover:text-foreground",
       },
       size: {
         default:
           "min-h-11 px-4 py-2 leading-[1.15] has-data-[icon=inline-end]:pr-3 has-data-[icon=inline-start]:pl-3 sm:min-h-10",
-        lg: "min-h-11 px-5 py-2.5 text-[0.95rem] leading-[1.15]",
+        lg: "min-h-11 px-5 py-2.5 text-[0.9375rem] leading-[1.15]",
         "icon-sm": "size-11 shrink-0 sm:size-9",
       },
     },

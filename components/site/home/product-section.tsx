@@ -1,281 +1,124 @@
 import Link from "next/link";
 import { Container } from "@/components/site/container";
-import { Eyebrow, SectionTitle } from "@/components/site/home/section-heading";
-import {
-  WorkflowPlate,
-  WorkflowStepTitle,
-} from "@/components/site/home/workflow-plate";
+import { ApprovalBench } from "@/components/site/home/approval-bench";
+import { SectionTitle } from "@/components/site/home/section-heading";
 import { cn } from "@/lib/utils";
 
-const DONOR_HISTORY_LABEL = "Donor\u{00A0}history";
-
-const workflowSteps = [
+const campaignStages = [
   {
-    number: 1,
-    title: "Describe",
+    step: "01",
     actor: "Your team",
-    isAiStep: false,
-    inDevelopment: false,
-    records: ["Campaign"],
-    text: "Set the fundraising goal, the project it supports, and who you want to reach.",
+    title: "Describe the appeal",
+    detail: "Set the goal, fund, and field project.",
+    isDraft: false,
   },
   {
-    number: 2,
-    title: "Prepare",
-    actor: "AI",
-    isAiStep: true,
-    inDevelopment: true,
-    records: ["Campaign", DONOR_HISTORY_LABEL],
-    text: "AI will draft the giving page and email, suggest a donor audience, and prepare the follow\u{2011}up.",
+    step: "02",
+    actor: "AI draft",
+    title: "Prepare page, email & audience",
+    detail: "Drafted strictly within your staff permissions.",
+    isDraft: true,
   },
   {
-    number: 3,
-    title: "Review",
+    step: "03",
     actor: "Your team",
-    isAiStep: false,
-    inDevelopment: false,
-    records: ["Campaign", DONOR_HISTORY_LABEL],
-    text: "Edit the draft page and email, verify the recipient list, and decide what goes live.",
+    title: "Edit & approve before sending",
+    detail: "Nothing emails a donor or changes your site without sign-off.",
+    isDraft: false,
   },
   {
-    number: 4,
-    title: "Publish",
+    step: "04",
     actor: "asym",
-    isAiStep: false,
-    inDevelopment: true,
-    records: ["Campaign", "Gift", "Receipt", DONOR_HISTORY_LABEL],
-    text: "Once your team approves, asym will publish the giving page on your website and tie each gift and receipt to donor history.",
+    title: "Publish & tie gifts to history",
+    detail: "Every resulting gift and receipt lands on the same record.",
+    isDraft: true,
   },
-] as const;
-
-const recordNodes = [
-  { label: "Campaign", steps: "1 2 3 4" },
-  { label: "Gift", steps: "4" },
-  { label: "Receipt", steps: "4" },
-  { label: DONOR_HISTORY_LABEL, steps: "2 3 4" },
 ] as const;
 
 export const ProductSection = () => (
   <section
     id="product"
     aria-labelledby="product-title"
-    className="pb-[clamp(3.25rem,6vw,5.25rem)]"
+    className="pb-[clamp(3.5rem,6vw,5.5rem)]"
   >
     <Container>
-      <div className="border-rule border-t pt-8 sm:pt-10 lg:pt-11">
-        <div className="grid gap-4 lg:grid-cols-[minmax(0,58fr)_minmax(0,42fr)] lg:items-start lg:gap-12">
-          <div>
-            <Eyebrow>The first workflow</Eyebrow>
-            <SectionTitle id="product-title">
-              From the appeal brief to the gift receipt.
-            </SectionTitle>
-          </div>
-          <p className="text-muted-foreground max-w-[42rem] text-base leading-7 text-pretty sm:text-lg sm:leading-8 lg:pt-7">
-            This campaign workflow is in development on top of our public code.
-            It brings the giving page, donor email, audience, and
-            follow&#8209;up into one reviewable flow.
-          </p>
-        </div>
-
-        <WorkflowPlate className="wf-plate surface-panel mt-5 overflow-hidden rounded-[2rem] lg:mt-5">
-          <div className="border-rule/80 bg-record/45 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-b px-5 py-3 sm:px-8">
-            <p className="text-muted-foreground text-[0.8125rem] leading-5">
-              <span className="hidden [.wf-plate[data-interactive='true']_&]:inline xl:[.wf-plate[data-interactive='true']_&]:hidden">
-                Select a step to highlight its records.
-              </span>
-              <span className="hidden xl:[.wf-plate[data-interactive='true']_&]:inline">
-                Select a step to trace records.
-              </span>
-              <span className="[.wf-plate[data-interactive='true']_&]:hidden">
-                Campaign workflow in development
-              </span>
+      <div className="border-rule border-t pt-12 sm:pt-16">
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,40fr)_minmax(0,60fr)] lg:items-start lg:gap-12">
+          <div className="min-w-0">
+            <p className="text-draft inline-flex items-center gap-2 font-mono text-xs font-medium tracking-[0.02em]">
+              <span
+                aria-hidden="true"
+                className="border-draft inline-block w-4 border-t-[1.5px] border-dashed"
+              />
+              In development · Built on the shared record
             </p>
-            <div className="text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-xs tracking-[0.02em]">
-              <span className="inline-flex items-center gap-1.5">
-                <span
-                  aria-hidden="true"
-                  className="border-ink inline-block w-3.5 border-t-[1.5px]"
-                />
-                Your team
-              </span>
-              <span className="inline-flex items-center gap-1.5">
-                <span
-                  aria-hidden="true"
-                  className="border-ink inline-block w-3.5 border-t-[1.5px] border-dashed"
-                />
-                AI / <span translate="no">asym</span> (in development)
-              </span>
-            </div>
-          </div>
+            <SectionTitle id="product-title">
+              Before an appeal goes out.
+            </SectionTitle>
+            <p className="text-muted-foreground mt-4 max-w-[34rem] text-base leading-7 text-pretty sm:text-[1.0625rem] sm:leading-8">
+              When a field project needs year&#8209;end support, your team
+              shouldn’t rebuild pages, donor lists, and thank&#8209;you emails
+              by hand. We’re building AI drafting that works inside your
+              existing permissions and stops for a person’s stamp.
+            </p>
 
-          <div className="relative px-5 pt-6 sm:px-8 sm:pt-8">
-            <div
-              aria-hidden="true"
-              className="bg-rule pointer-events-none absolute top-[3.125rem] right-16 left-16 hidden h-px xl:block"
-            />
-
-            <ol className="relative grid gap-5 sm:grid-cols-2 sm:gap-5 xl:grid-cols-4 xl:gap-4">
-              {workflowSteps.map((step, index) => {
-                const isLast = index === workflowSteps.length - 1;
-                const describedById = `wf-records-${step.number}`;
-                const cardClass = step.inDevelopment
-                  ? "wf-step-card group/step border-primary/34 relative rounded-[1.35rem] border border-dashed p-4 sm:row-span-2 sm:grid sm:grid-rows-subgrid sm:gap-y-3.5 xl:row-span-1 xl:block [.wf-plate[data-interactive='true']_&]:cursor-pointer has-[button:focus-visible]:ring-2 has-[button:focus-visible]:ring-ring has-[button:focus-visible]:ring-offset-2 has-[button:focus-visible]:ring-offset-card"
-                  : "wf-step-card group/step border-rule relative rounded-[1.35rem] border p-4 sm:row-span-2 sm:grid sm:grid-rows-subgrid sm:gap-y-3.5 xl:row-span-1 xl:block [.wf-plate[data-interactive='true']_&]:cursor-pointer has-[button:focus-visible]:ring-2 has-[button:focus-visible]:ring-ring has-[button:focus-visible]:ring-offset-2 has-[button:focus-visible]:ring-offset-card";
-
-                return (
-                  <li
-                    key={step.title}
-                    data-step={String(step.number)}
+            <ol className="border-rule divide-rule mt-7 divide-y border-y">
+              {campaignStages.map((stage) => (
+                <li
+                  key={stage.step}
+                  className="grid grid-cols-[2.25rem_1fr] items-baseline gap-3 py-3.5"
+                >
+                  <span
                     className={cn(
-                      "wf-step relative flex gap-3.5 sm:row-span-2 sm:grid sm:grid-rows-subgrid sm:gap-0 xl:row-span-1 xl:grid-rows-[1fr_auto]",
-                      step.inDevelopment && "wf-step-dev"
+                      "font-mono text-xs tabular-nums",
+                      stage.isDraft
+                        ? "text-draft"
+                        : "text-vermilion font-medium"
                     )}
                   >
-                    {/* Mobile vertical rail column (aligned cleanly across all 4 steps) */}
-                    <div className="relative flex w-8 shrink-0 justify-center sm:hidden">
+                    {stage.step}
+                  </span>
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-baseline justify-between gap-2">
+                      <h3 className="text-foreground font-sans text-sm font-semibold">
+                        {stage.title}
+                      </h3>
                       <span
-                        className={cn(
-                          "wf-disc relative z-10 flex size-8 shrink-0 items-center justify-center rounded-full font-mono text-sm tabular-nums",
-                          step.inDevelopment
-                            ? "border-primary/65 bg-background text-primary dark:text-ring border border-dashed"
-                            : "bg-primary text-primary-foreground border border-transparent forced-colors:border-[CanvasText]"
-                        )}
-                        aria-hidden="true"
+                        translate={stage.actor === "asym" ? "no" : undefined}
+                        className="text-muted-foreground font-mono text-xs"
                       >
-                        {step.number}
+                        {stage.actor}
                       </span>
-                      {isLast ? null : (
-                        <span
-                          aria-hidden="true"
-                          className="bg-rule pointer-events-none absolute top-8 -bottom-6 left-1/2 w-px -translate-x-1/2"
-                        />
-                      )}
                     </div>
-
-                    <div className={cn("min-w-0 flex-1", cardClass)}>
-                      <div>
-                        <div className="flex flex-wrap items-center justify-between gap-2">
-                          <span
-                            className={cn(
-                              "wf-disc relative z-10 hidden size-8 shrink-0 items-center justify-center rounded-full font-mono text-sm tabular-nums sm:flex",
-                              step.inDevelopment
-                                ? "border-primary/65 bg-background text-primary dark:text-ring border border-dashed"
-                                : "bg-primary text-primary-foreground border border-transparent forced-colors:border-[CanvasText]"
-                            )}
-                            aria-hidden="true"
-                          >
-                            {step.number}
-                          </span>
-                          <div className="wf-actor-mask relative z-10 flex flex-wrap items-center gap-1.5 rounded-full xl:px-1.5 xl:py-0.5">
-                            <span
-                              translate={
-                                step.actor === "asym" ? "no" : undefined
-                              }
-                              className={cn(
-                                "font-mono text-xs tracking-[0.02em]",
-                                step.isAiStep
-                                  ? "text-primary dark:text-ring font-medium"
-                                  : "text-muted-foreground"
-                              )}
-                            >
-                              {step.actor}
-                            </span>
-                            {step.inDevelopment ? (
-                              <span className="border-primary/30 bg-background/85 text-muted-foreground rounded-full border border-dashed px-2 py-0.5 font-mono text-xs tracking-[0.02em]">
-                                In development
-                              </span>
-                            ) : null}
-                          </div>
-                        </div>
-
-                        <h3 className="wf-step-title font-heading text-foreground mt-2.5 text-xl font-semibold tracking-[-0.015em] sm:mt-4">
-                          <WorkflowStepTitle
-                            stepNumber={step.number}
-                            title={step.title}
-                            describedById={describedById}
-                          />
-                        </h3>
-                        <p id={describedById} className="sr-only">
-                          {`Records: ${step.records.join(", ")}`}
-                        </p>
-                        <p className="text-muted-foreground mt-2 text-sm leading-6 text-pretty sm:text-[0.96875rem] sm:leading-[1.68]">
-                          {step.text}
-                        </p>
-                      </div>
-                      <div
-                        aria-hidden="true"
-                        className="wf-step-records mt-3 grid grid-cols-[auto_1fr] content-start items-baseline gap-x-2 text-xs sm:mt-0 xl:hidden"
-                      >
-                        <span className="text-muted-foreground font-mono tracking-[0.02em]">
-                          Records:
-                        </span>
-                        <div className="flex flex-wrap gap-1.5">
-                          {step.records.map((record) => (
-                            <span
-                              key={record}
-                              className="wf-inline-chip border-rule bg-card/85 text-foreground/85 inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium"
-                            >
-                              {record}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Desktop Datum & Sweep curved stem connecting step into the record band */}
-                    <div className="wf-stem hidden xl:block" aria-hidden="true">
-                      <span className="wf-stem-ink" />
-                    </div>
-                  </li>
-                );
-              })}
-            </ol>
-          </div>
-
-          <div className="datum-lid bg-record mt-6 px-5 pt-7 pb-6 sm:mt-8 sm:px-8 md:pt-[1.875rem] md:pb-7 xl:mt-0">
-            <span className="wf-datum-ink hidden xl:block" aria-hidden="true" />
-            <div className="hidden xl:block">
-              <div className="grid grid-cols-4 gap-4">
-                {recordNodes.map((node) => (
-                  <div key={node.label} className="pl-4">
-                    <span
-                      data-steps={node.steps}
-                      className="wf-node border-rule bg-card text-foreground inline-flex items-center justify-center rounded-full border px-3.5 py-1.5 text-[0.8125rem] font-medium"
-                    >
-                      {node.label}
-                    </span>
+                    <p className="text-muted-foreground mt-1 text-sm leading-6">
+                      {stage.detail}
+                    </p>
                   </div>
-                ))}
-              </div>
-              <p className="text-primary/82 dark:text-ring mt-2.5 pl-4 font-mono text-xs font-medium tracking-[0.02em]">
-                Connected records
-              </p>
-            </div>
+                </li>
+              ))}
+            </ol>
 
-            <div className="xl:border-rule/60 xl:mt-4 xl:border-t xl:pt-4">
-              <p className="text-muted-foreground max-w-[54rem] text-sm leading-6 text-pretty xl:pl-4">
-                <span className="text-foreground font-medium">
-                  Planned workflow:
-                </span>{" "}
-                For a year&#8209;end appeal, your team edits and approves the
-                draft before <span translate="no">asym</span> publishes the
-                giving page and links each gift to the donor’s record.
-              </p>
-            </div>
+            <p className="text-muted-foreground mt-5 text-sm leading-6">
+              Check{" "}
+              <Link
+                href="/#where-things-stand"
+                prefetch={false}
+                className="text-foreground hover:text-pine focus-visible:ring-ring focus-visible:ring-offset-background rounded-xs font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent"
+              >
+                the public code inventory
+              </Link>{" "}
+              for what exists in{" "}
+              <span translate="no" className="font-mono text-xs">
+                Asymmetric-al/core
+              </span>{" "}
+              today.
+            </p>
           </div>
-        </WorkflowPlate>
 
-        <p className="text-muted-foreground mt-5 max-w-3xl text-sm leading-6">
-          See{" "}
-          <Link
-            href="/#where-things-stand"
-            prefetch={false}
-            className="text-foreground hover:text-primary focus-visible:ring-ring focus-visible:ring-offset-background rounded-[0.375rem] font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent"
-          >
-            where things stand
-          </Link>{" "}
-          for what is already in the public code versus in development.
-        </p>
+          <div className="min-w-0 lg:pt-2">
+            <ApprovalBench />
+          </div>
+        </div>
       </div>
     </Container>
   </section>

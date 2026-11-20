@@ -12,26 +12,49 @@ export const size = {
 };
 export const contentType = "image/png";
 
-const INK = "#16212B";
-const MUTED = "#54636F";
-const RING = "#235D85";
-const DATUM_BORDER = "1.5px solid rgba(30,58,79,0.18)";
-const FONT_FAMILY = "Plus Jakarta Sans";
+const PAPER = "#F3EEE3";
+const SHEET = "#FCFBF7";
+const RECORD = "#E9E2D2";
+const INK = "#12202B";
+const MUTED = "#485763";
+const PINE = "#1B574C";
+const PINE_SOFT = "#E3EEE9";
+const VERMILION = "#B33A22";
+const VERMILION_SOFT = "#F8EBE6";
+const RULE = "rgba(18,32,43,0.18)";
+const SPACE_BETWEEN = "space-between";
+const FONT_NEWSREADER = '"Newsreader"';
+const FONT_MONO = '"IBM Plex Mono"';
 
 export default async function openGraphImage() {
-  const [logoData, mediumFont, semiBoldFont, boldFont] = await Promise.all([
+  const [
+    logoData,
+    newsreaderRegular,
+    newsreaderSemiBold,
+    newsreaderItalic,
+    instrumentMedium,
+    instrumentSemiBold,
+    plexMonoMedium,
+  ] = await Promise.all([
     readFile(
       path.join(process.cwd(), "public", "brand", "asym-mark-dark.png"),
       "base64"
     ),
     readFile(
-      path.join(process.cwd(), "lib", "fonts", "PlusJakartaSans-Medium.ttf")
+      path.join(process.cwd(), "lib", "fonts", "Newsreader-Regular.ttf")
     ),
     readFile(
-      path.join(process.cwd(), "lib", "fonts", "PlusJakartaSans-SemiBold.ttf")
+      path.join(process.cwd(), "lib", "fonts", "Newsreader-SemiBold.ttf")
+    ),
+    readFile(path.join(process.cwd(), "lib", "fonts", "Newsreader-Italic.ttf")),
+    readFile(
+      path.join(process.cwd(), "lib", "fonts", "InstrumentSans-Medium.ttf")
     ),
     readFile(
-      path.join(process.cwd(), "lib", "fonts", "PlusJakartaSans-Bold.ttf")
+      path.join(process.cwd(), "lib", "fonts", "InstrumentSans-SemiBold.ttf")
+    ),
+    readFile(
+      path.join(process.cwd(), "lib", "fonts", "IBMPlexMono-Medium.ttf")
     ),
   ]);
   const logoSrc = `data:image/png;base64,${logoData}`;
@@ -40,152 +63,260 @@ export default async function openGraphImage() {
     <div
       style={{
         display: "flex",
-        height: "100%",
         width: "100%",
-        background: "#f6f2ea",
-        padding: "28px",
-        fontFamily: '"Plus Jakarta Sans"',
+        height: "100%",
+        background: PAPER,
+        padding: "44px 52px",
+        fontFamily: '"Instrument Sans"',
         color: INK,
+        justifyContent: SPACE_BETWEEN,
+        alignItems: "stretch",
+        gap: "42px",
       }}
     >
-      {/* Card framed like the official asym mark with a Datum Lid record band */}
+      {/* Left editorial column */}
       <div
         style={{
           display: "flex",
           flexDirection: "column",
-          width: "100%",
-          height: "100%",
-          background: "#fbfaf7",
-          border: "2px solid rgba(30,58,79,0.22)",
-          borderRadius: "56px",
-          overflow: "hidden",
+          justifyContent: SPACE_BETWEEN,
+          width: "540px",
+          paddingTop: "6px",
+          paddingBottom: "6px",
         }}
       >
-        {/* Upper mark chamber: brand wordmark + status */}
+        <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+          <img
+            src={logoSrc}
+            alt=""
+            width={40}
+            height={40}
+            style={{ display: "block", objectFit: "contain" }}
+          />
+          <span
+            style={{
+              fontSize: 30,
+              fontWeight: 600,
+              letterSpacing: "-0.03em",
+            }}
+          >
+            asym
+          </span>
+          <span style={{ color: RULE, fontSize: 22 }}>|</span>
+          <span style={{ fontSize: 18, fontWeight: 500, color: PINE }}>
+            Open source · AGPL-3.0-only
+          </span>
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <div
+            style={{
+              fontFamily: FONT_NEWSREADER,
+              fontSize: 82,
+              lineHeight: 0.98,
+              fontWeight: 600,
+              letterSpacing: "-0.03em",
+            }}
+          >
+            One gift.
+          </div>
+          <div
+            style={{
+              fontFamily: FONT_NEWSREADER,
+              fontStyle: "italic",
+              fontSize: 82,
+              lineHeight: 1,
+              fontWeight: 500,
+              letterSpacing: "-0.03em",
+              color: INK,
+            }}
+          >
+            Three hands.
+          </div>
+          <div
+            style={{
+              marginTop: "24px",
+              fontSize: 22,
+              lineHeight: 1.45,
+              fontWeight: 500,
+              color: MUTED,
+            }}
+          >
+            Giving pages, receipts, donor records, and missionary updates on one
+            shared open-source record.
+          </div>
+        </div>
+
         <div
           style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "space-between",
-            height: "152px",
-            padding: "0 56px",
+            gap: "12px",
+            borderTop: `1px solid ${RULE}`,
+            paddingTop: "18px",
+            fontSize: 18,
+            fontWeight: 500,
+            color: MUTED,
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-            <img
-              src={logoSrc}
-              alt=""
-              width={52}
-              height={52}
-              style={{ display: "block", objectFit: "contain" }}
-            />
+          <span>
+            Built by Asymmetric.al · Starting with missions organizations
+          </span>
+        </div>
+      </div>
+
+      {/* Right specimen card */}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          flex: 1,
+          background: RECORD,
+          border: `1.5px solid rgba(18,32,43,0.28)`,
+          borderRadius: "24px",
+          padding: "22px",
+          justifyContent: SPACE_BETWEEN,
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: SPACE_BETWEEN,
+            alignItems: "center",
+            fontFamily: FONT_MONO,
+            fontSize: 14,
+            color: MUTED,
+          }}
+        >
+          <span>SAMPLE RECORD · GIFT-0418</span>
+          <span
+            style={{
+              background: PINE_SOFT,
+              color: PINE,
+              borderRadius: "999px",
+              padding: "4px 12px",
+              fontWeight: 500,
+            }}
+          >
+            In public code
+          </span>
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            background: SHEET,
+            border: `1.5px solid rgba(18,32,43,0.22)`,
+            borderRadius: "16px",
+            padding: "26px",
+            marginTop: "14px",
+            flex: 1,
+            justifyContent: SPACE_BETWEEN,
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: SPACE_BETWEEN,
+              alignItems: "flex-start",
+              borderBottom: `1px solid ${RULE}`,
+              paddingBottom: "18px",
+            }}
+          >
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <span
+                style={{
+                  fontFamily: FONT_MONO,
+                  fontSize: 14,
+                  color: PINE,
+                }}
+              >
+                RECEIPT #R-0418 · SETTLED
+              </span>
+              <span
+                style={{
+                  fontFamily: FONT_NEWSREADER,
+                  fontSize: 34,
+                  fontWeight: 600,
+                  marginTop: "6px",
+                }}
+              >
+                Official Gift Receipt
+              </span>
+            </div>
             <span
               style={{
-                fontSize: 40,
+                fontFamily: FONT_NEWSREADER,
+                fontSize: 38,
                 fontWeight: 600,
-                letterSpacing: "-0.03em",
               }}
             >
-              asym
+              $100
             </span>
           </div>
 
           <div
             style={{
               display: "flex",
-              alignItems: "center",
+              flexDirection: "column",
               gap: "12px",
-              fontSize: 22,
-              fontWeight: 500,
-              color: MUTED,
+              marginTop: "18px",
             }}
           >
+            {[
+              { role: "Donor", detail: "Receipt #R-0418 & donor portal" },
+              { role: "Missionary", detail: "Partner roster & thank-you note" },
+              { role: "Office", detail: "Fund 310-EAST-WATER & CRM" },
+            ].map((item) => (
+              <div
+                key={item.role}
+                style={{
+                  display: "flex",
+                  justifyContent: SPACE_BETWEEN,
+                  alignItems: "center",
+                  background: PAPER,
+                  borderRadius: "10px",
+                  padding: "12px 16px",
+                }}
+              >
+                <span style={{ fontSize: 18, fontWeight: 600, color: INK }}>
+                  {item.role}
+                </span>
+                <span style={{ fontSize: 16, fontWeight: 500, color: MUTED }}>
+                  {item.detail}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: SPACE_BETWEEN,
+              alignItems: "center",
+              marginTop: "18px",
+              paddingTop: "16px",
+              borderTop: `1px dashed rgba(74,89,102,0.45)`,
+            }}
+          >
+            <span style={{ fontSize: 16, fontWeight: 500, color: MUTED }}>
+              AI appeals in development
+            </span>
             <span
               style={{
-                width: "10px",
-                height: "10px",
-                borderRadius: "999px",
-                background: RING,
-              }}
-            />
-            <span>In development</span>
-          </div>
-        </div>
-
-        {/* Lower Datum Lid band (Pressed Parchment) */}
-        <div
-          style={{
-            display: "flex",
-            flex: 1,
-            flexDirection: "column",
-            justifyContent: "center",
-            background: "#f3eee4",
-            borderTop: DATUM_BORDER,
-            borderLeft: DATUM_BORDER,
-            borderRight: DATUM_BORDER,
-            borderTopLeftRadius: "48px",
-            borderTopRightRadius: "48px",
-            marginLeft: "-1.5px",
-            marginRight: "-1.5px",
-            padding: "44px 56px 48px",
-          }}
-        >
-          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-            <div
-              style={{
-                fontSize: 56,
-                lineHeight: 1.06,
-                fontWeight: 600,
-                letterSpacing: "-0.03em",
-              }}
-            >
-              Website, giving, and donor records.
-            </div>
-            <div
-              style={{
-                fontSize: 56,
-                lineHeight: 1.06,
+                border: `2px solid ${VERMILION}`,
+                background: VERMILION_SOFT,
+                color: VERMILION,
+                borderRadius: "6px",
+                padding: "5px 12px",
+                fontFamily: FONT_MONO,
+                fontSize: 13,
                 fontWeight: 500,
-                letterSpacing: "-0.03em",
-                color: MUTED,
               }}
             >
-              One platform built to work with AI.
-            </div>
-            <div
-              style={{
-                marginTop: "14px",
-                fontSize: 23,
-                lineHeight: 1.4,
-                fontWeight: 500,
-                color: MUTED,
-              }}
-            >
-              Website, giving, receipts, and donor records in public code. AI
-              workflows in development.
-            </div>
-          </div>
-
-          <div style={{ display: "flex", gap: "14px", marginTop: "36px" }}>
-            {["Open source", "Starting with missions organizations"].map(
-              (item) => (
-                <div
-                  key={item}
-                  style={{
-                    display: "flex",
-                    borderRadius: "999px",
-                    border: "1px solid rgba(30,58,79,0.18)",
-                    padding: "10px 22px",
-                    fontSize: 21,
-                    fontWeight: 500,
-                    color: INK,
-                    background: "#fbfaf7",
-                  }}
-                >
-                  {item}
-                </div>
-              )
-            )}
+              APPROVED · HUMAN REVIEW
+            </span>
           </div>
         </div>
       </div>
@@ -194,22 +325,40 @@ export default async function openGraphImage() {
       ...size,
       fonts: [
         {
-          name: FONT_FAMILY,
-          data: mediumFont,
+          name: "Newsreader",
+          data: newsreaderRegular,
           style: "normal",
-          weight: 500,
+          weight: 400,
         },
         {
-          name: FONT_FAMILY,
-          data: semiBoldFont,
+          name: "Newsreader",
+          data: newsreaderSemiBold,
           style: "normal",
           weight: 600,
         },
         {
-          name: FONT_FAMILY,
-          data: boldFont,
+          name: "Newsreader",
+          data: newsreaderItalic,
+          style: "italic",
+          weight: 500,
+        },
+        {
+          name: "Instrument Sans",
+          data: instrumentMedium,
           style: "normal",
-          weight: 700,
+          weight: 500,
+        },
+        {
+          name: "Instrument Sans",
+          data: instrumentSemiBold,
+          style: "normal",
+          weight: 600,
+        },
+        {
+          name: "IBM Plex Mono",
+          data: plexMonoMedium,
+          style: "normal",
+          weight: 500,
         },
       ],
     }

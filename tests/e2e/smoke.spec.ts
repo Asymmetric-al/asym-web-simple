@@ -93,22 +93,24 @@ test.describe("homepage smoke tests", () => {
     await page.goto("/", { waitUntil: "domcontentloaded" });
 
     await expect(page).toHaveTitle(
-      "asym | Open-source giving and donor records for nonprofits"
+      "asym | Open-source giving and donor records for missions organizations"
     );
     await expect(
       page.getByRole("heading", {
         level: 1,
-        name: "Website, giving, and donor records. One platform built to work with AI.",
+        name: "One gift. Three hands.",
       })
     ).toBeVisible();
     await expect(
-      page.getByText("Open-source software for nonprofits", { exact: true })
+      page.getByText("Open-source software for missions organizations", {
+        exact: true,
+      })
     ).toBeVisible();
     await expect(
       page
         .getByRole("main")
         .getByRole("link", {
-          name: /^(?:Request early access|See how it works)$/u,
+          name: /^(?:Request early access|See AI appeal approval)$/u,
         })
         .first()
     ).toHaveAttribute("href", /^\/#(?:early-access|product)$/u);
@@ -117,44 +119,58 @@ test.describe("homepage smoke tests", () => {
     ).toHaveAttribute("href", REPO_URL);
   });
 
-  test("workflow plate shows honest status and pins connected records on click", async ({
+  test("three-hand specimen switches roles, respects anonymity, and approval bench stamps human sign-off", async ({
     page,
   }) => {
     await page.goto("/", { waitUntil: "domcontentloaded" });
     await waitForUi(page);
-    const product = page.locator("#product");
 
+    const specimen = page.getByRole("region", {
+      name: /Illustrative sample gift across donor, missionary, and office views/iu,
+    });
+    await expect(specimen).toContainText("GIFT-0418");
+    await expect(
+      specimen.getByRole("heading", { level: 3, name: "Official Gift Receipt" })
+    ).toBeVisible();
+
+    await specimen.getByRole("button", { name: "$250" }).click();
+    await expect(specimen).toContainText("$250.00");
+
+    await specimen.getByRole("button", { name: "Test anonymous gift" }).click();
+    await specimen.getByRole("tab", { name: "Missionary" }).click();
+    await expect(
+      specimen.getByRole("heading", { level: 3, name: "Anonymous Supporter" })
+    ).toBeVisible();
+    await expect(specimen).toContainText(
+      "Name & address hidden from missionary"
+    );
+
+    await specimen.getByRole("tab", { name: "Office" }).click();
+    await expect(
+      specimen.getByRole("heading", {
+        level: 3,
+        name: "Contribution Ledger Entry",
+      })
+    ).toBeVisible();
+    await expect(specimen).toContainText("Rivera Household");
+
+    const product = page.locator("#product");
     await expect(
       product.getByRole("heading", {
         level: 2,
-        name: "From the appeal brief to the gift receipt.",
+        name: "Before an appeal goes out.",
       })
     ).toBeVisible();
-    await expect(product.getByRole("listitem")).toHaveText([
-      /Describe/u,
-      /Prepare/u,
-      /Review/u,
-      /Publish/u,
-    ]);
+    await expect(product).toContainText("Drafted by AI");
+
+    await product.getByRole("button", { name: "Make a staff edit" }).click();
+    await expect(product).toContainText("Two new wells funded");
+
+    await product.getByRole("button", { name: "Approve draft" }).click();
+    await expect(product).toContainText("Approved by staff");
     await expect(
-      product.getByText("In development", { exact: true }).first()
+      product.getByRole("button", { name: "Reset sample draft" })
     ).toBeVisible();
-    await expect(page.getByText(/sample data/iu)).toHaveCount(0);
-
-    const prepareButton = product.getByRole("button", { name: "Prepare" });
-    await prepareButton.click();
-    await expect(prepareButton).toHaveAttribute("aria-pressed", "true");
-    await expect(product.locator(".wf-plate")).toHaveAttribute(
-      "data-active",
-      "2"
-    );
-    await expect(product.locator(".wf-plate")).toHaveAttribute(
-      "data-pinned",
-      "true"
-    );
-
-    await page.keyboard.press("Escape");
-    await expect(prepareButton).toHaveAttribute("aria-pressed", "false");
   });
 
   test("open source and team sections link to the public code", async ({

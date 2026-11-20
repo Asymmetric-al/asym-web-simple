@@ -21,8 +21,8 @@ export const DocumentPage = ({
     tabIndex={-1}
   >
     <Container>
-      <article className="max-w-[48rem] pt-[clamp(7.4rem,9vw,9.5rem)] pb-14 sm:pb-18">
-        <p className="text-primary/82 dark:text-ring font-mono text-[0.8125rem] font-medium tracking-[0.02em]">
+      <article className="max-w-[48rem] pt-[clamp(7rem,8.5vw,9rem)] pb-14 sm:pb-18">
+        <p className="text-pine font-mono text-xs font-medium tracking-[0.02em]">
           {eyebrow}
         </p>
         {title}
@@ -53,11 +53,11 @@ export const DocumentSection = ({
 }) => (
   <section className={cn("grid gap-3", className)}>
     {number ? (
-      <p className="text-primary/82 dark:text-ring font-mono text-[0.8125rem] font-medium tracking-[0.02em]">
+      <p className="text-pine font-mono text-xs font-medium tracking-[0.02em]">
         {number}
       </p>
     ) : null}
-    <h2 className="font-heading text-foreground text-[clamp(1.5rem,2.4vw,2rem)] leading-tight font-semibold tracking-[-0.025em]">
+    <h2 className="font-heading text-foreground text-[clamp(1.6rem,2.5vw,2.1rem)] leading-tight font-medium tracking-[-0.02em]">
       {title}
     </h2>
     <div className="text-muted-foreground grid gap-4 text-base leading-7 sm:text-[1.04rem] sm:leading-8">

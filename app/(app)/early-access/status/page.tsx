@@ -188,16 +188,16 @@ export default async function EarlyAccessStatusPage({
       className="flex flex-1 items-center pt-32 pb-20 outline-none sm:pt-36"
     >
       <Container className="max-w-2xl">
-        <div className="surface-panel rounded-[2rem] p-6 sm:p-9">
+        <div className="surface-folio rounded-2xl p-6 sm:p-9">
           {statusIcon}
           {content.tone === "neutral" ? null : (
-            <p className="text-primary/82 dark:text-ring mt-5 font-mono text-[0.8125rem] font-medium tracking-[0.02em]">
+            <p className="text-pine mt-5 font-mono text-xs font-medium tracking-[0.02em]">
               {content.eyebrow}
             </p>
           )}
           <h1
             className={cn(
-              "font-heading text-foreground text-[clamp(1.9rem,4vw,2.75rem)] leading-[1.06] font-semibold tracking-[-0.035em] text-balance",
+              "font-heading text-foreground text-[clamp(2rem,4vw,2.9rem)] leading-[1.04] font-medium tracking-[-0.025em] text-balance",
               headingSpacing
             )}
           >
@@ -220,7 +220,7 @@ export default async function EarlyAccessStatusPage({
               {content.primaryLabel}
             </Link>
             <a
-              href={siteConfig.repoUrl}
+              href={`${siteConfig.repoUrl}#readme`}
               target="_blank"
               rel="noopener noreferrer"
               className={cn(

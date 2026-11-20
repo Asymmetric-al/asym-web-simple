@@ -3,21 +3,22 @@ import type { Metadata } from "next";
 
 export const siteMetadata = {
   name: siteConfig.shortName,
-  title: "asym | Open-source giving and donor records for nonprofits",
+  title:
+    "asym | Open-source giving and donor records for missions organizations",
   description: siteConfig.description,
   socialTitle:
-    "Website, giving, and donor records. One platform built to work with AI.",
+    "One gift. Three hands. Open-source software for missions organizations.",
   socialDescription:
-    "Public code for website pages, giving, receipts, and donor records. AI campaign workflows in development for missions organizations.",
+    "Giving pages, receipts, donor records, and missionary updates on one shared open-source record. Human-approved AI appeal drafting in development.",
   url: siteConfig.url,
   ogImage: "/opengraph-image",
   keywords: [
-    "nonprofit software",
+    "missions organization software",
     "open-source nonprofit CRM",
     "nonprofit fundraising software",
-    "AI for nonprofits",
-    "donor management",
-    "missions organization software",
+    "donor records and receipts",
+    "missionary donor portal",
+    "nonprofit software",
     "asym",
   ],
 } as const;
