@@ -9,18 +9,9 @@ export const siteMetadata = {
   socialTitle:
     "One gift. Three hands. Open-source software for missions organizations.",
   socialDescription:
-    "Open-source donor portals, self-service receipts, redacted missionary rosters, and office CRM on one shared record. Hosted teams and AI appeals in development.",
+    "Open-source donor portals, self-service receipts, redacted missionary rosters, and office CRM on one shared record. Hosted access not open yet.",
   url: siteConfig.url,
   ogImage: "/opengraph-image",
-  keywords: [
-    "missions organization software",
-    "open-source nonprofit CRM",
-    "nonprofit fundraising software",
-    "donor records and receipts",
-    "missionary donor portal",
-    "nonprofit software",
-    "asym",
-  ],
 } as const;
 
 export const baseMetadata: Metadata = {
@@ -30,7 +21,6 @@ export const baseMetadata: Metadata = {
     template: `%s | ${siteMetadata.name}`,
   },
   description: siteMetadata.description,
-  keywords: [...siteMetadata.keywords],
   authors: [{ name: siteConfig.name, url: siteConfig.url }],
   creator: siteConfig.name,
   publisher: siteConfig.name,

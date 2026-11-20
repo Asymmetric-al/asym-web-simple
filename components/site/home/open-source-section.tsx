@@ -71,14 +71,14 @@ const inventoryRows: readonly {
   },
 ];
 
-const getStatusDotClass = (status: InventoryStatus): string => {
+const getStatusBadgeClass = (status: InventoryStatus): string => {
   if (status === "planned") {
-    return "border-draft border border-dashed";
+    return "border-draft-border bg-draft-soft text-draft border-dashed";
   }
   if (status === "partial") {
-    return "border-pine border bg-[linear-gradient(90deg,var(--pine)_50%,transparent_50%)]";
+    return "border-pine-border bg-card text-pine";
   }
-  return "bg-pine";
+  return "border-pine-border bg-pine-soft text-pine";
 };
 
 export const OpenSourceSection = () => (
@@ -115,83 +115,63 @@ export const OpenSourceSection = () => (
               <p className="text-foreground text-sm font-semibold">
                 Where things stand
               </p>
-              <div className="text-muted-foreground flex flex-wrap items-center gap-x-3.5 gap-y-1 font-mono text-[0.75rem]">
-                <span className="inline-flex items-center gap-1.5">
-                  <span
-                    aria-hidden="true"
-                    className="bg-pine size-2 rounded-full"
-                  />
-                  In code
-                </span>
-                <span className="inline-flex items-center gap-1.5">
-                  <span
-                    aria-hidden="true"
-                    className="border-pine size-2 rounded-full border bg-[linear-gradient(90deg,var(--pine)_50%,transparent_50%)]"
-                  />
-                  Partial
-                </span>
-                <span className="inline-flex items-center gap-1.5">
-                  <span
-                    aria-hidden="true"
-                    className="border-draft size-2 rounded-full border border-dashed"
-                  />
-                  Planned
-                </span>
-              </div>
+              <span className="text-muted-foreground font-mono text-[0.75rem]">
+                Status · Code link
+              </span>
             </div>
 
             <ul className="divide-rule divide-y">
               {inventoryRows.map((row) => (
                 <li
                   key={row.module}
-                  className="flex flex-col items-start gap-1.5 px-4 py-3 text-sm sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-5"
+                  className="flex flex-col items-start gap-2 px-4 py-3 text-sm sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-5"
                 >
-                  <div className="flex min-w-0 items-start gap-2.5">
+                  <div className="min-w-0">
                     <span
-                      aria-hidden="true"
                       className={cn(
-                        "mt-1.5 size-2 shrink-0 rounded-full",
-                        getStatusDotClass(row.status)
+                        "block",
+                        row.status === "planned"
+                          ? "text-muted-foreground"
+                          : "text-foreground font-medium"
                       )}
-                    />
-                    <div className="min-w-0">
-                      <span
-                        className={cn(
-                          "block",
-                          row.status === "planned"
-                            ? "text-muted-foreground"
-                            : "text-foreground font-medium"
-                        )}
-                      >
-                        {row.module}
-                        <span className="sr-only"> ({row.statusLabel})</span>
-                      </span>
-                      {row.note ? (
-                        <span className="text-muted-foreground mt-0.5 block text-xs leading-5">
-                          {row.note}
-                        </span>
-                      ) : null}
-                    </div>
-                  </div>
-                  {row.href ? (
-                    <a
-                      href={row.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-pine focus-visible:ring-ring ml-4.5 inline-flex min-h-11 shrink-0 items-center gap-1 rounded-xs font-mono text-xs underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-2 focus-visible:outline-transparent sm:ml-0 sm:min-h-8 [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground"
                     >
-                      {row.path}
-                      <ArrowUpRightIcon className="size-3" />
-                      <span className="sr-only">
-                        {" "}
-                        in Asymmetric-al/core (opens in a new tab)
-                      </span>
-                    </a>
-                  ) : (
-                    <span className="text-draft ml-4.5 inline-flex shrink-0 items-center font-mono text-xs sm:ml-0">
-                      {row.path}
+                      {row.module}
                     </span>
-                  )}
+                    {row.note ? (
+                      <span className="text-muted-foreground mt-0.5 block text-xs leading-5">
+                        {row.note}
+                      </span>
+                    ) : null}
+                  </div>
+                  <div className="flex shrink-0 items-center gap-3">
+                    <span
+                      className={cn(
+                        "inline-flex items-center border px-2 py-0.5 font-mono text-[0.6875rem] font-medium whitespace-nowrap forced-colors:border-[CanvasText]",
+                        getStatusBadgeClass(row.status)
+                      )}
+                    >
+                      {row.statusLabel}
+                    </span>
+                    {row.href ? (
+                      <a
+                        href={row.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-pine focus-visible:ring-ring inline-flex min-h-11 shrink-0 items-center gap-1 rounded-xs font-mono text-xs underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-8 [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground"
+                      >
+                        {row.path}
+                        <ArrowUpRightIcon className="size-3" />
+                        <span className="sr-only">
+                          {" "}
+                          in Asymmetric-al/core (opens in a new tab)
+                        </span>
+                      </a>
+                    ) : (
+                      <span className="text-draft inline-flex shrink-0 items-center font-mono text-xs">
+                        {row.path}
+                      </span>
+                    )}
+                  </div>
                 </li>
               ))}
             </ul>
@@ -236,7 +216,7 @@ export const OpenSourceSection = () => (
                 Plate III · Open-source ledger
               </span>
               <span className="text-muted-foreground">
-                Every schema and rule inspectable now
+                Inspect schemas, API rules, and ADRs in Core
               </span>
             </figcaption>
           </figure>
@@ -252,9 +232,11 @@ export const OpenSourceSection = () => (
                 team never maintains servers. Pricing is not published yet.
               </p>
               <p>
-                Later, we also plan to offer optional managed donor care as a
-                separate service for routine requests like receipt copies and
-                recurring&#8209;gift updates.
+                When hosted onboarding opens, we’ll help your office move
+                existing donor records and configure giving pages before
+                switching over. Later, we also plan to offer optional managed
+                donor care as a separate service for routine requests like
+                receipt copies and recurring&#8209;gift updates.
               </p>
             </div>
 

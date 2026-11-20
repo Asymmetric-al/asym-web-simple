@@ -77,5 +77,5 @@ jobs:
           curl -sf http://127.0.0.1:3100/ >/dev/null || { echo "Unconfigured server did not become ready on :3100" >&2; exit 1; }
           curl -sf http://127.0.0.1:3101/ >/dev/null || { echo "Configured server did not become ready on :3101" >&2; exit 1; }
 
-          PLAYWRIGHT_BASE_URL=http://127.0.0.1:3100 bunx playwright test tests/e2e/smoke.spec.ts tests/e2e/responsive.spec.ts tests/a11y/routes.spec.ts --project=chromium --workers=2
-          PLAYWRIGHT_BASE_URL=http://127.0.0.1:3101 bunx playwright test tests/e2e/smoke.spec.ts tests/a11y/routes.spec.ts --project=chromium --workers=2
+          PLAYWRIGHT_BASE_URL=http://127.0.0.1:3100 bunx playwright test tests/e2e/smoke.spec.ts tests/e2e/responsive.spec.ts tests/a11y/routes.spec.ts --project=chromium --project=mobile-chrome --workers=2
+          PLAYWRIGHT_BASE_URL=http://127.0.0.1:3101 bunx playwright test tests/e2e/smoke.spec.ts tests/a11y/routes.spec.ts --project=chromium --project=mobile-chrome --workers=2

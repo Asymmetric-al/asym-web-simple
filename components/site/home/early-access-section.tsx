@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Container } from "@/components/site/container";
 import { GitHubMark } from "@/components/site/github-mark";
+import { EarlyAccessConfiguredLoader } from "@/components/site/home/early-access-configured-loader";
 import { Eyebrow, SectionTitle } from "@/components/site/home/section-heading";
 import { ArrowRightIcon, ArrowUpRightIcon } from "@/components/site/icons";
 import { buttonVariants } from "@/components/ui/button-variants";
@@ -12,23 +13,14 @@ import {
 import { cn } from "@/lib/utils";
 
 const pilotChecklist = [
-  "Missions organizations ready to run donor portals, tax statements, and missionary rosters from one record.",
+  "Missions organizations ready to run donor portals, annual giving statements, and missionary rosters from one record.",
   "Small staffs looking for hosted software without maintaining their own servers.",
   "Teams willing to share candid feedback while we finish testing onboarding and billing.",
 ] as const;
 
-const loadEarlyAccessForm = () =>
-  import("@/components/site/home/early-access-form");
-
-export const EarlyAccessSection = async () => {
+export const EarlyAccessSection = () => {
   const isConfigured = isEarlyAccessConfigured();
   const contactEmail = getVerifiedContactEmail();
-
-  let configuredForm = null;
-  if (isConfigured) {
-    const { EarlyAccessConfigured } = await loadEarlyAccessForm();
-    configuredForm = <EarlyAccessConfigured contactEmail={contactEmail} />;
-  }
 
   return (
     <section
@@ -47,7 +39,9 @@ export const EarlyAccessSection = async () => {
             )}
           />
 
-          {configuredForm ?? (
+          {isConfigured ? (
+            <EarlyAccessConfiguredLoader contactEmail={contactEmail} />
+          ) : (
             <div className="grid gap-8 lg:grid-cols-[minmax(0,44fr)_minmax(0,56fr)] lg:items-start lg:gap-12">
               <div className="min-w-0">
                 <Eyebrow>Early access</Eyebrow>
@@ -57,8 +51,8 @@ export const EarlyAccessSection = async () => {
                 <p className="text-muted-foreground mt-4 max-w-[32rem] text-base leading-7 text-pretty sm:text-[1.0625rem] sm:leading-8">
                   We’re finishing end&#8209;to&#8209;end testing across donor
                   portals, missionary rosters, and office tools before opening
-                  hosted onboarding. Review what’s ready today or check back
-                  once intake opens.
+                  hosted onboarding. Follow the repository or review what has to
+                  be ready before sign&#8209;ups open.
                 </p>
               </div>
               <div className="border-rule min-w-0 border-t pt-6 lg:border-t-0 lg:border-l lg:pt-1 lg:pl-10">
@@ -77,31 +71,31 @@ export const EarlyAccessSection = async () => {
                   ))}
                 </ul>
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                  <Link
-                    href="/early-access/status?state=unavailable"
-                    prefetch={false}
+                  <a
+                    href={`${siteConfig.repoUrl}#readme`}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className={cn(
                       buttonVariants({ variant: "ink", size: "lg" }),
                       "px-6"
                     )}
                   >
-                    Early access status
-                    <ArrowRightIcon dataIcon="inline-end" />
-                  </Link>
-                  <a
-                    href={siteConfig.commitsUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    <GitHubMark className="size-4" />
+                    Follow progress on GitHub
+                    <span className="sr-only"> (opens in a new tab)</span>
+                    <ArrowUpRightIcon dataIcon="inline-end" />
+                  </a>
+                  <Link
+                    href="/early-access/status?state=unavailable"
+                    prefetch={false}
                     className={cn(
                       buttonVariants({ variant: "outline", size: "lg" }),
                       "px-6"
                     )}
                   >
-                    <GitHubMark className="size-4" />
-                    Follow commits on develop
-                    <span className="sr-only"> (opens in a new tab)</span>
-                    <ArrowUpRightIcon dataIcon="inline-end" />
-                  </a>
+                    Pre-launch checklist
+                    <ArrowRightIcon dataIcon="inline-end" />
+                  </Link>
                 </div>
                 {contactEmail ? (
                   <p className="text-muted-foreground mt-5 text-sm leading-6">

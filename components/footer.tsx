@@ -21,7 +21,7 @@ export const Footer = () => {
 
   return (
     <footer className="pb-10 sm:pb-12">
-      <div className="mx-auto max-w-[80rem] px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[82rem] px-4 sm:px-6 lg:px-8">
         <div className="border-rule-strong flex flex-col gap-8 border-t pt-9 lg:flex-row lg:items-start lg:justify-between">
           <div className="max-w-md min-w-0">
             <Link

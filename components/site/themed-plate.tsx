@@ -44,24 +44,14 @@ export const ThemedPlate = ({
   return (
     <>
       {priority ? (
-        <>
-          <link
-            rel="preload"
-            as="image"
-            imageSrcSet={light.srcSet}
-            imageSizes={sizes}
-            media="(prefers-color-scheme: light)"
-            fetchPriority="high"
-          />
-          <link
-            rel="preload"
-            as="image"
-            imageSrcSet={dark.srcSet}
-            imageSizes={sizes}
-            media="(prefers-color-scheme: dark)"
-            fetchPriority="high"
-          />
-        </>
+        <link
+          rel="preload"
+          as="image"
+          imageSrcSet={dark.srcSet}
+          imageSizes={sizes}
+          media="(prefers-color-scheme: dark)"
+          fetchPriority="high"
+        />
       ) : null}
       <img
         src={light.src}

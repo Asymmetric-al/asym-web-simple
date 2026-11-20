@@ -221,9 +221,22 @@ test.describe("responsive regression coverage", () => {
     await expectNoHorizontalOverflow(page, "home @ 390x844");
     issues.expectNoUnexpectedIssuesSince(checkpoint, "home @ 390x844");
 
-    await setViewport(page, { label: "640x900", width: 640, height: 900 });
-    await expectNoHorizontalOverflow(page, "home @ 640x900");
-    await expect(page.getByRole("tab", { name: /Donor/iu })).toBeVisible();
+    await setViewport(page, { label: "1023x900", width: 1023, height: 900 });
+    const roleTabList = page.getByRole("tablist", {
+      name: /Choose a role to inspect its workspace/iu,
+    });
+    const missionaryTab = page.getByRole("tab", { name: /Missionary/iu });
+    await missionaryTab.focus();
+    await expect(roleTabList).toHaveAttribute("data-orientation", "horizontal");
+    await setViewport(page, { label: "1024x900", width: 1024, height: 900 });
+    await expect(roleTabList).toHaveAttribute("data-orientation", "vertical");
+    await expect(missionaryTab).toBeFocused();
+    await page.keyboard.press("ArrowDown");
+    await expect(page.getByRole("tab", { name: /Office/iu })).toHaveAttribute(
+      "aria-selected",
+      "true"
+    );
+    await expectNoHorizontalOverflow(page, "home @ 1024x900");
   });
 
   test("home footer remains accessible after repeated viewport changes", async ({

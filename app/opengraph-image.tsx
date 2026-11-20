@@ -179,21 +179,20 @@ export default async function openGraphImage() {
               display: "flex",
               alignItems: "center",
               gap: "8px",
-              fontSize: 15,
-              color: DRAFT,
+              fontSize: 17,
+              fontWeight: 600,
+              color: INK,
             }}
           >
             <span
               style={{
-                width: "9px",
-                height: "9px",
+                width: "10px",
+                height: "10px",
                 borderRadius: "999px",
-                border: `1.5px dashed ${DRAFT}`,
+                border: `2px dashed ${DRAFT}`,
               }}
             />
-            <span>
-              Hosted teams &amp; human-approved AI appeals in development
-            </span>
+            <span>Hosted access not open yet &middot; AI appeals planned</span>
           </div>
         </div>
       </div>

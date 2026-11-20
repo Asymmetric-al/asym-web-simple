@@ -10,7 +10,7 @@ const ordinaryWork = [
   },
   {
     num: "03",
-    line: "The missionary sees support, not private details.",
+    line: "The missionary sees support, anonymous by default.",
     italic: false,
   },
   {
@@ -24,7 +24,7 @@ export const AboutSection = () => (
   <section
     id="about"
     aria-labelledby="about-title"
-    className="midnight-band text-night-foreground border-night-rule scroll-mt-16 border-y py-[clamp(4rem,7vw,6.25rem)]"
+    className="midnight-band text-night-foreground border-night-rule scroll-mt-16 border-y py-14 sm:py-20 lg:py-24"
   >
     <Container>
       {/* Monumental editorial interlude — four lines, calm Night Pine accents (reserving Vermilion strictly for human decisions) */}

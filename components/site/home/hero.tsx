@@ -34,6 +34,7 @@ const HERO_PLATE_ALT =
 
 const HERO_PLATE_SIZES =
   "(min-width: 1024px) 54vw, (min-width: 640px) 36rem, calc(100vw - 2rem)";
+const HERO_CTA_PADDING = "px-5 xl:px-6";
 
 export const HomeHero = () => {
   const isConfigured = isEarlyAccessConfigured();
@@ -41,10 +42,10 @@ export const HomeHero = () => {
   return (
     <section
       aria-labelledby="hero-title"
-      className="pt-22 pb-10 sm:pt-26 sm:pb-14 lg:pt-28 lg:pb-16"
+      className="pt-20 pb-8 sm:pt-24 sm:pb-12 lg:pt-28 lg:pb-14"
     >
       <Container>
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,44fr)_minmax(0,56fr)] lg:items-center lg:gap-12 xl:gap-16">
+        <div className="grid gap-7 lg:grid-cols-[minmax(0,46fr)_minmax(0,54fr)] lg:items-center lg:gap-10 xl:grid-cols-[minmax(0,44fr)_minmax(0,56fr)] xl:gap-16">
           <div className="min-w-0">
             <p className="text-pine font-sans text-sm font-medium">
               Open-source software for missions organizations
@@ -52,29 +53,29 @@ export const HomeHero = () => {
 
             <h1
               id="hero-title"
-              className="font-heading text-foreground mt-3 text-[clamp(3rem,5.9vw,5.25rem)] leading-[0.95] font-medium tracking-[-0.03em]"
+              className="font-heading text-foreground mt-2.5 text-[clamp(3rem,6.8vw,5.25rem)] leading-[0.95] font-medium tracking-[-0.03em]"
             >
               <span className="block">One gift.</span>
               <span className="block italic">Three hands.</span>
             </h1>
 
-            <p className="text-foreground/88 mt-5 max-w-[33rem] text-base leading-7 text-pretty sm:text-[1.09375rem] sm:leading-8">
+            <p className="text-foreground/88 mt-4 max-w-[33rem] text-base leading-7 text-pretty sm:mt-5 sm:text-[1.09375rem] sm:leading-8">
               Record a gift once. Donors download their own receipts and annual
-              statements, missionaries track support without private donor
-              details, and office staff manage one ledger.
+              statements, missionaries track support with donors anonymous by
+              default, and office staff manage one ledger.
             </p>
-            <p className="text-muted-foreground mt-3 max-w-[33rem] text-sm leading-6 text-pretty">
+            <p className="text-muted-foreground mt-2.5 max-w-[33rem] text-sm leading-6 text-pretty sm:mt-3">
               The codebase is open source today. Public giving pages still use
               demo profiles; hosted teams and human&#8209;approved AI appeals
               are in development.
             </p>
 
-            <div className="mt-7 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
+            <div className="mt-6 flex flex-col gap-2.5 sm:mt-7 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
               {isConfigured ? (
                 <Link
                   href={siteConfig.cta.primary.href}
                   prefetch={false}
-                  className={cn(buttonVariants({ size: "lg" }), "px-6")}
+                  className={cn(buttonVariants({ size: "lg" }), HERO_CTA_PADDING)}
                 >
                   {siteConfig.cta.primary.label}
                   <ArrowRightIcon dataIcon="inline-end" />
@@ -85,7 +86,7 @@ export const HomeHero = () => {
                   prefetch={false}
                   className={cn(
                     buttonVariants({ variant: "ink", size: "lg" }),
-                    "px-6"
+                    HERO_CTA_PADDING
                   )}
                 >
                   Explore the three roles
@@ -98,7 +99,7 @@ export const HomeHero = () => {
                 rel="noopener noreferrer"
                 className={cn(
                   buttonVariants({ variant: "outline", size: "lg" }),
-                  "px-6"
+                  HERO_CTA_PADDING
                 )}
               >
                 <GitHubMark className="size-4" />
@@ -159,7 +160,7 @@ export const HomeHero = () => {
                       <span>{item.role}</span>
                       <span
                         aria-hidden="true"
-                        className="text-pine opacity-0 transition-opacity duration-150 group-focus-visible:opacity-100 [@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100"
+                        className="text-pine opacity-60 transition-opacity duration-150 group-focus-visible:opacity-100 [@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100"
                       >
                         &darr;
                       </span>

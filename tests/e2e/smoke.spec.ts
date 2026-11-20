@@ -147,7 +147,7 @@ test.describe("homepage smoke tests", () => {
     await expect(
       architecture.getByRole("heading", {
         level: 3,
-        name: /Field workers track assigned support while private donors stay redacted/iu,
+        name: /Field workers follow assigned support with donors anonymous by default/iu,
       })
     ).toBeVisible();
     await expect(architecture).toContainText("Anonymous partner");
@@ -362,13 +362,13 @@ test.describe("homepage smoke tests", () => {
       await expect(
         page
           .locator("#early-access")
-          .getByRole("link", { name: /Early access status/u })
-      ).toHaveAttribute("href", "/early-access/status?state=unavailable");
+          .getByRole("link", { name: /Follow progress on GitHub/u })
+      ).toHaveAttribute("href", `${REPO_URL}#readme`);
       await expect(
         page
           .locator("#early-access")
-          .getByRole("link", { name: /Follow commits on develop/u })
-      ).toHaveAttribute("href", `${REPO_URL}/commits/develop`);
+          .getByRole("link", { name: /Pre-launch checklist/u })
+      ).toHaveAttribute("href", "/early-access/status?state=unavailable");
       return;
     }
 
@@ -403,6 +403,20 @@ test.describe("homepage smoke tests", () => {
     await expect(form.getByLabel("Email")).toHaveAttribute(
       "aria-invalid",
       "true"
+    );
+
+    const { origin } = new URL(page.url());
+    const invalidFormPost = await page.request.post("/api/early-access", {
+      headers: {
+        "content-type": "application/x-www-form-urlencoded",
+        origin,
+      },
+      data: "email=invalid-email&organization=",
+      maxRedirects: 0,
+    });
+    expect(invalidFormPost.status()).toBe(303);
+    expect(invalidFormPost.headers().location).toContain(
+      "/early-access/status?state=invalid"
     );
   });
 

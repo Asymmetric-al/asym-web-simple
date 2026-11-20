@@ -7,11 +7,12 @@ export const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground hover:bg-primary/92 bg-clip-border font-semibold shadow-[inset_0_1px_0_rgb(255_255_255/18%),inset_0_-1px_0_rgb(18_32_43/24%),0_14px_32px_-20px_rgb(179_58_34/52%)] dark:shadow-[inset_0_1px_0_rgb(255_255_255/32%),inset_0_-1px_0_rgb(11_19_26/22%),0_14px_32px_-20px_rgb(0_0_0/75%)]",
-        ink: "bg-foreground text-background hover:bg-foreground/90 bg-clip-border font-semibold shadow-sm",
+          "bg-primary text-primary-foreground bg-clip-border font-semibold shadow-[inset_0_1px_0_rgb(255_255_255/18%),inset_0_-1px_0_rgb(18_32_43/24%),0_14px_32px_-20px_rgb(179_58_34/52%)] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-primary/92 dark:shadow-[inset_0_1px_0_rgb(255_255_255/32%),inset_0_-1px_0_rgb(11_19_26/22%),0_14px_32px_-20px_rgb(0_0_0/75%)]",
+        ink: "bg-foreground text-background bg-clip-border font-semibold shadow-sm [@media(hover:hover)_and_(pointer:fine)]:hover:bg-foreground/90",
         outline:
-          "border-input bg-card text-foreground hover:bg-secondary shadow-xs",
-        ghost: "hover:bg-muted hover:text-foreground",
+          "border-input bg-card text-foreground shadow-xs [@media(hover:hover)_and_(pointer:fine)]:hover:bg-secondary",
+        ghost:
+          "[@media(hover:hover)_and_(pointer:fine)]:hover:bg-muted [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground",
       },
       size: {
         default:

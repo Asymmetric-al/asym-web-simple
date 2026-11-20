@@ -52,7 +52,7 @@ export const ProductSection = () => (
                 Plate II · Staff review gate
               </span>
               <span className="text-muted-foreground">
-                Planned: staff sign-off before any AI-drafted appeal goes out.
+                Draft &rarr; staff review &rarr; publish only after approval
               </span>
             </figcaption>
 

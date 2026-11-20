@@ -12,7 +12,7 @@ export const metadata: Metadata = createMetadata({
 });
 
 const contactLinkClassName =
-  "text-foreground hover:text-primary focus-visible:ring-ring focus-visible:ring-offset-background link-resilient rounded-[0.375rem] font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent";
+  "text-foreground focus-visible:ring-ring focus-visible:ring-offset-background link-resilient rounded-[0.375rem] font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:text-pine";
 
 export default function PrivacyPage() {
   const contactEmail = getVerifiedContactEmail();

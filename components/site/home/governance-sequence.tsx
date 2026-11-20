@@ -58,7 +58,7 @@ const GOVERNANCE_STEPS: readonly [
       "Drafts copy and eligible recipients inside the requester’s role boundary.",
     guardrailLabel: "Role-scoped read access",
     guardrail:
-      "Planned drafts cannot read restricted funds, other teams, or donor fields outside the requesting staff member’s own permissions.",
+      "Planned drafts are designed to stay inside the requesting staff member’s existing permissions and never read restricted funds or other teams’ records.",
     tone: "draft",
   },
   {
@@ -133,10 +133,10 @@ const STEP_INDICATOR_INK: Record<StepKey, string> = {
 
 // Hairline-ruled press ledger rows — crisp ink rail, filled active index, zero rounded-xl card walls.
 const STEP_ROW_CLASS =
-  "border-rule-interactive data-selected:bg-card relative z-10 grid w-full min-w-0 grid-cols-[2rem_1fr] items-start gap-3 border-b px-3 py-3.5 text-left last:border-b-0 forced-colors:data-selected:border-[Highlight]";
+  "border-rule-interactive data-selected:bg-card relative z-10 grid w-full min-w-0 grid-cols-[2rem_1fr] items-start gap-3 border-b px-3 py-3.5 text-left last:border-b-0 forced-colors:data-selected:border-[Highlight] forced-colors:data-selected:outline-2 forced-colors:data-selected:outline-offset-[-2px] forced-colors:data-selected:outline-[Highlight]";
 
 const STEP_ROW_INTERACTIVE_CLASS =
-  "focus-visible:ring-ring focus-visible:ring-offset-background cursor-pointer transition-[color,background-color] duration-150 select-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent not-data-selected:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-card/75";
+  "focus-visible:ring-ring cursor-pointer transition-[color,background-color] duration-150 select-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:outline-2 focus-visible:outline-transparent not-data-selected:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-card/75";
 
 const DETAIL_STACK_CELL = "col-start-1 row-start-1 min-w-0";
 
@@ -165,8 +165,13 @@ const StepRowBody = ({
           <span className="text-foreground font-sans text-sm font-semibold">
             {item.title}
           </span>
-          <span className={cn("font-mono text-xs", tone.actor)}>
-            {item.actor}
+          <span className={cn("inline-flex items-center gap-1.5 font-mono text-xs", tone.actor)}>
+            <span>{item.actor}</span>
+            {isSelected ? null : (
+              <span aria-hidden="true" className="text-muted-foreground/70">
+                &rsaquo;
+              </span>
+            )}
           </span>
         </span>
         <span className="text-muted-foreground mt-0.5 block text-sm leading-6">
@@ -232,15 +237,26 @@ const InactiveDetailSizers = ({
 export const GovernanceSequence = (): ReactNode => {
   const isHydrated = useIsClient();
   const [activeStep, setActiveStep] = useState<StepKey>(DEFAULT_STEP);
+  const [hasInteracted, setHasInteracted] = useState(false);
 
   const handleStepChange = (nextValue: string | null) => {
-    if (nextValue !== null && Object.hasOwn(STEP_KEYS, nextValue)) {
-      setActiveStep(nextValue as StepKey);
+    if (nextValue === null || !Object.hasOwn(STEP_KEYS, nextValue)) {
+      return;
     }
+    setHasInteracted(true);
+    setActiveStep(nextValue as StepKey);
   };
 
   return (
-    <div className="grid gap-4">
+    <div className="grid gap-3.5">
+      <div className="flex flex-wrap items-baseline justify-between gap-2 font-mono text-xs">
+        <span className="text-foreground font-medium">
+          Four-step approval sequence
+        </span>
+        <span className="text-muted-foreground">
+          Select a step to inspect its rule
+        </span>
+      </div>
       {isHydrated ? (
         <Tabs
           orientation="vertical"
@@ -285,7 +301,7 @@ export const GovernanceSequence = (): ReactNode => {
                   "focus-visible:ring-ring focus-visible:ring-offset-background grid focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent data-ending-style:hidden"
                 )}
               >
-                <StepGuardrailNote item={item} animated />
+                <StepGuardrailNote item={item} animated={hasInteracted} />
               </TabsPanel>
             ))}
           </div>

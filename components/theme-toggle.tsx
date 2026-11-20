@@ -9,7 +9,7 @@ import { useTheme } from "next-themes";
 import { useRef } from "react";
 import { useIsClient } from "@/lib/use-is-client";
 import { cn } from "@/lib/utils";
-import type { ReactNode } from "react";
+import type { PointerEvent, ReactNode } from "react";
 
 const SunIcon = (): ReactNode => (
   <svg
@@ -105,8 +105,12 @@ export const ThemeToggle = () => {
 
   const currentTheme: ThemeValue = isThemeValue(theme) ? theme : "system";
 
-  const handleIntent = () => {
-    if (!resolvedTheme || prewarmedRef.current === resolvedTheme) {
+  const handlePointerEnter = (event: PointerEvent<HTMLDivElement>) => {
+    if (
+      !resolvedTheme ||
+      event.pointerType !== "mouse" ||
+      prewarmedRef.current === resolvedTheme
+    ) {
       return;
     }
     prewarmedRef.current = resolvedTheme;
@@ -125,8 +129,7 @@ export const ThemeToggle = () => {
       aria-label="Color theme"
       value={currentTheme}
       onValueChange={handleValueChange}
-      onPointerEnter={handleIntent}
-      onFocus={handleIntent}
+      onPointerEnter={handlePointerEnter}
       className="border-rule bg-record has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-background relative isolate inline-flex w-fit items-center self-start rounded-full border p-1 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2 sm:self-auto forced-colors:border-[ButtonBorder]"
     >
       <SegmentedControlIndicator className="theme-toggle-indicator" />

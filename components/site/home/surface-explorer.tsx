@@ -67,12 +67,11 @@ interface SurfaceSpec {
   readonly label: string;
   readonly shortOutcome: string;
   readonly appPath: string;
-  readonly proofPath: string;
+  readonly proofNote: string;
   readonly repoUrl: string;
   readonly repoLinkLabel: string;
   readonly heading: string;
   readonly whatTheyDo: string;
-  readonly scopeNote: string;
   readonly boundaryTitle: string;
   readonly boundaryDetail: string;
   readonly included: readonly string[];
@@ -85,47 +84,45 @@ const SURFACES: readonly [SurfaceSpec, SurfaceSpec, SurfaceSpec] = [
     label: "Donor",
     shortOutcome: "Portal, receipts & statements",
     appPath: "apps/donor",
-    proofPath: "donor-portal/statements.ts",
+    proofNote:
+      "Public worker directory & checkout lookup still use @asym/mock-data demo profiles",
     repoUrl: `${siteConfig.repoUrl}/blob/develop/packages/api/src/donor-portal/statements.ts`,
-    repoLinkLabel: "Inspect statements.ts on GitHub",
+    repoLinkLabel: "statements.ts",
     heading: "Signed-in donors pull their own receipts and annual statements.",
     whatTheyDo:
-      "In the authenticated donor portal, supporters review account-scoped giving history, manage pledges, download individual receipts, and pull annual statements covering settled gifts.",
-    scopeNote:
-      "Current boundary: Stripe checkout plumbing and the donor portal are in Core, while public worker directory pages and checkout recipient lookup still use demo profiles from @asym/mock-data.",
-    boundaryTitle: "Own-account scope & name-sharing opt-in",
+      "In the authenticated donor portal, supporters review their own giving history, manage pledges, download individual receipts, and pull annual statements covering settled gifts.",
+    boundaryTitle: "Own-account scope & opt-in sharing",
     boundaryDetail:
-      "Each donor sees only their own account’s gifts and preferences, including whether they opt in to share their name on a missionary’s roster.",
+      "Each donor sees only their own account’s gifts and preferences. Supporters remain anonymous on a missionary’s roster unless they opt in to share their name, contact details, notes, and recurring-gift info.",
     included: [
       "Authenticated donor portal",
       "Individual receipt downloads",
       "Settled annual statements",
-      "Stripe plumbing (demo public profiles)",
+      "Stripe checkout (demo public profiles)",
     ],
   },
   {
     key: "missionary",
     index: "02",
     label: "Missionary",
-    shortOutcome: "Assigned roster, server redaction",
+    shortOutcome: "Assigned roster, anonymous by default",
     appPath: "apps/missionary",
-    proofPath: "missionary-portal/donors.ts",
+    proofNote:
+      "Server projection defaults to Anonymous partner and sets total_given & last_gift_amount to null",
     repoUrl: `${siteConfig.repoUrl}/blob/develop/packages/api/src/missionary-portal/donors.ts`,
-    repoLinkLabel: "Inspect donors.ts redaction on GitHub",
+    repoLinkLabel: "donors.ts",
     heading:
-      "Field workers track assigned support while private donors stay redacted.",
+      "Field workers follow assigned support with donors anonymous by default.",
     whatTheyDo:
-      "Missionaries follow support progress for their assignment, correspond with opted-in supporters, and publish ministry updates without waiting on exported office spreadsheets.",
-    scopeNote:
-      "Verified server projection: the API redacts donor identity and withholds individual totals before JSON leaves the server rather than hiding fields in the browser.",
-    boundaryTitle: "Fail-closed anonymity on the API",
+      "Missionaries follow support progress for their assignment and correspond with opted-in supporters without waiting on exported office spreadsheets.",
+    boundaryTitle: "Anonymous by default, gift amounts withheld",
     boundaryDetail:
-      "Non-opted-in donors default to Anonymous partner, and the missionary roster projection returns null for individual gift totals and last-gift amounts across rows.",
+      "Supporters who have not opted in appear as Anonymous partner with contact details, notes, and recurring gifts stripped. Even for opted-in supporters, lifetime totals and last-gift amounts stay withheld across every roster row.",
     included: [
       "Assigned supporter roster",
-      "Default fail-closed identity redaction",
-      "Individual gift amounts withheld (null)",
-      "Isolated from org-wide accounts",
+      "Anonymous partner by default",
+      "Lifetime & last-gift amounts withheld",
+      "Only their assigned supporters",
     ],
   },
   {
@@ -134,21 +131,20 @@ const SURFACES: readonly [SurfaceSpec, SurfaceSpec, SurfaceSpec] = [
     label: "Office",
     shortOutcome: "CRM, ledger & batch previews",
     appPath: "apps/admin",
-    proofPath: "contribution-batches/preview.ts",
+    proofNote:
+      "Server-side batch preview calculates affected & skipped rows before running",
     repoUrl: `${siteConfig.repoUrl}/blob/develop/packages/api/src/admin/contribution-batches/preview.ts`,
-    repoLinkLabel: "Inspect batch preview.ts on GitHub",
+    repoLinkLabel: "preview.ts",
     heading:
       "Staff manage legal donor records and preview bulk actions before running.",
     whatTheyDo:
-      "Office teams work from the same contribution tables to manage legal donors, funds, offline gift intake, Payload Web Studio pages, and email or PDF templates.",
-    scopeNote:
-      "Verified safeguard: bulk contribution operations compute a server-side preview of affected and skipped records before staff process the batch.",
-    boundaryTitle: "One shared record across every desk",
+      "Office staff work from the same contribution tables to manage legal donors, designated funds, offline gift intake, website pages, and email or PDF templates.",
+    boundaryTitle: "Shared ledger with supported batch previews",
     boundaryDetail:
-      "Because donor portals, missionary rosters, and office tools read the same contribution tables, staff stop reconciling disconnected CSV exports.",
+      "Supported bulk contribution actions compute affected and skipped records before staff confirm, while reading from one ledger reduces manual CSV handoffs between desks.",
     included: [
       "Mission Control donor & gift CRM",
-      "Server-side batch action previews",
+      "Supported batch action previews",
       "Payload Web Studio & templates",
       "Offline money & recurring rules",
     ],
@@ -158,10 +154,10 @@ const SURFACES: readonly [SurfaceSpec, SurfaceSpec, SurfaceSpec] = [
 // Single responsive tab row per role: compact 3-up horizontal ledger bar on <lg; vertical hairline-ruled ledger rows on lg+.
 // Hover fill is scoped strictly to unselected tabs (`not-data-selected:`) so fine-pointer hover never lowers selected tab contrast (<1024px SC 1.4.3).
 const ROLE_TAB_CLASS =
-  "group border-rule-interactive data-selected:border-foreground data-selected:bg-foreground data-selected:text-background lg:data-selected:border-rule-interactive lg:data-selected:bg-card lg:data-selected:text-foreground relative z-10 flex min-h-11 w-full min-w-0 items-center justify-center gap-1.5 border px-2.5 py-2 text-center lg:min-h-0 lg:items-start lg:justify-between lg:gap-3 lg:border-x-0 lg:border-t-0 lg:border-b lg:px-3.5 lg:py-3.5 lg:text-left lg:last:border-b-0 forced-colors:data-selected:border-[Highlight]";
+  "group border-rule-interactive data-selected:border-foreground data-selected:bg-foreground data-selected:text-background lg:data-selected:border-rule-interactive lg:data-selected:bg-card lg:data-selected:text-foreground relative z-10 flex min-h-11 w-full min-w-0 items-center justify-center gap-1.5 border px-2.5 py-2 text-center lg:min-h-0 lg:items-start lg:justify-between lg:gap-3 lg:border-x-0 lg:border-t-0 lg:border-b lg:px-3.5 lg:py-3.5 lg:text-left lg:last:border-b-0 forced-colors:data-selected:border-[Highlight] forced-colors:data-selected:outline-2 forced-colors:data-selected:outline-offset-[-2px] forced-colors:data-selected:outline-[Highlight]";
 
 const ROLE_TAB_INTERACTIVE_CLASS =
-  "focus-visible:ring-ring focus-visible:ring-offset-background cursor-pointer transition-[color,background-color,border-color] duration-150 select-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent not-data-selected:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-card/80";
+  "focus-visible:ring-ring focus-visible:ring-offset-background cursor-pointer transition-[color,background-color,border-color] duration-150 select-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent lg:focus-visible:ring-inset lg:focus-visible:ring-offset-0 not-data-selected:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-card/80";
 
 const PANEL_STACK_CELL = "col-start-1 row-start-1 min-w-0";
 
@@ -271,7 +267,7 @@ const SurfaceLedgerSheet = ({
           {spec.index} · {spec.label} workspace
         </span>
         <span translate="no" className="text-muted-foreground">
-          {spec.proofPath}
+          {spec.appPath}
         </span>
       </div>
 
@@ -280,9 +276,6 @@ const SurfaceLedgerSheet = ({
       </h3>
       <p className="text-foreground/85 mt-2.5 text-sm leading-6 text-pretty sm:text-[0.96875rem] sm:leading-7">
         {spec.whatTheyDo}
-      </p>
-      <p className="text-muted-foreground mt-2.5 text-xs leading-5 text-pretty sm:text-sm sm:leading-6">
-        {spec.scopeNote}
       </p>
 
       <div className="border-rule mt-4 border-t pt-4">
@@ -310,18 +303,18 @@ const SurfaceLedgerSheet = ({
       </ul>
     </div>
 
-    <div className="border-rule mt-5 flex flex-wrap items-center justify-between gap-3 border-t pt-4 text-xs">
-      <span translate="no" className="text-muted-foreground font-mono">
-        {spec.appPath}
-      </span>
+    <div className="border-rule mt-5 flex flex-col gap-2 border-t pt-3.5 text-xs sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+      <p className="text-muted-foreground font-mono text-[0.75rem] leading-5">
+        {spec.proofNote}
+      </p>
       <a
         href={spec.repoUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-foreground focus-visible:ring-ring inline-flex min-h-11 items-center gap-1 rounded-xs font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-8 [@media(hover:hover)_and_(pointer:fine)]:hover:text-pine"
+        className="text-foreground focus-visible:ring-ring inline-flex min-h-11 shrink-0 items-center gap-1 rounded-xs font-mono font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-8 [@media(hover:hover)_and_(pointer:fine)]:hover:text-pine"
       >
         {spec.repoLinkLabel}
-        <span className="sr-only"> (opens in a new tab)</span>
+        <span className="sr-only"> in Asymmetric-al/core (opens in a new tab)</span>
         <ArrowUpRightIcon className="size-3.5" />
       </a>
     </div>
@@ -362,13 +355,16 @@ export const SurfaceExplorer = (): ReactNode => {
       ? DEFAULT_SURFACE
       : (readSurfaceFromHash() ?? DEFAULT_SURFACE)
   );
+  const [hasInteracted, setHasInteracted] = useState(false);
 
   useEffect(() => {
     const handleHashChange = () => {
       const next = readSurfaceFromHash();
-      if (next) {
-        setActiveSurface(next);
+      if (!next) {
+        return;
       }
+      setHasInteracted(true);
+      setActiveSurface(next);
     };
     window.addEventListener("hashchange", handleHashChange);
     return () => {
@@ -380,6 +376,7 @@ export const SurfaceExplorer = (): ReactNode => {
     if (!isSurfaceKey(nextValue)) {
       return;
     }
+    setHasInteracted(true);
     setActiveSurface(nextValue);
     if (readSurfaceFromHash() !== null) {
       window.history.replaceState(
@@ -446,7 +443,7 @@ export const SurfaceExplorer = (): ReactNode => {
                   "focus-visible:ring-ring focus-visible:ring-offset-background grid focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent data-ending-style:hidden"
                 )}
               >
-                <SurfaceLedgerSheet spec={spec} animated />
+                <SurfaceLedgerSheet spec={spec} animated={hasInteracted} />
               </TabsPanel>
             ))}
           </div>

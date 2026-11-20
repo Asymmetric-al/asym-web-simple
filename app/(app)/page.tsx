@@ -39,6 +39,17 @@ const organizationSchema = {
       },
       description: siteMetadata.description,
     },
+    {
+      "@type": "SoftwareSourceCode",
+      "@id": `${siteConfig.url}#source`,
+      name: "Asymmetric-al/core",
+      codeRepository: siteConfig.repoUrl,
+      license: "https://spdx.org/licenses/AGPL-3.0-only.html",
+      programmingLanguage: "TypeScript",
+      creator: {
+        "@id": `${siteConfig.url}#organization`,
+      },
+    },
   ],
 };
 

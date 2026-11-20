@@ -40,9 +40,12 @@ Prefer edge-injected headers over client-supplied leading X-Forwarded-For hops.
 Note: in-memory Map buckets apply per serverless isolate (documented for prelaunch).
 */
 const readClientIp = (request: Request): string => {
-  const vercelIp = request.headers.get("x-vercel-forwarded-for")?.trim();
-  if (vercelIp) {
-    return vercelIp;
+  const vercelForwarded = request.headers.get("x-vercel-forwarded-for");
+  if (vercelForwarded) {
+    const rightmost = vercelForwarded.split(",").at(-1)?.trim();
+    if (rightmost) {
+      return rightmost;
+    }
   }
 
   const realIp = request.headers.get("x-real-ip")?.trim();

@@ -40,6 +40,12 @@ export const metadata: Metadata = createMetadata({
   noIndex: true,
 });
 
+const PRELAUNCH_MILESTONES = [
+  "Replace @asym/mock-data demo profiles on public worker directory and giving pages with live organization data.",
+  "Finish hosted team subscription billing and guided onboarding from existing donor records.",
+  "Publish a verified private support and privacy inbox before opening sign-ups.",
+] as const;
+
 interface StatusContent {
   readonly tone: "success" | "neutral" | "error";
   readonly eyebrow: string;
@@ -103,7 +109,8 @@ const buildStatusContent = ({
       tone: "neutral",
       eyebrow: "Sign\u{2011}ups closed",
       title: earlyAccessCopy.notConfigured,
-      description: "You can read the code and follow development on GitHub.",
+      description:
+        "Hosted onboarding stays closed until our pre-launch readiness checklist is complete. You can inspect the codebase or track current module maturity on GitHub.",
       primaryLabel: BACK_TO_HOMEPAGE_LABEL,
       primaryHref: "/",
       primaryIcon: "back",
@@ -213,6 +220,24 @@ export default async function EarlyAccessStatusPage({
           >
             {content.description}
           </p>
+          {!isConfigured && content.tone === "neutral" ? (
+            <div className="border-rule mt-6 border-t pt-5">
+              <p className="text-foreground font-mono text-xs font-medium">
+                Before hosted intake opens
+              </p>
+              <ul className="text-muted-foreground mt-3 space-y-2 text-sm leading-6">
+                {PRELAUNCH_MILESTONES.map((item) => (
+                  <li key={item} className="flex items-start gap-2.5">
+                    <span
+                      aria-hidden="true"
+                      className="border-draft mt-2 size-2 shrink-0 rounded-full border border-dashed"
+                    />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <Link
               href={content.primaryHref}
@@ -245,7 +270,7 @@ export default async function EarlyAccessStatusPage({
               For private questions, email{" "}
               <a
                 href={`mailto:${contactEmail}?subject=asym%20early%20access`}
-                className="text-foreground hover:text-primary focus-visible:ring-ring focus-visible:ring-offset-background link-resilient rounded-xs underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent"
+                className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-background link-resilient rounded-xs underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:text-pine"
               >
                 {contactEmail}
               </a>
