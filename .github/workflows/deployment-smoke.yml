@@ -1,8 +1,10 @@
-name: Preview smoke
+name: Deployment smoke
 
-# Runs the Playwright smoke suite against each successful Vercel preview.
-# Previews are behind Vercel Deployment Protection; the suite gets through with
-# the "GitHub Actions CI" Protection Bypass for Automation secret.
+# Runs the Playwright smoke suite against each successful Vercel deployment.
+# Git deployments are limited to main (see vercel.json), so this normally runs
+# after each production deploy; one-off previews (e.g. `vercel deploy`) are
+# tested too. Deployment URLs are behind Vercel Deployment Protection; the suite
+# gets through with the "GitHub Actions CI" Protection Bypass for Automation secret.
 on:
   deployment_status:
 
@@ -15,8 +17,9 @@ concurrency:
 
 jobs:
   smoke:
-    name: smoke (chromium, Vercel preview)
-    if: github.event.deployment_status.state == 'success' && github.event.deployment.environment == 'Preview'
+    name: smoke (chromium, Vercel ${{ github.event.deployment.environment }})
+    if: >-
+      github.event.deployment_status.state == 'success' && contains(fromJSON('["Preview", "Production"]'), github.event.deployment.environment)
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
