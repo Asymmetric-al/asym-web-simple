@@ -47,8 +47,7 @@ export const ConnectedSection = () => (
               or who is allowed to act.
             </p>
             <p>
-              Keeping website pages, giving, email, and donor history on the
-              same shared records keeps every team working from the same facts.
+              Giving pages, email, and donor history use the same records.
               Several staff actions in the public code already preview which
               records will change; we’re building review and approval history
               into campaign publishing.

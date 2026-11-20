@@ -240,7 +240,7 @@ test.describe("homepage smoke tests", () => {
         page
           .locator("#early-access")
           .getByRole("link", { name: /Follow progress on GitHub/u })
-      ).toHaveAttribute("href", REPO_URL);
+      ).toHaveAttribute("href", `${REPO_URL}#readme`);
       return;
     }
 

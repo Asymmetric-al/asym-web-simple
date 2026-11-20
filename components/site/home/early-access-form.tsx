@@ -697,7 +697,7 @@ export const EarlyAccessConfigured = ({
           className="font-heading text-foreground mt-3.5 text-[clamp(1.95rem,3.6vw,3.05rem)] leading-[1.04] font-semibold tracking-[-0.04em] text-balance"
         >
           {submitted
-            ? "What happens next"
+            ? "What happens next."
             : "Request early access for your team."}
         </h2>
         <p className="text-muted-foreground mt-5 max-w-[34rem] text-base leading-7 text-pretty sm:text-lg sm:leading-8">

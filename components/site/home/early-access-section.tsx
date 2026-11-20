@@ -48,12 +48,11 @@ export const EarlyAccessSection = () => {
               <div className="min-w-0">
                 <div className="sm:border-rule sm:bg-card sm:rounded-[1.6rem] sm:border sm:p-8">
                   <h3 className="font-heading text-foreground text-2xl font-semibold tracking-[-0.025em]">
-                    While sign&#8209;ups are closed
+                    In the meantime
                   </h3>
                   <p className="text-muted-foreground mt-3 text-base leading-7 text-pretty">
-                    You can check what is already built and what is in
-                    development right on this page, or follow public progress in
-                    the repository README on GitHub.
+                    See what’s built and what’s in development, or follow public
+                    progress in the repository README.
                   </p>
                   <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                     <Link
@@ -64,7 +63,7 @@ export const EarlyAccessSection = () => {
                       See what’s built
                     </Link>
                     <a
-                      href={siteConfig.repoUrl}
+                      href={`${siteConfig.repoUrl}#readme`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className={cn(

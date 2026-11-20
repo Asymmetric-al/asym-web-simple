@@ -324,7 +324,7 @@ export const WorkflowStepTitle = ({
       data-wf-trigger={String(stepNumber)}
       aria-pressed="false"
       aria-describedby={describedById}
-      className="decoration-rule group-hover/step:decoration-ink -my-2 inline-flex min-h-11 cursor-pointer items-center py-2 text-left underline underline-offset-[5px] focus-visible:outline-2 focus-visible:outline-transparent sm:my-0 sm:min-h-0 sm:py-0"
+      className="decoration-ink -my-2 inline-flex min-h-11 cursor-pointer items-center py-2 text-left underline-offset-[5px] group-hover/step:underline hover:underline focus-visible:outline-2 focus-visible:outline-transparent aria-pressed:underline sm:my-0 sm:min-h-0 sm:py-0"
     >
       {title}
     </button>

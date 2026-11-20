@@ -63,7 +63,7 @@ export default function NotFound() {
                 : "Early access status"}
             </Link>
           </div>
-          <nav aria-label="Homepage sections" className="mt-10">
+          <nav aria-label="Explore the homepage" className="mt-10">
             <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
               {navigationLinks.map((link) => (
                 <li key={link.href}>

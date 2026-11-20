@@ -52,7 +52,7 @@ export const HomeHero = () => {
             <p className="text-muted-foreground max-w-[40rem] text-base leading-7 text-pretty sm:text-[1.125rem] sm:leading-8">
               We’re building <span translate="no">asym</span> for missions
               organizations so receipts, donor history, and missionary updates
-              stop drifting apart across separate tools.
+              stay connected, with AI campaign drafting in development.
             </p>
 
             <div className="mt-5 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
@@ -118,7 +118,7 @@ export const HomeHero = () => {
 
         <noscript>
           <nav
-            aria-label="On this page"
+            aria-label="Homepage sections"
             className="border-rule mt-5 border-t pt-2 md:hidden"
           >
             <ul className="flex flex-wrap items-center gap-x-5 gap-y-1 text-sm">
