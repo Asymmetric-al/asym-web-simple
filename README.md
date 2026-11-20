@@ -6,7 +6,7 @@ The product website for **asym**, open-source software for nonprofits built by *
 
 This repository is the marketing site served at [asym.app](https://asym.app) (Vercel project `asym-web-simple`, production branch `main`). The product itself lives in [Asymmetric-al/core](https://github.com/Asymmetric-al/core) (AGPL-3.0-only). Product name, URL, navigation, and repository figures live in `lib/config.ts`; the optional private contact address comes from `NEXT_PUBLIC_CONTACT_EMAIL` via `lib/early-access-config.ts`.
 
-The homepage is informational: it describes the first workflow in text and never shows mock product screens. See `DESIGN.md`.
+The homepage uses clearly labeled illustrative specimens (`Sample record · fictional · no payment` and `Sample draft · nothing sends`) to explain how one gift crosses donor, missionary, and office records and how human approval works for AI drafts in development—never real customer data or unverified claims. See `DESIGN.md`.
 
 ### What lives in this repository
 
@@ -23,7 +23,7 @@ The **Next.js marketing site**, the **`/api/early-access`** intake route (plus S
 - **shadcn/ui** — `base-maia` style (`components.json`)
 - **next-themes** — dark mode (`disableTransitionOnChange`)
 - **Lucide React** — icons
-- **Fonts** (root layout) — Plus Jakarta Sans (headings), Inter (body), JetBrains Mono (mono)
+- **Fonts** (root layout) — Newsreader (editorial display serif), Instrument Sans (UI & reading body), IBM Plex Mono (ledger IDs & repo paths)
 - **Resend** — `/api/early-access` transactional email
 - **Payload CMS 3** — **Phase 1 (dormant until configured):** Postgres adapter, Lexical editor, Vercel Blob storage plugin, minimal **`users`** collection for `/admin`. **Marketing copy does not load from Payload**; see [docs/PAYLOAD-CMS.md](./docs/PAYLOAD-CMS.md).
 

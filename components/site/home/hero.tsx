@@ -2,29 +2,11 @@ import Link from "next/link";
 import { Container } from "@/components/site/container";
 import { GitHubMark } from "@/components/site/github-mark";
 import { GiftSpecimen } from "@/components/site/home/gift-specimen";
-import { ArrowDownIcon } from "@/components/site/icons";
+import { ArrowRightIcon } from "@/components/site/icons";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { mobileNavigationLinks, siteConfig } from "@/lib/config";
 import { isEarlyAccessConfigured } from "@/lib/early-access-config";
 import { cn } from "@/lib/utils";
-
-const legendItems = [
-  {
-    label: "Public code",
-    detail: "Giving, receipts, donor & missionary views",
-    dotClass: "bg-pine",
-  },
-  {
-    label: "In development",
-    detail: "AI appeal drafting & approval rules",
-    dotClass: "border border-dashed border-draft bg-transparent",
-  },
-  {
-    label: "Human decision",
-    detail: "Approval stamps & live actions",
-    dotClass: "bg-vermilion",
-  },
-] as const;
 
 export const HomeHero = () => {
   const isConfigured = isEarlyAccessConfigured();
@@ -32,35 +14,34 @@ export const HomeHero = () => {
   return (
     <section
       aria-labelledby="hero-title"
-      className="pt-24 pb-14 sm:pt-28 sm:pb-20 lg:flex lg:min-h-[min(56.25rem,100svh)] lg:items-center lg:pt-24 lg:pb-16"
+      className="pt-22 pb-12 sm:pt-26 sm:pb-16 xl:flex xl:min-h-[min(56.25rem,100svh)] xl:items-center xl:pt-24 xl:pb-14"
     >
       <Container>
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,44fr)_minmax(0,56fr)] lg:items-start lg:gap-12">
-          <div className="min-w-0 lg:pt-2">
+        <div className="grid gap-8 sm:gap-10 xl:grid-cols-[minmax(0,43fr)_minmax(0,57fr)] xl:items-center xl:gap-12">
+          <div className="min-w-0">
             <p className="text-pine font-sans text-sm font-medium">
               Open-source software for missions organizations
             </p>
 
             <h1
               id="hero-title"
-              className="font-heading text-foreground mt-4 text-[clamp(2.85rem,5.6vw,4.75rem)] leading-[0.98] font-medium tracking-[-0.03em]"
+              className="font-heading text-foreground mt-3.5 text-[clamp(2.75rem,5.4vw,4.75rem)] leading-[0.97] font-medium tracking-[-0.03em]"
             >
               <span className="block">One gift.</span>
               <span className="block italic">Three hands.</span>
             </h1>
 
-            <p className="text-muted-foreground mt-5 max-w-[36rem] text-base leading-7 text-pretty sm:text-[1.09375rem] sm:leading-8">
-              A donor gives. A receipt goes out. A missionary sees the gift.
-              Your office has the full picture.{" "}
+            <p className="text-muted-foreground mt-4 max-w-[34rem] text-base leading-7 text-pretty sm:mt-5 sm:text-[1.09375rem] sm:leading-8">
               <span translate="no" className="text-foreground font-medium">
                 asym
               </span>{" "}
               keeps giving pages, receipts, donor records, and missionary
-              updates on one open&#8209;source record, with human&#8209;approved
-              AI appeal drafting in development.
+              updates on one shared record. Donors get receipts, missionaries
+              see supporter progress, and your office keeps the full picture,
+              with human&#8209;approved AI appeal drafting in development.
             </p>
 
-            <div className="mt-6 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
+            <div className="mt-5 flex flex-col gap-2.5 sm:mt-6 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
               {isConfigured ? (
                 <Link
                   href={siteConfig.cta.primary.href}
@@ -68,15 +49,19 @@ export const HomeHero = () => {
                   className={cn(buttonVariants({ size: "lg" }), "px-6")}
                 >
                   {siteConfig.cta.primary.label}
+                  <ArrowRightIcon dataIcon="inline-end" />
                 </Link>
               ) : (
                 <Link
-                  href="/#product"
+                  href="/#open-source"
                   prefetch={false}
-                  className={cn(buttonVariants({ size: "lg" }), "px-6")}
+                  className={cn(
+                    buttonVariants({ variant: "ink", size: "lg" }),
+                    "px-6"
+                  )}
                 >
-                  See AI appeal approval
-                  <ArrowDownIcon />
+                  See what’s built
+                  <ArrowRightIcon dataIcon="inline-end" />
                 </Link>
               )}
               <a
@@ -94,27 +79,19 @@ export const HomeHero = () => {
               </a>
             </div>
 
-            {/* Unified three-ink key — states visual grammar once for the entire page */}
-            <dl className="border-rule mt-8 grid gap-3 border-t pt-5 sm:grid-cols-3 lg:grid-cols-1 lg:gap-2.5">
-              {legendItems.map((item) => (
-                <div
-                  key={item.label}
-                  className="flex items-baseline gap-2.5 text-xs leading-5"
+            {isConfigured ? null : (
+              <p className="text-muted-foreground mt-4 text-sm leading-6">
+                Also in development:{" "}
+                <Link
+                  href="/#product"
+                  prefetch={false}
+                  className="text-foreground hover:text-pine focus-visible:ring-ring focus-visible:ring-offset-background rounded-xs font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent"
                 >
-                  <dt className="text-foreground inline-flex shrink-0 items-center gap-2 font-mono font-medium">
-                    <span
-                      aria-hidden="true"
-                      className={cn(
-                        "inline-block size-2 rounded-full",
-                        item.dotClass
-                      )}
-                    />
-                    {item.label}
-                  </dt>
-                  <dd className="text-muted-foreground">{item.detail}</dd>
-                </div>
-              ))}
-            </dl>
+                  try the sample AI appeal approval
+                </Link>
+                .
+              </p>
+            )}
           </div>
 
           <div className="min-w-0">

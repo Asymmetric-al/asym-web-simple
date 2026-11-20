@@ -116,9 +116,7 @@ export const Footer = () => {
               </span>{" "}
               (AGPL-3.0-only)
             </p>
-            <p className="text-muted-foreground/85">
-              Set in Newsreader, Instrument Sans, and IBM Plex Mono.
-            </p>
+            <p>Set in Newsreader, Instrument Sans, and IBM Plex Mono.</p>
           </div>
           <ThemeToggle />
         </div>

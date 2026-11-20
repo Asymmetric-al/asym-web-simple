@@ -2,26 +2,14 @@
 
 import { Popover, PopoverContent, PopoverTrigger } from "@ui-sdk/react/popover";
 import Link from "next/link";
-import { useRef, useState, useSyncExternalStore } from "react";
+import { useRef, useState } from "react";
 import { CloseIcon, MenuIcon } from "@/components/site/icons";
 import { mobileNavigationLinks } from "@/lib/config";
+import { useIsClient } from "@/lib/use-is-client";
 import type { ComponentProps, ReactNode } from "react";
 
 const INTERACTIVE_OUTSIDE_SELECTOR =
   'a[href], button, input, textarea, select, summary, [role="button"], [role="radio"], [role="link"], [tabindex="0"]';
-
-const noop = () => {
-  // Intentionally empty unsubscribe for static client hydration store.
-};
-
-const emptySubscribe = () => noop;
-
-const useIsClient = (): boolean =>
-  useSyncExternalStore(
-    emptySubscribe,
-    () => true,
-    () => false
-  );
 
 const isInteractiveTarget = (target: EventTarget | null | undefined): boolean =>
   target instanceof Element &&

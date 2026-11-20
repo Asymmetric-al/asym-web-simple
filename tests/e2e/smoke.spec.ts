@@ -110,16 +110,16 @@ test.describe("homepage smoke tests", () => {
       page
         .getByRole("main")
         .getByRole("link", {
-          name: /^(?:Request early access|See AI appeal approval)$/u,
+          name: /^(?:Request early access|See what’s built)$/u,
         })
         .first()
-    ).toHaveAttribute("href", /^\/#(?:early-access|product)$/u);
+    ).toHaveAttribute("href", /^\/#(?:early-access|open-source)$/u);
     await expect(
       page.getByRole("link", { name: /^View the code/u })
     ).toHaveAttribute("href", REPO_URL);
   });
 
-  test("three-hand specimen switches roles, respects anonymity, and approval bench stamps human sign-off", async ({
+  test("three-hand specimen switches roles with keyboard, redacts anonymous donor on missionary roster, and stamps approval", async ({
     page,
   }) => {
     await page.goto("/", { waitUntil: "domcontentloaded" });
@@ -136,16 +136,29 @@ test.describe("homepage smoke tests", () => {
     await specimen.getByRole("button", { name: "$250" }).click();
     await expect(specimen).toContainText("$250.00");
 
-    await specimen.getByRole("button", { name: "Test anonymous gift" }).click();
-    await specimen.getByRole("tab", { name: "Missionary" }).click();
+    const anonToggle = specimen.getByRole("button", {
+      name: "Anonymous to field",
+    });
+    await expect(anonToggle).toHaveAttribute("aria-pressed", "false");
+    await anonToggle.click();
+    await expect(anonToggle).toHaveAttribute("aria-pressed", "true");
+
+    const missionaryTab = specimen.getByRole("tab", { name: "Missionary" });
+    await missionaryTab.click();
     await expect(
-      specimen.getByRole("heading", { level: 3, name: "Anonymous Supporter" })
+      specimen.getByRole("heading", { level: 3, name: "Anonymous partner" })
     ).toBeVisible();
     await expect(specimen).toContainText(
-      "Name & address hidden from missionary"
+      "Individual gift amount & ID hidden on roster"
     );
+    await expect(specimen).toContainText("Name, email, phone & notes redacted");
 
-    await specimen.getByRole("tab", { name: "Office" }).click();
+    await missionaryTab.focus();
+    await page.keyboard.press("ArrowRight");
+    await expect(specimen.getByRole("tab", { name: "Office" })).toHaveAttribute(
+      "aria-selected",
+      "true"
+    );
     await expect(
       specimen.getByRole("heading", {
         level: 3,
@@ -163,14 +176,56 @@ test.describe("homepage smoke tests", () => {
     ).toBeVisible();
     await expect(product).toContainText("Drafted by AI");
 
-    await product.getByRole("button", { name: "Make a staff edit" }).click();
+    await product.getByRole("button", { name: "Apply sample edit" }).click();
     await expect(product).toContainText("Two new wells funded");
 
-    await product.getByRole("button", { name: "Approve draft" }).click();
-    await expect(product).toContainText("Approved by staff");
+    await product.getByRole("button", { name: "Approve sample draft" }).click();
+    await expect(product).toContainText("Sample approved");
+    await expect(product).toContainText("Ready after sign-off");
     await expect(
       product.getByRole("button", { name: "Reset sample draft" })
     ).toBeVisible();
+    await product.getByRole("button", { name: "Reset sample draft" }).click();
+    await expect(
+      product.getByRole("button", { name: "Approve sample draft" })
+    ).toBeVisible();
+  });
+
+  test("homepage maintains near-zero CLS across hydration and unconfigured API returns 503", async ({
+    page,
+    request,
+  }) => {
+    await page.addInitScript(() => {
+      let cls = 0;
+      new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          const shift = entry as PerformanceEntry & {
+            value: number;
+            hadRecentInput: boolean;
+          };
+          if (!shift.hadRecentInput) {
+            cls += shift.value;
+          }
+        }
+        (window as unknown as { __asymCls: number }).__asymCls = cls;
+      }).observe({ type: "layout-shift", buffered: true });
+    });
+
+    await page.goto("/", { waitUntil: "networkidle" });
+    await waitForUi(page);
+
+    const measuredCls = await page.evaluate(
+      () => (window as unknown as { __asymCls?: number }).__asymCls ?? 0
+    );
+    expect(measuredCls).toBeLessThanOrEqual(0.01);
+
+    if ((await earlyAccessForm(page).count()) === 0) {
+      const apiRes = await request.post("/api/early-access", {
+        headers: { "content-type": "application/json" },
+        data: { email: "director@example.org" },
+      });
+      expect(apiRes.status()).toBe(503);
+    }
   });
 
   test("open source and team sections link to the public code", async ({

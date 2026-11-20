@@ -7,251 +7,260 @@ import {
   TabsPanel,
   TabsTab,
 } from "@ui-sdk/react/tabs";
-import { useState, useSyncExternalStore } from "react";
+import { useState } from "react";
+import { useIsClient } from "@/lib/use-is-client";
 import { cn } from "@/lib/utils";
 import type { ReactNode } from "react";
 
-const noop = () => {
-  // Static subscription for client hydration flag.
-};
-
-const emptySubscribe = () => noop;
-
-const useIsClient = (): boolean =>
-  useSyncExternalStore(
-    emptySubscribe,
-    () => true,
-    () => false
-  );
-
-type GiftAmount = 50 | 100 | 250;
-type GiftCadence = "monthly" | "one-time";
 type SpecimenRole = "donor" | "missionary" | "office";
+type GiftAmount = 50 | 100 | 250;
+type GiftCadence = "monthly" | "once";
 
 const AMOUNTS: readonly GiftAmount[] = [50, 100, 250];
-
-const ROLE_TABS: readonly {
-  readonly value: SpecimenRole;
-  readonly label: string;
-  readonly surface: string;
-}[] = [
-  { value: "donor", label: "Donor", surface: "apps/donor" },
-  { value: "missionary", label: "Missionary", surface: "apps/missionary" },
-  { value: "office", label: "Office", surface: "apps/admin" },
-];
+const ROLE_RECORD: Record<SpecimenRole, true> = {
+  donor: true,
+  missionary: true,
+  office: true,
+};
 
 const formatCurrency = (amount: GiftAmount): string => `$${amount}.00`;
-
 const formatCadence = (cadence: GiftCadence): string =>
   cadence === "monthly" ? "Monthly" : "One-time";
-
-const formatFrequencyLabel = (cadence: GiftCadence): string =>
+const formatCadenceSuffix = (cadence: GiftCadence): string =>
   cadence === "monthly" ? "/mo" : "once";
+
+interface DocumentProps {
+  readonly amount: GiftAmount;
+  readonly cadence: GiftCadence;
+  readonly isAnonymousToField: boolean;
+}
 
 const DonorDocument = ({
   amount,
   cadence,
   isAnonymousToField,
-}: {
-  readonly amount: GiftAmount;
-  readonly cadence: GiftCadence;
-  readonly isAnonymousToField: boolean;
-}) => (
-  <div className="receipt-perforation bg-card border-rule-strong relative rounded-t-xl border border-b-0 px-5 pt-5 pb-6 sm:px-6">
-    <div className="border-rule flex flex-wrap items-baseline justify-between gap-2 border-b pb-3.5">
-      <div>
-        <p className="text-pine font-mono text-xs font-medium tracking-[0.02em]">
-          Receipt #R-0418 · Settled
-        </p>
-        <h3 className="font-heading text-foreground mt-1 text-2xl font-medium tracking-[-0.02em]">
-          Official Gift Receipt
-        </h3>
+}: DocumentProps): ReactNode => (
+  <article
+    aria-label="Donor view: Official Gift Receipt"
+    className="receipt-perforation border-rule-strong bg-card surface-enter relative flex min-h-[16.5rem] flex-col justify-between rounded-t-xl border border-b-0 px-5 pt-5 pb-6 shadow-[var(--shadow-card)] sm:px-6"
+  >
+    <div>
+      <div className="border-rule flex flex-wrap items-start justify-between gap-3 border-b pb-4">
+        <div>
+          <p className="text-pine font-mono text-xs tracking-[0.04em] uppercase">
+            Receipt #R-0418 · Settled
+          </p>
+          <h3 className="font-heading text-foreground mt-1 text-2xl leading-tight font-medium tracking-[-0.02em]">
+            Official Gift Receipt
+          </h3>
+        </div>
+        <div className="text-right">
+          <p className="font-heading text-foreground text-3xl leading-none font-medium tabular-nums">
+            {formatCurrency(amount)}
+            <span className="text-muted-foreground ml-1 font-mono text-xs font-normal">
+              {formatCadenceSuffix(cadence)}
+            </span>
+          </p>
+        </div>
       </div>
-      <p className="font-heading text-foreground text-3xl font-medium tracking-[-0.03em] tabular-nums">
-        {formatCurrency(amount)}
-        <span className="text-muted-foreground ml-1 font-sans text-xs font-normal">
-          {formatFrequencyLabel(cadence)}
-        </span>
-      </p>
+
+      <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
+        <div>
+          <dt className="text-muted-foreground font-mono text-xs">Donor</dt>
+          <dd className="text-foreground mt-0.5 font-medium">
+            Rivera Household
+          </dd>
+        </div>
+        <div>
+          <dt className="text-muted-foreground font-mono text-xs">
+            Designation
+          </dt>
+          <dd className="text-foreground mt-0.5 font-medium">
+            Water Project, Field Team East
+          </dd>
+        </div>
+        <div>
+          <dt className="text-muted-foreground font-mono text-xs">Cadence</dt>
+          <dd className="text-foreground mt-0.5">
+            {formatCadence(cadence)} · Stripe checkout
+          </dd>
+        </div>
+        <div>
+          <dt className="text-muted-foreground font-mono text-xs">
+            Missionary visibility
+          </dt>
+          <dd className="text-foreground mt-0.5">
+            {isAnonymousToField
+              ? "Anonymous partner to missionary (receipt still issued)"
+              : "Named on Field Team East roster"}
+          </dd>
+        </div>
+      </dl>
     </div>
 
-    <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
-      <div>
-        <dt className="text-muted-foreground text-xs">Donor</dt>
-        <dd className="text-foreground mt-0.5 font-medium">Rivera Household</dd>
-      </div>
-      <div>
-        <dt className="text-muted-foreground text-xs">Designation</dt>
-        <dd className="text-foreground mt-0.5 font-medium">
-          Water Project, Field Team East
-        </dd>
-      </div>
-      <div>
-        <dt className="text-muted-foreground text-xs">Cadence</dt>
-        <dd className="text-foreground mt-0.5">
-          {formatCadence(cadence)} · Stripe checkout
-        </dd>
-      </div>
-      <div>
-        <dt className="text-muted-foreground text-xs">Missionary visibility</dt>
-        <dd className="text-foreground mt-0.5">
-          {isAnonymousToField
-            ? "Hidden from field worker (receipt still issued)"
-            : "Shared with Field Team East"}
-        </dd>
-      </div>
-    </dl>
-
-    <div className="border-rule bg-record/65 mt-4 flex flex-wrap items-center justify-between gap-2 rounded-lg border px-3.5 py-2.5 text-xs">
+    <div className="border-rule bg-record/65 mt-5 flex flex-wrap items-center justify-between gap-2 rounded-lg border px-3 py-2 text-xs">
       <span className="text-foreground font-medium">
-        Donor portal synced · history, pledges &amp; annual statements
+        Donor portal: history, pledges &amp; yearly statements
       </span>
       <span className="text-pine font-mono">apps/donor</span>
     </div>
-  </div>
+  </article>
 );
 
 const MissionaryDocument = ({
-  amount,
   cadence,
   isAnonymousToField,
-}: {
-  readonly amount: GiftAmount;
-  readonly cadence: GiftCadence;
-  readonly isAnonymousToField: boolean;
-}) => (
-  <div className="bg-card border-rule-strong rounded-xl border px-5 py-5 sm:px-6">
-    <div className="border-rule flex flex-wrap items-baseline justify-between gap-2 border-b pb-3.5">
-      <div>
-        <p className="text-pine font-mono text-xs font-medium tracking-[0.02em]">
-          Supporter Roster · Field Team East
-        </p>
-        <h3 className="font-heading text-foreground mt-1 text-2xl font-medium tracking-[-0.02em]">
-          {isAnonymousToField ? "Anonymous Supporter" : "Rivera Household"}
-        </h3>
+}: Omit<DocumentProps, "amount">): ReactNode => (
+  <article
+    aria-label="Missionary view: Supporter Roster"
+    className="border-rule-strong bg-card surface-enter flex min-h-[16.5rem] flex-col justify-between rounded-xl border px-5 py-5 shadow-[var(--shadow-card)] sm:px-6"
+  >
+    <div>
+      <div className="border-rule flex flex-wrap items-start justify-between gap-3 border-b pb-4">
+        <div>
+          <p className="text-pine font-mono text-xs tracking-[0.04em] uppercase">
+            Supporter Roster · Field Team East
+          </p>
+          <h3 className="font-heading text-foreground mt-1 text-2xl leading-tight font-medium tracking-[-0.02em]">
+            {isAnonymousToField ? "Anonymous partner" : "Rivera Household"}
+          </h3>
+        </div>
+        <span className="border-pine-border bg-pine-soft text-pine inline-flex items-center rounded-full border px-2.5 py-1 font-mono text-xs font-medium">
+          {cadence === "monthly" ? "Active pledge" : "Recorded support"}
+        </span>
       </div>
-      <span className="border-pine-border bg-pine-soft text-pine rounded-full border px-2.5 py-0.5 font-mono text-xs font-medium">
-        {cadence === "monthly" ? "Active pledge" : "Single gift"}
-      </span>
+
+      <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
+        <div>
+          <dt className="text-muted-foreground font-mono text-xs">
+            Partner status
+          </dt>
+          <dd className="text-foreground mt-0.5 font-medium">
+            {formatCadence(cadence)} partner · Oct 18, 2026
+          </dd>
+          {isAnonymousToField ? (
+            <dd className="text-muted-foreground mt-0.5 text-xs">
+              Individual gift amount &amp; ID hidden on roster
+            </dd>
+          ) : null}
+        </div>
+        <div>
+          <dt className="text-muted-foreground font-mono text-xs">
+            Contact &amp; updates
+          </dt>
+          <dd className="mt-0.5">
+            {isAnonymousToField ? (
+              <span className="border-draft-border bg-draft-soft text-draft inline-flex items-center rounded-md border border-dashed px-2 py-0.5 font-mono text-xs">
+                Name, email, phone &amp; notes redacted
+              </span>
+            ) : (
+              <span className="text-foreground font-medium">
+                Email &amp; ministry updates enabled
+              </span>
+            )}
+          </dd>
+        </div>
+        <div className="sm:col-span-2">
+          <dt className="text-muted-foreground font-mono text-xs">
+            Server-enforced scope
+          </dt>
+          <dd className="text-muted-foreground mt-0.5 text-xs leading-5">
+            Other field teams, org-wide financials, and unrelated donor
+            households stay outside this account.
+          </dd>
+        </div>
+      </dl>
     </div>
 
-    <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
-      <div>
-        <dt className="text-muted-foreground text-xs">Latest gift</dt>
-        <dd className="text-foreground mt-0.5 font-medium tabular-nums">
-          {formatCurrency(amount)} ({formatCadence(cadence).toLowerCase()}) ·
-          GIFT-0418
-        </dd>
-      </div>
-      <div>
-        <dt className="text-muted-foreground text-xs">Contact access</dt>
-        <dd className="mt-0.5">
-          {isAnonymousToField ? (
-            <span className="border-draft-border bg-draft-soft text-draft inline-flex rounded border border-dashed px-2 py-0.5 text-xs">
-              Name &amp; address hidden from missionary
-            </span>
-          ) : (
-            <span className="text-foreground">
-              Preferred: email · thank-you ready
-            </span>
-          )}
-        </dd>
-      </div>
-      <div className="sm:col-span-2">
-        <dt className="text-muted-foreground text-xs">
-          Permission boundary (not shown here)
-        </dt>
-        <dd className="text-muted-foreground mt-0.5">
-          Other field teams, organization-wide financials, and unrelated donor
-          households stay hidden from this account.
-        </dd>
-      </div>
-    </dl>
-
-    <div className="border-rule bg-record/65 mt-4 flex flex-wrap items-center justify-between gap-2 rounded-lg border px-3.5 py-2.5 text-xs">
+    <div className="border-rule bg-record/65 mt-5 flex flex-wrap items-center justify-between gap-2 rounded-lg border px-3 py-2 text-xs">
       <span className="text-foreground font-medium">
         {isAnonymousToField
-          ? "Gift total updated in support progress without exposing donor identity"
-          : "Prompted to log a thank-you note or share a ministry update"}
+          ? "Support progress updates; donor identity stays private"
+          : "Partner roster stays current without office spreadsheets"}
       </span>
       <span className="text-pine font-mono">apps/missionary</span>
     </div>
-  </div>
+  </article>
 );
 
 const OfficeDocument = ({
   amount,
   cadence,
   isAnonymousToField,
-}: {
-  readonly amount: GiftAmount;
-  readonly cadence: GiftCadence;
-  readonly isAnonymousToField: boolean;
-}) => (
-  <div className="bg-card border-rule-strong rounded-xl border px-5 py-5 sm:px-6">
-    <div className="border-rule flex flex-wrap items-baseline justify-between gap-2 border-b pb-3.5">
-      <div>
-        <p className="text-pine font-mono text-xs font-medium tracking-[0.02em]">
-          Mission Control · Fund 310-EAST-WATER
+}: DocumentProps): ReactNode => (
+  <article
+    aria-label="Office view: Staff Contribution Ledger"
+    className="border-rule-strong bg-card surface-enter flex min-h-[16.5rem] flex-col justify-between rounded-xl border px-5 py-5 shadow-[var(--shadow-card)] sm:px-6"
+  >
+    <div>
+      <div className="border-rule flex flex-wrap items-start justify-between gap-3 border-b pb-4">
+        <div>
+          <p className="text-pine font-mono text-xs tracking-[0.04em] uppercase">
+            Staff Workspace · Fund 310-EAST-WATER
+          </p>
+          <h3 className="font-heading text-foreground mt-1 text-2xl leading-tight font-medium tracking-[-0.02em]">
+            Contribution Ledger Entry
+          </h3>
+        </div>
+        <p className="font-heading text-foreground text-2xl leading-none font-medium tabular-nums">
+          {formatCurrency(amount)}
+          <span className="text-muted-foreground ml-1 font-mono text-xs font-normal">
+            {formatCadenceSuffix(cadence)}
+          </span>
         </p>
-        <h3 className="font-heading text-foreground mt-1 text-2xl font-medium tracking-[-0.02em]">
-          Contribution Ledger Entry
-        </h3>
       </div>
-      <span className="text-foreground font-mono text-sm font-medium tabular-nums">
-        {formatCurrency(amount)} {formatFrequencyLabel(cadence)}
-      </span>
+
+      <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
+        <div>
+          <dt className="text-muted-foreground font-mono text-xs">
+            Legal donor record
+          </dt>
+          <dd className="text-foreground mt-0.5 font-medium">
+            Rivera Household
+            {isAnonymousToField ? (
+              <span className="text-muted-foreground block text-xs font-normal">
+                Marked anonymous to missionary
+              </span>
+            ) : null}
+          </dd>
+        </div>
+        <div>
+          <dt className="text-muted-foreground font-mono text-xs">
+            Receipt record
+          </dt>
+          <dd className="text-foreground mt-0.5 font-medium">
+            #R-0418 linked · tax year 2026
+          </dd>
+        </div>
+        <div className="sm:col-span-2">
+          <dt className="text-muted-foreground font-mono text-xs">
+            Staff record preview (in public code)
+          </dt>
+          <dd className="mt-1 flex flex-wrap gap-1.5 font-mono text-xs">
+            <span className="border-pine-border bg-pine-soft text-pine rounded-md border px-2 py-0.5">
+              +1 gift (GIFT-0418)
+            </span>
+            <span className="border-pine-border bg-pine-soft text-pine rounded-md border px-2 py-0.5">
+              +1 receipt (#R-0418)
+            </span>
+            <span className="border-pine-border bg-pine-soft text-pine rounded-md border px-2 py-0.5">
+              {cadence === "monthly" ? "+1 active pledge" : "One-time gift"}
+            </span>
+          </dd>
+        </div>
+      </dl>
     </div>
 
-    <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
-      <div>
-        <dt className="text-muted-foreground text-xs">Legal donor record</dt>
-        <dd className="text-foreground mt-0.5 font-medium">
-          Rivera Household
-          {isAnonymousToField ? (
-            <span className="text-muted-foreground block text-xs font-normal">
-              Marked anonymous to field worker
-            </span>
-          ) : null}
-        </dd>
-      </div>
-      <div>
-        <dt className="text-muted-foreground text-xs">Automated receipt</dt>
-        <dd className="text-foreground mt-0.5">
-          #R-0418 linked · tax year 2026
-        </dd>
-      </div>
-      <div className="sm:col-span-2">
-        <dt className="text-muted-foreground text-xs">
-          Staff record preview (in public code)
-        </dt>
-        <dd className="mt-1 flex flex-wrap gap-2 font-mono text-xs">
-          <span className="border-pine-border bg-pine-soft text-pine rounded border px-2 py-0.5">
-            +1 gift (GIFT-0418)
-          </span>
-          <span className="border-pine-border bg-pine-soft text-pine rounded border px-2 py-0.5">
-            +1 receipt (#R-0418)
-          </span>
-          <span className="border-pine-border bg-pine-soft text-pine rounded border px-2 py-0.5">
-            {cadence === "monthly" ? "+1 active pledge" : "1x fund credit"}
-          </span>
-        </dd>
-      </div>
-    </dl>
-
-    <div className="border-rule bg-record/65 mt-4 flex flex-wrap items-center justify-between gap-2 rounded-lg border px-3.5 py-2.5 text-xs">
+    <div className="border-rule bg-record/65 mt-5 flex flex-wrap items-center justify-between gap-2 rounded-lg border px-3 py-2 text-xs">
       <span className="text-foreground font-medium">
-        CRM history, fund totals, and receipt trail stay in sync
+        CRM history, fund totals, and receipt records stay aligned
       </span>
       <span className="text-pine font-mono">apps/admin</span>
     </div>
-  </div>
+  </article>
 );
 
-/**
-Interactive Three-Hand Living Specimen (`Donor`, `Missionary`, `Office`)
-showing one anchored sample gift across Asymmetric-al/core's three real apps.
-*/
+// Interactive Three-Hand Living Specimen (`Donor`, `Missionary`, `Office`) anchored to one sample gift across Asymmetric-al/core's three surfaces.
 export const GiftSpecimen = (): ReactNode => {
   const isHydrated = useIsClient();
   const [role, setRole] = useState<SpecimenRole>("donor");
@@ -260,12 +269,7 @@ export const GiftSpecimen = (): ReactNode => {
   const [isAnonymousToField, setIsAnonymousToField] = useState(false);
 
   const handleRoleChange = (nextValue: string | null) => {
-    const validRoles: readonly SpecimenRole[] = [
-      "donor",
-      "missionary",
-      "office",
-    ];
-    if (nextValue !== null && validRoles.includes(nextValue as SpecimenRole)) {
+    if (nextValue !== null && Object.hasOwn(ROLE_RECORD, nextValue)) {
       setRole(nextValue as SpecimenRole);
     }
   };
@@ -275,7 +279,8 @@ export const GiftSpecimen = (): ReactNode => {
       <h2 id="specimen-heading" className="sr-only">
         Illustrative sample gift across donor, missionary, and office views
       </h2>
-      {/* Subtle archival registration corners */}
+
+      {/* Subtle archival registration marks */}
       <span
         aria-hidden="true"
         className="text-rule-strong pointer-events-none absolute -top-3 -left-2 hidden font-mono text-xs select-none sm:block"
@@ -289,13 +294,13 @@ export const GiftSpecimen = (): ReactNode => {
         +
       </span>
 
-      <div className="border-rule-strong bg-record/75 rounded-2xl border p-3.5 shadow-[var(--shadow-card)] sm:p-4">
-        {/* Specimen honesty bar */}
-        <div className="flex flex-wrap items-center justify-between gap-2 px-1 pb-3">
+      <div className="surface-hero rounded-2xl p-4 sm:p-5">
+        {/* Top disclosure & single-row status badge */}
+        <div className="flex flex-wrap items-center justify-between gap-2 pb-3">
           <p className="text-muted-foreground font-mono text-xs">
-            Illustrative specimen · fictional record · no payment taken
+            Sample record · fictional · no payment
           </p>
-          <span className="border-pine-border bg-pine-soft text-pine inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 font-mono text-xs font-medium">
+          <span className="border-pine-border bg-pine-soft text-pine inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-0.5 font-mono text-xs font-medium">
             <span
               aria-hidden="true"
               className="bg-pine size-1.5 rounded-full"
@@ -304,126 +309,177 @@ export const GiftSpecimen = (): ReactNode => {
           </span>
         </div>
 
-        {/* Fixed-position Gift ID Anchor — stays locked while role view switches */}
-        <div className="border-rule-strong bg-card rounded-xl border px-4 py-3">
+        {/* Anchored gift control strip — exact SSR height reservation prevents desktop hydration CLS */}
+        <div className="border-rule bg-card rounded-xl border px-3.5 py-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1">
-              <span className="text-foreground font-mono text-sm font-medium tracking-[0.02em] tabular-nums">
-                GIFT-0418
+            <div className="flex flex-wrap items-center gap-2 font-mono text-xs">
+              <span className="text-foreground font-medium">GIFT-0418</span>
+              <span aria-hidden="true" className="text-rule-strong">
+                ·
+              </span>
+              <span className="text-pine font-medium tabular-nums">
+                {formatCurrency(amount)} {formatCadenceSuffix(cadence)}
               </span>
               <span aria-hidden="true" className="text-rule-strong">
                 ·
               </span>
-              <span className="text-pine font-mono text-sm font-medium tabular-nums">
-                {formatCurrency(amount)} {formatFrequencyLabel(cadence)}
-              </span>
-              <span
-                aria-hidden="true"
-                className="text-rule-strong hidden sm:inline"
-              >
-                ·
-              </span>
-              <span className="text-muted-foreground text-xs sm:text-[0.8125rem]">
+              <span className="text-muted-foreground">
                 Water Project, Field Team East
               </span>
             </div>
           </div>
 
-          {/* Sample controls (upgraded on hydration so no-JS never sees inert buttons) */}
           {isHydrated ? (
-            <div className="border-rule mt-3 flex flex-wrap items-center gap-x-3 gap-y-2 border-t pt-2.5">
+            <div className="border-rule mt-3 flex flex-wrap items-center gap-2 border-t pt-3">
+              {/* Amount segmented controls */}
               <div
                 role="group"
                 aria-label="Sample gift amount"
-                className="inline-flex items-center gap-1"
+                className="border-rule bg-record/70 inline-flex items-center rounded-full border p-0.5"
               >
-                {AMOUNTS.map((value) => (
-                  <button
-                    key={value}
-                    type="button"
-                    aria-pressed={amount === value}
-                    onClick={() => setAmount(value)}
-                    className={cn(
-                      "focus-visible:ring-ring min-h-11 cursor-pointer rounded-full border px-3 font-mono text-xs font-medium tabular-nums focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-8 sm:px-2.5",
-                      amount === value
-                        ? "border-foreground bg-foreground text-background"
-                        : "border-rule-strong bg-background text-foreground hover:bg-secondary"
-                    )}
-                  >
-                    ${value}
-                  </button>
-                ))}
+                {AMOUNTS.map((value) => {
+                  const isActive = amount === value;
+                  return (
+                    <button
+                      key={value}
+                      type="button"
+                      aria-pressed={isActive}
+                      onClick={() => setAmount(value)}
+                      className={cn(
+                        "focus-visible:ring-ring inline-flex min-h-9 cursor-pointer items-center rounded-full px-2.5 font-mono text-xs font-medium tabular-nums transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-none sm:min-h-7",
+                        isActive
+                          ? "bg-foreground text-background"
+                          : "text-foreground/82 hover:text-foreground"
+                      )}
+                    >
+                      ${value}
+                    </button>
+                  );
+                })}
               </div>
 
-              <button
-                type="button"
-                aria-pressed={cadence === "one-time"}
-                onClick={() =>
-                  setCadence((prev) =>
-                    prev === "monthly" ? "one-time" : "monthly"
-                  )
-                }
-                className="border-rule-strong bg-background text-foreground hover:bg-secondary focus-visible:ring-ring min-h-11 cursor-pointer rounded-full border px-3 text-xs font-medium focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-8 sm:px-2.5"
+              {/* Cadence segmented controls (fixed labels + aria-pressed) */}
+              <div
+                role="group"
+                aria-label="Sample gift cadence"
+                className="border-rule bg-record/70 inline-flex items-center rounded-full border p-0.5"
               >
-                {cadence === "monthly"
-                  ? "Switch to one-time"
-                  : "Switch to monthly"}
-              </button>
+                {(
+                  [
+                    { key: "monthly", label: "Monthly" },
+                    { key: "once", label: "One-time" },
+                  ] as const
+                ).map((option) => {
+                  const isActive = cadence === option.key;
+                  return (
+                    <button
+                      key={option.key}
+                      type="button"
+                      aria-pressed={isActive}
+                      onClick={() => setCadence(option.key)}
+                      className={cn(
+                        "focus-visible:ring-ring inline-flex min-h-9 cursor-pointer items-center rounded-full px-2.5 text-xs font-medium transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-none sm:min-h-7",
+                        isActive
+                          ? "bg-foreground text-background"
+                          : "text-foreground/82 hover:text-foreground"
+                      )}
+                    >
+                      {option.label}
+                    </button>
+                  );
+                })}
+              </div>
 
+              {/* Privacy toggle: fixed accessible label with pine/ink state (never vermilion) */}
               <button
                 type="button"
                 aria-pressed={isAnonymousToField}
                 onClick={() => setIsAnonymousToField((prev) => !prev)}
                 className={cn(
-                  "focus-visible:ring-ring min-h-11 cursor-pointer rounded-full border px-3 text-xs font-medium focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-8 sm:px-2.5",
+                  "focus-visible:ring-ring inline-flex min-h-10 cursor-pointer items-center gap-1.5 rounded-full border px-3 text-xs font-medium transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-none sm:min-h-8",
                   isAnonymousToField
-                    ? "border-vermilion bg-vermilion-soft text-vermilion"
-                    : "border-rule-strong bg-background text-foreground hover:bg-secondary"
+                    ? "border-pine-border bg-pine-soft text-pine"
+                    : "border-input bg-background/80 text-foreground hover:bg-secondary"
                 )}
               >
-                {isAnonymousToField
-                  ? "Anonymous to field: On"
-                  : "Test anonymous gift"}
+                <span
+                  aria-hidden="true"
+                  className={cn(
+                    "size-1.5 rounded-full",
+                    isAnonymousToField
+                      ? "bg-pine"
+                      : "border-muted-foreground border"
+                  )}
+                />
+                <span>Anonymous to field</span>
               </button>
             </div>
-          ) : null}
+          ) : (
+            // Static zero-button SSR bar matching hydrated height for 0.0000 CLS and 0 inert no-JS controls.
+            <div className="border-rule mt-3 flex flex-wrap items-center gap-2 border-t pt-3">
+              <span className="border-rule bg-record/70 text-foreground inline-flex min-h-10 items-center rounded-full border px-3 font-mono text-xs sm:min-h-8">
+                $100 · Monthly · Named partner
+              </span>
+            </div>
+          )}
         </div>
 
-        {/* Interactive @ui-sdk/react/tabs role switcher (Donor / Missionary / Office) */}
+        {/* Three-hand role switcher powered by @ui-sdk/react/tabs */}
         {isHydrated ? (
-          <Tabs value={role} onValueChange={handleRoleChange} className="mt-3">
+          <Tabs
+            value={role}
+            onValueChange={handleRoleChange}
+            className="mt-3.5"
+          >
             <TabsList
-              aria-label="Inspect GIFT-0418 by role"
-              className="border-rule bg-background/80 relative grid grid-cols-3 rounded-full border p-1"
+              aria-label="Inspect gift by role"
+              className="border-input bg-record relative grid grid-cols-3 rounded-full border p-1"
             >
               <TabsIndicator className="specimen-tabs-indicator" />
-              {ROLE_TABS.map((tab) => (
-                <TabsTab
-                  key={tab.value}
-                  value={tab.value}
-                  className="text-muted-foreground data-selected:text-foreground focus-visible:ring-ring relative z-10 inline-flex min-h-11 cursor-pointer items-center justify-center gap-1.5 rounded-full px-2 text-xs font-medium select-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-9 sm:text-sm"
-                >
-                  <span>{tab.label}</span>
-                </TabsTab>
-              ))}
+              <TabsTab
+                value="donor"
+                className="text-foreground/80 hover:text-foreground data-selected:text-background data-selected:hover:text-background focus-visible:ring-ring focus-visible:ring-offset-record relative z-10 inline-flex min-h-11 cursor-pointer items-center justify-center rounded-full px-3 text-sm font-medium transition-colors duration-150 select-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none data-selected:font-semibold sm:min-h-9"
+              >
+                Donor
+              </TabsTab>
+              <TabsTab
+                value="missionary"
+                className="text-foreground/80 hover:text-foreground data-selected:text-background data-selected:hover:text-background focus-visible:ring-ring focus-visible:ring-offset-record relative z-10 inline-flex min-h-11 cursor-pointer items-center justify-center rounded-full px-3 text-sm font-medium transition-colors duration-150 select-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none data-selected:font-semibold sm:min-h-9"
+              >
+                Missionary
+              </TabsTab>
+              <TabsTab
+                value="office"
+                className="text-foreground/80 hover:text-foreground data-selected:text-background data-selected:hover:text-background focus-visible:ring-ring focus-visible:ring-offset-record relative z-10 inline-flex min-h-11 cursor-pointer items-center justify-center rounded-full px-3 text-sm font-medium transition-colors duration-150 select-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none data-selected:font-semibold sm:min-h-9"
+              >
+                Office
+              </TabsTab>
             </TabsList>
 
             <div className="mt-3">
-              <TabsPanel value="donor" className="outline-none">
+              <TabsPanel
+                value="donor"
+                className="focus-visible:ring-ring focus-visible:ring-offset-record rounded-xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+              >
                 <DonorDocument
                   amount={amount}
                   cadence={cadence}
                   isAnonymousToField={isAnonymousToField}
                 />
               </TabsPanel>
-              <TabsPanel value="missionary" className="outline-none">
+              <TabsPanel
+                value="missionary"
+                className="focus-visible:ring-ring focus-visible:ring-offset-record rounded-xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+              >
                 <MissionaryDocument
-                  amount={amount}
                   cadence={cadence}
                   isAnonymousToField={isAnonymousToField}
                 />
               </TabsPanel>
-              <TabsPanel value="office" className="outline-none">
+              <TabsPanel
+                value="office"
+                className="focus-visible:ring-ring focus-visible:ring-offset-record rounded-xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+              >
                 <OfficeDocument
                   amount={amount}
                   cadence={cadence}
@@ -437,21 +493,36 @@ export const GiftSpecimen = (): ReactNode => {
             </p>
           </Tabs>
         ) : (
-          // SSR default view: Donor receipt rendered immediately at 0ms for zero CLS.
-          <div className="mt-3">
-            <DonorDocument
-              amount={100}
-              cadence="monthly"
-              isAnonymousToField={false}
-            />
+          // Zero-button static role header matching hydrated TabsList height for 0.0000 CLS.
+          <div className="mt-3.5">
+            <div
+              aria-hidden="true"
+              className="border-input bg-record grid grid-cols-3 rounded-full border p-1"
+            >
+              <span className="bg-foreground text-background inline-flex min-h-11 items-center justify-center rounded-full px-3 text-sm font-semibold sm:min-h-9">
+                Donor
+              </span>
+              <span className="text-foreground/80 inline-flex min-h-11 items-center justify-center rounded-full px-3 text-sm font-medium sm:min-h-9">
+                Missionary
+              </span>
+              <span className="text-foreground/80 inline-flex min-h-11 items-center justify-center rounded-full px-3 text-sm font-medium sm:min-h-9">
+                Office
+              </span>
+            </div>
+            <div className="mt-3">
+              <DonorDocument
+                amount={100}
+                cadence="monthly"
+                isAnonymousToField={false}
+              />
+            </div>
           </div>
         )}
 
-        {/* No-JS complete three-view triptych fallback */}
+        {/* Complete no-JS static triptych fallback */}
         <noscript>
           <div className="mt-4 space-y-3">
             <MissionaryDocument
-              amount={100}
               cadence="monthly"
               isAnonymousToField={false}
             />
@@ -463,15 +534,19 @@ export const GiftSpecimen = (): ReactNode => {
           </div>
         </noscript>
 
-        {/* Quiet scholarly marginalia */}
-        <p className="text-muted-foreground mt-4 px-1 text-xs leading-5">
-          Same gift ID, three role-specific views. Switch between{" "}
-          <span className="text-foreground font-medium">Donor</span>,{" "}
-          <span className="text-foreground font-medium">Missionary</span>, and{" "}
-          <span className="text-foreground font-medium">Office</span> (or toggle{" "}
-          <span className="text-foreground font-medium">anonymous gift</span>)
-          to see what stays connected and what stays private.
-        </p>
+        {isHydrated ? (
+          <p className="text-muted-foreground mt-3.5 px-0.5 text-xs leading-5">
+            Switch between{" "}
+            <strong className="text-foreground font-medium">Donor</strong>,{" "}
+            <strong className="text-foreground font-medium">Missionary</strong>,
+            and <strong className="text-foreground font-medium">Office</strong>{" "}
+            to inspect what stays linked and what stays private.
+          </p>
+        ) : (
+          <p className="text-muted-foreground mt-3.5 px-0.5 text-xs leading-5">
+            One sample gift shown across donor, missionary, and office records.
+          </p>
+        )}
       </div>
     </div>
   );

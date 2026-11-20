@@ -55,7 +55,7 @@ export const StatusPill = ({
     )}
   >
     <span
-      className="bg-vermilion size-1.5 shrink-0 rounded-full"
+      className="bg-draft size-1.5 shrink-0 rounded-full"
       aria-hidden="true"
     />
     {children}

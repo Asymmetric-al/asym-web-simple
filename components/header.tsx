@@ -10,7 +10,7 @@ export const Header = () => {
   const isConfigured = isEarlyAccessConfigured();
 
   return (
-    <header className="border-rule bg-background/94 fixed inset-x-0 top-0 z-50 border-b pt-[env(safe-area-inset-top)] pr-[env(safe-area-inset-right)] pl-[env(safe-area-inset-left)] backdrop-blur-md">
+    <header className="border-rule bg-background/97 md:bg-background/94 fixed inset-x-0 top-0 z-50 border-b pt-[env(safe-area-inset-top)] pr-[env(safe-area-inset-right)] pl-[env(safe-area-inset-left)] md:backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-[80rem] items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
         <div className="flex min-w-0 items-center gap-3.5">
           <Link
@@ -74,10 +74,7 @@ export const Header = () => {
                 </span>
               </>
             ) : (
-              <>
-                <span className="sm:hidden">Access status</span>
-                <span className="hidden sm:inline">Early access status</span>
-              </>
+              <span>Early access</span>
             )}
           </Link>
           <MobileNavMenu />

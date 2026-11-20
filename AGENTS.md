@@ -6,8 +6,8 @@
 
 - For any task involving UI, UX, visual styling, layout, components, Tailwind classes, CSS variables, design tokens, page generation, landing pages, forms, copy hierarchy, or visual polish: **read `DESIGN.md` first**.
 - Treat `DESIGN.md` as authoritative design context unless the user explicitly overrides it in their request.
-- Reuse the semantic names and design language from `DESIGN.md` when generating or editing UI (e.g. "Deep Ink Navy (#1e3a4f)" not "primary color"; "Fully pill-shaped" not "rounded-full"; "surface-panel" not "frosted card").
-- Keep all new work visually aligned with `DESIGN.md`: warm parchment palette, frosted-glass surface hierarchy, generous pill-shaped corners, negative-tracked Plus Jakarta Sans headings, and JetBrains Mono eyebrow labels.
+- Reuse the semantic names and design language from `DESIGN.md` when generating or editing UI (e.g. "Prussian Ink (#12202b)", "Field Pine (#1b574c)", "Postmark Vermilion (#b33a22)", "Dashed Graphite (#4a5966)", and "Cotton Stock (`bg-card`)" / "surface-folio" rather than ad-hoc color or glass terms).
+- Keep all new work visually aligned with `DESIGN.md`: warm unbleached rag paper (`#f3eee3`) & Night Ledger (`#0b131a`) palette, solid Cotton Stock specimen/folio surfaces (no frosted glass), Newsreader optical editorial serif display headings, Instrument Sans UI/body prose, and IBM Plex Mono ledger/code metadata.
 - If an implemented UI change intentionally diverges from `DESIGN.md`, update `DESIGN.md` in the same commit or PR so it stays current.
 - Do not create parallel design instructions in ad-hoc comments, inline styles, or separate files — design system knowledge belongs in `DESIGN.md`.
 - There is no `.stitch/DESIGN.md`; `DESIGN.md` at the repo root is the only design document.

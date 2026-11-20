@@ -45,7 +45,10 @@ export default function NotFound() {
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link
               href="/"
-              className={cn(buttonVariants({ size: "lg" }), "px-6")}
+              className={cn(
+                buttonVariants({ variant: "ink", size: "lg" }),
+                "px-6"
+              )}
             >
               Go to the homepage
               <ArrowRightIcon dataIcon="inline-end" />
@@ -58,9 +61,7 @@ export default function NotFound() {
                 "px-6"
               )}
             >
-              {isConfigured
-                ? siteConfig.cta.primary.label
-                : "Early access status"}
+              {isConfigured ? siteConfig.cta.primary.label : "Early access"}
             </Link>
           </div>
           <nav aria-label="Explore the homepage" className="mt-10">

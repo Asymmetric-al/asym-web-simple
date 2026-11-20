@@ -1,7 +1,7 @@
-import dynamic from "next/dynamic";
 import Link from "next/link";
 import { Container } from "@/components/site/container";
 import { GitHubMark } from "@/components/site/github-mark";
+import { EarlyAccessConfigured } from "@/components/site/home/early-access-form";
 import { Eyebrow, SectionTitle } from "@/components/site/home/section-heading";
 import { ArrowUpRightIcon } from "@/components/site/icons";
 import { buttonVariants } from "@/components/ui/button-variants";
@@ -12,12 +12,6 @@ import {
 } from "@/lib/early-access-config";
 import { cn } from "@/lib/utils";
 
-const EarlyAccessConfigured = dynamic(() =>
-  import("@/components/site/home/early-access-form").then(
-    (mod) => mod.EarlyAccessConfigured
-  )
-);
-
 export const EarlyAccessSection = () => {
   const isConfigured = isEarlyAccessConfigured();
   const contactEmail = getVerifiedContactEmail();
@@ -26,14 +20,17 @@ export const EarlyAccessSection = () => {
     <section
       id="early-access"
       aria-labelledby="early-access-title"
-      className="pb-[clamp(3.5rem,6vw,5.5rem)]"
+      className="pb-[clamp(3.25rem,5.5vw,5rem)]"
     >
       <Container>
-        <div className="surface-folio relative overflow-hidden rounded-2xl p-6 sm:p-10 lg:p-12">
-          {/* Subtle top correspondence accent bar */}
+        <div className="surface-folio relative rounded-2xl p-6 sm:p-10 lg:p-12">
+          {/* Corner-safe inset accent rule: vermilion only when live intake is open */}
           <div
             aria-hidden="true"
-            className="bg-vermilion/85 absolute inset-x-0 top-0 h-[3px]"
+            className={cn(
+              "mb-6 h-[2.5px] w-16 rounded-full",
+              isConfigured ? "bg-vermilion" : "bg-pine"
+            )}
           />
 
           {isConfigured ? (
@@ -64,7 +61,10 @@ export const EarlyAccessSection = () => {
                   <Link
                     href="/#where-things-stand"
                     prefetch={false}
-                    className={cn(buttonVariants({ size: "lg" }), "px-6")}
+                    className={cn(
+                      buttonVariants({ variant: "ink", size: "lg" }),
+                      "px-6"
+                    )}
                   >
                     See what’s built
                   </Link>

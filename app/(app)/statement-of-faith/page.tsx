@@ -58,7 +58,7 @@ export default function StatementOfFaithPage() {
     <DocumentPage
       eyebrow="Statement of Faith"
       title={
-        <h1 className="font-heading text-foreground mt-5 text-[clamp(2.8rem,5.5vw,4.6rem)] leading-[0.98] font-semibold tracking-[-0.04em] text-balance">
+        <h1 className="font-heading text-foreground mt-5 text-[clamp(2.8rem,5.5vw,4.6rem)] leading-[0.98] font-medium tracking-[-0.03em] text-balance">
           Statement of Faith
         </h1>
       }

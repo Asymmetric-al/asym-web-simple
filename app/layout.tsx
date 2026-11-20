@@ -9,15 +9,16 @@ import "./globals.css";
 const displayFont = Newsreader({
   variable: "--font-newsreader",
   subsets: ["latin"],
+  weight: ["500"],
   style: ["normal", "italic"],
-  axes: ["opsz"],
   display: "swap",
 });
 
 const bodyFont = Instrument_Sans({
   variable: "--font-instrument-sans",
   subsets: ["latin"],
-  style: ["normal", "italic"],
+  weight: ["400", "500", "600"],
+  style: ["normal"],
   display: "swap",
 });
 
@@ -25,6 +26,7 @@ const monoFont = IBM_Plex_Mono({
   variable: "--font-ibm-plex-mono",
   subsets: ["latin"],
   weight: ["400", "500"],
+  preload: false,
   display: "swap",
 });
 

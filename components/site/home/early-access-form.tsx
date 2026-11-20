@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  useEffect,
-  useId,
-  useRef,
-  useState,
-  useSyncExternalStore,
-} from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -23,6 +17,7 @@ import {
   parseRetryAfterSeconds,
   validateEarlyAccessRequest,
 } from "@/lib/early-access";
+import { useIsClient } from "@/lib/use-is-client";
 import { cn } from "@/lib/utils";
 import type {
   EarlyAccessErrors,
@@ -127,19 +122,6 @@ const DRAFT_STORAGE_KEY = "asym:early-access-draft:v1";
 const VALIDATION_FAILED = 422;
 const RATE_LIMITED = 429;
 const NOT_CONFIGURED = 503;
-
-const noop = () => {
-  // Static subscription for client hydration flag.
-};
-
-const emptySubscribe = () => noop;
-
-const useIsClient = (): boolean =>
-  useSyncExternalStore(
-    emptySubscribe,
-    () => true,
-    () => false
-  );
 
 const readStoredDraft = (): Partial<EarlyAccessRequest> | null => {
   try {
@@ -284,8 +266,27 @@ const FieldMessage = ({
     return null;
   }
   return (
-    <p id={id} className="text-destructive mt-2 text-sm leading-5">
-      {children}
+    <p
+      id={id}
+      className="text-destructive mt-2 flex items-center gap-1.5 text-sm leading-5 font-medium"
+    >
+      <svg
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+        className="size-3.5 shrink-0"
+      >
+        <circle cx="12" cy="12" r="10" />
+        <path d="M12 8v4" />
+        <path d="M12 16h.01" />
+      </svg>
+      <span>{children}</span>
     </p>
   );
 };
@@ -353,7 +354,7 @@ export const EarlyAccessForm = ({
       <div className="surface-enter border-rule-strong bg-background/70 relative rounded-xl border p-6 sm:p-8">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <CircleCheckIcon className="text-pine size-7" />
-          <span className="approval-stamp inline-block px-2.5 py-1 font-mono text-xs font-medium tracking-[0.06em] uppercase">
+          <span className="border-pine-border bg-pine-soft text-pine inline-block rounded-md border px-2.5 py-1 font-mono text-xs font-medium tracking-[0.06em] uppercase">
             Received
           </span>
         </div>
@@ -705,8 +706,8 @@ export const EarlyAccessConfigured = ({
         </h2>
         <p className="text-muted-foreground mt-4 max-w-[34rem] text-base leading-7 text-pretty sm:text-[1.0625rem] sm:leading-8">
           {submitted
-            ? "We review requests from missions organizations as onboarding capacity opens and follow up by email."
-            : "Tell us which organization you’re with and what part of fundraising or donor care you’d like help with. We review requests as capacity opens; submitting does not guarantee immediate access."}
+            ? "The Asymmetric.al team reviews requests from missions organizations as onboarding capacity opens and follows up by email."
+            : "Tell us which organization you’re with and what part of fundraising or donor care you’d like help with. The Asymmetric.al team reviews requests as capacity opens; submitting does not guarantee immediate access."}
         </p>
       </div>
       <div className="min-w-0">

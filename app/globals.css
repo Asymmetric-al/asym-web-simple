@@ -31,10 +31,10 @@
   --muted-foreground: #485763;
   --accent: #e3eee9;
   --accent-foreground: #133932;
-  --destructive: #b52d1d;
+  --destructive: #8b1d41;
   --destructive-foreground: #fcfbf7;
   --border: rgb(18 32 43 / 14%);
-  --input: rgb(18 32 43 / 48%);
+  --input: rgb(18 32 43 / 58%);
   --ring: #1b574c;
   --rule: rgb(18 32 43 / 18%);
   --rule-strong: rgb(18 32 43 / 30%);
@@ -97,10 +97,10 @@
   --muted-foreground: #b2bfc8;
   --accent: #142c29;
   --accent-foreground: #c7efe3;
-  --destructive: #ff8a75;
+  --destructive: #f288a8;
   --destructive-foreground: #0b131a;
   --border: rgb(239 233 221 / 14%);
-  --input: rgb(239 233 221 / 38%);
+  --input: rgb(239 233 221 / 52%);
   --ring: #62bda8;
   --rule: rgb(239 233 221 / 16%);
   --rule-strong: rgb(239 233 221 / 28%);
@@ -115,10 +115,10 @@
   --draft: #96a6b4;
   --draft-soft: #0f1a23;
   --draft-border: rgb(150 166 180 / 38%);
-  --night: #12212e;
-  --night-foreground: #efe9dd;
-  --night-muted: #b2bfc8;
-  --night-rule: rgb(239 233 221 / 18%);
+  --night: #152635;
+  --night-foreground: #f3eee3;
+  --night-muted: #bcc9d2;
+  --night-rule: rgb(243 238 227 / 22%);
   --night-accent: #f08066;
   --selection-bg: rgb(98 189 168 / 28%);
   --frame: #0b131a;
@@ -384,28 +384,35 @@
   pointer-events: none;
 }
 
-/* Sliding indicator for @ui-sdk/react/tabs specimen role bar */
+/* GPU-composited high-contrast ink indicator for @ui-sdk/react/tabs specimen role bar */
 .specimen-tabs-indicator {
   position: absolute;
   z-index: 0;
-  top: var(--active-tab-top);
-  left: var(--active-tab-left);
+  top: 4px;
+  bottom: 4px;
+  left: 0;
   width: var(--active-tab-width);
-  height: var(--active-tab-height);
-  border: 1px solid var(--rule-strong);
+  border: 1px solid var(--foreground);
   border-radius: 999px;
-  background: var(--card);
-  box-shadow: 0 1px 2px rgb(18 32 43 / 8%);
+  background: var(--foreground);
+  box-shadow: 0 1px 2px rgb(18 32 43 / 16%);
   pointer-events: none;
-  transition:
-    left 180ms var(--ease-out-expo),
-    width 180ms var(--ease-out-expo),
-    top 180ms var(--ease-out-expo),
-    height 180ms var(--ease-out-expo);
+  transform: translate3d(var(--active-tab-left, 4px), 0, 0);
+  transition: transform 180ms var(--ease-out-expo);
+  will-change: transform;
 }
 
 .specimen-tabs-indicator[data-activation-direction="none"] {
   transition: none;
+}
+
+.midnight-band {
+  background-color: var(--night);
+  background-image: radial-gradient(
+    ellipse 72% 62% at 78% 12%,
+    rgb(98 189 168 / 12%),
+    transparent 68%
+  );
 }
 
 @keyframes stamp-land {
@@ -447,6 +454,12 @@
 
 .surface-enter {
   animation: surface-enter 160ms var(--ease-out-expo) both;
+}
+
+@media (width < 768px) {
+  .page-atmosphere::after {
+    display: none;
+  }
 }
 
 @media (forced-colors: active) {

@@ -27,11 +27,7 @@ interface RateLimitBucket {
 }
 
 type FormOutcome =
-  | "received"
-  | "invalid"
-  | "rate_limited"
-  | "unavailable"
-  | "failed";
+  "received" | "invalid" | "rate_limited" | "unavailable" | "failed";
 
 let rateLimitStore: Map<string, RateLimitBucket> | null = null;
 
@@ -300,12 +296,12 @@ const wasAcceptedForDelivery = async (
   const resend = new Resend(config.apiKey);
 
   try {
-    const { error } = await resend.emails.send({
+    const { data, error } = await resend.emails.send({
       from: config.from,
       to: [config.inbox],
       ...message,
     });
-    return error === null;
+    return error === null && typeof data?.id === "string" && data.id.length > 0;
   } catch {
     return false;
   }
@@ -352,17 +348,17 @@ export const POST = async (request: Request): Promise<NextResponse> => {
       : NextResponse.json({ ok: true });
   }
 
+  const config = readEarlyAccessDeliveryConfig();
+  if (!config) {
+    return respondFailure(request, isUrlEncodedForm, 503, "not_configured");
+  }
+
   const submission = normalizeEarlyAccessRequest(parsed.body);
   const errors = validateEarlyAccessRequest(submission);
   if (hasErrors(errors)) {
     return respondFailure(request, isUrlEncodedForm, 422, "invalid", {
       errors,
     });
-  }
-
-  const config = readEarlyAccessDeliveryConfig();
-  if (!config) {
-    return respondFailure(request, isUrlEncodedForm, 503, "not_configured");
   }
 
   const delivered = await wasAcceptedForDelivery(config, {

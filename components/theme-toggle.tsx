@@ -5,22 +5,9 @@ import {
   SegmentedControlItem,
 } from "@ui-sdk/react/segmented-control";
 import { useTheme } from "next-themes";
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useIsClient } from "@/lib/use-is-client";
 import { cn } from "@/lib/utils";
 import type { ReactNode } from "react";
-
-const noop = () => {
-  // Intentionally empty unsubscribe for static client hydration store.
-};
-
-const emptySubscribe = () => noop;
-
-const useIsClient = (): boolean =>
-  useSyncExternalStore(
-    emptySubscribe,
-    () => true,
-    () => false
-  );
 
 const SunIcon = (): ReactNode => (
   <svg
@@ -83,55 +70,24 @@ const isThemeValue = (value: string | null): value is ThemeValue =>
 export const ThemeToggle = () => {
   const isMounted = useIsClient();
   const { setTheme, theme = "system" } = useTheme();
-  const [pendingTheme, setPendingTheme] = useState<ThemeValue | null>(null);
-  const rafRef = useRef<number | null>(null);
-  const timerRef = useRef<number | null>(null);
-
-  useEffect(
-    () => () => {
-      if (rafRef.current !== null) {
-        window.cancelAnimationFrame(rafRef.current);
-      }
-      if (timerRef.current !== null) {
-        window.clearTimeout(timerRef.current);
-      }
-    },
-    []
-  );
 
   if (!isMounted) {
     return <div className="h-[3.375rem] sm:h-[2.625rem]" aria-hidden="true" />;
   }
 
   const currentTheme: ThemeValue = isThemeValue(theme) ? theme : "system";
-  const activeTheme: ThemeValue = pendingTheme ?? currentTheme;
 
   const handleValueChange = (nextValue: string | null) => {
     if (!isThemeValue(nextValue)) {
       return;
     }
-    if (rafRef.current !== null) {
-      window.cancelAnimationFrame(rafRef.current);
-    }
-    if (timerRef.current !== null) {
-      window.clearTimeout(timerRef.current);
-    }
-    // Paint the active pill state immediately, then commit the root theme swap on the next frame so mobile INP stays responsive.
-    setPendingTheme(nextValue);
-    rafRef.current = window.requestAnimationFrame(() => {
-      rafRef.current = null;
-      timerRef.current = window.setTimeout(() => {
-        timerRef.current = null;
-        setTheme(nextValue);
-        setPendingTheme(null);
-      }, 0);
-    });
+    setTheme(nextValue);
   };
 
   return (
     <SegmentedControl
       aria-label="Color theme"
-      value={activeTheme}
+      value={currentTheme}
       onValueChange={handleValueChange}
       className="border-rule bg-record has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-background inline-flex w-fit items-center self-start rounded-full border p-1 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2 sm:self-auto forced-colors:border-[ButtonBorder]"
     >

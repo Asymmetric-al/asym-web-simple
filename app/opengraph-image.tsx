@@ -19,8 +19,6 @@ const INK = "#12202B";
 const MUTED = "#485763";
 const PINE = "#1B574C";
 const PINE_SOFT = "#E3EEE9";
-const VERMILION = "#B33A22";
-const VERMILION_SOFT = "#F8EBE6";
 const RULE = "rgba(18,32,43,0.18)";
 const SPACE_BETWEEN = "space-between";
 const FONT_NEWSREADER = '"Newsreader"';
@@ -66,12 +64,12 @@ export default async function openGraphImage() {
         width: "100%",
         height: "100%",
         background: PAPER,
-        padding: "44px 52px",
+        padding: "46px 54px",
         fontFamily: '"Instrument Sans"',
         color: INK,
         justifyContent: SPACE_BETWEEN,
         alignItems: "stretch",
-        gap: "42px",
+        gap: "44px",
       }}
     >
       {/* Left editorial column */}
@@ -81,21 +79,21 @@ export default async function openGraphImage() {
           flexDirection: "column",
           justifyContent: SPACE_BETWEEN,
           width: "540px",
-          paddingTop: "6px",
-          paddingBottom: "6px",
+          paddingTop: "4px",
+          paddingBottom: "4px",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
           <img
             src={logoSrc}
             alt=""
-            width={40}
-            height={40}
+            width={42}
+            height={42}
             style={{ display: "block", objectFit: "contain" }}
           />
           <span
             style={{
-              fontSize: 30,
+              fontSize: 32,
               fontWeight: 600,
               letterSpacing: "-0.03em",
             }}
@@ -104,7 +102,7 @@ export default async function openGraphImage() {
           </span>
           <span style={{ color: RULE, fontSize: 22 }}>|</span>
           <span style={{ fontSize: 18, fontWeight: 500, color: PINE }}>
-            Open source · AGPL-3.0-only
+            Open source &middot; AGPL-3.0-only
           </span>
         </div>
 
@@ -112,8 +110,8 @@ export default async function openGraphImage() {
           <div
             style={{
               fontFamily: FONT_NEWSREADER,
-              fontSize: 82,
-              lineHeight: 0.98,
+              fontSize: 86,
+              lineHeight: 0.96,
               fontWeight: 600,
               letterSpacing: "-0.03em",
             }}
@@ -124,7 +122,7 @@ export default async function openGraphImage() {
             style={{
               fontFamily: FONT_NEWSREADER,
               fontStyle: "italic",
-              fontSize: 82,
+              fontSize: 86,
               lineHeight: 1,
               fontWeight: 500,
               letterSpacing: "-0.03em",
@@ -136,14 +134,14 @@ export default async function openGraphImage() {
           <div
             style={{
               marginTop: "24px",
-              fontSize: 22,
-              lineHeight: 1.45,
+              fontSize: 23,
+              lineHeight: 1.44,
               fontWeight: 500,
               color: MUTED,
             }}
           >
             Giving pages, receipts, donor records, and missionary updates on one
-            shared open-source record.
+            shared record.
           </div>
         </div>
 
@@ -151,7 +149,6 @@ export default async function openGraphImage() {
           style={{
             display: "flex",
             alignItems: "center",
-            gap: "12px",
             borderTop: `1px solid ${RULE}`,
             paddingTop: "18px",
             fontSize: 18,
@@ -160,12 +157,13 @@ export default async function openGraphImage() {
           }}
         >
           <span>
-            Built by Asymmetric.al · Starting with missions organizations
+            Built by Asymmetric.al &nbsp;&middot;&nbsp; Starting with missions
+            organizations
           </span>
         </div>
       </div>
 
-      {/* Right specimen card */}
+      {/* Right specimen card — legible at social thumbnail widths */}
       <div
         style={{
           display: "flex",
@@ -174,7 +172,7 @@ export default async function openGraphImage() {
           background: RECORD,
           border: `1.5px solid rgba(18,32,43,0.28)`,
           borderRadius: "24px",
-          padding: "22px",
+          padding: "24px",
           justifyContent: SPACE_BETWEEN,
         }}
       >
@@ -184,17 +182,17 @@ export default async function openGraphImage() {
             justifyContent: SPACE_BETWEEN,
             alignItems: "center",
             fontFamily: FONT_MONO,
-            fontSize: 14,
+            fontSize: 15,
             color: MUTED,
           }}
         >
-          <span>SAMPLE RECORD · GIFT-0418</span>
+          <span>SAMPLE &middot; GIFT-0418</span>
           <span
             style={{
               background: PINE_SOFT,
               color: PINE,
               borderRadius: "999px",
-              padding: "4px 12px",
+              padding: "5px 14px",
               fontWeight: 500,
             }}
           >
@@ -209,8 +207,8 @@ export default async function openGraphImage() {
             background: SHEET,
             border: `1.5px solid rgba(18,32,43,0.22)`,
             borderRadius: "16px",
-            padding: "26px",
-            marginTop: "14px",
+            padding: "28px",
+            marginTop: "16px",
             flex: 1,
             justifyContent: SPACE_BETWEEN,
           }}
@@ -221,23 +219,23 @@ export default async function openGraphImage() {
               justifyContent: SPACE_BETWEEN,
               alignItems: "flex-start",
               borderBottom: `1px solid ${RULE}`,
-              paddingBottom: "18px",
+              paddingBottom: "20px",
             }}
           >
             <div style={{ display: "flex", flexDirection: "column" }}>
               <span
                 style={{
                   fontFamily: FONT_MONO,
-                  fontSize: 14,
+                  fontSize: 15,
                   color: PINE,
                 }}
               >
-                RECEIPT #R-0418 · SETTLED
+                RECEIPT #R-0418 &middot; SETTLED
               </span>
               <span
                 style={{
                   fontFamily: FONT_NEWSREADER,
-                  fontSize: 34,
+                  fontSize: 30,
                   fontWeight: 600,
                   marginTop: "6px",
                 }}
@@ -245,28 +243,46 @@ export default async function openGraphImage() {
                 Official Gift Receipt
               </span>
             </div>
-            <span
+            <div
               style={{
-                fontFamily: FONT_NEWSREADER,
-                fontSize: 38,
-                fontWeight: 600,
+                display: "flex",
+                alignItems: "baseline",
+                gap: "3px",
+                flexShrink: 0,
               }}
             >
-              $100
-            </span>
+              <span
+                style={{
+                  fontFamily: FONT_NEWSREADER,
+                  fontSize: 34,
+                  fontWeight: 600,
+                }}
+              >
+                $100
+              </span>
+              <span
+                style={{
+                  fontFamily: FONT_MONO,
+                  fontSize: 15,
+                  color: MUTED,
+                }}
+              >
+                /mo
+              </span>
+            </div>
           </div>
 
           <div
             style={{
               display: "flex",
               flexDirection: "column",
-              gap: "12px",
-              marginTop: "18px",
+              gap: "14px",
+              marginTop: "20px",
             }}
           >
             {[
-              { role: "Donor", detail: "Receipt #R-0418 & donor portal" },
-              { role: "Missionary", detail: "Partner roster & thank-you note" },
+              { role: "Donor", detail: "Receipt & portal history" },
+              { role: "Missionary", detail: "Partner roster & redaction" },
               { role: "Office", detail: "Fund 310-EAST-WATER & CRM" },
             ].map((item) => (
               <div
@@ -276,14 +292,14 @@ export default async function openGraphImage() {
                   justifyContent: SPACE_BETWEEN,
                   alignItems: "center",
                   background: PAPER,
-                  borderRadius: "10px",
-                  padding: "12px 16px",
+                  borderRadius: "12px",
+                  padding: "14px 18px",
                 }}
               >
-                <span style={{ fontSize: 18, fontWeight: 600, color: INK }}>
+                <span style={{ fontSize: 20, fontWeight: 600, color: INK }}>
                   {item.role}
                 </span>
-                <span style={{ fontSize: 16, fontWeight: 500, color: MUTED }}>
+                <span style={{ fontSize: 18, fontWeight: 500, color: MUTED }}>
                   {item.detail}
                 </span>
               </div>
@@ -297,26 +313,14 @@ export default async function openGraphImage() {
               alignItems: "center",
               marginTop: "18px",
               paddingTop: "16px",
-              borderTop: `1px dashed rgba(74,89,102,0.45)`,
+              borderTop: `1px solid ${RULE}`,
+              fontFamily: FONT_MONO,
+              fontSize: 12,
+              color: PINE,
             }}
           >
-            <span style={{ fontSize: 16, fontWeight: 500, color: MUTED }}>
-              AI appeals in development
-            </span>
-            <span
-              style={{
-                border: `2px solid ${VERMILION}`,
-                background: VERMILION_SOFT,
-                color: VERMILION,
-                borderRadius: "6px",
-                padding: "5px 12px",
-                fontFamily: FONT_MONO,
-                fontSize: 13,
-                fontWeight: 500,
-              }}
-            >
-              APPROVED · HUMAN REVIEW
-            </span>
+            <span>apps/donor &middot; apps/missionary &middot; apps/admin</span>
+            <span style={{ color: MUTED, flexShrink: 0 }}>asym.app</span>
           </div>
         </div>
       </div>

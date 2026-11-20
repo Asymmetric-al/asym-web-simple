@@ -171,7 +171,7 @@ export default async function EarlyAccessStatusPage({
     <StatusPill>{content.eyebrow}</StatusPill>
   ) : null;
   if (content.tone === "success") {
-    statusIcon = <CircleCheckIcon className="text-primary size-7" />;
+    statusIcon = <CircleCheckIcon className="text-pine size-7" />;
   } else if (content.tone === "error") {
     statusIcon = <CircleAlertIcon className="text-destructive size-7" />;
   }
@@ -212,7 +212,10 @@ export default async function EarlyAccessStatusPage({
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <Link
               href={content.primaryHref}
-              className={cn(buttonVariants({ size: "lg" }), "px-6")}
+              className={cn(
+                buttonVariants({ variant: "ink", size: "lg" }),
+                "px-6"
+              )}
             >
               {content.primaryIcon === "back" ? (
                 <ArrowLeftIcon dataIcon="inline-start" />
