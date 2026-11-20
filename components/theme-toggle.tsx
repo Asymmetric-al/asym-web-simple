@@ -1,5 +1,9 @@
 "use client";
 
+import {
+  SegmentedControl,
+  SegmentedControlItem,
+} from "@ui-sdk/react/segmented-control";
 import { useTheme } from "next-themes";
 import { useSyncExternalStore } from "react";
 import { cn } from "@/lib/utils";
@@ -71,6 +75,11 @@ const themes = [
   { value: "system", label: "System", renderIcon: SystemIcon },
 ] as const;
 
+type ThemeValue = (typeof themes)[number]["value"];
+
+const isThemeValue = (value: string | null): value is ThemeValue =>
+  value !== null && themes.some((option) => option.value === value);
+
 export const ThemeToggle = () => {
   const isMounted = useIsClient();
   const { setTheme, theme = "system" } = useTheme();
@@ -79,33 +88,35 @@ export const ThemeToggle = () => {
     return <div className="h-[3.125rem] sm:h-[2.375rem]" aria-hidden="true" />;
   }
 
-  return (
-    <div
-      role="group"
-      aria-label="Color theme"
-      className="border-foreground/14 bg-card/90 inline-flex w-fit self-start items-center rounded-full border p-0.5 forced-colors:border-[ButtonBorder] sm:self-auto"
-    >
-      {themes.map((option) => {
-        const isActive = theme === option.value;
+  const activeTheme: ThemeValue = isThemeValue(theme) ? theme : "system";
 
-        return (
-          <button
-            key={option.value}
-            type="button"
-            aria-pressed={isActive}
-            onClick={() => setTheme(option.value)}
-            className={cn(
-              "focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center gap-1.5 rounded-full border border-transparent px-3 text-xs font-medium select-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-2 focus-visible:outline-transparent active:scale-[0.97] sm:min-h-8 sm:px-2.5",
-              isActive
-                ? "bg-primary text-primary-foreground shadow-xs forced-colors:border-[Highlight] forced-colors:bg-[Highlight] forced-colors:text-[HighlightText] forced-colors:forced-color-adjust-none"
-                : "text-muted-foreground hover:text-foreground"
-            )}
-          >
-            {option.renderIcon()}
-            <span>{option.label}</span>
-          </button>
-        );
-      })}
-    </div>
+  const handleValueChange = (nextValue: string | null) => {
+    if (isThemeValue(nextValue)) {
+      setTheme(nextValue);
+    }
+  };
+
+  return (
+    <SegmentedControl
+      aria-label="Color theme"
+      value={activeTheme}
+      onValueChange={handleValueChange}
+      className="border-foreground/14 bg-card/90 inline-flex w-fit items-center self-start rounded-full border p-0.5 sm:self-auto forced-colors:border-[ButtonBorder]"
+    >
+      {themes.map((option) => (
+        <SegmentedControlItem
+          key={option.value}
+          value={option.value}
+          className={cn(
+            "focus-visible:ring-ring focus-visible:ring-offset-background text-muted-foreground hover:text-foreground inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-full border border-transparent px-3 text-xs font-medium select-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-2 focus-visible:outline-transparent active:scale-[0.97] sm:min-h-8 sm:px-2.5",
+            "data-checked:bg-primary data-checked:text-primary-foreground data-checked:hover:text-primary-foreground data-checked:shadow-xs",
+            "forced-colors:data-checked:border-[Highlight] forced-colors:data-checked:bg-[Highlight] forced-colors:data-checked:text-[HighlightText] forced-colors:data-checked:forced-color-adjust-none"
+          )}
+        >
+          {option.renderIcon()}
+          <span>{option.label}</span>
+        </SegmentedControlItem>
+      ))}
+    </SegmentedControl>
   );
 };

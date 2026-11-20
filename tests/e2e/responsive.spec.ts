@@ -251,7 +251,7 @@ test.describe("responsive regression coverage", () => {
       ).toBeVisible();
       await expect(footer.getByRole("link", { name: "Privacy" })).toBeVisible();
       await expect(
-        footer.getByRole("group", { name: /color theme/i })
+        footer.getByRole("radiogroup", { name: /color theme/i })
       ).toBeVisible();
       await expectNoHorizontalOverflow(page, `home footer @ ${viewport.label}`);
       issues.expectNoUnexpectedIssuesSince(

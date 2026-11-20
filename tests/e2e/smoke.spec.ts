@@ -165,9 +165,7 @@ test.describe("homepage smoke tests", () => {
     await expect(page.locator("#open-source")).toContainText(
       "Managed donor care"
     );
-    await expect(page.locator("#about")).toContainText(
-      "Global Fellowship"
-    );
+    await expect(page.locator("#about")).toContainText("Global Fellowship");
   });
 
   test("main navigation reaches each homepage section", async ({ page }) => {
@@ -338,7 +336,7 @@ test.describe("homepage smoke tests", () => {
     ).toBeVisible();
   });
 
-  test("theme toggle applies dark mode and swaps the logo artwork", async ({
+  test("theme toggle applies dark mode, supports arrow keys, and swaps the logo artwork", async ({
     page,
   }) => {
     const projectName = test.info().project.name;
@@ -346,18 +344,24 @@ test.describe("homepage smoke tests", () => {
     await waitForUi(page);
     await page.locator("footer").scrollIntoViewIfNeeded();
 
-    const themeGroup = page.getByRole("group", { name: /color theme/iu });
-    await activate(
-      themeGroup.getByRole("button", { name: /^Dark$/u }),
-      projectName
-    );
+    const themeGroup = page.getByRole("radiogroup", { name: /color theme/iu });
+    const darkOption = themeGroup.getByRole("radio", { name: /^Dark$/u });
+    const lightOption = themeGroup.getByRole("radio", { name: /^Light$/u });
 
+    await activate(darkOption, projectName);
+
+    await expect(darkOption).toHaveAttribute("aria-checked", "true");
     await expect(page.locator("html")).toHaveClass(/dark/u);
     await expect(
       page.locator(
         'header a[aria-label="asym home"] img[src*="asym-mark-light"]'
       )
     ).toBeVisible();
+
+    await darkOption.focus();
+    await page.keyboard.press("ArrowLeft");
+    await expect(lightOption).toHaveAttribute("aria-checked", "true");
+    await expect(page.locator("html")).not.toHaveClass(/dark/u);
   });
 
   test("footer links to code, early access, and legal pages", async ({
