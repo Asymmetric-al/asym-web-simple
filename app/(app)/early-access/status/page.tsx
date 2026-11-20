@@ -1,4 +1,9 @@
-import { ArrowLeft, ArrowUpRight, CircleAlert, CircleCheck } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowUpRight,
+  CircleAlert,
+  CircleCheck,
+} from "lucide-react";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { Container } from "@/components/site/container";
@@ -135,7 +140,7 @@ const buildStatusContent = ({
     eyebrow: "",
     title: EARLY_ACCESS_STATUS_TITLE,
     description:
-      "Sign\u{2011}ups aren’t open yet. You can read the code and follow development on GitHub.",
+      "Early access isn’t open yet. While we finish the first workflow, you can read the code and follow progress on GitHub.",
     primaryLabel: BACK_TO_HOMEPAGE_LABEL,
     primaryHref: "/",
     primaryIcon: "back",

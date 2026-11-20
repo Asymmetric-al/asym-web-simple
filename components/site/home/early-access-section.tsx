@@ -1,13 +1,8 @@
 import { ArrowUpRight } from "lucide-react";
 import dynamic from "next/dynamic";
-import { HalftoneFrame } from "@/components/react-bits/halftone-frame";
 import { Container } from "@/components/site/container";
 import { GitHubMark } from "@/components/site/github-mark";
-import {
-  Eyebrow,
-  SectionTitle,
-  StatusPill,
-} from "@/components/site/home/section-heading";
+import { Eyebrow, SectionTitle } from "@/components/site/home/section-heading";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { siteConfig } from "@/lib/config";
 import {
@@ -34,26 +29,27 @@ export const EarlyAccessSection = () => {
     >
       <Container>
         <div className="surface-hero relative overflow-hidden rounded-[2.25rem] p-5 sm:p-9 lg:p-12">
-          <HalftoneFrame />
-          <div className="relative z-10 grid gap-8 lg:grid-cols-[minmax(0,42fr)_minmax(0,58fr)] lg:gap-12">
+          <div className="relative z-10 grid gap-8 lg:grid-cols-[minmax(0,42fr)_minmax(0,58fr)] lg:items-start lg:gap-12">
             <div className="min-w-0">
               <Eyebrow>Early access</Eyebrow>
               <SectionTitle id="early-access-title">
                 {isConfigured
                   ? "Request early access for your team."
-                  : "See what we’re building."}
+                  : "Early access opens soon."}
               </SectionTitle>
               <p className="text-muted-foreground mt-5 max-w-[34rem] text-base leading-7 sm:text-lg sm:leading-8">
                 {isConfigured ? (
                   <>
-                    Tell us which organization you’re with. If there’s a part of
-                    fundraising or donor care you’d like help with, we’d like to
-                    hear about it.
+                    Tell us which organization you’re with and what part of
+                    fundraising or donor care you’d like help with. We’ll be in
+                    touch with launch updates and invitations as early access
+                    opens.
                   </>
                 ) : (
                   <>
-                    We’re building <span translate="no">asym</span> in the open
-                    ahead of launch, starting with missions teams.
+                    We’re finishing the first campaign workflow in the open,
+                    starting with missions teams. Once sign&#8209;ups open,
+                    you’ll be able to request access for your organization here.
                   </>
                 )}
               </p>
@@ -62,13 +58,14 @@ export const EarlyAccessSection = () => {
               {isConfigured ? (
                 <EarlyAccessForm contactEmail={contactEmail} />
               ) : (
-                <div className="sm:border-foreground/12 sm:bg-card sm:rounded-[1.6rem] sm:border sm:p-8">
-                  <StatusPill>Opening soon</StatusPill>
-                  <h3 className="font-heading text-foreground mt-4 text-2xl font-semibold tracking-[-0.025em]">
-                    Sign&#8209;ups aren’t open yet.
+                <div className="sm:border-rule sm:bg-card sm:rounded-[1.6rem] sm:border sm:p-8">
+                  <h3 className="font-heading text-foreground text-2xl font-semibold tracking-[-0.025em]">
+                    Follow progress on GitHub
                   </h3>
                   <p className="text-muted-foreground mt-3 text-base leading-7">
-                    You can read the code and follow development on GitHub.
+                    While sign&#8209;ups are closed, you can read the source
+                    code, explore the architecture, and see what we’re working
+                    on next.
                   </p>
                   <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                     <a
@@ -90,7 +87,7 @@ export const EarlyAccessSection = () => {
                         "px-6"
                       )}
                     >
-                      Browse development issues
+                      Browse open issues
                       <ArrowUpRight data-icon="inline-end" aria-hidden="true" />
                     </a>
                   </div>

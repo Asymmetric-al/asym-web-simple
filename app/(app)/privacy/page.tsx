@@ -19,13 +19,13 @@ export default function PrivacyPage() {
 
   return (
     <DocumentPage
-      eyebrow="Privacy Policy"
+      eyebrow="Updated November 20, 2026"
       title={
         <h1 className="font-heading text-foreground mt-5 text-[clamp(2.8rem,5.5vw,4.6rem)] leading-[0.98] font-semibold tracking-[-0.04em] text-balance">
           Privacy Policy
         </h1>
       }
-      description="We collect only what we need to reply to you, share launch updates and early access invitations, run the website, and understand what nonprofit teams need from asym. Last updated November 20, 2026."
+      description="We collect only what we need to reply to you, share launch updates and early access invitations, run the website, and understand what nonprofit teams need from asym."
       footer={
         contactEmail ? (
           <>

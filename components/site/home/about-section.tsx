@@ -30,20 +30,17 @@ export const AboutSection = () => (
 
         <div className="text-muted-foreground max-w-[42rem] space-y-5 text-base leading-7 sm:text-lg sm:leading-8">
           <p className="text-foreground">
-            Missions teams manage recurring support, donor relationships, and
-            projects across many people and places. They’re our first focus.
+            Missions organizations coordinate recurring donor support, field
+            workers, and projects across many people and places. Starting with
+            that complexity builds a stronger foundation for nonprofits broadly.
           </p>
           <p>
             We’re Conrad and Blake. We’re building{" "}
             <span translate="no">asym</span> at{" "}
             <span translate="no">{siteConfig.name}</span>, an independent,
             for-profit software company serving nonprofits. Conrad’s experience
-            co-leading Global Fellowship, a missions organization, helps us
-            decide what to build first.
-          </p>
-          <p>
-            We’re building a foundation for other nonprofit workflows as the
-            product develops.
+            co-leading Global Fellowship, a missions organization, shapes what
+            we build first.
           </p>
         </div>
       </div>
@@ -54,10 +51,7 @@ export const AboutSection = () => (
         </p>
         <ol className="font-heading text-foreground mt-3.5 text-[clamp(1.375rem,2.5vw,2.25rem)] leading-[1.2] font-semibold tracking-[-0.03em] [word-spacing:0.04em]">
           {ordinaryWork.map(({ line, indentClass }) => (
-            <li
-              key={line}
-              className={cn("py-1.5 pl-5 sm:py-1.5", indentClass)}
-            >
+            <li key={line} className={cn("py-1.5 pl-5 sm:py-1.5", indentClass)}>
               {line}
             </li>
           ))}

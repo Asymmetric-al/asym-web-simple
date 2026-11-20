@@ -261,17 +261,6 @@
     transition: transform 160ms var(--ease-out-expo);
   }
 
-  @media (hover: hover) {
-    a,
-    button {
-      transition:
-        color 160ms var(--ease-out-expo),
-        background-color 160ms var(--ease-out-expo),
-        border-color 160ms var(--ease-out-expo),
-        transform 160ms var(--ease-out-expo);
-    }
-  }
-
   :is(a, button, input, textarea):focus-visible {
     outline: 2px solid var(--ring);
     outline-offset: 2px;
@@ -347,8 +336,34 @@
 
 .surface-hero {
   border: 1px solid color-mix(in srgb, var(--border) 92%, transparent);
-  background: linear-gradient(180deg, var(--surface-1), var(--surface-2));
+  background:
+    radial-gradient(
+      ellipse 62% 72% at 10% 0%,
+      rgb(212 236 252 / 46%),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 52% 68% at 92% 100%,
+      rgb(223 236 214 / 42%),
+      transparent 72%
+    ),
+    linear-gradient(180deg, var(--surface-1), var(--surface-2));
   box-shadow: var(--shadow-strong);
+}
+
+.dark .surface-hero {
+  background:
+    radial-gradient(
+      ellipse 62% 72% at 10% 0%,
+      rgb(42 82 114 / 28%),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 52% 68% at 92% 100%,
+      rgb(44 74 54 / 22%),
+      transparent 72%
+    ),
+    linear-gradient(180deg, var(--surface-1), var(--surface-2));
 }
 
 .section-wash-sky {
@@ -492,6 +507,12 @@
 .wf-plate[data-active="3"] .wf-step[data-step="3"] .wf-stem-ink,
 .wf-plate[data-active="4"] .wf-step[data-step="4"] .wf-stem-ink {
   clip-path: inset(0);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .wf-plate:not([data-instant="true"]) .wf-step-card {
+    transition: background-color 140ms var(--ease-out-expo);
+  }
 }
 
 .wf-plate[data-active="1"] .wf-step[data-step="1"] .wf-step-card,

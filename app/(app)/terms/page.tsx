@@ -19,13 +19,13 @@ export default function TermsPage() {
 
   return (
     <DocumentPage
-      eyebrow="Terms of Service"
+      eyebrow="Updated November 20, 2026"
       title={
         <h1 className="font-heading text-foreground mt-5 text-[clamp(2.8rem,5.5vw,4.6rem)] leading-[0.98] font-semibold tracking-[-0.04em] text-balance">
           Terms of Service
         </h1>
       }
-      description="These terms apply to asym.app, operated by Asymmetric.al, and any early access to asym that we provide directly. Last updated November 20, 2026."
+      description="These terms apply to asym.app, operated by Asymmetric.al, and any early access to asym that we provide directly."
       footer={
         contactEmail ? (
           <>

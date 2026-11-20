@@ -85,7 +85,7 @@ export const ThemeToggle = () => {
   const { setTheme, theme = "system" } = useTheme();
 
   if (!isMounted) {
-    return <div className="h-[3.125rem] sm:h-[2.375rem]" aria-hidden="true" />;
+    return <div className="h-[3.375rem] sm:h-[2.625rem]" aria-hidden="true" />;
   }
 
   const activeTheme: ThemeValue = isThemeValue(theme) ? theme : "system";
@@ -101,15 +101,15 @@ export const ThemeToggle = () => {
       aria-label="Color theme"
       value={activeTheme}
       onValueChange={handleValueChange}
-      className="border-foreground/14 bg-card/90 inline-flex w-fit items-center self-start rounded-full border p-0.5 sm:self-auto forced-colors:border-[ButtonBorder]"
+      className="border-rule bg-record has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-background inline-flex w-fit items-center self-start rounded-full border p-1 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2 sm:self-auto forced-colors:border-[ButtonBorder]"
     >
       {themes.map((option) => (
         <SegmentedControlItem
           key={option.value}
           value={option.value}
           className={cn(
-            "focus-visible:ring-ring focus-visible:ring-offset-background text-muted-foreground hover:text-foreground inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-full border border-transparent px-3 text-xs font-medium select-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-2 focus-visible:outline-transparent active:scale-[0.97] sm:min-h-8 sm:px-2.5",
-            "data-checked:bg-primary data-checked:text-primary-foreground data-checked:hover:text-primary-foreground data-checked:shadow-xs",
+            "text-muted-foreground hover:text-foreground inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-full border border-transparent px-3 text-xs font-medium select-none focus-visible:outline-2 focus-visible:outline-transparent active:scale-[0.97] sm:min-h-8 sm:px-2.5",
+            "data-checked:border-rule data-checked:bg-card data-checked:text-foreground data-checked:hover:text-foreground dark:data-checked:border-foreground/16 dark:data-checked:bg-secondary data-checked:shadow-xs",
             "forced-colors:data-checked:border-[Highlight] forced-colors:data-checked:bg-[Highlight] forced-colors:data-checked:text-[HighlightText] forced-colors:data-checked:forced-color-adjust-none"
           )}
         >

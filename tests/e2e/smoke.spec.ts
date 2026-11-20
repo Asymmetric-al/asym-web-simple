@@ -106,9 +106,11 @@ test.describe("homepage smoke tests", () => {
     await expect(
       page
         .getByRole("main")
-        .getByRole("link", { name: /^(Request early access|Early access)/u })
+        .getByRole("link", {
+          name: /^(?:Request early access|See how it works)$/u,
+        })
         .first()
-    ).toHaveAttribute("href", "/#early-access");
+    ).toHaveAttribute("href", /^\/#(?:early-access|product)$/u);
     await expect(
       page.getByRole("link", { name: "View the code", exact: true })
     ).toHaveAttribute("href", REPO_URL);
@@ -220,12 +222,12 @@ test.describe("homepage smoke tests", () => {
 
     if (formCount === 0) {
       await expect(page.locator("#early-access")).toContainText(
-        "Sign\u2011ups aren’t open yet."
+        "Early access opens soon."
       );
       await expect(
         page
           .locator("#early-access")
-          .getByRole("link", { name: /Browse development issues/u })
+          .getByRole("link", { name: /Browse open issues/u })
       ).toHaveAttribute("href", ISSUES_URL);
       return;
     }

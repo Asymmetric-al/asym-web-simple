@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Container } from "@/components/site/container";
 import { GitHubMark } from "@/components/site/github-mark";
-import { StatusPill } from "@/components/site/home/section-heading";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { navigationLinks, siteConfig } from "@/lib/config";
 import { isEarlyAccessConfigured } from "@/lib/early-access-config";
@@ -13,24 +12,29 @@ export const HomeHero = () => {
   return (
     <section
       aria-labelledby="hero-title"
-      className="pt-[5.5rem] pb-[clamp(2.25rem,4vw,3.25rem)] sm:pt-[clamp(6.25rem,8vw,7.75rem)]"
+      className="pt-[5.25rem] pb-[clamp(2rem,3.5vw,2.75rem)] sm:pt-[clamp(5.75rem,6.8vw,6.75rem)]"
     >
       <Container>
-        <ul
-          className="flex flex-wrap items-center gap-2 text-sm"
-          aria-label="Status"
-        >
-          <li className="border-foreground/14 bg-card/80 text-foreground inline-flex min-h-8 items-center rounded-full border px-3.5 py-1 font-medium">
+        <div className="border-rule bg-card/85 inline-flex max-w-full flex-col items-start gap-1 rounded-[1rem] border px-3.5 py-2 text-sm shadow-[inset_0_1px_0_rgb(255_255_255/60%)] sm:flex-row sm:items-center sm:gap-3 sm:rounded-full sm:py-1.5 dark:shadow-[inset_0_1px_0_rgb(237_243_247/6%)]">
+          <span className="text-foreground font-medium">
             Open-source software for nonprofits
-          </li>
-          <li>
-            <StatusPill>Launching soon</StatusPill>
-          </li>
-        </ul>
+          </span>
+          <span
+            aria-hidden="true"
+            className="bg-rule hidden h-3.5 w-px sm:inline-block"
+          />
+          <span className="text-muted-foreground inline-flex items-center gap-1.5 font-mono text-xs tracking-[0.04em]">
+            <span
+              aria-hidden="true"
+              className="bg-ring size-1.5 shrink-0 rounded-full"
+            />
+            Launching soon
+          </span>
+        </div>
 
         <h1
           id="hero-title"
-          className="font-heading text-foreground mt-4 max-w-[18ch] text-[clamp(2.25rem,5.6vw,4.35rem)] leading-[1.02] font-semibold tracking-[-0.03em] text-balance sm:mt-6 sm:max-w-[24ch] sm:tracking-[-0.045em] lg:max-w-none"
+          className="font-heading text-foreground mt-4 max-w-[18ch] text-[clamp(2.25rem,5.4vw,4.25rem)] leading-[1.02] font-semibold tracking-[-0.03em] text-balance sm:mt-5 sm:max-w-[24ch] sm:tracking-[-0.045em] lg:max-w-none"
         >
           <span className="block">Your website, fundraising, and CRM.</span>{" "}
           <span className="text-muted-foreground mt-1 block">
@@ -38,21 +42,46 @@ export const HomeHero = () => {
           </span>
         </h1>
 
-        <p className="text-muted-foreground mt-4 max-w-[44rem] text-[1.0625rem] leading-7 text-pretty sm:mt-6 sm:text-xl sm:leading-9">
-          We’re building <span translate="no">asym</span> for missions
-          organizations first. The goal: prepare an appeal with AI, let your
-          team decide what goes live, and keep each gift connected to its donor
+        <p className="text-muted-foreground mt-4 max-w-[44rem] text-[1.0625rem] leading-7 text-pretty sm:mt-5 sm:text-xl sm:leading-8">
+          Nonprofit teams shouldn’t have to move lists and match receipts across
+          separate tools. We’re building <span translate="no">asym</span> for
+          missions organizations first, so AI can prepare campaign work, your
+          team decides what goes live, and every gift stays tied to its donor
           and receipt.
         </p>
 
-        <div className="mt-6 flex flex-col gap-2.5 sm:mt-8 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
-          <Link
-            href={siteConfig.cta.primary.href}
-            prefetch={false}
-            className={cn(buttonVariants({ size: "lg" }), "px-6")}
-          >
-            {isConfigured ? siteConfig.cta.primary.label : "Early access status"}
-          </Link>
+        <div className="mt-6 flex flex-col gap-2.5 sm:mt-7 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
+          {isConfigured ? (
+            <Link
+              href={siteConfig.cta.primary.href}
+              prefetch={false}
+              className={cn(buttonVariants({ size: "lg" }), "px-6")}
+            >
+              {siteConfig.cta.primary.label}
+            </Link>
+          ) : (
+            <Link
+              href="/#product"
+              prefetch={false}
+              className={cn(buttonVariants({ size: "lg" }), "px-6")}
+            >
+              See how it works
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M12 5v14" />
+                <path d="m19 12-7 7-7-7" />
+              </svg>
+            </Link>
+          )}
           <a
             href={siteConfig.repoUrl}
             target="_blank"
@@ -67,47 +96,9 @@ export const HomeHero = () => {
           </a>
         </div>
 
-        <div className="border-rule bg-record/75 mt-6 rounded-[1.5rem] border px-4 py-3.5 shadow-[inset_0_1px_0_rgb(255_255_255/45%)] sm:mt-10 sm:rounded-[1.875rem] sm:px-7 sm:py-4 dark:shadow-[inset_0_1px_0_rgb(237_243_247/6%)]">
-          <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-            <p className="text-muted-foreground flex items-baseline gap-2.5 text-sm leading-6 sm:text-[0.9375rem]">
-              <span
-                aria-hidden="true"
-                className="bg-ring mt-2 size-1.5 shrink-0 rounded-full"
-              />
-              <span>
-                <span className="text-foreground font-medium">
-                  First workflow in development:
-                </span>{" "}
-                a fundraising appeal your team reviews.
-              </span>
-            </p>
-            <Link
-              href="/#product"
-              prefetch={false}
-              className="text-primary hover:text-foreground focus-visible:ring-ring focus-visible:ring-offset-background -mx-1.5 -my-2.5 hidden min-h-11 shrink-0 items-center gap-1.5 rounded-[0.375rem] px-1.5 py-2.5 font-mono text-xs font-medium tracking-[0.02em] underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent md:inline-flex lg:-my-1.5 lg:min-h-8 lg:py-1.5"
-            >
-              See how it works
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M12 5v14" />
-                <path d="m19 12-7 7-7-7" />
-              </svg>
-            </Link>
-          </div>
-        </div>
-
         <nav
           aria-label="On this page"
-          className="border-foreground/10 mt-4 border-t pt-2 md:hidden"
+          className="border-rule mt-5 border-t pt-2 md:hidden"
         >
           <ul className="flex flex-wrap items-center gap-x-5 gap-y-1 text-sm">
             {navigationLinks.map((link) => (

@@ -16,12 +16,12 @@ const principles: readonly {
   {
     highlight: "sweep",
     title: "Defined actions",
-    text: "We’re building campaign AI to use the same permission checks as staff, instead of guessing across separate tools. Some staff actions in the public code already preview which records will change.",
+    text: "Instead of guessing across separate tools, campaign AI will use the same permission checks as staff. Some staff actions in the public code already preview which records will change.",
   },
   {
     highlight: "frame",
     title: "People decide",
-    text: "We’re building approval rules for AI-prepared campaigns so your team reviews recipients and proposed changes before anything goes live or sends.",
+    text: "Approval rules for AI-prepared campaigns will let your team review recipients and proposed changes before anything goes live or sends.",
   },
 ];
 
@@ -47,7 +47,7 @@ export const ConnectedSection = () => (
               move lists around, check who gave, and match receipts by hand.
             </p>
             <p>
-              We’re building these pieces into one platform with shared records
+              We’re bringing these pieces into one platform with shared records
               and defined actions, so staff can see what happened, what is
               proposed next, and who signed off.
             </p>

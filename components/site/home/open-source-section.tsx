@@ -57,21 +57,23 @@ export const OpenSourceSection = () => (
         <Eyebrow>Open source</Eyebrow>
         <SectionTitle id="open-source-title">
           <span className="block">The code is public.</span>{" "}
-          <span className="block">Hosting will be a paid subscription.</span>
+          <span className="block">
+            Hosting will be a{"\u{00A0}"}paid subscription.
+          </span>
         </SectionTitle>
         <div className="text-muted-foreground mt-6 max-w-[42rem] space-y-5 text-base leading-7 sm:text-lg sm:leading-8">
           <p>
-            The code is public under{" "}
-            <span className="text-foreground font-mono text-[0.92em]">
+            The platform is published under{" "}
+            <span className="text-foreground font-mono text-[0.92em] whitespace-nowrap">
               {repoStats.license}
             </span>
-            . You can read it, follow development, and see how{" "}
+            , so you can read the code, follow development, and see how{" "}
             <span translate="no">asym</span> is being built.
           </p>
           <p>
-            We plan to include hosting, AI workflows, updates, and product
-            support in a paid managed subscription, so your team doesn’t have to
-            run any of it.
+            When <span translate="no">asym</span> launches, our paid managed
+            subscription will cover hosting, AI workflows, updates, and product
+            support, so your team doesn’t have to run any of it.
           </p>
         </div>
         <a
@@ -115,7 +117,7 @@ export const OpenSourceSection = () => (
                 className={cn(
                   "flex min-w-0 flex-col py-4 sm:py-5",
                   index === 0 && "border-rule border-r pr-4 sm:pr-5",
-                  index === 1 && "pl-4 sm:border-rule sm:border-r sm:px-5",
+                  index === 1 && "sm:border-rule pl-4 sm:border-r sm:px-5",
                   index === 2 &&
                     "border-rule col-span-2 border-t pt-4 sm:col-span-1 sm:border-t-0 sm:pt-5 sm:pl-5"
                 )}
@@ -174,18 +176,22 @@ export const OpenSourceSection = () => (
               </div>
             ))}
           </div>
+          <p className="border-rule text-muted-foreground mt-5 border-t pt-4 text-xs leading-5">
+            Module maturity varies across the repository. See the README on
+            GitHub for current status.
+          </p>
         </div>
       </div>
 
       <div className="border-foreground/18 bg-card/70 rounded-[1.5rem] border border-dashed p-5 sm:p-6 lg:col-start-1 lg:row-start-2">
         <StatusPill>Planned</StatusPill>
-        <h3 className="font-heading text-foreground mt-4 text-xl font-semibold tracking-[-0.015em]">
+        <h3 className="font-heading text-foreground mt-3.5 text-xl font-semibold tracking-[-0.015em]">
           Managed donor care
         </h3>
         <p className="text-muted-foreground mt-2 text-sm leading-6 sm:text-base sm:leading-7">
-          A separate service we’re planning will combine AI with our team for
-          supported requests such as receipt copies and recurring-gift changes,
-          with escalation to the person your organization chooses.
+          A planned separate service pairing AI with our team for routine donor
+          requests like receipt copies and recurring-gift changes, escalating to
+          your chosen staff contact when needed.
         </p>
       </div>
     </Container>
