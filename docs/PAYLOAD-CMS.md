@@ -16,8 +16,8 @@ What _is_ integrated:
 | **`app/(payload)/admin/[[...segments]]`** | Admin UI catch-all route. Public URL: **`/admin`**. |
 | **`app/(payload)/api/[...slug]/route.ts`** | Payload REST API (CRUD, auth, etc.). |
 | **`app/(payload)/api/graphql` & `graphql-playground`** | GraphQL endpoint and playground (as provided by Payload). |
-| **`app/(app)/`** | Route group for **marketing** pages (URLs unchanged: `/`, `/contact`, …). |
-| **`app/(app)/layout.tsx`** | Marketing chrome: gradients, `SiteChrome`, `Header`, `Footer`. |
+| **`app/(app)/`** | Route group for **marketing** pages (`/`, `/privacy`, `/terms`, `/early-access/status`, `/statement-of-faith`). |
+| **`app/(app)/layout.tsx`** | Marketing chrome: `.page-atmosphere` watercolor wash & grain, `Header`, `Footer`. |
 | **`app/layout.tsx`** | Root: fonts, `Providers`, `SkipToContent`, and `children`. Keeps admin layout independent. |
 | **`app/api/draft/route.ts`** | Enables Next.js **draft mode** when `secret` query param matches `PAYLOAD_DRAFT_SECRET` (for future preview). |
 | **`app/api/revalidate/route.ts`** | **On-demand revalidation**: `POST` with `Authorization: Bearer ${REVALIDATION_SECRET}` and JSON `{ "path": "/..." }` or `{ "tag": "..." }`. |

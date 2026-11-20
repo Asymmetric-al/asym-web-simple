@@ -17,7 +17,7 @@ const workflowSteps = [
     actor: "Your team",
     isAiStep: false,
     inDevelopment: false,
-    recordsSummary: "Touches record: Campaign.",
+    recordsSummary: "Record: Campaign.",
     text: "Set the fundraising goal, the project it supports, and who you want to reach.",
   },
   {
@@ -26,7 +26,7 @@ const workflowSteps = [
     actor: "AI",
     isAiStep: true,
     inDevelopment: true,
-    recordsSummary: "Touches records: Campaign and Donor history.",
+    recordsSummary: "Records: Campaign and Donor history.",
     text: "AI drafts the giving page and email, suggests a donor audience, and prepares the follow-up.",
   },
   {
@@ -35,7 +35,7 @@ const workflowSteps = [
     actor: "Your team",
     isAiStep: false,
     inDevelopment: false,
-    recordsSummary: "Touches records: Campaign and Donor history.",
+    recordsSummary: "Records: Campaign and Donor history.",
     text: "Edit the giving page and donor email, check the recipient list, and decide whether to publish the page.",
   },
   {
@@ -45,7 +45,7 @@ const workflowSteps = [
     isAiStep: false,
     inDevelopment: true,
     recordsSummary:
-      "Touches records: Campaign, Gift, Receipt, and Donor history.",
+      "Publishes the campaign page. Gifts made through it link to receipts and donor history.",
     text: "With your approval and permission, asym would publish the giving page on your website, keeping each gift and receipt tied to donor history.",
   },
 ] as const;
@@ -87,13 +87,13 @@ export const ProductSection = () => (
             className="bg-rule pointer-events-none absolute top-[3.25rem] right-16 left-16 hidden h-px xl:block"
           />
 
-          <ol className="relative grid gap-6 sm:grid-cols-2 sm:gap-x-8 sm:gap-y-6 xl:grid-cols-4 xl:gap-6">
+          <ol className="relative grid gap-5 sm:grid-cols-2 sm:gap-5 xl:grid-cols-4 xl:gap-4">
             {workflowSteps.map((step, index) => {
               const isLast = index === workflowSteps.length - 1;
               const describedById = `wf-records-${step.number}`;
               const cardClass = step.inDevelopment
-                ? "wf-step-card group/step border-primary/34 bg-card/65 relative rounded-[1.35rem] border border-dashed p-4 transition-colors sm:-mx-4 sm:px-4 sm:py-4 xl:-mx-3.5 xl:-mt-5 xl:px-3.5 xl:pt-5 xl:pb-4 has-[button:focus-visible]:ring-2 has-[button:focus-visible]:ring-ring has-[button:focus-visible]:ring-offset-2 has-[button:focus-visible]:ring-offset-card"
-                : "wf-step-card group/step relative rounded-[1.35rem] border border-transparent p-4 transition-colors sm:-mx-4 sm:px-4 sm:py-4 xl:-mx-3.5 xl:-mt-5 xl:px-3.5 xl:pt-5 xl:pb-4 has-[button:focus-visible]:ring-2 has-[button:focus-visible]:ring-ring has-[button:focus-visible]:ring-offset-2 has-[button:focus-visible]:ring-offset-card";
+                ? "wf-step-card group/step border-primary/34 bg-card/65 relative rounded-[1.35rem] border border-dashed p-4 xl:-mt-5 xl:pt-5 has-[button:focus-visible]:ring-2 has-[button:focus-visible]:ring-ring has-[button:focus-visible]:ring-offset-2 has-[button:focus-visible]:ring-offset-card"
+                : "wf-step-card group/step border-rule bg-card/45 relative rounded-[1.35rem] border p-4 xl:-mt-5 xl:pt-5 has-[button:focus-visible]:ring-2 has-[button:focus-visible]:ring-ring has-[button:focus-visible]:ring-offset-2 has-[button:focus-visible]:ring-offset-card";
 
               return (
                 <li
@@ -125,7 +125,7 @@ export const ProductSection = () => (
                     )}
                   </div>
 
-                  <div className={cn("min-w-0 flex-1 sm:flex-initial", cardClass)}>
+                  <div className={cn("min-w-0 flex-1 xl:flex-initial", cardClass)}>
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <span
                         className={cn(
@@ -173,7 +173,7 @@ export const ProductSection = () => (
                     </p>
                     <p
                       aria-hidden="true"
-                      className="wf-step-records text-primary dark:text-ring mt-2.5 font-mono text-xs leading-5 tracking-[0.02em] xl:hidden"
+                      className="wf-step-records text-muted-foreground mt-2.5 font-mono text-xs leading-5 tracking-[0.02em] xl:hidden"
                     >
                       {step.recordsSummary}
                     </p>
@@ -189,21 +189,21 @@ export const ProductSection = () => (
           </ol>
         </div>
 
-        <div className="datum-lid bg-record mt-6 px-5 pt-7 pb-6 sm:mt-8 sm:px-8 sm:pt-[1.875rem] sm:pb-7 xl:mt-0">
+        <div className="datum-lid bg-record mt-6 px-5 pt-7 pb-6 sm:mt-8 sm:px-8 md:pt-[1.875rem] md:pb-7 xl:mt-0">
           <span className="wf-datum-ink hidden xl:block" aria-hidden="true" />
-          <div className="grid gap-3.5 sm:grid-cols-[11rem_1fr] sm:items-start sm:gap-5 xl:grid-cols-[13.5rem_1fr] xl:gap-6">
-            <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 sm:block">
-              <p className="text-primary/82 dark:text-ring font-mono text-[0.8125rem] font-medium tracking-[0.02em] sm:pt-1.5">
+          <div className="grid gap-3.5 md:grid-cols-[11rem_1fr] md:items-start md:gap-5 xl:grid-cols-[13.5rem_1fr] xl:gap-6">
+            <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 md:block">
+              <p className="text-primary/82 dark:text-ring font-mono text-[0.8125rem] font-medium tracking-[0.02em] md:pt-1.5">
                 One shared record
               </p>
-              <p className="text-muted-foreground hidden text-xs leading-5 sm:mt-1 [.wf-plate[data-interactive='true']_&]:block">
-                <span className="sm:hidden">Tap a step to trace.</span>
-                <span className="hidden sm:inline">
+              <p className="text-muted-foreground hidden text-xs leading-5 md:mt-1 [.wf-plate[data-interactive='true']_&]:block">
+                <span className="md:hidden">Tap a step to trace.</span>
+                <span className="hidden md:inline">
                   Select a step to trace its records.
                 </span>
               </p>
             </div>
-            <div className="flex flex-wrap items-center gap-2 sm:grid sm:grid-cols-[repeat(4,max-content)] sm:justify-between sm:gap-3 sm:pr-2">
+            <div className="flex flex-wrap items-center gap-2 md:grid md:grid-cols-[repeat(4,max-content)] md:justify-between md:gap-3 md:pr-2">
               {recordNodes.map((node) => (
                 <span
                   key={node.label}

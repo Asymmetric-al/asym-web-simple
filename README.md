@@ -69,7 +69,7 @@ Next.js matches **more specific** `app/api/*` routes first; remaining `/api/*` t
 │   ├── (payload)/            # Payload admin + REST/GraphQL (URLs: /admin, /api/*)
 │   ├── api/                  # First-party routes: early-access, draft, disable-draft, revalidate (+ retired 410s)
 │   ├── globals.css           # Design tokens, theme colors, surface variables
-│   ├── layout.tsx            # Root: fonts, providers, analytics
+│   ├── layout.tsx            # Root: fonts, providers, skip link
 │   └── qa/                   # Optional maintainer pages (e.g. error UI checks)
 ├── components/
 │   ├── header.tsx / footer.tsx

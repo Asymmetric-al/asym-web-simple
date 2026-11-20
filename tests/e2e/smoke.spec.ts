@@ -203,7 +203,7 @@ test.describe("homepage smoke tests", () => {
       banner.getByRole("link", { name: /^asym home$/iu })
     ).toBeVisible();
     await expect(
-      banner.getByRole("link", { name: "Early access" })
+      banner.getByRole("link", { name: /^(Early access|Access status)$/u })
     ).toBeVisible();
     await expect(banner.getByRole("navigation")).toBeHidden();
     await expect(

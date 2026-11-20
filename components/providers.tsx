@@ -14,7 +14,6 @@ export const Providers = ({
     defaultTheme="system"
     enableSystem
     enableColorScheme
-    disableTransitionOnChange
   >
     <UiReadyMarker />
     {children}

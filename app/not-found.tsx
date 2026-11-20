@@ -52,6 +52,7 @@ export default function NotFound() {
             </Link>
             <Link
               href={siteConfig.cta.primary.href}
+              prefetch={false}
               className={cn(
                 buttonVariants({ variant: "outline", size: "lg" }),
                 "px-6"
@@ -66,6 +67,7 @@ export default function NotFound() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
+                    prefetch={false}
                     className="text-foreground/78 hover:text-foreground focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center rounded-[0.375rem] underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-10"
                   >
                     {link.label}

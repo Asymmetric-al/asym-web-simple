@@ -204,11 +204,27 @@ test.describe("responsive regression coverage", () => {
     await expect(brandLink).toBeVisible();
     await expect(mainNav).toBeHidden();
     await expect(
-      banner.getByRole("link", { name: "Early access" })
+      banner.getByRole("link", { name: /^(Early access|Access status)$/ })
     ).toBeVisible();
     await expectNoVisibleDialogs(page, "home @ 390x844");
     await expectNoHorizontalOverflow(page, "home @ 390x844");
     issues.expectNoUnexpectedIssuesSince(checkpoint, "home @ 390x844");
+
+    await setViewport(page, { label: "640x900", width: 640, height: 900 });
+    const clipCheck = await page.evaluate(() => {
+      const plate = document.querySelector(".wf-plate");
+      const nodes = [...document.querySelectorAll(".wf-node")];
+      if (!plate || nodes.length === 0) return { ok: false, overflowPx: 999 };
+      const plateRight = plate.getBoundingClientRect().right;
+      const maxNodeRight = Math.max(
+        ...nodes.map((node) => node.getBoundingClientRect().right)
+      );
+      return {
+        ok: maxNodeRight <= plateRight - 8,
+        overflowPx: Math.round(maxNodeRight - plateRight),
+      };
+    });
+    expect(clipCheck.ok).toBeTruthy();
   });
 
   test("home footer remains accessible after repeated viewport changes", async ({

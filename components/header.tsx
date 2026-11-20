@@ -19,6 +19,7 @@ export const Header = () => {
           <SiteLogoMark
             className="size-7 transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] [@media(hover:hover)_and_(pointer:fine)]:group-hover:-translate-y-px"
             size={28}
+            eager
           />
           <span
             translate="no"
@@ -34,6 +35,7 @@ export const Header = () => {
               <li key={link.href}>
                 <Link
                   href={link.href}
+                  prefetch={false}
                   className="text-foreground/78 hover:text-foreground hover:bg-muted/75 focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-10 items-center rounded-full px-4 text-sm font-medium focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-2 focus-visible:outline-transparent"
                 >
                   {link.label}
@@ -45,6 +47,7 @@ export const Header = () => {
 
         <Link
           href={siteConfig.cta.primary.href}
+          prefetch={false}
           className={cn(buttonVariants({ size: "default" }), "shrink-0 px-4")}
         >
           {isConfigured ? (
@@ -56,7 +59,7 @@ export const Header = () => {
             </>
           ) : (
             <>
-              <span className="sm:hidden">Early access</span>
+              <span className="sm:hidden">Access status</span>
               <span className="hidden sm:inline">Early access status</span>
             </>
           )}

@@ -53,8 +53,7 @@ export const EarlyAccessSection = () => {
                 ) : (
                   <>
                     We’re building <span translate="no">asym</span> in the open
-                    ahead of launch and inviting missions teams once
-                    sign&#8209;ups open.
+                    ahead of launch, starting with missions teams.
                   </>
                 )}
               </p>

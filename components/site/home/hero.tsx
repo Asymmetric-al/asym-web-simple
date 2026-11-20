@@ -48,6 +48,7 @@ export const HomeHero = () => {
         <div className="mt-6 flex flex-col gap-2.5 sm:mt-8 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
           <Link
             href={siteConfig.cta.primary.href}
+            prefetch={false}
             className={cn(buttonVariants({ size: "lg" }), "px-6")}
           >
             {isConfigured ? siteConfig.cta.primary.label : "Early access status"}
@@ -66,12 +67,12 @@ export const HomeHero = () => {
           </a>
         </div>
 
-        <div className="datum-lid bg-record/70 mt-6 rounded-t-[1.875rem] px-4 pt-4 pb-3.5 sm:mt-10 sm:px-7 sm:pt-6 sm:pb-5">
+        <div className="border-rule bg-record/75 mt-6 rounded-[1.5rem] border px-4 py-3.5 shadow-[inset_0_1px_0_rgb(255_255_255/45%)] sm:mt-10 sm:rounded-[1.875rem] sm:px-7 sm:py-4 dark:shadow-[inset_0_1px_0_rgb(237_243_247/6%)]">
           <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-            <p className="text-muted-foreground flex items-baseline gap-3 text-sm leading-6 sm:text-[0.9375rem]">
+            <p className="text-muted-foreground flex items-baseline gap-2.5 text-sm leading-6 sm:text-[0.9375rem]">
               <span
                 aria-hidden="true"
-                className="border-ink inline-block w-4 shrink-0 -translate-y-0.5 border-t-[1.5px] border-dashed"
+                className="bg-ring mt-2 size-1.5 shrink-0 rounded-full"
               />
               <span>
                 <span className="text-foreground font-medium">
@@ -82,7 +83,8 @@ export const HomeHero = () => {
             </p>
             <Link
               href="/#product"
-              className="text-primary hover:text-foreground focus-visible:ring-ring focus-visible:ring-offset-background hidden shrink-0 items-center gap-1.5 rounded-[0.375rem] font-mono text-xs font-medium tracking-[0.02em] underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent md:inline-flex"
+              prefetch={false}
+              className="text-primary hover:text-foreground focus-visible:ring-ring focus-visible:ring-offset-background -mx-1.5 -my-2.5 hidden min-h-11 shrink-0 items-center gap-1.5 rounded-[0.375rem] px-1.5 py-2.5 font-mono text-xs font-medium tracking-[0.02em] underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent md:inline-flex lg:-my-1.5 lg:min-h-8 lg:py-1.5"
             >
               See how it works
               <svg
@@ -112,6 +114,7 @@ export const HomeHero = () => {
               <li key={link.href}>
                 <Link
                   href={link.href}
+                  prefetch={false}
                   className="text-foreground/78 hover:text-foreground focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center rounded-[0.375rem] font-medium underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent"
                 >
                   {link.label}

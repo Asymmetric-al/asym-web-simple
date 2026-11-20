@@ -76,7 +76,7 @@ export const HalftoneFrame = ({
       </defs>
     </svg>
 
-    <div className="text-primary/11 dark:text-ring/14 absolute -top-8 -left-8 w-40 sm:w-64">
+    <div className="text-primary/17 dark:text-ring/14 absolute -top-8 -left-8 w-40 sm:w-64">
       <svg
         viewBox={`0 0 ${FIELD_SIZE} ${FIELD_SIZE}`}
         aria-hidden="true"
@@ -87,7 +87,7 @@ export const HalftoneFrame = ({
       </svg>
     </div>
 
-    <div className="text-primary/10 dark:text-ring/13 absolute -right-8 -bottom-8 w-44 sm:w-72">
+    <div className="text-primary/15 dark:text-ring/13 absolute -right-8 -bottom-8 w-44 sm:w-72">
       <svg
         viewBox={`0 0 ${FIELD_SIZE} ${FIELD_SIZE}`}
         aria-hidden="true"

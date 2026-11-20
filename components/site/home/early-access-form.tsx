@@ -1,6 +1,5 @@
 "use client";
 
-import { ArrowRight, ArrowUpRight, CircleCheck, Loader2 } from "lucide-react";
 import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { Input } from "@/components/ui/input";
@@ -25,6 +24,77 @@ import type {
   EarlyAccessRequest,
 } from "@/lib/early-access";
 import type { ReactNode, SubmitEvent } from "react";
+
+const CircleCheckIcon = ({ className }: { readonly className?: string }) => (
+  <svg
+    width="28"
+    height="28"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+    className={className}
+  >
+    <circle cx="12" cy="12" r="10" />
+    <path d="m9 12 2 2 4-4" />
+  </svg>
+);
+
+const ArrowRightIcon = () => (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    data-icon="inline-end"
+    aria-hidden="true"
+  >
+    <path d="M5 12h14" />
+    <path d="m12 5 7 7-7 7" />
+  </svg>
+);
+
+const ArrowUpRightIcon = ({ className }: { readonly className?: string }) => (
+  <svg
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+    className={className}
+  >
+    <path d="M7 7h10v10" />
+    <path d="M7 17 17 7" />
+  </svg>
+);
+
+const SpinnerIcon = () => (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+    className="size-4 animate-spin"
+  >
+    <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+  </svg>
+);
 
 type FormStatus =
   | "idle"
@@ -272,7 +342,7 @@ export const EarlyAccessForm = ({
   if (status === "success") {
     return (
       <div className="surface-enter border-foreground/12 bg-card rounded-[1.6rem] border p-6 sm:p-8">
-        <CircleCheck className="text-primary size-7" aria-hidden="true" />
+        <CircleCheckIcon className="text-primary size-7" />
         <h3
           ref={successRef}
           tabIndex={-1}
@@ -294,7 +364,7 @@ export const EarlyAccessForm = ({
             className="text-foreground hover:text-primary focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center gap-1.5 rounded-[0.375rem] text-sm font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-9"
           >
             Follow development on GitHub
-            <ArrowUpRight className="size-3.5" aria-hidden="true" />
+            <ArrowUpRightIcon className="size-3.5" />
           </a>
         </div>
       </div>
@@ -538,13 +608,13 @@ export const EarlyAccessForm = ({
         >
           {isSubmitting ? (
             <>
-              <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+              <SpinnerIcon />
               {earlyAccessCopy.submitting}
             </>
           ) : (
             <>
               Request early access
-              <ArrowRight data-icon="inline-end" aria-hidden="true" />
+              <ArrowRightIcon />
             </>
           )}
         </button>
@@ -564,10 +634,7 @@ export const EarlyAccessForm = ({
           )}
         >
           Privacy policy (opens in a new tab)
-          <ArrowUpRight
-            className="size-3 shrink-0 self-center"
-            aria-hidden="true"
-          />
+          <ArrowUpRightIcon className="size-3 shrink-0 self-center" />
         </a>
         .
       </p>

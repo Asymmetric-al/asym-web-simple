@@ -44,7 +44,11 @@ export const Footer = () => {
               <ul className="grid gap-0.5 text-sm sm:gap-1">
                 {navigationLinks.map((link) => (
                   <li key={link.href}>
-                    <Link href={link.href} className={linkClassName}>
+                    <Link
+                      href={link.href}
+                      prefetch={false}
+                      className={linkClassName}
+                    >
                       {link.label}
                     </Link>
                   </li>
@@ -64,7 +68,11 @@ export const Footer = () => {
                       {link.label}
                     </a>
                   ) : (
-                    <Link href={link.href} className={linkClassName}>
+                    <Link
+                      href={link.href}
+                      prefetch={!link.href.includes("#")}
+                      className={linkClassName}
+                    >
                       {link.label}
                     </Link>
                   )}
