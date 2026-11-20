@@ -21,7 +21,7 @@ The **Next.js marketing site**, the **`/api/early-access`** intake route (plus S
 - **TypeScript** — strict mode (`tsconfig.json`)
 - **Tailwind CSS v4** — design tokens via CSS variables in `app/globals.css`
 - **shadcn/ui** — `base-maia` style (`components.json`)
-- **next-themes** — dark mode (`disableTransitionOnChange`)
+- **next-themes** — light, dark, and system themes (with targeted compositor-only transitions)
 - **Lucide React** — icons
 - **Fonts** (root layout) — Newsreader (editorial display serif), Instrument Sans (UI & reading body), IBM Plex Mono (ledger IDs & repo paths)
 - **Resend** — `/api/early-access` transactional email

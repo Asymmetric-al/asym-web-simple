@@ -13,12 +13,12 @@ export const ProductSection = () => (
   <section
     id="appeals"
     aria-labelledby="appeals-title"
-    className="scroll-mt-20 pb-[clamp(3.25rem,5.5vw,5rem)]"
+    className="scroll-mt-24 pb-[clamp(3.25rem,5.5vw,5rem)]"
   >
     <Container>
       <div className="border-rule border-t pt-12 sm:pt-16">
         <div className="max-w-[42rem]">
-          <p className="text-draft inline-flex items-center gap-2 font-mono text-xs font-medium tracking-[0.02em]">
+          <p className="text-draft inline-flex items-center gap-2 font-mono text-[0.8125rem] font-medium tracking-[0.02em]">
             <span
               aria-hidden="true"
               className="border-draft inline-block w-4 border-t-[1.5px] border-dashed"
@@ -28,7 +28,7 @@ export const ProductSection = () => (
           <SectionTitle id="appeals-title">
             Before an appeal goes out.
           </SectionTitle>
-          <p className="text-muted-foreground mt-4 text-base leading-7 text-pretty sm:text-[1.0625rem] sm:leading-8">
+          <p className="text-muted-foreground mt-4 text-base leading-7 text-pretty sm:text-[1.0625rem] sm:leading-7">
             When a field project needs support, small teams shouldn’t rebuild
             giving pages, donor lists, and updates by hand. We’re building
             AI&#8209;drafted appeals that stay inside your existing permissions

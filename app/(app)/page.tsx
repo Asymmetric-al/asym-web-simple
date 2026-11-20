@@ -37,6 +37,9 @@ const organizationSchema = {
       publisher: {
         "@id": `${siteConfig.url}#organization`,
       },
+      isBasedOn: {
+        "@id": `${siteConfig.url}#source`,
+      },
       description: siteMetadata.description,
     },
     {
@@ -68,11 +71,11 @@ export default function HomePage() {
         }}
       />
       <HomeHero />
-      <ArchitectureSection />
       <ConnectedSection />
+      <ArchitectureSection />
+      <OpenSourceSection />
       <ProductSection />
       <AboutSection />
-      <OpenSourceSection />
       <EarlyAccessSection />
     </main>
   );

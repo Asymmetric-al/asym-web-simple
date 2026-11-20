@@ -4,7 +4,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@ui-sdk/react/popover";
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { CloseIcon, MenuIcon } from "@/components/site/icons";
-import { mobileNavigationLinks } from "@/lib/config";
+import { navigationLinks } from "@/lib/config";
 import { useIsClient } from "@/lib/use-is-client";
 import type { ComponentProps, ReactNode } from "react";
 
@@ -23,7 +23,11 @@ to the trigger on Escape, trigger close, and non-interactive blank-space
 dismissal, while letting anchor links and interactive outside controls retain
 natural navigation and focus.
 */
-export const MobileNavMenu = (): ReactNode => {
+export const MobileNavMenu = ({
+  isConfigured = false,
+}: {
+  readonly isConfigured?: boolean;
+}): ReactNode => {
   const isMounted = useIsClient();
   const [open, setOpen] = useState(false);
   const [suppressReturnFocus, setSuppressReturnFocus] = useState(false);
@@ -33,6 +37,16 @@ export const MobileNavMenu = (): ReactNode => {
   if (!isMounted) {
     return <span className="size-11 shrink-0 md:hidden" aria-hidden="true" />;
   }
+
+  const menuLinks = [
+    ...navigationLinks,
+    isConfigured
+      ? { label: "Where things stand", href: "/#where-things-stand" }
+      : {
+          label: "Pre-launch checklist",
+          href: "/early-access/status?state=unavailable",
+        },
+  ] as const;
 
   const restoreTriggerIfNonInteractive = () => {
     const active = document.activeElement;
@@ -110,11 +124,11 @@ export const MobileNavMenu = (): ReactNode => {
         >
           <nav aria-label="Homepage sections">
             <ul className="grid gap-0.5 text-sm">
-              {mobileNavigationLinks.map((link, index) => (
+              {menuLinks.map((link, index) => (
                 <li
                   key={link.href}
                   className={
-                    index === mobileNavigationLinks.length - 1
+                    index === menuLinks.length - 1
                       ? "border-rule mt-1 border-t pt-1"
                       : undefined
                   }

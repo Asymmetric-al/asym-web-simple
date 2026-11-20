@@ -10,12 +10,12 @@ const ordinaryWork = [
   },
   {
     num: "03",
-    line: "The missionary sees support, anonymous by default.",
+    line: "The missionary sees support, never gift totals.",
     italic: false,
   },
   {
     num: "04",
-    line: "Staff hold the full picture.",
+    line: "Office staff keep one ledger.",
     italic: true,
   },
 ] as const;

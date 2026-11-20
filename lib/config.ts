@@ -8,7 +8,7 @@ export const siteConfig = {
   */
   shortName: "asym",
   description:
-    "Open-source donor portals, self-service receipts, redacted missionary rosters, and office CRM on one shared record for missions organizations.",
+    "Open-source donor portals, self-service receipts, redacted missionary rosters, and office CRM on one shared record for missions organizations. Hosted access is not open yet.",
   /**
   Production domain served by this project (Vercel `asym-web-simple`).
   */

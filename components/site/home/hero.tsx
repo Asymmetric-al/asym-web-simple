@@ -59,15 +59,16 @@ export const HomeHero = () => {
               <span className="block italic">Three hands.</span>
             </h1>
 
-            <p className="text-foreground/88 mt-4 max-w-[33rem] text-base leading-7 text-pretty sm:mt-5 sm:text-[1.09375rem] sm:leading-8">
-              Record a gift once. Donors download their own receipts and annual
-              statements, missionaries track support with donors anonymous by
-              default, and office staff manage one ledger.
+            <p className="text-foreground/88 mt-4 max-w-[33rem] text-base leading-7 text-pretty sm:mt-5 sm:text-[1.09375rem] sm:leading-7">
+              Staff enter a gift once. Signed&#8209;in donors download their own
+              receipts and annual statements, missionaries track assigned
+              support with donors private by default, and the office keeps one
+              ledger.
             </p>
             <p className="text-muted-foreground mt-2.5 max-w-[33rem] text-sm leading-6 text-pretty sm:mt-3">
-              The codebase is open source today. Public giving pages still use
-              demo profiles; hosted teams and human&#8209;approved AI appeals
-              are in development.
+              The codebase is open source today; hosted access isn’t open yet.
+              Public giving pages still use sample profiles, and AI appeals are
+              in development.
             </p>
 
             <div className="mt-6 flex flex-col gap-2.5 sm:mt-7 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
@@ -138,15 +139,15 @@ export const HomeHero = () => {
             </svg>
 
             <figcaption className="mt-1">
-              <div className="flex flex-wrap items-baseline justify-between gap-2 pb-1.5 text-xs">
+              <div className="flex flex-wrap items-baseline justify-between gap-2 pb-1.5 text-[0.8125rem]">
                 <span className="text-foreground font-mono font-medium">
                   Plate I · Three hands, one record
                 </span>
                 <span className="text-muted-foreground font-mono">
-                  Open a role
+                  Jump to a role
                 </span>
               </div>
-              <div className="border-rule grid grid-cols-3 gap-2 border-t pt-1 text-xs">
+              <div className="border-rule divide-rule grid grid-cols-1 divide-y border-t pt-1 text-xs min-[400px]:grid-cols-3 min-[400px]:gap-2 min-[400px]:divide-y-0">
                 {plateIndex.map((item) => (
                   <a
                     key={item.num}

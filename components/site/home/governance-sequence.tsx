@@ -68,7 +68,7 @@ const GOVERNANCE_STEPS: readonly [
     summary: "Hold every draft word, fund link, and recipient list for review.",
     guardrailLabel: "Separate from routine receipts",
     guardrail:
-      "AI-drafted appeals remain in draft until approved by staff. Routine gift receipts and entry-gated thank-yous (ADR 0004) follow separate organization rules.",
+      "AI-drafted appeals remain in draft until approved by staff. Routine gift receipts and staff-released thank-yous (ADR 0004) follow separate organization rules.",
     tone: "approval",
   },
   {
@@ -249,13 +249,15 @@ export const GovernanceSequence = (): ReactNode => {
 
   return (
     <div className="grid gap-3.5">
-      <div className="flex flex-wrap items-baseline justify-between gap-2 font-mono text-xs">
+      <div className="flex flex-wrap items-baseline justify-between gap-2 font-mono text-[0.8125rem]">
         <span className="text-foreground font-medium">
           Four-step approval sequence
         </span>
-        <span className="text-muted-foreground">
-          Select a step to inspect its rule
-        </span>
+        {isHydrated ? (
+          <span className="text-muted-foreground">
+            Select a step to inspect its rule
+          </span>
+        ) : null}
       </div>
       {isHydrated ? (
         <Tabs

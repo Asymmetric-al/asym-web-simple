@@ -85,7 +85,7 @@ const SURFACES: readonly [SurfaceSpec, SurfaceSpec, SurfaceSpec] = [
     shortOutcome: "Portal, receipts & statements",
     appPath: "apps/donor",
     proofNote:
-      "Public worker directory & checkout lookup still use @asym/mock-data demo profiles",
+      "Online checkout is built; public worker directory & lookup still show sample profiles (@asym/mock-data)",
     repoUrl: `${siteConfig.repoUrl}/blob/develop/packages/api/src/donor-portal/statements.ts`,
     repoLinkLabel: "statements.ts",
     heading: "Signed-in donors pull their own receipts and annual statements.",
@@ -98,24 +98,24 @@ const SURFACES: readonly [SurfaceSpec, SurfaceSpec, SurfaceSpec] = [
       "Authenticated donor portal",
       "Individual receipt downloads",
       "Settled annual statements",
-      "Stripe checkout (demo public profiles)",
+      "Online checkout (sample public profiles)",
     ],
   },
   {
     key: "missionary",
     index: "02",
     label: "Missionary",
-    shortOutcome: "Assigned roster, anonymous by default",
+    shortOutcome: "Assigned roster, private by default",
     appPath: "apps/missionary",
     proofNote:
-      "Server projection defaults to Anonymous partner and sets total_given & last_gift_amount to null",
+      "Server API defaults to Anonymous partner and withholds total_given & last_gift_amount across rows",
     repoUrl: `${siteConfig.repoUrl}/blob/develop/packages/api/src/missionary-portal/donors.ts`,
     repoLinkLabel: "donors.ts",
     heading:
-      "Field workers follow assigned support with donors anonymous by default.",
+      "Field workers follow assigned support with donors private by default.",
     whatTheyDo:
       "Missionaries follow support progress for their assignment and correspond with opted-in supporters without waiting on exported office spreadsheets.",
-    boundaryTitle: "Anonymous by default, gift amounts withheld",
+    boundaryTitle: "Private by default; lifetime & last-gift amounts withheld",
     boundaryDetail:
       "Supporters who have not opted in appear as Anonymous partner with contact details, notes, and recurring gifts stripped. Even for opted-in supporters, lifetime totals and last-gift amounts stay withheld across every roster row.",
     included: [
@@ -132,21 +132,21 @@ const SURFACES: readonly [SurfaceSpec, SurfaceSpec, SurfaceSpec] = [
     shortOutcome: "CRM, ledger & batch previews",
     appPath: "apps/admin",
     proofNote:
-      "Server-side batch preview calculates affected & skipped rows before running",
+      "Supported batch actions preview affected & skipped rows before running",
     repoUrl: `${siteConfig.repoUrl}/blob/develop/packages/api/src/admin/contribution-batches/preview.ts`,
     repoLinkLabel: "preview.ts",
     heading:
       "Staff manage legal donor records and preview bulk actions before running.",
     whatTheyDo:
-      "Office staff work from the same contribution tables to manage legal donors, designated funds, offline gift intake, website pages, and email or PDF templates.",
+      "Office staff work from the same contribution tables to manage legal donors, designated funds, offline gifts, website pages, and email or PDF templates.",
     boundaryTitle: "Shared ledger with supported batch previews",
     boundaryDetail:
-      "Supported bulk contribution actions compute affected and skipped records before staff confirm, while reading from one ledger reduces manual CSV handoffs between desks.",
+      "Supported bulk contribution actions compute affected and skipped records before staff confirm, while reading from one ledger reduces manual spreadsheet handoffs between desks.",
     included: [
-      "Mission Control donor & gift CRM",
+      "Donor & gift CRM",
       "Supported batch action previews",
-      "Payload Web Studio & templates",
-      "Offline money & recurring rules",
+      "Website editor & templates",
+      "Offline gifts & recurring rules",
     ],
   },
 ];
@@ -198,7 +198,7 @@ const SharedRecordFoot = ({
   return (
     <div className="border-rule-strong bg-card/65 mt-3 min-w-0 border-t px-3.5 py-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <div className="flex items-center gap-2 text-xs">
+        <div className="flex items-center gap-2 text-[0.8125rem]">
           <span
             aria-hidden="true"
             className="bg-pine size-1.5 shrink-0 rounded-full"
@@ -206,13 +206,10 @@ const SharedRecordFoot = ({
           <span className="text-foreground font-sans font-semibold">
             One shared record
           </span>
-          <span translate="no" className="text-pine font-mono">
-            packages/api
-          </span>
         </div>
         <span
           className={cn(
-            "grid text-left font-mono text-[0.75rem] transition-colors duration-150 sm:text-right",
+            "grid text-left font-sans text-[0.8125rem] transition-colors duration-150 sm:text-right",
             isRosterFilter ? "text-pine font-medium" : "text-muted-foreground"
           )}
         >
@@ -223,7 +220,7 @@ const SharedRecordFoot = ({
               isRosterFilter && "invisible"
             )}
           >
-            Role-scoped server queries
+            Each role sees only its part
           </span>
           <span
             aria-hidden={!isRosterFilter}
@@ -232,7 +229,7 @@ const SharedRecordFoot = ({
               !isRosterFilter && "invisible"
             )}
           >
-            Roster redacted on the server
+            Lifetime &amp; last-gift amounts withheld
           </span>
         </span>
       </div>
@@ -303,8 +300,8 @@ const SurfaceLedgerSheet = ({
       </ul>
     </div>
 
-    <div className="border-rule mt-5 flex flex-col gap-2 border-t pt-3.5 text-xs sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-      <p className="text-muted-foreground font-mono text-[0.75rem] leading-5">
+    <div className="border-rule mt-5 flex flex-col gap-2 border-t pt-3.5 text-[0.8125rem] sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+      <p className="text-muted-foreground font-mono text-[0.8125rem] leading-5">
         {spec.proofNote}
       </p>
       <a
@@ -365,6 +362,12 @@ export const SurfaceExplorer = (): ReactNode => {
       }
       setHasInteracted(true);
       setActiveSurface(next);
+      window.requestAnimationFrame(() => {
+        const targetTab = document.querySelector<HTMLButtonElement>(
+          `[data-surface-tab="${CSS.escape(next)}"]`
+        );
+        targetTab?.focus({ preventScroll: true });
+      });
     };
     window.addEventListener("hashchange", handleHashChange);
     return () => {
@@ -422,6 +425,7 @@ export const SurfaceExplorer = (): ReactNode => {
                 <TabsTab
                   key={spec.key}
                   value={spec.key}
+                  data-surface-tab={spec.key}
                   className={cn(ROLE_TAB_CLASS, ROLE_TAB_INTERACTIVE_CLASS)}
                 >
                   <RoleTabBody spec={spec} />

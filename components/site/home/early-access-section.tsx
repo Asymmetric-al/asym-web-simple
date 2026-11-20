@@ -26,7 +26,7 @@ export const EarlyAccessSection = () => {
     <section
       id="early-access"
       aria-labelledby="early-access-title"
-      className="pb-[clamp(3.25rem,5.5vw,5rem)]"
+      className="py-[clamp(3.25rem,5.5vw,5rem)]"
     >
       <Container>
         <div className="border-rule-strong bg-card relative border p-6 sm:p-10 lg:p-12">
@@ -71,12 +71,23 @@ export const EarlyAccessSection = () => {
                   ))}
                 </ul>
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                  <Link
+                    href="/early-access/status?state=unavailable"
+                    prefetch={false}
+                    className={cn(
+                      buttonVariants({ variant: "ink", size: "lg" }),
+                      "px-6"
+                    )}
+                  >
+                    Pre-launch checklist
+                    <ArrowRightIcon dataIcon="inline-end" />
+                  </Link>
                   <a
                     href={`${siteConfig.repoUrl}#readme`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className={cn(
-                      buttonVariants({ variant: "ink", size: "lg" }),
+                      buttonVariants({ variant: "outline", size: "lg" }),
                       "px-6"
                     )}
                   >
@@ -85,17 +96,6 @@ export const EarlyAccessSection = () => {
                     <span className="sr-only"> (opens in a new tab)</span>
                     <ArrowUpRightIcon dataIcon="inline-end" />
                   </a>
-                  <Link
-                    href="/early-access/status?state=unavailable"
-                    prefetch={false}
-                    className={cn(
-                      buttonVariants({ variant: "outline", size: "lg" }),
-                      "px-6"
-                    )}
-                  >
-                    Pre-launch checklist
-                    <ArrowRightIcon dataIcon="inline-end" />
-                  </Link>
                 </div>
                 {contactEmail ? (
                   <p className="text-muted-foreground mt-5 text-sm leading-6">

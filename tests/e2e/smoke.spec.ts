@@ -147,7 +147,7 @@ test.describe("homepage smoke tests", () => {
     await expect(
       architecture.getByRole("heading", {
         level: 3,
-        name: /Field workers follow assigned support with donors anonymous by default/iu,
+        name: /Field workers follow assigned support with donors private by default/iu,
       })
     ).toBeVisible();
     await expect(architecture).toContainText("Anonymous partner");

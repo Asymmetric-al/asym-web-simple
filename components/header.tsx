@@ -87,7 +87,7 @@ export const Header = () => {
               See what’s built
             </Link>
           )}
-          <MobileNavMenu />
+          <MobileNavMenu isConfigured={isConfigured} />
         </div>
       </div>
     </header>

@@ -105,16 +105,29 @@ export const ThemeToggle = () => {
 
   const currentTheme: ThemeValue = isThemeValue(theme) ? theme : "system";
 
-  const handlePointerEnter = (event: PointerEvent<HTMLDivElement>) => {
-    if (
-      !resolvedTheme ||
-      event.pointerType !== "mouse" ||
-      prewarmedRef.current === resolvedTheme
-    ) {
+  const prewarmIfNeeded = () => {
+    if (!resolvedTheme || prewarmedRef.current === resolvedTheme) {
       return;
     }
     prewarmedRef.current = resolvedTheme;
     prewarmHeroOppositePlate(resolvedTheme);
+  };
+
+  const handlePointerEnter = (event: PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType !== "mouse") {
+      return;
+    }
+    prewarmIfNeeded();
+  };
+
+  const handleFocus = () => {
+    if (
+      typeof window !== "undefined" &&
+      !window.matchMedia("(hover: hover) and (pointer: fine)").matches
+    ) {
+      return;
+    }
+    prewarmIfNeeded();
   };
 
   const handleValueChange = (nextValue: string | null) => {
@@ -130,6 +143,7 @@ export const ThemeToggle = () => {
       value={currentTheme}
       onValueChange={handleValueChange}
       onPointerEnter={handlePointerEnter}
+      onFocus={handleFocus}
       className="border-rule bg-record has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-background relative isolate inline-flex w-fit items-center self-start rounded-full border p-1 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2 sm:self-auto forced-colors:border-[ButtonBorder]"
     >
       <SegmentedControlIndicator className="theme-toggle-indicator" />

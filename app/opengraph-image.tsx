@@ -13,7 +13,6 @@ export const size = {
 export const contentType = "image/png";
 
 const PAPER = "#F3EEE3";
-const SHEET = "#FCFBF7";
 const INK = "#12202B";
 const MUTED = "#485763";
 const PINE = "#1B574C";
@@ -213,7 +212,7 @@ export default async function openGraphImage() {
             height: "414px",
             overflow: "hidden",
             border: `1px solid rgba(18,32,43,0.32)`,
-            background: SHEET,
+            background: PAPER,
             padding: "8px",
           }}
         >

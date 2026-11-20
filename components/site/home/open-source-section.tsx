@@ -23,7 +23,7 @@ const inventoryRows: readonly {
 }[] = [
   {
     module: "Public website & giving pages",
-    note: "Stripe plumbing in code; public worker pages still use @asym/mock-data demo profiles",
+    note: "Online checkout is built; public worker pages still show sample profiles (@asym/mock-data)",
     path: "apps/donor",
     href: `${siteConfig.repoUrl}/tree/develop/apps/donor`,
     status: "partial",
@@ -37,21 +37,21 @@ const inventoryRows: readonly {
     statusLabel: "In code",
   },
   {
-    module: "Missionary supporter roster & fail-closed redaction",
+    module: "Missionary supporter roster & private-by-default redaction",
     path: "missionary-portal",
     href: `${siteConfig.repoUrl}/blob/develop/packages/api/src/missionary-portal/donors.ts`,
     status: "in_code",
     statusLabel: "In code",
   },
   {
-    module: "Mission Control CRM, Payload Web Studio & batch previews",
+    module: "Donor & gift CRM, website editor & supported batch previews",
     path: "apps/admin",
     href: `${siteConfig.repoUrl}/tree/develop/apps/admin`,
     status: "in_code",
     statusLabel: "In code",
   },
   {
-    module: "Offline gift intake, recurring commitments & entry-gated thank-yous",
+    module: "Offline gifts, recurring commitments & staff-released thank-yous",
     path: "docs/adr",
     href: `${siteConfig.repoUrl}/tree/develop/docs/adr`,
     status: "in_code",
@@ -85,10 +85,11 @@ export const OpenSourceSection = () => (
   <section
     id="open-source"
     aria-labelledby="open-source-title"
-    className="py-[clamp(3.25rem,5.5vw,5rem)]"
+    className="scroll-mt-24 pb-[clamp(3.25rem,5.5vw,5rem)]"
   >
     <Container>
-      <div className="grid gap-10 lg:grid-cols-[minmax(0,58fr)_minmax(0,42fr)] lg:items-start lg:gap-14">
+      <div className="border-rule border-t pt-12 sm:pt-16">
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,58fr)_minmax(0,42fr)] lg:items-start lg:gap-14">
         <div id="where-things-stand" className="min-w-0 scroll-mt-24">
           <Eyebrow>Open source</Eyebrow>
           <SectionTitle id="open-source-title">
@@ -115,7 +116,7 @@ export const OpenSourceSection = () => (
               <p className="text-foreground text-sm font-semibold">
                 Where things stand
               </p>
-              <span className="text-muted-foreground font-mono text-[0.75rem]">
+              <span className="text-muted-foreground font-mono text-[0.8125rem]">
                 Status · Code link
               </span>
             </div>
@@ -138,7 +139,7 @@ export const OpenSourceSection = () => (
                       {row.module}
                     </span>
                     {row.note ? (
-                      <span className="text-muted-foreground mt-0.5 block text-xs leading-5">
+                      <span className="text-muted-foreground mt-0.5 block text-[0.8125rem] leading-5">
                         {row.note}
                       </span>
                     ) : null}
@@ -146,7 +147,7 @@ export const OpenSourceSection = () => (
                   <div className="flex shrink-0 items-center gap-3">
                     <span
                       className={cn(
-                        "inline-flex items-center border px-2 py-0.5 font-mono text-[0.6875rem] font-medium whitespace-nowrap forced-colors:border-[CanvasText]",
+                        "inline-flex items-center border px-2 py-0.5 font-mono text-xs font-medium whitespace-nowrap forced-colors:border-[CanvasText]",
                         getStatusBadgeClass(row.status)
                       )}
                     >
@@ -157,7 +158,7 @@ export const OpenSourceSection = () => (
                         href={row.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-pine focus-visible:ring-ring inline-flex min-h-11 shrink-0 items-center gap-1 rounded-xs font-mono text-xs underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-8 [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground"
+                        className="text-pine focus-visible:ring-ring inline-flex min-h-11 shrink-0 items-center gap-1 rounded-xs font-mono text-[0.8125rem] underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-8 [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground"
                       >
                         {row.path}
                         <ArrowUpRightIcon className="size-3" />
@@ -167,7 +168,7 @@ export const OpenSourceSection = () => (
                         </span>
                       </a>
                     ) : (
-                      <span className="text-draft inline-flex shrink-0 items-center font-mono text-xs">
+                      <span className="text-draft inline-flex shrink-0 items-center font-mono text-[0.8125rem]">
                         {row.path}
                       </span>
                     )}
@@ -257,6 +258,7 @@ export const OpenSourceSection = () => (
             </div>
           </div>
         </div>
+      </div>
       </div>
     </Container>
   </section>

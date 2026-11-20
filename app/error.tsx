@@ -65,13 +65,13 @@ export default function ErrorPage({
         className="flex flex-1 items-center py-24 outline-none"
       >
         <Container className="max-w-3xl">
-          <p className="text-primary/82 dark:text-ring font-mono text-[0.8125rem] font-medium tracking-[0.02em]">
+          <p className="text-destructive font-mono text-[0.8125rem] font-medium tracking-[0.02em]">
             Something went wrong
           </p>
-          <h1 className="font-heading text-foreground mt-4 text-[clamp(2.4rem,5vw,3.8rem)] leading-[1.02] font-semibold tracking-[-0.04em] text-balance">
+          <h1 className="font-heading text-foreground mt-4 text-[clamp(2.4rem,5vw,3.8rem)] leading-[1.02] font-medium tracking-[-0.03em] text-balance">
             This page couldn’t finish loading.
           </h1>
-          <p className="text-muted-foreground mt-5 max-w-[38rem] text-lg leading-8">
+          <p className="text-muted-foreground mt-5 max-w-[38rem] text-lg leading-7">
             Try loading the page again, or return to the{" "}
             <span translate="no">{siteConfig.shortName}</span> homepage.
           </p>
@@ -79,7 +79,10 @@ export default function ErrorPage({
             <button
               type="button"
               onClick={() => reset()}
-              className={cn(buttonVariants({ size: "lg" }), "px-6")}
+              className={cn(
+                buttonVariants({ variant: "ink", size: "lg" }),
+                "px-6"
+              )}
             >
               Try again
               <ReloadIcon />
