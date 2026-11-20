@@ -194,7 +194,7 @@ test.describe("responsive regression coverage", () => {
     await expect(mainNav).toBeVisible();
     await expect(
       banner.getByRole("link", {
-        name: /^(?:Request early access|View the code|Early access)/,
+        name: /^(?:Request early access|See what’s built|Early access)/,
       })
     ).toBeVisible();
     await expectNoHorizontalOverflow(page, "home @ 1440x900");
@@ -206,8 +206,17 @@ test.describe("responsive regression coverage", () => {
     await expect(brandLink).toBeVisible();
     await expect(mainNav).toBeHidden();
     await expect(
-      banner.getByRole("link", { name: /^(?:Early access|View the code)/ })
+      banner.getByRole("link", { name: /^(?:Early access|See what’s built)/ })
     ).toBeVisible();
+
+    // Verify horizontal tab orientation on <1024px viewports (ArrowRight selects Missionary)
+    const donorTab = page.getByRole("tab", { name: /Donor/iu });
+    await donorTab.focus();
+    await page.keyboard.press("ArrowRight");
+    await expect(page.getByRole("tab", { name: /Missionary/iu })).toHaveAttribute(
+      "aria-selected",
+      "true"
+    );
     await expectNoVisibleDialogs(page, "home @ 390x844");
     await expectNoHorizontalOverflow(page, "home @ 390x844");
     issues.expectNoUnexpectedIssuesSince(checkpoint, "home @ 390x844");

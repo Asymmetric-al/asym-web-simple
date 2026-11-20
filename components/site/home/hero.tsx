@@ -58,15 +58,15 @@ export const HomeHero = () => {
               <span className="block italic">Three hands.</span>
             </h1>
 
-            <p className="text-muted-foreground mt-5 max-w-[33rem] text-base leading-7 text-pretty sm:text-[1.09375rem] sm:leading-8">
-              <span translate="no" className="text-foreground font-medium">
-                asym
-              </span>{" "}
-              keeps donor records, self&#8209;service receipts, redacted
-              missionary rosters, and office CRM on one shared open&#8209;source
-              record. Public giving pages in Core still use demo profiles;
-              hosted teams and human&#8209;approved AI appeals are in
-              development.
+            <p className="text-foreground/88 mt-5 max-w-[33rem] text-base leading-7 text-pretty sm:text-[1.09375rem] sm:leading-8">
+              Record a gift once. Donors download their own receipts and annual
+              statements, missionaries track support without private donor
+              details, and office staff manage one ledger.
+            </p>
+            <p className="text-muted-foreground mt-3 max-w-[33rem] text-sm leading-6 text-pretty">
+              The codebase is open source today. Public giving pages still use
+              demo profiles; hosted teams and human&#8209;approved AI appeals
+              are in development.
             </p>
 
             <div className="mt-7 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
@@ -88,7 +88,7 @@ export const HomeHero = () => {
                     "px-6"
                   )}
                 >
-                  See what’s built
+                  Explore the three roles
                   <ArrowRightIcon dataIcon="inline-end" />
                 </Link>
               )}
@@ -142,7 +142,7 @@ export const HomeHero = () => {
                   Plate I · Three hands, one record
                 </span>
                 <span className="text-muted-foreground font-mono">
-                  Select a role below
+                  Open a role
                 </span>
               </div>
               <div className="border-rule grid grid-cols-3 gap-2 border-t pt-1 text-xs">
@@ -152,11 +152,17 @@ export const HomeHero = () => {
                     href={item.href}
                     className="group focus-visible:ring-ring focus-visible:ring-offset-background flex min-h-11 min-w-0 flex-col justify-center rounded-sm py-1 focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-2 focus-visible:outline-transparent"
                   >
-                    <span className="text-foreground block font-sans leading-4 font-semibold underline-offset-4 [@media(hover:hover)_and_(pointer:fine)]:group-hover:text-pine [@media(hover:hover)_and_(pointer:fine)]:group-hover:underline">
-                      <span className="text-pine mr-1.5 font-mono font-medium tabular-nums">
+                    <span className="text-foreground inline-flex items-center gap-1 font-sans leading-4 font-semibold underline-offset-4 [@media(hover:hover)_and_(pointer:fine)]:group-hover:text-pine [@media(hover:hover)_and_(pointer:fine)]:group-hover:underline">
+                      <span className="text-pine mr-0.5 font-mono font-medium tabular-nums">
                         {item.num}
                       </span>{" "}
-                      {item.role}
+                      <span>{item.role}</span>
+                      <span
+                        aria-hidden="true"
+                        className="text-pine opacity-0 transition-opacity duration-150 group-focus-visible:opacity-100 [@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100"
+                      >
+                        &darr;
+                      </span>
                     </span>
                     <span className="text-muted-foreground mt-0.5 block text-[0.75rem] leading-4">
                       {item.detail}

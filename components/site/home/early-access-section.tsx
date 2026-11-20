@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Container } from "@/components/site/container";
 import { GitHubMark } from "@/components/site/github-mark";
 import { Eyebrow, SectionTitle } from "@/components/site/home/section-heading";
-import { ArrowUpRightIcon } from "@/components/site/icons";
+import { ArrowRightIcon, ArrowUpRightIcon } from "@/components/site/icons";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { siteConfig } from "@/lib/config";
 import {
@@ -57,8 +57,8 @@ export const EarlyAccessSection = async () => {
                 <p className="text-muted-foreground mt-4 max-w-[32rem] text-base leading-7 text-pretty sm:text-[1.0625rem] sm:leading-8">
                   We’re finishing end&#8209;to&#8209;end testing across donor
                   portals, missionary rosters, and office tools before opening
-                  hosted onboarding. Until intake opens, our public develop
-                  branch is the live changelog.
+                  hosted onboarding. Review what’s ready today or check back
+                  once intake opens.
                 </p>
               </div>
               <div className="border-rule min-w-0 border-t pt-6 lg:border-t-0 lg:border-l lg:pt-1 lg:pl-10">
@@ -77,12 +77,23 @@ export const EarlyAccessSection = async () => {
                   ))}
                 </ul>
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                  <Link
+                    href="/early-access/status?state=unavailable"
+                    prefetch={false}
+                    className={cn(
+                      buttonVariants({ variant: "ink", size: "lg" }),
+                      "px-6"
+                    )}
+                  >
+                    Early access status
+                    <ArrowRightIcon dataIcon="inline-end" />
+                  </Link>
                   <a
                     href={siteConfig.commitsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className={cn(
-                      buttonVariants({ variant: "ink", size: "lg" }),
+                      buttonVariants({ variant: "outline", size: "lg" }),
                       "px-6"
                     )}
                   >
@@ -91,43 +102,19 @@ export const EarlyAccessSection = async () => {
                     <span className="sr-only"> (opens in a new tab)</span>
                     <ArrowUpRightIcon dataIcon="inline-end" />
                   </a>
-                  <a
-                    href={`${siteConfig.repoUrl}#readme`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={cn(
-                      buttonVariants({ variant: "outline", size: "lg" }),
-                      "px-6"
-                    )}
-                  >
-                    Read Core README
-                    <span className="sr-only"> (opens in a new tab)</span>
-                    <ArrowUpRightIcon dataIcon="inline-end" />
-                  </a>
                 </div>
-                <p className="text-muted-foreground mt-5 text-sm leading-6">
-                  Checking back later? Bookmark the{" "}
-                  <Link
-                    href="/early-access/status?state=unavailable"
-                    prefetch={false}
-                    className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-card rounded-xs font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:text-pine"
-                  >
-                    early access status page
-                  </Link>
-                  {contactEmail ? (
-                    <>
-                      {" "}
-                      or email{" "}
-                      <a
-                        href={`mailto:${contactEmail}?subject=asym%20early%20access`}
-                        className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-card link-resilient rounded-xs underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:text-pine"
-                      >
-                        {contactEmail}
-                      </a>
-                    </>
-                  ) : null}
-                  .
-                </p>
+                {contactEmail ? (
+                  <p className="text-muted-foreground mt-5 text-sm leading-6">
+                    Questions before intake opens? Email{" "}
+                    <a
+                      href={`mailto:${contactEmail}?subject=asym%20early%20access`}
+                      className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-card link-resilient rounded-xs underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:text-pine"
+                    >
+                      {contactEmail}
+                    </a>
+                    .
+                  </p>
+                ) : null}
               </div>
             </div>
           )}

@@ -10,7 +10,7 @@ import {
 import { useState } from "react";
 import { useIsClient } from "@/lib/use-is-client";
 import { cn } from "@/lib/utils";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 type GovernanceTone = "human" | "draft" | "approval" | "record";
 type StepKey = "01" | "02" | "03" | "04";
@@ -124,12 +124,19 @@ const getToneClasses = (tone: GovernanceTone) => {
   };
 };
 
+const STEP_INDICATOR_INK: Record<StepKey, string> = {
+  "01": "var(--foreground)",
+  "02": "var(--draft)",
+  "03": "var(--vermilion)",
+  "04": "var(--pine)",
+};
+
 // Hairline-ruled press ledger rows — crisp ink rail, filled active index, zero rounded-xl card walls.
 const STEP_ROW_CLASS =
   "border-rule-interactive data-selected:bg-card relative z-10 grid w-full min-w-0 grid-cols-[2rem_1fr] items-start gap-3 border-b px-3 py-3.5 text-left last:border-b-0 forced-colors:data-selected:border-[Highlight]";
 
 const STEP_ROW_INTERACTIVE_CLASS =
-  "focus-visible:ring-ring focus-visible:ring-offset-background cursor-pointer transition-[color,background-color] duration-150 select-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:bg-card/70";
+  "focus-visible:ring-ring focus-visible:ring-offset-background cursor-pointer transition-[color,background-color] duration-150 select-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent not-data-selected:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-card/75";
 
 const DETAIL_STACK_CELL = "col-start-1 row-start-1 min-w-0";
 
@@ -245,7 +252,14 @@ export const GovernanceSequence = (): ReactNode => {
             aria-label="Planned AI appeal approval steps"
             className="border-rule-strong relative block border-y pl-2.5"
           >
-            <TabsIndicator className="vertical-tabs-indicator" />
+            <TabsIndicator
+              className="vertical-tabs-indicator"
+              style={
+                {
+                  "--indicator-ink": STEP_INDICATOR_INK[activeStep],
+                } as CSSProperties
+              }
+            />
             {GOVERNANCE_STEPS.map((item) => (
               <TabsTab
                 key={item.step}
@@ -290,7 +304,7 @@ export const GovernanceSequence = (): ReactNode => {
                   {isSelected ? (
                     <span
                       aria-hidden="true"
-                      className="bg-foreground absolute top-0 bottom-0 -left-[0.625rem] w-[3px] rounded-full"
+                      className="bg-vermilion absolute top-0 bottom-0 -left-[0.625rem] w-[3px] rounded-full"
                     />
                   ) : null}
                   <StepRowBody item={item} isSelected={isSelected} />

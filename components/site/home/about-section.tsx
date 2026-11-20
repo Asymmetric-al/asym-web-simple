@@ -2,23 +2,20 @@ import { Container } from "@/components/site/container";
 import { siteConfig } from "@/lib/config";
 
 const ordinaryWork = [
-  { num: "01", line: "A gift is recorded.", role: "Shared ledger", italic: false },
+  { num: "01", line: "A gift is recorded.", italic: false },
   {
     num: "02",
     line: "The donor holds their receipt.",
-    role: "Donor portal",
     italic: true,
   },
   {
     num: "03",
     line: "The missionary sees support, not private details.",
-    role: "Redacted roster",
     italic: false,
   },
   {
     num: "04",
     line: "Staff hold the full picture.",
-    role: "Office CRM",
     italic: true,
   },
 ] as const;
@@ -30,16 +27,16 @@ export const AboutSection = () => (
     className="midnight-band text-night-foreground border-night-rule scroll-mt-16 border-y py-[clamp(4rem,7vw,6.25rem)]"
   >
     <Container>
-      {/* Monumental editorial interlude with full-width press registration ticks */}
+      {/* Monumental editorial interlude — four lines, calm Night Pine accents (reserving Vermilion strictly for human decisions) */}
       <div>
         <p className="text-night-accent font-sans text-sm font-medium">
           The ordinary work comes first
         </p>
         <ol className="divide-night-rule/75 border-night-rule mt-6 divide-y border-t">
-          {ordinaryWork.map(({ num, line, role, italic }) => (
+          {ordinaryWork.map(({ num, line, italic }) => (
             <li
               key={num}
-              className="flex flex-col gap-1 py-3.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6 sm:py-4"
+              className="flex items-baseline justify-between gap-6 py-3.5 sm:py-4"
             >
               <span
                 className={
@@ -50,11 +47,11 @@ export const AboutSection = () => (
               >
                 {line}
               </span>
-              <span className="text-night-muted shrink-0 font-sans text-xs">
-                <span className="text-night-accent mr-2 font-mono tabular-nums">
-                  {num}
-                </span>{" "}
-                {role}
+              <span
+                aria-hidden="true"
+                className="text-night-accent shrink-0 font-mono text-xs tabular-nums"
+              >
+                {num}
               </span>
             </li>
           ))}
@@ -77,10 +74,9 @@ export const AboutSection = () => (
 
         <div className="text-night-muted max-w-[40rem] space-y-4 text-base leading-7 text-pretty sm:text-[1.0625rem] sm:leading-8">
           <p className="text-night-foreground">
-            Missions organizations coordinate recurring donor support, field
-            workers, designated projects, and donor privacy rules across small
-            staffs. If software holds up for them, it will hold up for most
-            nonprofits.
+            Missions offices coordinate recurring donor support, designated
+            funds, field workers, and donor privacy rules across small staffs
+            every week. We build for that daily work first.
           </p>
           <p>
             We’re Conrad O’Brien and Blake. We’re building{" "}

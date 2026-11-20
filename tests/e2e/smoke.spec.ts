@@ -110,7 +110,7 @@ test.describe("homepage smoke tests", () => {
       page
         .getByRole("main")
         .getByRole("link", {
-          name: /^(?:Request early access|See what’s built)$/u,
+          name: /^(?:Request early access|Explore the three roles)$/u,
         })
         .first()
     ).toHaveAttribute("href", /^\/#(?:early-access|product)$/u);
@@ -157,8 +157,13 @@ test.describe("homepage smoke tests", () => {
     );
     expect(Math.abs(missionaryHeight - donorHeight)).toBeLessThanOrEqual(2);
 
+    const isDesktop = (page.viewportSize()?.width ?? 1280) >= 1024;
+    await expect(architecture.getByRole("tablist")).toHaveAttribute(
+      "data-orientation",
+      isDesktop ? "vertical" : "horizontal"
+    );
     await missionaryTab.focus();
-    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press(isDesktop ? "ArrowDown" : "ArrowRight");
     await expect(
       architecture.getByRole("tab", { name: /Office/iu })
     ).toHaveAttribute("aria-selected", "true");
@@ -327,7 +332,7 @@ test.describe("homepage smoke tests", () => {
       banner.getByRole("link", { name: /^asym home$/iu })
     ).toBeVisible();
     await expect(
-      banner.getByRole("link", { name: /^(?:Early access|View the code)/u })
+      banner.getByRole("link", { name: /^(?:Early access|See what’s built)/u })
     ).toBeVisible();
     await expect(banner.getByRole("navigation")).toBeHidden();
     const menuTrigger = banner.getByRole("button", { name: "Page sections" });
@@ -357,13 +362,13 @@ test.describe("homepage smoke tests", () => {
       await expect(
         page
           .locator("#early-access")
-          .getByRole("link", { name: /Follow commits on develop/u })
-      ).toHaveAttribute("href", `${REPO_URL}/commits/develop`);
+          .getByRole("link", { name: /Early access status/u })
+      ).toHaveAttribute("href", "/early-access/status?state=unavailable");
       await expect(
         page
           .locator("#early-access")
-          .getByRole("link", { name: /Read Core README/u })
-      ).toHaveAttribute("href", `${REPO_URL}#readme`);
+          .getByRole("link", { name: /Follow commits on develop/u })
+      ).toHaveAttribute("href", `${REPO_URL}/commits/develop`);
       return;
     }
 

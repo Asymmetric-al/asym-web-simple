@@ -330,6 +330,11 @@ const readJson = async (response: Response): Promise<unknown> => {
   }
 };
 
+const isAcceptedPayload = (payload: unknown): boolean =>
+  typeof payload === "object" &&
+  payload !== null &&
+  (payload as { ok?: unknown }).ok === true;
+
 const submitEarlyAccess = async (
   request: EarlyAccessRequest,
   honeypot: string
@@ -339,7 +344,8 @@ const submitEarlyAccess = async (
   );
 
   if (response?.ok) {
-    return { kind: "accepted" };
+    const payload = await readJson(response);
+    return { kind: isAcceptedPayload(payload) ? "accepted" : "failed" };
   }
   if (response?.status === NOT_CONFIGURED) {
     return { kind: "not_configured" };
@@ -622,7 +628,7 @@ export const EarlyAccessForm = ({
       onInput={handleDraftInput}
       onSubmit={handleSubmit}
       aria-label="Request early access"
-      className="sm:border-rule sm:bg-background/60 relative sm:rounded-xl sm:border sm:p-7"
+      className="sm:border-rule sm:bg-background/60 relative sm:border sm:p-7"
     >
       <p className="sr-only" role="status" aria-live="polite">
         {isSubmitting ? earlyAccessCopy.submitting : ""}

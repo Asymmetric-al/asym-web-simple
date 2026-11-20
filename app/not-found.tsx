@@ -65,18 +65,16 @@ export default function NotFound() {
                 {siteConfig.cta.primary.label}
               </Link>
             ) : (
-              <a
-                href={siteConfig.repoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href="/#where-things-stand"
+                prefetch={false}
                 className={cn(
                   buttonVariants({ variant: "outline", size: "lg" }),
                   "px-6"
                 )}
               >
-                View the code
-                <span className="sr-only"> on GitHub (opens in a new tab)</span>
-              </a>
+                Where things stand
+              </Link>
             )}
           </div>
           <nav aria-label="Explore the homepage" className="mt-10">

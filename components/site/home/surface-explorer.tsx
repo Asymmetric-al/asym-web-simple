@@ -7,7 +7,7 @@ import {
   TabsPanel,
   TabsTab,
 } from "@ui-sdk/react/tabs";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { ArrowUpRightIcon } from "@/components/site/icons";
 import { siteConfig } from "@/lib/config";
 import { useIsClient } from "@/lib/use-is-client";
@@ -24,9 +24,29 @@ const SURFACE_KEYS: Record<SurfaceKey, true> = {
 
 const SURFACE_HASH_PREFIX = "#surface-";
 const DEFAULT_SURFACE: SurfaceKey = "donor";
+const DESKTOP_MEDIA_QUERY = "(min-width: 1024px)";
 
 const isSurfaceKey = (value: string | null): value is SurfaceKey =>
   value !== null && Object.hasOwn(SURFACE_KEYS, value);
+
+const subscribeDesktopLayout = (onStoreChange: () => void) => {
+  if (typeof window === "undefined") {
+    return () => {
+      // No media listener on server.
+    };
+  }
+  const media = window.matchMedia(DESKTOP_MEDIA_QUERY);
+  media.addEventListener("change", onStoreChange);
+  return () => {
+    media.removeEventListener("change", onStoreChange);
+  };
+};
+
+const isDesktopViewport = (): boolean =>
+  typeof window !== "undefined" &&
+  window.matchMedia(DESKTOP_MEDIA_QUERY).matches;
+
+const isDesktopViewportServer = (): boolean => true;
 
 /**
 The hero plate caption links to `#surface-donor`, `#surface-missionary`, and
@@ -65,22 +85,22 @@ const SURFACES: readonly [SurfaceSpec, SurfaceSpec, SurfaceSpec] = [
     label: "Donor",
     shortOutcome: "Portal, receipts & statements",
     appPath: "apps/donor",
-    proofPath: "packages/api/src/donor-portal/statements.ts",
+    proofPath: "donor-portal/statements.ts",
     repoUrl: `${siteConfig.repoUrl}/blob/develop/packages/api/src/donor-portal/statements.ts`,
     repoLinkLabel: "Inspect statements.ts on GitHub",
     heading: "Signed-in donors pull their own receipts and annual statements.",
     whatTheyDo:
-      "In the authenticated donor portal, supporters review settled giving history, manage pledges, and download individual receipts or annual statements directly from shared records.",
+      "In the authenticated donor portal, supporters review account-scoped giving history, manage pledges, download individual receipts, and pull annual statements covering settled gifts.",
     scopeNote:
       "Current boundary: Stripe checkout plumbing and the donor portal are in Core, while public worker directory pages and checkout recipient lookup still use demo profiles from @asym/mock-data.",
     boundaryTitle: "Own-account scope & name-sharing opt-in",
     boundaryDetail:
-      "Each donor sees only their own settled gifts and settings, including whether they opt in to share their name on a missionary’s roster.",
+      "Each donor sees only their own account’s gifts and preferences, including whether they opt in to share their name on a missionary’s roster.",
     included: [
       "Authenticated donor portal",
       "Individual receipt downloads",
-      "Annual giving statements",
-      "Stripe checkout plumbing (demo public profiles)",
+      "Settled annual statements",
+      "Stripe plumbing (demo public profiles)",
     ],
   },
   {
@@ -89,7 +109,7 @@ const SURFACES: readonly [SurfaceSpec, SurfaceSpec, SurfaceSpec] = [
     label: "Missionary",
     shortOutcome: "Assigned roster, server redaction",
     appPath: "apps/missionary",
-    proofPath: "packages/api/src/missionary-portal/donors.ts",
+    proofPath: "missionary-portal/donors.ts",
     repoUrl: `${siteConfig.repoUrl}/blob/develop/packages/api/src/missionary-portal/donors.ts`,
     repoLinkLabel: "Inspect donors.ts redaction on GitHub",
     heading:
@@ -97,14 +117,14 @@ const SURFACES: readonly [SurfaceSpec, SurfaceSpec, SurfaceSpec] = [
     whatTheyDo:
       "Missionaries follow support progress for their assignment, correspond with opted-in supporters, and publish ministry updates without waiting on exported office spreadsheets.",
     scopeNote:
-      "Verified server projection: the API redacts non-opted-in donors before JSON leaves the server rather than hiding fields in the browser.",
+      "Verified server projection: the API redacts donor identity and withholds individual totals before JSON leaves the server rather than hiding fields in the browser.",
     boundaryTitle: "Fail-closed anonymity on the API",
     boundaryDetail:
-      "Until a donor opts in to share their name, the API substitutes Anonymous partner and returns null for individual gift totals and last-gift amounts.",
+      "Non-opted-in donors default to Anonymous partner, and the missionary roster projection returns null for individual gift totals and last-gift amounts across rows.",
     included: [
       "Assigned supporter roster",
-      "Default fail-closed redaction",
-      "Ministry updates & feed",
+      "Default fail-closed identity redaction",
+      "Individual gift amounts withheld (null)",
       "Isolated from org-wide accounts",
     ],
   },
@@ -114,7 +134,7 @@ const SURFACES: readonly [SurfaceSpec, SurfaceSpec, SurfaceSpec] = [
     label: "Office",
     shortOutcome: "CRM, ledger & batch previews",
     appPath: "apps/admin",
-    proofPath: "packages/api/src/admin/contribution-batches/preview.ts",
+    proofPath: "contribution-batches/preview.ts",
     repoUrl: `${siteConfig.repoUrl}/blob/develop/packages/api/src/admin/contribution-batches/preview.ts`,
     repoLinkLabel: "Inspect batch preview.ts on GitHub",
     heading:
@@ -122,7 +142,7 @@ const SURFACES: readonly [SurfaceSpec, SurfaceSpec, SurfaceSpec] = [
     whatTheyDo:
       "Office teams work from the same contribution tables to manage legal donors, funds, offline gift intake, Payload Web Studio pages, and email or PDF templates.",
     scopeNote:
-      "Verified safeguard: bulk contribution operations compute a server-side preview of affected records before staff process the batch.",
+      "Verified safeguard: bulk contribution operations compute a server-side preview of affected and skipped records before staff process the batch.",
     boundaryTitle: "One shared record across every desk",
     boundaryDetail:
       "Because donor portals, missionary rosters, and office tools read the same contribution tables, staff stop reconciling disconnected CSV exports.",
@@ -135,12 +155,13 @@ const SURFACES: readonly [SurfaceSpec, SurfaceSpec, SurfaceSpec] = [
   },
 ];
 
-// Single responsive tab row per role: compact 3-up horizontal ledger bar on <lg so proof renders immediately in-viewport; vertical hairline-ruled ledger rows on lg+.
+// Single responsive tab row per role: compact 3-up horizontal ledger bar on <lg; vertical hairline-ruled ledger rows on lg+.
+// Hover fill is scoped strictly to unselected tabs (`not-data-selected:`) so fine-pointer hover never lowers selected tab contrast (<1024px SC 1.4.3).
 const ROLE_TAB_CLASS =
   "group border-rule-interactive data-selected:border-foreground data-selected:bg-foreground data-selected:text-background lg:data-selected:border-rule-interactive lg:data-selected:bg-card lg:data-selected:text-foreground relative z-10 flex min-h-11 w-full min-w-0 items-center justify-center gap-1.5 border px-2.5 py-2 text-center lg:min-h-0 lg:items-start lg:justify-between lg:gap-3 lg:border-x-0 lg:border-t-0 lg:border-b lg:px-3.5 lg:py-3.5 lg:text-left lg:last:border-b-0 forced-colors:data-selected:border-[Highlight]";
 
 const ROLE_TAB_INTERACTIVE_CLASS =
-  "focus-visible:ring-ring focus-visible:ring-offset-background cursor-pointer transition-[color,background-color,border-color] duration-150 select-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:bg-card/75";
+  "focus-visible:ring-ring focus-visible:ring-offset-background cursor-pointer transition-[color,background-color,border-color] duration-150 select-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent not-data-selected:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-card/80";
 
 const PANEL_STACK_CELL = "col-start-1 row-start-1 min-w-0";
 
@@ -195,7 +216,7 @@ const SharedRecordFoot = ({
         </div>
         <span
           className={cn(
-            "grid text-right font-mono text-[0.75rem] transition-colors duration-150",
+            "grid text-left font-mono text-[0.75rem] transition-colors duration-150 sm:text-right",
             isRosterFilter ? "text-pine font-medium" : "text-muted-foreground"
           )}
         >
@@ -331,6 +352,11 @@ const InactivePanelSizers = ({
 
 export const SurfaceExplorer = (): ReactNode => {
   const isHydrated = useIsClient();
+  const isDesktop = useSyncExternalStore(
+    subscribeDesktopLayout,
+    isDesktopViewport,
+    isDesktopViewportServer
+  );
   const [activeSurface, setActiveSurface] = useState<SurfaceKey>(() =>
     typeof window === "undefined"
       ? DEFAULT_SURFACE
@@ -384,7 +410,7 @@ export const SurfaceExplorer = (): ReactNode => {
 
       {isHydrated ? (
         <Tabs
-          orientation="vertical"
+          orientation={isDesktop ? "vertical" : "horizontal"}
           value={activeSurface}
           onValueChange={handleSurfaceChange}
           className={gridClass}

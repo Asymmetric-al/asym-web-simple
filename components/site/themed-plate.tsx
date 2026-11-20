@@ -21,11 +21,11 @@ const plateSources = (name: PlateName, theme: PlateTheme) => {
 /**
 The light and dark editions of one engraved plate.
 
-`loading="lazy"` keeps the `display: none` opposite-theme edition from
-downloading on initial load, while `priority` pairs media-scoped preloads with
-`fetchPriority="high"` and `decoding="sync"` so the visible hero plate paints
-immediately once bytes arrive. `data-theme-plate` lets `ThemeToggle` warm the
-hidden edition before a click or touch tap using the exact `srcset` and `sizes`.
+The default light edition loads eagerly (`fetchPriority="high"` for the hero
+plate, `fetchPriority="low"` below the fold) so Plate I paints immediately and
+Plates II/III never appear blank on scroll or full-page captures. Dark editions
+stay `loading="lazy"` (with a `prefers-color-scheme: dark` preload on the hero
+plate) so light visitors never download hidden dark plates on first paint.
 */
 export const ThemedPlate = ({
   name,
@@ -70,10 +70,11 @@ export const ThemedPlate = ({
         alt={alt}
         width={PLATE_WIDTH}
         height={PLATE_HEIGHT}
-        loading="lazy"
+        loading="eager"
         decoding={priority ? "sync" : "async"}
-        fetchPriority={priority ? "high" : undefined}
+        fetchPriority={priority ? "high" : "low"}
         data-theme-plate="light"
+        data-priority={priority ? "true" : undefined}
         className="block h-full w-full object-cover dark:hidden"
       />
       <img
@@ -87,6 +88,7 @@ export const ThemedPlate = ({
         decoding={priority ? "sync" : "async"}
         fetchPriority={priority ? "high" : undefined}
         data-theme-plate="dark"
+        data-priority={priority ? "true" : undefined}
         className="hidden h-full w-full object-cover dark:block"
       />
     </>

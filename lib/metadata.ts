@@ -9,7 +9,7 @@ export const siteMetadata = {
   socialTitle:
     "One gift. Three hands. Open-source software for missions organizations.",
   socialDescription:
-    "Donor portals, self-service receipts, redacted missionary rosters, and office CRM on one shared open-source record. Hosted teams and human-approved AI appeals are in development.",
+    "Open-source donor portals, self-service receipts, redacted missionary rosters, and office CRM on one shared record. Hosted teams and AI appeals in development.",
   url: siteConfig.url,
   ogImage: "/opengraph-image",
   keywords: [

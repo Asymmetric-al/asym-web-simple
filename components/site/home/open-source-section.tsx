@@ -19,6 +19,7 @@ const inventoryRows: readonly {
   readonly path: string;
   readonly href?: string;
   readonly status: InventoryStatus;
+  readonly statusLabel: string;
 }[] = [
   {
     module: "Public website & giving pages",
@@ -26,34 +27,47 @@ const inventoryRows: readonly {
     path: "apps/donor",
     href: `${siteConfig.repoUrl}/tree/develop/apps/donor`,
     status: "partial",
+    statusLabel: "Partial",
   },
   {
-    module: "Authenticated donor portal, receipts & statements",
+    module: "Authenticated donor portal, receipts & settled annual statements",
     path: "donor-portal",
     href: `${siteConfig.repoUrl}/tree/develop/packages/api/src/donor-portal`,
     status: "in_code",
+    statusLabel: "In code",
   },
   {
     module: "Missionary supporter roster & fail-closed redaction",
     path: "missionary-portal",
     href: `${siteConfig.repoUrl}/blob/develop/packages/api/src/missionary-portal/donors.ts`,
     status: "in_code",
+    statusLabel: "In code",
   },
   {
-    module: "Staff CRM, Web Studio (Payload) & batch previews",
+    module: "Mission Control CRM, Payload Web Studio & batch previews",
     path: "apps/admin",
     href: `${siteConfig.repoUrl}/tree/develop/apps/admin`,
     status: "in_code",
+    statusLabel: "In code",
+  },
+  {
+    module: "Offline gift intake, recurring commitments & entry-gated thank-yous",
+    path: "docs/adr",
+    href: `${siteConfig.repoUrl}/tree/develop/docs/adr`,
+    status: "in_code",
+    statusLabel: "In code",
   },
   {
     module: "Hosted team subscription & onboarding",
     path: "in development",
     status: "planned",
+    statusLabel: "Planned",
   },
   {
     module: "AI campaign & appeal drafting with staff sign-off",
     path: "in development",
     status: "planned",
+    statusLabel: "Planned",
   },
 ];
 
@@ -150,6 +164,7 @@ export const OpenSourceSection = () => (
                         )}
                       >
                         {row.module}
+                        <span className="sr-only"> ({row.statusLabel})</span>
                       </span>
                       {row.note ? (
                         <span className="text-muted-foreground mt-0.5 block text-xs leading-5">
@@ -218,10 +233,10 @@ export const OpenSourceSection = () => (
             </div>
             <figcaption className="border-rule mt-2.5 flex flex-wrap items-baseline justify-between gap-2 border-t pt-2 text-xs">
               <span className="text-foreground font-mono font-medium">
-                Plate III · Public archival ledger
+                Plate III · Open-source ledger
               </span>
               <span className="text-muted-foreground">
-                Inspectable source under AGPL-3.0-only
+                Every schema and rule inspectable now
               </span>
             </figcaption>
           </figure>

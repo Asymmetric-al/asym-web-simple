@@ -21,28 +21,48 @@ const normalizeHost = (raw: string | null | undefined): string | null => {
   return first.length > 0 ? first : null;
 };
 
-const parseHostFromUrl = (rawUrl: string): string | null => {
+const normalizeProto = (raw: string | null | undefined): string | null => {
+  if (!raw) {
+    return null;
+  }
+  const first = raw.split(",", 1)[0]?.trim().toLowerCase() ?? "";
+  return first === "http" || first === "https" ? `${first}:` : null;
+};
+
+const formatOrigin = (parsed: URL): string | null =>
+  parsed.protocol === "http:" || parsed.protocol === "https:"
+    ? `${parsed.protocol}//${parsed.host.toLowerCase()}`
+    : null;
+
+const parseOriginFromUrl = (rawUrl: string): string | null => {
   try {
-    const parsed = new URL(rawUrl);
-    return parsed.host.toLowerCase();
+    return formatOrigin(new URL(rawUrl));
   } catch {
     return null;
   }
 };
 
-const readExpectedHost = (request: Request): string | null => {
+const readExpectedOrigin = (request: Request): string | null => {
   const forwardedHost = normalizeHost(request.headers.get("x-forwarded-host"));
-  if (forwardedHost) {
-    return forwardedHost;
+  const host = forwardedHost ?? normalizeHost(request.headers.get("host"));
+  const requestOrigin = parseOriginFromUrl(request.url);
+  if (!host) {
+    return requestOrigin;
   }
-  const hostHeader = normalizeHost(request.headers.get("host"));
-  return hostHeader ?? parseHostFromUrl(request.url);
+  const forwardedProto = normalizeProto(request.headers.get("x-forwarded-proto"));
+  let protocol: string | null = forwardedProto;
+  if (!protocol && forwardedHost) {
+    protocol = "https:";
+  } else if (!protocol && requestOrigin) {
+    protocol = requestOrigin.startsWith("https:") ? "https:" : "http:";
+  }
+  return protocol ? `${protocol}//${host}` : null;
 };
 
 /**
 Rejects cross-site POST requests using Fetch Metadata (`Sec-Fetch-Site`) and
-`Origin` host verification, blocking cross-origin `application/x-www-form-urlencoded`
-and JSON spam posts while permitting same-origin browsers and direct server/CLI callers.
+full `Origin` (scheme + host) verification, blocking cross-origin and
+scheme-downgrade posts while permitting same-origin browsers and direct callers.
 */
 export const isSameOriginRequest = (request: Request): boolean => {
   const secFetchSite = request.headers
@@ -61,13 +81,13 @@ export const isSameOriginRequest = (request: Request): boolean => {
     return false;
   }
 
-  const originHost = parseHostFromUrl(originHeader);
-  if (!originHost) {
+  const incomingOrigin = parseOriginFromUrl(originHeader);
+  if (!incomingOrigin) {
     return false;
   }
 
-  const expectedHost = readExpectedHost(request);
-  return expectedHost !== null && originHost === expectedHost;
+  const expectedOrigin = readExpectedOrigin(request);
+  return expectedOrigin !== null && incomingOrigin === expectedOrigin;
 };
 
 /**

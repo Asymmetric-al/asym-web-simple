@@ -377,6 +377,18 @@ describe("isSameOriginRequest", () => {
         })
       )
     ).toBeFalsy();
+    expect(
+      isSameOriginRequest(
+        new Request("https://asym.app/api/early-access", {
+          method: "POST",
+          headers: {
+            host: "asym.app",
+            // eslint-disable-next-line sonarjs/no-clear-text-protocols -- Intentionally testing HTTP scheme downgrade rejection against HTTPS.
+            origin: "http://asym.app",
+          },
+        })
+      )
+    ).toBeFalsy();
   });
 });
 

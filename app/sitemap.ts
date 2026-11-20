@@ -15,13 +15,13 @@ const routes: readonly {
   },
   {
     path: "/privacy",
-    lastModified: "2026-11-19",
+    lastModified: "2026-11-20",
     changeFrequency: "monthly",
     priority: 0.6,
   },
   {
     path: "/terms",
-    lastModified: "2026-11-19",
+    lastModified: "2026-11-20",
     changeFrequency: "monthly",
     priority: 0.6,
   },

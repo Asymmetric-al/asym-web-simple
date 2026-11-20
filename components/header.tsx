@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { GitHubMark } from "@/components/site/github-mark";
 import { MobileNavMenu } from "@/components/site/mobile-nav-menu";
 import { SiteLogoMark } from "@/components/site/site-logo-mark";
 import { buttonVariants } from "@/components/ui/button-variants";
@@ -74,10 +73,9 @@ export const Header = () => {
               </span>
             </Link>
           ) : (
-            <a
-              href={siteConfig.repoUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/#where-things-stand"
+              prefetch={false}
               className={cn(
                 buttonVariants({
                   variant: "ink",
@@ -86,10 +84,8 @@ export const Header = () => {
                 "shrink-0 px-4"
               )}
             >
-              <GitHubMark className="size-3.5" />
-              <span>View the code</span>
-              <span className="sr-only"> on GitHub (opens in a new tab)</span>
-            </a>
+              See what’s built
+            </Link>
           )}
           <MobileNavMenu />
         </div>

@@ -38,7 +38,7 @@
   --ring: #1b574c;
   --rule: rgb(18 32 43 / 18%);
   --rule-strong: rgb(18 32 43 / 34%);
-  --rule-interactive: rgb(18 32 43 / 44%);
+  --rule-interactive: rgb(18 32 43 / 52%);
   --glyph-stroke: rgb(18 32 43 / 38%);
   --ink: #12202b;
   --record: #e9e2d2;
@@ -55,7 +55,7 @@
   --night-foreground: #f3eee3;
   --night-muted: #b7c4cd;
   --night-rule: rgb(243 238 227 / 18%);
-  --night-accent: #f07456;
+  --night-accent: #62bda8;
   --selection-bg: rgb(27 87 76 / 22%);
   --frame: #fcfbf7;
   --surface-1: #fcfbf7;
@@ -108,7 +108,7 @@
   --ring: #62bda8;
   --rule: rgb(239 233 221 / 16%);
   --rule-strong: rgb(239 233 221 / 32%);
-  --rule-interactive: rgb(239 233 221 / 42%);
+  --rule-interactive: rgb(239 233 221 / 46%);
   --glyph-stroke: rgb(239 233 221 / 50%);
   --ink: #efe9dd;
   --record: #0e1821;
@@ -125,7 +125,7 @@
   --night-foreground: #f3eee3;
   --night-muted: #bcc9d2;
   --night-rule: rgb(243 238 227 / 22%);
-  --night-accent: #f08066;
+  --night-accent: #62bda8;
   --selection-bg: rgb(98 189 168 / 28%);
   --frame: #0b131a;
   --surface-1: #121e28;
@@ -390,10 +390,12 @@
   width: 3px;
   height: var(--active-tab-height);
   border-radius: 999px;
-  background: var(--foreground);
+  background: var(--indicator-ink, var(--foreground));
   pointer-events: none;
   transform: translate3d(0, var(--active-tab-top, 0), 0);
-  transition: transform 180ms var(--ease-out-expo);
+  transition:
+    transform 180ms var(--ease-out-expo),
+    background-color 180ms var(--ease-out-expo);
   will-change: transform;
 }
 

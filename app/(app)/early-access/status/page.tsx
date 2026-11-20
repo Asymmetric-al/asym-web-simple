@@ -191,7 +191,8 @@ export default async function EarlyAccessStatusPage({
       className="flex flex-1 items-center pt-32 pb-20 outline-none sm:pt-36"
     >
       <Container className="max-w-2xl">
-        <div className="surface-folio rounded-2xl p-6 sm:p-9">
+        <div className="border-rule-strong bg-card border p-6 sm:p-9">
+          <div aria-hidden="true" className="bg-pine mb-5 h-[2px] w-14" />
           {statusIcon}
           {content.tone === "neutral" ? null : (
             <p className="text-pine mt-5 font-mono text-xs font-medium tracking-[0.02em]">

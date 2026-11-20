@@ -8,7 +8,7 @@ export const siteConfig = {
   */
   shortName: "asym",
   description:
-    "Open-source software for missions organizations: donor portals, self-service receipts, redacted missionary rosters, and office CRM on one shared record. Public giving pages use demo profiles; hosted teams and human-approved AI appeals are in development.",
+    "Open-source donor portals, self-service receipts, redacted missionary rosters, and office CRM on one shared record for missions organizations.",
   /**
   Production domain served by this project (Vercel `asym-web-simple`).
   */
