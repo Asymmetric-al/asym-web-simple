@@ -21,7 +21,7 @@ export const EditorialGlyph = ({
       >
         <path
           d="M11 8.5H41V43.5L36.5 40.5L32 43.5L27.5 40.5L23 43.5L18.5 40.5L14 43.5L11 41.5V8.5Z"
-          stroke="var(--rule-strong)"
+          stroke="var(--glyph-stroke)"
           strokeWidth="1.5"
           strokeLinejoin="round"
         />
@@ -71,10 +71,10 @@ export const EditorialGlyph = ({
           width="38"
           height="32"
           rx="3"
-          stroke="var(--rule-strong)"
+          stroke="var(--glyph-stroke)"
           strokeWidth="1.5"
         />
-        <path d="M26 10V42" stroke="var(--rule-strong)" strokeWidth="1.5" />
+        <path d="M26 10V42" stroke="var(--glyph-stroke)" strokeWidth="1.5" />
         <path
           d="M12 18H21M12 24H20M12 30H18"
           stroke="var(--pine)"
@@ -115,7 +115,7 @@ export const EditorialGlyph = ({
         width="30"
         height="34"
         rx="3"
-        stroke="var(--rule-strong)"
+        stroke="var(--glyph-stroke)"
         strokeWidth="1.5"
       />
       <path

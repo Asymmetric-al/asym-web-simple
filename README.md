@@ -153,7 +153,7 @@ Copy `.env.example` → `.env.local` for local secrets.
 | `generate:types` | Generate `payload-types.ts` (not checked in until run) |
 | `generate:importmap` | Regenerate Payload admin import map |
 
-Primary static checks before a PR: **`lint`** and **`typecheck`**. Playwright defaults to **`http://127.0.0.1:3001`** with `webServer` running `npm run build && npx next start` (see `playwright.config.ts`).
+Primary static checks before a PR: **`lint`** and **`typecheck`**. Playwright defaults to **`http://127.0.0.1:3001`** with `webServer` running `bun run build && bunx next start` (see `playwright.config.ts`); set `PLAYWRIGHT_BASE_URL` to test an already-running server instead (no `webServer`, list reporter only).
 
 ## Configuration
 

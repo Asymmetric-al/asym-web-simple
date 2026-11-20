@@ -28,7 +28,7 @@
 - This repo is intentionally `base-maia`, so prefer Base UI-compatible Shadcnblocks installs and let the CLI follow `components.json`. Use dedicated `@shadcnblocks/base/...` installs only when the automatic Base UI path is not enough.
 - Preserve local styling, spacing, and copy after installing any Shadcnblocks block. Treat installed Shadcnblocks code as local source code and adapt it to Maia, the current tokens, and the Asymmetric.al content system.
 - Prefer shadcn MCP discovery before guessing Shadcnblocks block names. Once the registry is present in `components.json`, the configured shadcn MCP server should be able to browse it naturally.
-- Use `motion/react` for new animation work. Keep motion subtle and performant, and respect reduced-motion preferences.
+- No animation library is installed. Use CSS transitions and keyframes in `app/globals.css` alongside UI SDK state attributes (`data-starting-style`, `data-ending-style`, `data-activation-direction`); add `motion` back with `bun add motion` only for a concrete need. Keep motion subtle and performant, and respect reduced-motion preferences.
 - Preserve stable shadcn (`base-maia`) and `@base-ui/react` components that already work in `components/ui/`. For new or substantially revised interactive behavior and custom primitives, follow the **Vercel UI SDK** policy below, styling everything through Tailwind and `app/globals.css` tokens rather than ad hoc overrides.
 
 ## Vercel UI SDK

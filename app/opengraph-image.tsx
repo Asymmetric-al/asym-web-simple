@@ -14,12 +14,10 @@ export const contentType = "image/png";
 
 const PAPER = "#F3EEE3";
 const SHEET = "#FCFBF7";
-const RECORD = "#E9E2D2";
 const INK = "#12202B";
 const MUTED = "#485763";
 const PINE = "#1B574C";
-const PINE_SOFT = "#E3EEE9";
-const VERMILION = "#B33A22";
+const DRAFT = "#4A5966";
 const RULE = "rgba(18,32,43,0.18)";
 const SPACE_BETWEEN = "space-between";
 const FONT_NEWSREADER = '"Newsreader"';
@@ -28,6 +26,7 @@ const FONT_MONO = '"IBM Plex Mono"';
 export default async function openGraphImage() {
   const [
     logoData,
+    plateData,
     newsreaderRegular,
     newsreaderSemiBold,
     newsreaderItalic,
@@ -37,6 +36,10 @@ export default async function openGraphImage() {
   ] = await Promise.all([
     readFile(
       path.join(process.cwd(), "public", "brand", "asym-mark-dark.png"),
+      "base64"
+    ),
+    readFile(
+      path.join(process.cwd(), "lib", "art", "three-hands-og.png"),
       "base64"
     ),
     readFile(
@@ -57,6 +60,7 @@ export default async function openGraphImage() {
     ),
   ]);
   const logoSrc = `data:image/png;base64,${logoData}`;
+  const plateSrc = `data:image/png;base64,${plateData}`;
 
   return new ImageResponse(
     <div
@@ -65,12 +69,12 @@ export default async function openGraphImage() {
         width: "100%",
         height: "100%",
         background: PAPER,
-        padding: "48px 56px",
+        padding: "44px 52px",
         fontFamily: '"Instrument Sans"',
         color: INK,
         justifyContent: SPACE_BETWEEN,
         alignItems: "stretch",
-        gap: "48px",
+        gap: "44px",
       }}
     >
       {/* Left editorial column */}
@@ -79,7 +83,7 @@ export default async function openGraphImage() {
           display: "flex",
           flexDirection: "column",
           justifyContent: SPACE_BETWEEN,
-          width: "560px",
+          width: "510px",
           paddingTop: "4px",
           paddingBottom: "4px",
         }}
@@ -88,13 +92,13 @@ export default async function openGraphImage() {
           <img
             src={logoSrc}
             alt=""
-            width={42}
-            height={42}
+            width={40}
+            height={40}
             style={{ display: "block", objectFit: "contain" }}
           />
           <span
             style={{
-              fontSize: 32,
+              fontSize: 30,
               fontWeight: 600,
               letterSpacing: "-0.03em",
             }}
@@ -102,7 +106,7 @@ export default async function openGraphImage() {
             asym
           </span>
           <span style={{ color: RULE, fontSize: 22 }}>|</span>
-          <span style={{ fontSize: 18, fontWeight: 500, color: PINE }}>
+          <span style={{ fontSize: 17, fontWeight: 500, color: PINE }}>
             Open source &middot; AGPL-3.0-only
           </span>
         </div>
@@ -112,7 +116,7 @@ export default async function openGraphImage() {
             style={{
               fontFamily: FONT_NEWSREADER,
               fontSize: 88,
-              lineHeight: 0.96,
+              lineHeight: 0.95,
               fontWeight: 600,
               letterSpacing: "-0.03em",
             }}
@@ -134,8 +138,8 @@ export default async function openGraphImage() {
           </div>
           <div
             style={{
-              marginTop: "24px",
-              fontSize: 23,
+              marginTop: "22px",
+              fontSize: 22,
               lineHeight: 1.44,
               fontWeight: 500,
               color: MUTED,
@@ -149,183 +153,135 @@ export default async function openGraphImage() {
         <div
           style={{
             display: "flex",
-            alignItems: "center",
+            flexDirection: "column",
+            gap: "10px",
             borderTop: `1px solid ${RULE}`,
-            paddingTop: "18px",
-            fontSize: 18,
-            fontWeight: 500,
-            color: MUTED,
+            paddingTop: "16px",
           }}
         >
-          <span>
-            Built by Asymmetric.al &nbsp;&middot;&nbsp; Starting with missions
-            organizations
-          </span>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: SPACE_BETWEEN,
+              alignItems: "center",
+              fontSize: 17,
+              fontWeight: 500,
+              color: MUTED,
+            }}
+          >
+            <span>Built by Asymmetric.al &middot; Missions organizations</span>
+            <span style={{ fontFamily: FONT_MONO, fontSize: 15, color: INK }}>
+              asym.app
+            </span>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              fontSize: 15,
+              color: DRAFT,
+            }}
+          >
+            <span
+              style={{
+                width: "9px",
+                height: "9px",
+                borderRadius: "999px",
+                border: `1.5px dashed ${DRAFT}`,
+              }}
+            />
+            <span>Human-approved AI appeal drafting in development</span>
+          </div>
         </div>
       </div>
 
-      {/* Right architectural brand plate (real monorepo surfaces, zero fake UI or fictional records) */}
+      {/* Right framed Hero Plate I copperplate triptych — unified art direction, zero fake UI */}
       <div
         style={{
           display: "flex",
           flexDirection: "column",
           flex: 1,
-          background: RECORD,
+          background: SHEET,
           border: `1.5px solid rgba(18,32,43,0.28)`,
           borderRadius: "24px",
-          padding: "24px",
+          padding: "18px",
           justifyContent: SPACE_BETWEEN,
         }}
       >
         <div
           style={{
             display: "flex",
-            justifyContent: SPACE_BETWEEN,
-            alignItems: "center",
-            fontFamily: FONT_MONO,
-            fontSize: 14,
-            color: MUTED,
+            width: "100%",
+            height: "378px",
+            borderRadius: "14px",
+            overflow: "hidden",
+            border: `1px solid ${RULE}`,
+            background: PAPER,
           }}
         >
-          <span>Asymmetric-al/core</span>
-          <span
+          <img
+            src={plateSrc}
+            alt=""
+            width={501}
+            height={376}
             style={{
-              background: PINE_SOFT,
-              color: PINE,
-              borderRadius: "999px",
-              padding: "5px 14px",
-              fontWeight: 500,
+              display: "block",
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
             }}
-          >
-            In public code
-          </span>
+          />
         </div>
 
         <div
           style={{
             display: "flex",
-            flexDirection: "column",
-            background: SHEET,
-            border: `1.5px solid rgba(18,32,43,0.22)`,
-            borderRadius: "16px",
-            padding: "26px",
-            marginTop: "16px",
-            flex: 1,
             justifyContent: SPACE_BETWEEN,
+            alignItems: "center",
+            padding: "14px 8px 4px",
+            gap: "12px",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              borderBottom: `1px solid ${RULE}`,
-              paddingBottom: "18px",
-            }}
-          >
-            <span
+          {[
+            { num: "01", role: "Donor", detail: "Giving & receipts" },
+            { num: "02", role: "Missionary", detail: "Scoped roster" },
+            { num: "03", role: "Office", detail: "Full ledger" },
+          ].map((item) => (
+            <div
+              key={item.num}
               style={{
-                fontFamily: FONT_MONO,
-                fontSize: 13,
-                color: PINE,
+                display: "flex",
+                flexDirection: "column",
+                flex: 1,
               }}
             >
-              THREE CONNECTED SURFACES
-            </span>
-            <span
-              style={{
-                fontFamily: FONT_NEWSREADER,
-                fontSize: 32,
-                fontWeight: 600,
-                marginTop: "8px",
-              }}
-            >
-              One shared record.
-            </span>
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "12px",
-              marginTop: "18px",
-            }}
-          >
-            {[
-              { index: "01", role: "Donor", path: "apps/donor" },
-              { index: "02", role: "Missionary", path: "apps/missionary" },
-              { index: "03", role: "Office", path: "apps/admin" },
-            ].map((item) => (
-              <div
-                key={item.role}
-                style={{
-                  display: "flex",
-                  justifyContent: SPACE_BETWEEN,
-                  alignItems: "center",
-                  background: PAPER,
-                  borderRadius: "12px",
-                  padding: "15px 18px",
-                }}
-              >
-                <div
-                  style={{ display: "flex", alignItems: "center", gap: "12px" }}
-                >
-                  <span
-                    style={{
-                      fontFamily: FONT_MONO,
-                      fontSize: 15,
-                      color: PINE,
-                      fontWeight: 500,
-                    }}
-                  >
-                    {item.index}
-                  </span>
-                  <span style={{ fontSize: 21, fontWeight: 600, color: INK }}>
-                    {item.role}
-                  </span>
-                </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                 <span
                   style={{
                     fontFamily: FONT_MONO,
-                    fontSize: 15,
+                    fontSize: 14,
+                    color: PINE,
                     fontWeight: 500,
-                    color: MUTED,
                   }}
                 >
-                  {item.path}
+                  {item.num}
+                </span>
+                <span style={{ fontSize: 17, fontWeight: 600, color: INK }}>
+                  {item.role}
                 </span>
               </div>
-            ))}
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              justifyContent: SPACE_BETWEEN,
-              alignItems: "center",
-              gap: "16px",
-              marginTop: "18px",
-              paddingTop: "16px",
-              borderTop: `1px dashed rgba(74,89,102,0.45)`,
-              fontSize: 15,
-              color: MUTED,
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <span
                 style={{
-                  width: "8px",
-                  height: "8px",
-                  borderRadius: "999px",
-                  background: VERMILION,
+                  fontSize: 14,
+                  color: MUTED,
+                  marginTop: "2px",
                 }}
-              />
-              <span>AI appeal drafting in development</span>
+              >
+                {item.detail}
+              </span>
             </div>
-            <span style={{ fontFamily: FONT_MONO, fontSize: 13 }}>
-              asym.app
-            </span>
-          </div>
+          ))}
         </div>
       </div>
     </div>,

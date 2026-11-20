@@ -2,9 +2,11 @@
 
 import {
   SegmentedControl,
+  SegmentedControlIndicator,
   SegmentedControlItem,
 } from "@ui-sdk/react/segmented-control";
 import { useTheme } from "next-themes";
+import { useEffect, useRef, useState } from "react";
 import { useIsClient } from "@/lib/use-is-client";
 import { cn } from "@/lib/utils";
 import type { ReactNode } from "react";
@@ -67,21 +69,79 @@ type ThemeValue = (typeof themes)[number]["value"];
 const isThemeValue = (value: string | null): value is ThemeValue =>
   value !== null && themes.some((option) => option.value === value);
 
+/**
+Warms only the hidden opposite-theme plates actually mounted on this route,
+reusing each `<img>`'s exact `srcset` and `sizes` so the browser picks the same
+DPR-matched candidate it will display when the theme toggles.
+*/
+const prewarmOppositePlates = (resolvedTheme: string | undefined) => {
+  if (typeof document === "undefined") {
+    return;
+  }
+  const selector =
+    resolvedTheme === "dark"
+      ? 'img[data-theme-plate="light"]'
+      : 'img[data-theme-plate="dark"]';
+  const plates = document.querySelectorAll<HTMLImageElement>(selector);
+  for (const plate of plates) {
+    const preloader = new window.Image();
+    preloader.decoding = "async";
+    if (plate.sizes) {
+      preloader.sizes = plate.sizes;
+    }
+    if (plate.srcset) {
+      preloader.srcset = plate.srcset;
+    } else if (plate.src) {
+      preloader.src = plate.src;
+    }
+  }
+};
+
 export const ThemeToggle = () => {
   const isMounted = useIsClient();
-  const { setTheme, theme = "system" } = useTheme();
+  const { resolvedTheme, setTheme, theme = "system" } = useTheme();
+  const [pendingTheme, setPendingTheme] = useState<ThemeValue | null>(null);
+  const rafRef = useRef<number | null>(null);
+  const prewarmedRef = useRef<string | null>(null);
+
+  useEffect(
+    () => () => {
+      if (rafRef.current !== null) {
+        window.cancelAnimationFrame(rafRef.current);
+      }
+    },
+    []
+  );
 
   if (!isMounted) {
     return <div className="h-[3.375rem] sm:h-[2.625rem]" aria-hidden="true" />;
   }
 
-  const currentTheme: ThemeValue = isThemeValue(theme) ? theme : "system";
+  const currentTheme: ThemeValue =
+    pendingTheme ?? (isThemeValue(theme) ? theme : "system");
+
+  const handleIntent = () => {
+    if (!resolvedTheme || prewarmedRef.current === resolvedTheme) {
+      return;
+    }
+    prewarmedRef.current = resolvedTheme;
+    prewarmOppositePlates(resolvedTheme);
+  };
 
   const handleValueChange = (nextValue: string | null) => {
     if (!isThemeValue(nextValue)) {
       return;
     }
-    setTheme(nextValue);
+    if (rafRef.current !== null) {
+      window.cancelAnimationFrame(rafRef.current);
+    }
+    // Paint the sliding active pill immediately, then commit the root `.dark` toggle on the next frame for crisp mobile INP.
+    setPendingTheme(nextValue);
+    rafRef.current = window.requestAnimationFrame(() => {
+      rafRef.current = null;
+      setTheme(nextValue);
+      setPendingTheme(null);
+    });
   };
 
   return (
@@ -89,15 +149,18 @@ export const ThemeToggle = () => {
       aria-label="Color theme"
       value={currentTheme}
       onValueChange={handleValueChange}
-      className="border-rule bg-record has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-background inline-flex w-fit items-center self-start rounded-full border p-1 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2 sm:self-auto forced-colors:border-[ButtonBorder]"
+      onPointerEnter={handleIntent}
+      onFocus={handleIntent}
+      className="border-rule bg-record has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-background relative isolate inline-flex w-fit items-center self-start rounded-full border p-1 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2 sm:self-auto forced-colors:border-[ButtonBorder]"
     >
+      <SegmentedControlIndicator className="theme-toggle-indicator" />
       {themes.map((option) => (
         <SegmentedControlItem
           key={option.value}
           value={option.value}
           className={cn(
-            "text-muted-foreground hover:text-foreground inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-full border border-transparent px-3 text-xs font-medium select-none focus-visible:outline-2 focus-visible:outline-transparent active:scale-[0.97] sm:min-h-8 sm:px-2.5",
-            "data-checked:border-foreground/58 data-checked:bg-card data-checked:text-foreground data-checked:hover:text-foreground dark:data-checked:border-ring/70 dark:data-checked:bg-secondary data-checked:shadow-xs",
+            "text-muted-foreground hover:text-foreground relative z-10 inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-full border border-transparent px-3 text-xs font-medium transition-[color,scale] duration-150 select-none focus-visible:outline-2 focus-visible:outline-transparent active:scale-[0.97] sm:min-h-8 sm:px-2.5",
+            "data-checked:text-foreground data-checked:hover:text-foreground data-checked:font-semibold",
             "forced-colors:data-checked:border-[Highlight] forced-colors:data-checked:bg-[Highlight] forced-colors:data-checked:text-[HighlightText] forced-colors:data-checked:forced-color-adjust-none"
           )}
         >

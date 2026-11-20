@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Setup Bun 1.4.5
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.5
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: TypeScript typecheck
+        run: bun run typecheck
+
+      - name: Stylelint
+        run: bunx stylelint app/globals.css
+
+      - name: Unit tests
+        run: bun run test:unit
+
+      - name: Build unconfigured and configured apps
+        run: |
+          bun run build
+          NEXT_DIST_DIR=.tmp/next-configured \
+            RESEND_API_KEY=re_ci_placeholder \
+            CONTACT_INBOX_EMAIL=inbox@example.invalid \
+            CONTACT_FROM_EMAIL='asym <from@example.invalid>' \
+            NEXT_PUBLIC_CONTACT_EMAIL=team@example.org \
+            bun run build
+
+      - name: Install Playwright Chromium
+        run: bunx playwright install --with-deps chromium
+
+      - name: Run Playwright smoke, responsive, configured form & WCAG 2.2 AA suites
+        run: |
+          bunx next start -H 127.0.0.1 -p 3100 &
+          PID_UNCONFIGURED=$!
+          NEXT_DIST_DIR=.tmp/next-configured \
+            RESEND_API_KEY=re_ci_placeholder \
+            CONTACT_INBOX_EMAIL=inbox@example.invalid \
+            CONTACT_FROM_EMAIL='asym <from@example.invalid>' \
+            NEXT_PUBLIC_CONTACT_EMAIL=team@example.org \
+            bunx next start -H 127.0.0.1 -p 3101 &
+          PID_CONFIGURED=$!
+          trap "kill $PID_UNCONFIGURED $PID_CONFIGURED 2>/dev/null || true" EXIT
+
+          for i in $(seq 1 30); do
+            if curl -sf http://127.0.0.1:3100/ >/dev/null && curl -sf http://127.0.0.1:3101/ >/dev/null; then
+              break
+            fi
+            sleep 1
+          done
+          curl -sf http://127.0.0.1:3100/ >/dev/null || { echo "Unconfigured server did not become ready on :3100" >&2; exit 1; }
+          curl -sf http://127.0.0.1:3101/ >/dev/null || { echo "Configured server did not become ready on :3101" >&2; exit 1; }
+
+          PLAYWRIGHT_BASE_URL=http://127.0.0.1:3100 bunx playwright test tests/e2e/smoke.spec.ts tests/e2e/responsive.spec.ts tests/a11y/routes.spec.ts --project=chromium --workers=2
+          PLAYWRIGHT_BASE_URL=http://127.0.0.1:3101 bunx playwright test tests/e2e/smoke.spec.ts --project=chromium --workers=2

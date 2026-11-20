@@ -48,7 +48,7 @@ export const earlyAccessCopy = {
   success:
     "Thanks for telling us about your team. We’ll be in touch with launch updates and information about early access.",
   failure: "Your request didn’t go through. Please try again.",
-  notConfigured: "Early\u{2011}access sign\u{2011}ups aren’t open right now.",
+  notConfigured: "Early access sign\u{2011}ups aren’t open right now.",
   rateLimited:
     "Too many requests right now. Please wait a few minutes and try again.",
   invalidEmail: "Enter a valid email address.",
@@ -103,13 +103,10 @@ local part (allowing `+`) and at least two dot-separated ASCII DNS labels
 (1-63 letters, digits, or hyphens, with a letter or digit at both ends).
 */
 const hasValidLocalPart = (local: string): boolean => {
-  if (local.length === 0 || local.length > MAX_LOCAL_LENGTH) {
-    return false;
-  }
-  if (local.startsWith(".") || local.endsWith(".") || local.includes("..")) {
-    return false;
-  }
-  return LOCAL_PART_PATTERN.test(local);
+  const hasValidLength = local.length > 0 && local.length <= MAX_LOCAL_LENGTH;
+  const hasInvalidDots =
+    local.startsWith(".") || local.endsWith(".") || local.includes("..");
+  return hasValidLength && !hasInvalidDots && LOCAL_PART_PATTERN.test(local);
 };
 
 export const isValidEmail = (value: string): boolean => {
@@ -163,10 +160,10 @@ export const isValidSenderAddress = (value: string): boolean => {
     openIndex > 0 &&
     closeIndex === trimmed.length - 1 &&
     trimmed.lastIndexOf("<") === openIndex;
-  if (!hasValidBrackets) {
-    return false;
-  }
-  return isValidEmail(trimmed.slice(openIndex + 1, closeIndex).trim());
+  return (
+    hasValidBrackets &&
+    isValidEmail(trimmed.slice(openIndex + 1, closeIndex).trim())
+  );
 };
 
 /**

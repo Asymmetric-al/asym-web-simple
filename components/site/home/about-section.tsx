@@ -2,10 +2,25 @@ import { Container } from "@/components/site/container";
 import { siteConfig } from "@/lib/config";
 
 const ordinaryWork = [
-  { line: "A donor gives.", italic: false },
-  { line: "A receipt goes out.", italic: true },
-  { line: "A missionary sees the gift.", italic: false },
-  { line: "Staff have the full picture.", italic: true },
+  { num: "01", line: "A donor gives.", role: "Giving page", italic: false },
+  {
+    num: "02",
+    line: "A receipt goes out.",
+    role: "Tax receipt",
+    italic: true,
+  },
+  {
+    num: "03",
+    line: "A missionary sees the gift.",
+    role: "Scoped roster",
+    italic: false,
+  },
+  {
+    num: "04",
+    line: "Staff have the full picture.",
+    role: "Office ledger",
+    italic: true,
+  },
 ] as const;
 
 export const AboutSection = () => (
@@ -15,22 +30,32 @@ export const AboutSection = () => (
     className="midnight-band text-night-foreground border-night-rule scroll-mt-16 border-y py-[clamp(4rem,7vw,6.25rem)]"
   >
     <Container>
-      {/* Monumental editorial interlude — appears here for the first and only time */}
-      <div className="max-w-4xl">
+      {/* Monumental editorial interlude with full-width press registration ticks */}
+      <div>
         <p className="text-night-accent font-sans text-sm font-medium">
           The ordinary work comes first
         </p>
-        <ol className="font-heading mt-5 space-y-1.5 text-[clamp(2rem,4.1vw,3.6rem)] leading-[1.08] font-medium tracking-[-0.025em]">
-          {ordinaryWork.map(({ line, italic }) => (
+        <ol className="divide-night-rule/75 border-night-rule mt-6 divide-y border-t">
+          {ordinaryWork.map(({ num, line, role, italic }) => (
             <li
-              key={line}
-              className={
-                italic
-                  ? "text-night-foreground/86 italic"
-                  : "text-night-foreground"
-              }
+              key={num}
+              className="flex flex-col gap-1 py-3.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6 sm:py-4"
             >
-              {line}
+              <span
+                className={
+                  italic
+                    ? "font-heading text-night-foreground/86 text-[clamp(2rem,4vw,3.5rem)] leading-[1.08] font-medium tracking-[-0.025em] italic"
+                    : "font-heading text-night-foreground text-[clamp(2rem,4vw,3.5rem)] leading-[1.08] font-medium tracking-[-0.025em]"
+                }
+              >
+                {line}
+              </span>
+              <span className="text-night-muted shrink-0 font-sans text-xs">
+                <span className="text-night-accent mr-2 font-mono tabular-nums">
+                  {num}
+                </span>{" "}
+                {role}
+              </span>
             </li>
           ))}
         </ol>
@@ -54,8 +79,8 @@ export const AboutSection = () => (
           <p className="text-night-foreground">
             Missions organizations coordinate recurring donor support, field
             workers, designated projects, and donor privacy rules across small
-            staffs. Software built to stay accurate under that daily handoff
-            serves nonprofits broadly as well.
+            staffs. Software that stays accurate through that daily handoff
+            works for nonprofits broadly.
           </p>
           <p>
             We’re Conrad O’Brien and Blake. We’re building{" "}

@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import {
   EARLY_ACCESS_CONFIRMED_COOKIE,
-  EARLY_ACCESS_RATE_LIMIT_WINDOW_SECONDS,
   buildEarlyAccessNotification,
   hasErrors,
   isHoneypotFilled,
@@ -10,32 +9,30 @@ import {
   validateEarlyAccessRequest,
 } from "@/lib/early-access";
 import { readEarlyAccessDeliveryConfig } from "@/lib/early-access-config";
+import {
+  createEarlyAccessRateLimiter,
+  isSameOriginRequest,
+} from "@/lib/early-access-guard";
 import type { EarlyAccessDeliveryConfig } from "@/lib/early-access-config";
 
 /**
 Generous for three short text fields; larger bodies are not form posts.
 */
 const MAX_BODY_BYTES = 16_000;
-const RATE_LIMIT_WINDOW_MS = EARLY_ACCESS_RATE_LIMIT_WINDOW_SECONDS * 1000;
-const RATE_LIMIT_MAX_REQUESTS = 8;
-const MAX_TRACKED_KEYS = 2000;
 const CONFIRMED_COOKIE_MAX_AGE_SECONDS = 300;
-
-interface RateLimitBucket {
-  count: number;
-  resetAt: number;
-}
 
 type FormOutcome =
   "received" | "invalid" | "rate_limited" | "unavailable" | "failed";
 
-let rateLimitStore: Map<string, RateLimitBucket> | null = null;
+const rateLimitHolder: {
+  instance: ReturnType<typeof createEarlyAccessRateLimiter> | null;
+} = { instance: null };
 
-const getRateLimitStore = (): Map<string, RateLimitBucket> => {
-  if (!rateLimitStore) {
-    rateLimitStore = new Map();
+const getRateLimiter = () => {
+  if (!rateLimitHolder.instance) {
+    rateLimitHolder.instance = createEarlyAccessRateLimiter();
   }
-  return rateLimitStore;
+  return rateLimitHolder.instance;
 };
 
 /**
@@ -63,41 +60,6 @@ const readClientIp = (request: Request): string => {
   }
 
   return "unknown";
-};
-
-const checkRateLimit = (
-  clientIp: string,
-  now: number
-): { limited: false } | { limited: true; retryAfterSeconds: number } => {
-  const store = getRateLimitStore();
-
-  if (store.size > MAX_TRACKED_KEYS) {
-    for (const [key, entry] of store) {
-      if (entry.resetAt <= now) {
-        store.delete(key);
-      }
-    }
-  }
-
-  const current = store.get(clientIp);
-  if (!current || current.resetAt <= now) {
-    store.set(clientIp, {
-      count: 1,
-      resetAt: now + RATE_LIMIT_WINDOW_MS,
-    });
-    return { limited: false };
-  }
-
-  current.count += 1;
-  if (current.count > RATE_LIMIT_MAX_REQUESTS) {
-    const retryAfterSeconds = Math.max(
-      1,
-      Math.ceil((current.resetAt - now) / 1000)
-    );
-    return { limited: true, retryAfterSeconds };
-  }
-
-  return { limited: false };
 };
 
 const detectContentKind = (
@@ -286,6 +248,25 @@ const parseBoundedPayload = async (
   }
 };
 
+const sendNotification = (
+  config: EarlyAccessDeliveryConfig,
+  message: { replyTo: string; subject: string; text: string }
+) => {
+  const resend = new Resend(config.apiKey);
+  return resend.emails.send({
+    from: config.from,
+    to: [config.inbox],
+    ...message,
+  });
+};
+
+const isAcceptedResendResult = (
+  result: Awaited<ReturnType<typeof sendNotification>>
+): boolean =>
+  result.error === null &&
+  typeof result.data?.id === "string" &&
+  result.data.id.length > 0;
+
 /**
 True only when Resend accepted the message for delivery.
 */
@@ -293,15 +274,8 @@ const wasAcceptedForDelivery = async (
   config: EarlyAccessDeliveryConfig,
   message: { replyTo: string; subject: string; text: string }
 ): Promise<boolean> => {
-  const resend = new Resend(config.apiKey);
-
   try {
-    const { data, error } = await resend.emails.send({
-      from: config.from,
-      to: [config.inbox],
-      ...message,
-    });
-    return error === null && typeof data?.id === "string" && data.id.length > 0;
+    return isAcceptedResendResult(await sendNotification(config, message));
   } catch {
     return false;
   }
@@ -318,7 +292,16 @@ export const POST = async (request: Request): Promise<NextResponse> => {
   }
 
   const isUrlEncodedForm = contentKind === "urlencoded";
-  const rateCheck = checkRateLimit(readClientIp(request), Date.now());
+  if (!isSameOriginRequest(request)) {
+    return respondFailure(request, isUrlEncodedForm, 403, "forbidden_origin");
+  }
+
+  const config = readEarlyAccessDeliveryConfig();
+  if (!config) {
+    return respondFailure(request, isUrlEncodedForm, 503, "not_configured");
+  }
+
+  const rateCheck = getRateLimiter().check(readClientIp(request), Date.now());
 
   if (rateCheck.limited) {
     return respondFailure(
@@ -346,11 +329,6 @@ export const POST = async (request: Request): Promise<NextResponse> => {
     return isUrlEncodedForm
       ? redirectForForm(request, "received")
       : NextResponse.json({ ok: true });
-  }
-
-  const config = readEarlyAccessDeliveryConfig();
-  if (!config) {
-    return respondFailure(request, isUrlEncodedForm, 503, "not_configured");
   }
 
   const submission = normalizeEarlyAccessRequest(parsed.body);

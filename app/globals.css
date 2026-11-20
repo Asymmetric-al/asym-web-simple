@@ -38,6 +38,7 @@
   --ring: #1b574c;
   --rule: rgb(18 32 43 / 18%);
   --rule-strong: rgb(18 32 43 / 30%);
+  --glyph-stroke: rgb(18 32 43 / 38%);
   --ink: #12202b;
   --record: #e9e2d2;
   --pine: #1b574c;
@@ -104,6 +105,7 @@
   --ring: #62bda8;
   --rule: rgb(239 233 221 / 16%);
   --rule-strong: rgb(239 233 221 / 28%);
+  --glyph-stroke: rgb(239 233 221 / 50%);
   --ink: #efe9dd;
   --record: #0e1821;
   --pine: #62bda8;
@@ -362,35 +364,95 @@
   word-break: normal;
 }
 
-/* GPU-composited high-contrast ink indicator for @ui-sdk/react/tabs surface bar */
-.specimen-tabs-indicator {
+/* GPU-composited vertical high-contrast rail for SurfaceExplorer and GovernanceSequence @ui-sdk/react/tabs */
+.vertical-tabs-indicator {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: var(--active-tab-height);
+  border-radius: 999px;
+  background: var(--foreground);
+  pointer-events: none;
+  transform: translate3d(0, var(--active-tab-top, 0), 0);
+  transition:
+    transform 180ms var(--ease-out-expo),
+    height 180ms var(--ease-out-expo);
+  will-change: transform;
+}
+
+.vertical-tabs-indicator[data-activation-direction="none"] {
+  transition: none;
+}
+
+/* GPU-composited sliding active pill for ThemeToggle @ui-sdk/react/segmented-control */
+.theme-toggle-indicator {
   position: absolute;
   z-index: 0;
   top: 4px;
   bottom: 4px;
   left: 0;
-  width: var(--active-tab-width);
-  border: 1px solid var(--foreground);
+  width: var(--segmented-control-indicator-width);
+  border: 1px solid var(--input);
   border-radius: 999px;
-  background: var(--foreground);
-  box-shadow: 0 1px 2px rgb(18 32 43 / 16%);
+  background: var(--card);
+  box-shadow: 0 1px 2px rgb(18 32 43 / 12%);
   pointer-events: none;
-  transform: translate3d(var(--active-tab-left, 4px), 0, 0);
-  transition: transform 180ms var(--ease-out-expo);
+  transform: translate3d(var(--segmented-control-indicator-left, 4px), 0, 0);
+  transition:
+    transform 180ms var(--ease-out-expo),
+    width 180ms var(--ease-out-expo);
   will-change: transform;
 }
 
-.specimen-tabs-indicator[data-activation-direction="none"] {
+.dark .theme-toggle-indicator {
+  border-color: rgb(98 189 168 / 65%);
+  background: var(--secondary);
+}
+
+.theme-toggle-indicator[data-activation-direction="none"] {
   transition: none;
 }
 
 .midnight-band {
+  position: relative;
   background-color: var(--night);
   background-image: radial-gradient(
     ellipse 72% 62% at 78% 12%,
     rgb(98 189 168 / 12%),
     transparent 68%
   );
+  isolation: isolate;
+}
+
+/* Fine neutral grain breaks up 8-bit radial gradient banding on dark displays */
+.midnight-band::before {
+  position: absolute;
+  z-index: -1;
+  background-image: url("/brand/grain-neutral.png");
+  background-repeat: repeat;
+  background-size: 128px 128px;
+  content: "";
+  inset: 0;
+  opacity: 0.04;
+  pointer-events: none;
+}
+
+@keyframes thread-draw {
+  from {
+    stroke-dashoffset: 320;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.ink-thread-reveal {
+  animation: thread-draw 850ms var(--ease-out-expo) both;
+  stroke-dasharray: 320;
+  stroke-dashoffset: 0;
 }
 
 @keyframes surface-enter {

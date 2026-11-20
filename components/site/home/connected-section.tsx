@@ -13,22 +13,22 @@ const principles: readonly {
 }[] = [
   {
     glyph: "receipt",
-    title: "One record, three views",
-    text: "Giving pages, receipts, donor history, and missionary rosters read from the same underlying contribution. Donors check their own history and yearly statements in the donor portal instead of emailing the office.",
-    marginNote: "apps/donor · apps/missionary · apps/admin",
+    title: "Donors pull their own year-end statements",
+    text: "When giving pages, recurring pledges, and receipts share one ledger, households pull their own tax statements in the donor portal instead of waiting on office staff to cross-check spreadsheets.",
+    marginNote: "Self-service statements",
   },
   {
     glyph: "permissions",
-    title: "Same permissions as staff",
-    text: "Role boundaries are enforced on the server before data reaches a screen. A missionary sees only assigned supporters and never sees an anonymous donor’s identity; AI campaign tools in development are being built to follow the exact scope of the staff member running them.",
-    marginNote: "Role scoping in public code",
-    repoPath: "tree/develop/packages/api/src/missionary-portal/donors.ts",
+    title: "Privacy without hand-editing CSVs",
+    text: "Missionaries track support progress for their assignment while anonymous givers are redacted on the server before roster data leaves the API, removing the weekly chore of scrubbing exported donor lists by hand.",
+    marginNote: "donors.ts redaction",
+    repoPath: "blob/develop/packages/api/src/missionary-portal/donors.ts",
   },
   {
     glyph: "approval",
-    title: "A person approves every send",
-    text: "Several staff actions in the public code already preview which records will change before running. Approval rules in development extend that sign-off step to AI-drafted pages, recipient lists, and donor emails.",
-    marginNote: "Preview & sign-off",
+    title: "Planned: staff sign-off on every AI-drafted appeal",
+    text: "Routine receipts follow your organization’s settings, while key staff actions in the public code already preview affected records first. Planned AI appeal workflows keep every draft page, recipient list, and email behind explicit staff sign-off.",
+    marginNote: "Planned AI guardrail",
   },
 ];
 
@@ -41,15 +41,14 @@ export const ConnectedSection = () => (
       <div className="border-rule border-t pt-12 sm:pt-16">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,40fr)_minmax(0,60fr)] lg:gap-14">
           <div className="lg:sticky lg:top-24 lg:self-start">
-            <Eyebrow>Why one record</Eyebrow>
+            <Eyebrow>Why it matters on Monday</Eyebrow>
             <SectionTitle id="connected-title">
-              The work stays connected after the gift.
+              Less spreadsheet cleanup after every gift.
             </SectionTitle>
             <p className="text-muted-foreground mt-4 max-w-[32rem] text-base leading-7 text-pretty sm:mt-5 sm:text-[1.0625rem] sm:leading-8">
-              The donor needs a receipt. The missionary needs current partner
-              progress. The office needs every gift tied to the right fund and
-              household. When those live in separate tools, every appeal starts
-              with spreadsheet cleanup.
+              Small missions offices lose hours every month moving the same gift
+              between a website form, a receipt tool, a CRM, and a missionary
+              update list. Keeping them on one record removes that handoff work.
             </p>
           </div>
 

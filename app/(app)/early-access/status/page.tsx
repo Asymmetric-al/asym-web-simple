@@ -20,6 +20,7 @@ import {
   getVerifiedContactEmail,
   isEarlyAccessConfigured,
 } from "@/lib/early-access-config";
+import { isEarlyAccessConfirmationValid } from "@/lib/early-access-guard";
 import { createMetadata } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
@@ -128,7 +129,7 @@ const buildStatusContent = ({
       eyebrow: "",
       title: EARLY_ACCESS_STATUS_TITLE,
       description:
-        "This page confirms a request right after you submit the early\u{2011}access form. If you haven’t sent one yet, you can submit your organization’s details on the homepage.",
+        "This page confirms a request right after you submit the early access form. If you haven’t sent one yet, you can submit your organization’s details on the homepage.",
       primaryLabel: "Request early access",
       primaryHref: EARLY_ACCESS_HREF,
       primaryIcon: "none",
@@ -140,7 +141,7 @@ const buildStatusContent = ({
     eyebrow: "",
     title: EARLY_ACCESS_STATUS_TITLE,
     description:
-      "Early access isn’t open yet. While we finish the first workflow, you can read the code and follow progress on GitHub.",
+      "Early access isn’t open yet. While we finish testing, you can inspect the public code and follow progress on GitHub.",
     primaryLabel: BACK_TO_HOMEPAGE_LABEL,
     primaryHref: "/",
     primaryIcon: "back",
@@ -156,8 +157,10 @@ export default async function EarlyAccessStatusPage({
   const retrySeconds = params.retry
     ? parseRetryAfterSeconds(params.retry)
     : undefined;
-  const isConfirmed =
-    cookieStore.get(EARLY_ACCESS_CONFIRMED_COOKIE)?.value === "1";
+  const isConfirmed = isEarlyAccessConfirmationValid(
+    params.state,
+    cookieStore.get(EARLY_ACCESS_CONFIRMED_COOKIE)?.value
+  );
   const isConfigured = isEarlyAccessConfigured();
   const content = buildStatusContent({
     state: params.state,

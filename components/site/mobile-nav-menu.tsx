@@ -100,7 +100,7 @@ export const MobileNavMenu = (): ReactNode => {
           sideOffset={10}
           collisionPadding={16}
           finalFocus={suppressReturnFocus ? "none" : "trigger"}
-          className="border-rule bg-popover text-popover-foreground shadow-card m-0 w-56 origin-(--transform-origin) rounded-[1.35rem] border p-2 transition-[opacity,scale] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] data-ending-style:scale-96 data-ending-style:opacity-0 data-starting-style:scale-96 data-starting-style:opacity-0 motion-reduce:transition-none forced-colors:border-[CanvasText]"
+          className="border-rule-strong bg-popover text-popover-foreground m-0 w-56 origin-(--transform-origin) rounded-[1.35rem] border p-2 shadow-[var(--shadow-strong)] transition-[opacity,scale] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] data-ending-style:scale-96 data-ending-style:opacity-0 data-starting-style:scale-96 data-starting-style:opacity-0 motion-reduce:transition-none forced-colors:border-[CanvasText]"
         >
           <nav aria-label="Homepage sections">
             <ul className="grid gap-0.5 text-sm">

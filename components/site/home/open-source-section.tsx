@@ -84,7 +84,10 @@ export const OpenSourceSection = () => (
               Asymmetric-al/core
             </span>{" "}
             is published under{" "}
-            <span translate="no" className="text-foreground font-mono text-sm">
+            <span
+              translate="no"
+              className="text-foreground font-mono text-sm whitespace-nowrap"
+            >
               AGPL-3.0-only
             </span>
             . Code presence is not blanket production readiness; read the README
@@ -133,7 +136,7 @@ export const OpenSourceSection = () => (
                       href={row.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="border-pine-border bg-pine-soft text-pine hover:bg-pine hover:text-background focus-visible:ring-ring ml-4.5 inline-flex shrink-0 items-center gap-1 rounded-full border px-2.5 py-0.5 font-mono text-xs transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-none sm:ml-0"
+                      className="border-pine-border bg-pine-soft text-pine hover:bg-pine hover:text-background focus-visible:ring-ring ml-4.5 inline-flex shrink-0 items-center gap-1 rounded-full border px-2.5 py-0.5 font-mono text-xs transition-[color,background-color,border-color,scale] duration-150 focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-2 focus-visible:outline-transparent active:scale-[0.98] sm:ml-0"
                     >
                       {row.path}
                       <span className="sr-only">

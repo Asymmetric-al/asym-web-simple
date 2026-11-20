@@ -69,7 +69,7 @@ test.describe("route accessibility", () => {
     const architecture = page.getByRole("region", {
       name: /Three surfaces, one shared record/iu,
     });
-    await architecture.getByRole("tab", { name: "Missionary" }).click();
+    await architecture.getByRole("tab", { name: /^Missionary/iu }).click();
     const missionaryResults = await new AxeBuilder({ page })
       .withTags(WCAG_TAGS)
       .analyze();
@@ -77,13 +77,38 @@ test.describe("route accessibility", () => {
 
     const appeals = page.locator("#appeals");
     await appeals
-      .getByRole("button", { name: /Prepare page, email & recipient scope/iu })
+      .getByRole("tab", { name: /Prepare page, email & recipient scope/iu })
       .click();
     const governanceResults = await new AxeBuilder({ page })
       .withTags(WCAG_TAGS)
       .analyze();
     expect(governanceResults.violations).toEqual([]);
 
+    // Verify dark-mode interactive states (Missionary + Step 02 + Step 03)
+    await page.emulateMedia({
+      reducedMotion: "reduce",
+      colorScheme: "dark",
+    });
+    await page.waitForFunction(() =>
+      document.documentElement.classList.contains("dark")
+    );
+    const darkInteractiveResults = await new AxeBuilder({ page })
+      .withTags(WCAG_TAGS)
+      .analyze();
+    expect(darkInteractiveResults.violations).toEqual([]);
+
+    await appeals
+      .getByRole("tab", { name: /Review, edit & approve/iu })
+      .click();
+    const darkApprovalResults = await new AxeBuilder({ page })
+      .withTags(WCAG_TAGS)
+      .analyze();
+    expect(darkApprovalResults.violations).toEqual([]);
+
+    await page.emulateMedia({
+      reducedMotion: "reduce",
+      colorScheme: "light",
+    });
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/does-not-exist", { waitUntil: "domcontentloaded" });
     await page.waitForFunction(

@@ -1,22 +1,23 @@
 import { defineConfig, devices } from "@playwright/test";
 
 const port = 3001;
-const baseURL = `http://127.0.0.1:${port}`;
+const externalBaseURL = process.env.PLAYWRIGHT_BASE_URL?.trim();
+const baseURL = externalBaseURL || `http://127.0.0.1:${port}`;
+const isExternalServer = Boolean(externalBaseURL);
 
 export default defineConfig({
   testDir: "./tests",
   fullyParallel: true,
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 2 : 0,
-  reporter: [
-    ["list"],
-    ["html", { open: "never", outputFolder: "playwright-report" }],
-  ],
+  reporter: isExternalServer
+    ? [["list"]]
+    : [["list"], ["html", { open: "never", outputFolder: "playwright-report" }]],
   use: {
     baseURL,
-    trace: "on-first-retry",
-    screenshot: "only-on-failure",
-    video: "retain-on-failure",
+    trace: isExternalServer ? "off" : "on-first-retry",
+    screenshot: isExternalServer ? "off" : "only-on-failure",
+    video: isExternalServer ? "off" : "retain-on-failure",
   },
   projects: [
     {
@@ -40,10 +41,14 @@ export default defineConfig({
       use: { ...devices["iPhone 14"] },
     },
   ],
-  webServer: {
-    command: `npm run build && npx next start -H 127.0.0.1 -p ${port}`,
-    url: baseURL,
-    reuseExistingServer: !process.env.CI,
-    timeout: 180_000,
-  },
+  ...(isExternalServer
+    ? {}
+    : {
+        webServer: {
+          command: `bun run build && bunx next start -H 127.0.0.1 -p ${port}`,
+          url: baseURL,
+          reuseExistingServer: !process.env.CI,
+          timeout: 180_000,
+        },
+      }),
 });

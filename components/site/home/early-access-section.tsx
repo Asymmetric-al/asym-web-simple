@@ -12,6 +12,12 @@ import {
 } from "@/lib/early-access-config";
 import { cn } from "@/lib/utils";
 
+const pilotChecklist = [
+  "Missions organizations ready to unify giving pages, tax receipts, and missionary rosters.",
+  "Small staffs looking for hosted software without maintaining their own servers.",
+  "Teams willing to share candid feedback while we finish testing onboarding and billing.",
+] as const;
+
 export const EarlyAccessSection = () => {
   const isConfigured = isEarlyAccessConfigured();
   const contactEmail = getVerifiedContactEmail();
@@ -38,24 +44,31 @@ export const EarlyAccessSection = () => {
           ) : (
             <div className="grid gap-8 lg:grid-cols-[minmax(0,44fr)_minmax(0,56fr)] lg:items-start lg:gap-12">
               <div className="min-w-0">
-                <Eyebrow>Early access</Eyebrow>
+                <Eyebrow>Early access status</Eyebrow>
                 <SectionTitle id="early-access-title">
                   Early access isn’t open yet.
                 </SectionTitle>
                 <p className="text-muted-foreground mt-4 max-w-[32rem] text-base leading-7 text-pretty sm:text-[1.0625rem] sm:leading-8">
-                  We’re finishing the first campaign workflow for missions
-                  organizations. When sign&#8209;ups open, you’ll be able to
-                  request access for your team here.
+                  We’re completing end&#8209;to&#8209;end testing across donor
+                  giving, missionary portals, and office tools before opening
+                  hosted onboarding. AI appeal drafting is still in development.
                 </p>
               </div>
               <div className="border-rule min-w-0 border-t pt-6 lg:border-t-0 lg:border-l lg:pt-1 lg:pl-10">
                 <h3 className="font-heading text-foreground text-2xl font-medium tracking-[-0.02em]">
-                  In the meantime
+                  Who early access is for
                 </h3>
-                <p className="text-muted-foreground mt-2.5 text-base leading-7 text-pretty">
-                  Inspect the three-surface architecture and public code
-                  inventory above, or follow progress in the repository README.
-                </p>
+                <ul className="text-muted-foreground mt-3 space-y-2 text-sm leading-6">
+                  {pilotChecklist.map((item) => (
+                    <li key={item} className="flex items-start gap-2.5">
+                      <span
+                        aria-hidden="true"
+                        className="bg-pine mt-2 size-1.5 shrink-0 rounded-full"
+                      />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                   <Link
                     href="/#where-things-stand"
@@ -65,7 +78,7 @@ export const EarlyAccessSection = () => {
                       "px-6"
                     )}
                   >
-                    See what’s built
+                    See where things stand
                   </Link>
                   <a
                     href={`${siteConfig.repoUrl}#readme`}

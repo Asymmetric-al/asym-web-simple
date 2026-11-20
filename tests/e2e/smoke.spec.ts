@@ -132,31 +132,53 @@ test.describe("homepage smoke tests", () => {
     await expect(
       architecture.getByRole("heading", {
         level: 3,
-        name: /Giving pages, receipts, and self-service history/iu,
+        name: /Donors give online and download their own tax receipts/iu,
       })
     ).toBeVisible();
 
-    const missionaryTab = architecture.getByRole("tab", { name: "Missionary" });
+    const donorHeight = await architecture.evaluate(
+      (el) => el.getBoundingClientRect().height
+    );
+
+    const missionaryTab = architecture.getByRole("tab", {
+      name: /^Missionary/iu,
+    });
     await missionaryTab.click();
     await expect(
       architecture.getByRole("heading", {
         level: 3,
-        name: /Assigned supporter progress, with server-enforced privacy/iu,
+        name: /Field workers track assigned support while anonymous donors stay private/iu,
       })
     ).toBeVisible();
     await expect(architecture).toContainText("Anonymous partner");
 
+    const missionaryHeight = await architecture.evaluate(
+      (el) => el.getBoundingClientRect().height
+    );
+    expect(Math.abs(missionaryHeight - donorHeight)).toBeLessThanOrEqual(2);
+
     await missionaryTab.focus();
-    await page.keyboard.press("ArrowRight");
+    await page.keyboard.press("ArrowDown");
     await expect(
-      architecture.getByRole("tab", { name: "Office" })
+      architecture.getByRole("tab", { name: /^Office/iu })
     ).toHaveAttribute("aria-selected", "true");
     await expect(
       architecture.getByRole("heading", {
         level: 3,
-        name: /Full stewardship record, templates, and action previews/iu,
+        name: /Staff reconcile funds, receipts, and households from one ledger/iu,
       })
     ).toBeVisible();
+
+    const officeHeight = await architecture.evaluate(
+      (el) => el.getBoundingClientRect().height
+    );
+    expect(Math.abs(officeHeight - donorHeight)).toBeLessThanOrEqual(2);
+
+    // Clicking the hero plate's Donor caption link selects Donor via #surface-donor
+    await page.getByRole("link", { name: /01 Donor/iu }).click();
+    await expect(
+      architecture.getByRole("tab", { name: /^Donor/iu })
+    ).toHaveAttribute("aria-selected", "true");
 
     const appeals = page.locator("#appeals");
     await expect(
@@ -165,17 +187,20 @@ test.describe("homepage smoke tests", () => {
         name: "Before an appeal goes out.",
       })
     ).toBeVisible();
-    await appeals
-      .getByRole("button", { name: /Prepare page, email & recipient scope/iu })
-      .click();
+    const step2Tab = appeals.getByRole("tab", {
+      name: /Prepare page, email & recipient scope/iu,
+    });
+    await step2Tab.click();
     await expect(appeals).toContainText("Permission boundary:");
-    await appeals
-      .getByRole("button", { name: /Review, edit & approve/iu })
-      .click();
-    await expect(appeals).toContainText("Hard stop:");
+    await step2Tab.focus();
+    await page.keyboard.press("ArrowDown");
+    await expect(
+      appeals.getByRole("tab", { name: /Review, edit & approve/iu })
+    ).toHaveAttribute("aria-selected", "true");
+    await expect(appeals).toContainText("Planned AI guardrail:");
   });
 
-  test("homepage maintains near-zero CLS across hydration and unconfigured API returns 503", async ({
+  test("homepage maintains near-zero CLS across hydration and enforces API origin and config gates", async ({
     page,
     request,
   }) => {
@@ -202,6 +227,19 @@ test.describe("homepage smoke tests", () => {
       () => (window as unknown as { __asymCls?: number }).__asymCls ?? 0
     );
     expect(measuredCls).toBeLessThanOrEqual(0.01);
+
+    const crossSiteRes = await request.post("/api/early-access", {
+      headers: {
+        "content-type": "application/json",
+        origin: "https://evil.example",
+        "sec-fetch-site": "cross-site",
+      },
+      data: {
+        email: "director@example.org",
+        organization: "Example Missions",
+      },
+    });
+    expect(crossSiteRes.status()).toBe(403);
 
     if ((await earlyAccessForm(page).count()) === 0) {
       const apiRes = await request.post("/api/early-access", {
@@ -289,7 +327,7 @@ test.describe("homepage smoke tests", () => {
       await expect(
         page
           .locator("#early-access")
-          .getByRole("link", { name: "See what’s built" })
+          .getByRole("link", { name: "See where things stand" })
       ).toHaveAttribute("href", "/#where-things-stand");
       await expect(
         page
@@ -353,7 +391,7 @@ test.describe("homepage smoke tests", () => {
     await form.getByRole("button", { name: "Request early access" }).click();
 
     await expect(form.getByRole("alert")).toContainText(
-      "Early\u2011access sign\u2011ups aren’t open right now."
+      "Early access sign\u2011ups aren’t open right now."
     );
     await expect(form.getByLabel("Email")).toHaveValue("director@example.org");
     await expect(form.getByLabel("Organization")).toHaveValue(

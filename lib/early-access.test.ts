@@ -18,6 +18,11 @@ import {
   isEarlyAccessConfigured,
   readEarlyAccessDeliveryConfig,
 } from "./early-access-config";
+import {
+  createEarlyAccessRateLimiter,
+  isEarlyAccessConfirmationValid,
+  isSameOriginRequest,
+} from "./early-access-guard";
 
 const validRequest = {
   email: "director@example.org",
@@ -266,5 +271,149 @@ describe("readEarlyAccessDeliveryConfig", () => {
         }
       }
     }
+  });
+});
+
+describe("isSameOriginRequest", () => {
+  it("allows same-origin browser posts and direct non-browser calls without Origin", () => {
+    expect(
+      isSameOriginRequest(
+        new Request("https://asym.app/api/early-access", {
+          method: "POST",
+          headers: {
+            host: "asym.app",
+            origin: "https://asym.app",
+            "sec-fetch-site": "same-origin",
+          },
+        })
+      )
+    ).toBeTruthy();
+
+    expect(
+      isSameOriginRequest(
+        new Request("http://127.0.0.1:3101/api/early-access", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+        })
+      )
+    ).toBeTruthy();
+
+    expect(
+      isSameOriginRequest(
+        new Request("http://127.0.0.1:3101/api/early-access", {
+          method: "POST",
+          headers: {
+            "x-forwarded-host": "preview.asym.app",
+            origin: "https://preview.asym.app",
+          },
+        })
+      )
+    ).toBeTruthy();
+  });
+
+  it("rejects cross-site Fetch Metadata, mismatched Origins, and null Origins", () => {
+    expect(
+      isSameOriginRequest(
+        new Request("https://asym.app/api/early-access", {
+          method: "POST",
+          headers: {
+            host: "asym.app",
+            origin: "https://evil.example",
+            "sec-fetch-site": "cross-site",
+          },
+        })
+      )
+    ).toBeFalsy();
+
+    expect(
+      isSameOriginRequest(
+        new Request("https://asym.app/api/early-access", {
+          method: "POST",
+          headers: {
+            host: "asym.app",
+            origin: "https://evil.example",
+          },
+        })
+      )
+    ).toBeFalsy();
+
+    expect(
+      isSameOriginRequest(
+        new Request("https://asym.app/api/early-access", {
+          method: "POST",
+          headers: {
+            host: "asym.app",
+            "sec-fetch-site": "cross-site",
+          },
+        })
+      )
+    ).toBeFalsy();
+
+    expect(
+      isSameOriginRequest(
+        new Request("https://asym.app/api/early-access", {
+          method: "POST",
+          headers: {
+            host: "asym.app",
+            origin: "https://asym.app",
+            "sec-fetch-site": "cross-site",
+          },
+        })
+      )
+    ).toBeFalsy();
+
+    expect(
+      isSameOriginRequest(
+        new Request("https://asym.app/api/early-access", {
+          method: "POST",
+          headers: {
+            host: "asym.app",
+            origin: "null",
+          },
+        })
+      )
+    ).toBeFalsy();
+  });
+});
+
+describe("createEarlyAccessRateLimiter", () => {
+  it("enforces request ceiling, computes Retry-After, resets after window, and stays strictly bounded", () => {
+    const limiter = createEarlyAccessRateLimiter({
+      maxRequests: 2,
+      windowMs: 60_000,
+      maxTrackedKeys: 2,
+    });
+
+    expect(limiter.check("203.0.113.10", 1_000)).toStrictEqual({
+      limited: false,
+    });
+    expect(limiter.check("203.0.113.10", 2_000)).toStrictEqual({
+      limited: false,
+    });
+    expect(limiter.check("203.0.113.10", 11_000)).toStrictEqual({
+      limited: true,
+      retryAfterSeconds: 50,
+    });
+
+    // Window expires cleanly
+    expect(limiter.check("203.0.113.10", 62_000)).toStrictEqual({
+      limited: false,
+    });
+
+    // Live capacity stays strictly capped at maxTrackedKeys, then expired keys drop
+    limiter.check("203.0.113.11", 62_000);
+    limiter.check("203.0.113.12", 62_000);
+    expect(limiter.size()).toBe(2);
+    limiter.check("203.0.113.13", 130_000);
+    expect(limiter.size()).toBe(1);
+  });
+});
+
+describe("isEarlyAccessConfirmationValid", () => {
+  it("requires both state=received and the HttpOnly confirmation cookie value", () => {
+    expect(isEarlyAccessConfirmationValid("received", "1")).toBeTruthy();
+    expect(isEarlyAccessConfirmationValid("received", undefined)).toBeFalsy();
+    expect(isEarlyAccessConfirmationValid("received", "0")).toBeFalsy();
+    expect(isEarlyAccessConfirmationValid("unavailable", "1")).toBeFalsy();
   });
 });

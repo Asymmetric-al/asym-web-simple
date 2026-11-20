@@ -7,17 +7,12 @@ import {
   TabsPanel,
   TabsTab,
 } from "@ui-sdk/react/tabs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowUpRightIcon } from "@/components/site/icons";
 import { siteConfig } from "@/lib/config";
 import { useIsClient } from "@/lib/use-is-client";
+import { cn } from "@/lib/utils";
 import type { ReactNode } from "react";
-
-const VAR_PINE = "var(--pine)";
-const VAR_PINE_SOFT = "var(--pine-soft)";
-const VAR_BACKGROUND = "var(--background)";
-const VAR_RULE = "var(--rule)";
-const VAR_RULE_STRONG = "var(--rule-strong)";
 
 type SurfaceKey = "donor" | "missionary" | "office";
 
@@ -27,10 +22,30 @@ const SURFACE_KEYS: Record<SurfaceKey, true> = {
   office: true,
 };
 
+const SURFACE_HASH_PREFIX = "#surface-";
+const DEFAULT_SURFACE: SurfaceKey = "donor";
+
+const isSurfaceKey = (value: string | null): value is SurfaceKey =>
+  value !== null && Object.hasOwn(SURFACE_KEYS, value);
+
+/**
+The hero plate caption links to `#surface-donor`, `#surface-missionary`, and
+`#surface-office`. Reading the hash lets each link open the role it names.
+*/
+const readSurfaceFromHash = (): SurfaceKey | null => {
+  const { hash } = window.location;
+  if (!hash.startsWith(SURFACE_HASH_PREFIX)) {
+    return null;
+  }
+  const key = hash.slice(SURFACE_HASH_PREFIX.length);
+  return isSurfaceKey(key) ? key : null;
+};
+
 interface SurfaceSpec {
   readonly key: SurfaceKey;
   readonly index: string;
   readonly label: string;
+  readonly shortOutcome: string;
   readonly appPath: string;
   readonly repoUrl: string;
   readonly repoLinkLabel: string;
@@ -46,15 +61,16 @@ const SURFACES: readonly [SurfaceSpec, SurfaceSpec, SurfaceSpec] = [
     key: "donor",
     index: "01",
     label: "Donor",
+    shortOutcome: "Gives once, pulls own receipts",
     appPath: "apps/donor",
     repoUrl: `${siteConfig.repoUrl}/tree/develop/apps/donor`,
     repoLinkLabel: "Inspect apps/donor on GitHub",
-    heading: "Giving pages, receipts, and self-service history.",
+    heading: "Donors give online and download their own tax receipts.",
     whatTheyDo:
-      "Donors give through your website using Stripe checkout, manage recurring pledges, and download tax receipts or yearly statements in the donor portal without emailing the office.",
-    boundaryTitle: "Personal scope & anonymity choice",
+      "Supporters give through your website using Stripe checkout, manage recurring pledges, and download tax receipts or yearly giving statements in their own portal without emailing the office.",
+    boundaryTitle: "Personal giving scope & name visibility",
     boundaryDetail:
-      "Each donor sees only their own gifts, receipts, and giving preferences, including whether their identity stays private from the field worker.",
+      "Each donor sees only their own gifts, statements, and preferences, including whether their name is shown on the missionary’s roster.",
     included: [
       "Website & giving pages",
       "Stripe checkout & designated funds",
@@ -66,18 +82,20 @@ const SURFACES: readonly [SurfaceSpec, SurfaceSpec, SurfaceSpec] = [
     key: "missionary",
     index: "02",
     label: "Missionary",
+    shortOutcome: "Assigned roster, server redaction",
     appPath: "apps/missionary",
-    repoUrl: `${siteConfig.repoUrl}/tree/develop/packages/api/src/missionary-portal/donors.ts`,
+    repoUrl: `${siteConfig.repoUrl}/blob/develop/packages/api/src/missionary-portal/donors.ts`,
     repoLinkLabel: "Inspect redaction code on GitHub",
-    heading: "Assigned supporter progress, with server-enforced privacy.",
+    heading:
+      "Field workers track assigned support while anonymous donors stay private.",
     whatTheyDo:
-      "Field workers stay current on support progress for their assignment, reach out to named partners, and post ministry updates without waiting on exported office spreadsheets.",
-    boundaryTitle: "Server-side anonymity redaction",
+      "Missionaries follow support progress for their assignment, reach out to named supporters, and share ministry updates without waiting on exported office spreadsheets.",
+    boundaryTitle: "Server-side roster anonymity redaction",
     boundaryDetail:
-      "When a donor chooses anonymity, the server redacts their name to Anonymous partner and strips contact details, notes, and individual gift amounts before data reaches the screen.",
+      "Unless a donor shares their name, the API substitutes Anonymous partner on the missionary roster and removes contact details, notes, and individual gift totals before data reaches the screen.",
     included: [
       "Assigned partner roster",
-      "Server-enforced donor redaction",
+      "Server-enforced roster redaction",
       "Ministry updates & supporter feed",
       "Scoped away from org-wide accounts",
     ],
@@ -86,15 +104,16 @@ const SURFACES: readonly [SurfaceSpec, SurfaceSpec, SurfaceSpec] = [
     key: "office",
     index: "03",
     label: "Office",
+    shortOutcome: "Full ledger & action previews",
     appPath: "apps/admin",
     repoUrl: `${siteConfig.repoUrl}/tree/develop/apps/admin`,
     repoLinkLabel: "Inspect apps/admin on GitHub",
-    heading: "Full stewardship record, templates, and action previews.",
+    heading: "Staff reconcile funds, receipts, and households from one ledger.",
     whatTheyDo:
-      "Staff manage funds, legal donor records, receipt trails, and email templates in one place. Key staff actions already preview which records will change before running.",
-    boundaryTitle: "One shared schema across every desk",
+      "Office staff manage funds, legal donor records, receipt trails, and email templates in one workspace. Key staff actions already preview which records will change before running.",
+    boundaryTitle: "One shared record across every desk",
     boundaryDetail:
-      "Because giving pages, donor portals, and missionary rosters read from the same underlying record, staff stop reconciling disconnected CSV exports.",
+      "Because donor portals, missionary rosters, and office tools read from the same contribution record, staff stop reconciling disconnected CSV exports.",
     included: [
       "Legal donor & contribution CRM",
       "Fund tracking & receipt records",
@@ -104,215 +123,126 @@ const SURFACES: readonly [SurfaceSpec, SurfaceSpec, SurfaceSpec] = [
   },
 ];
 
-// Abstract geometric diagram derived strictly from the asym mark's three-pane architecture (zero fake product UI or fictional records).
-const AsymmetricArchitectureDiagram = ({
+const HELPER_TEXT = "Each role has its own workspace and server boundary.";
+
+// The role rows are the tabs: one control owns selection, keyboard, and focus.
+const ROLE_ROW_CLASS =
+  "group border-rule bg-card/85 data-selected:border-pine data-selected:bg-pine-soft relative z-10 flex w-full min-w-0 flex-wrap items-center justify-between gap-x-3 gap-y-1.5 rounded-xl border px-3.5 py-3 text-left data-selected:shadow-xs forced-colors:data-selected:border-[Highlight]";
+
+const ROLE_ROW_INTERACTIVE_CLASS =
+  "hover:border-rule-strong hover:bg-card data-selected:hover:border-pine data-selected:hover:bg-pine-soft focus-visible:ring-ring focus-visible:ring-offset-card cursor-pointer transition-[color,background-color,border-color,scale] duration-180 ease-[var(--ease-out-expo)] select-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent active:scale-[0.99]";
+
+const PANEL_STACK_CELL = "col-start-1 row-start-1 min-w-0";
+
+const RoleRowBody = ({ spec }: { readonly spec: SurfaceSpec }): ReactNode => (
+  <>
+    <span className="min-w-0">
+      <span className="flex items-center gap-2">
+        <span
+          aria-hidden="true"
+          className="border-rule-strong group-data-selected:border-pine group-data-selected:bg-pine size-2 shrink-0 rounded-full border-[1.5px] transition-colors duration-180"
+        />
+        <span className="text-foreground font-sans text-sm font-semibold">
+          {spec.label}
+        </span>
+      </span>
+      <span className="text-muted-foreground mt-0.5 block pl-4 text-xs leading-5">
+        {spec.shortOutcome}
+      </span>
+    </span>
+    <span
+      translate="no"
+      className="border-rule bg-background text-muted-foreground group-data-selected:border-pine-border group-data-selected:bg-card group-data-selected:text-pine ml-4 shrink-0 rounded-full border px-2 py-0.5 font-mono text-xs transition-colors duration-180 group-data-selected:font-medium"
+    >
+      {spec.appPath}
+    </span>
+  </>
+);
+
+// Shared record foundation beneath the role tabs; both labels occupy one grid cell for zero height movement.
+const SharedRecordFoot = ({
   active,
 }: {
   readonly active: SurfaceKey;
-}): ReactNode => (
-  <div className="border-rule bg-record/55 flex flex-col justify-between rounded-xl border p-5 sm:p-6">
-    <div className="flex items-center justify-between gap-2 font-mono text-xs">
-      <span className="text-foreground font-medium">Asymmetric-al/core</span>
-      <span className="border-pine-border bg-pine-soft text-pine inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 font-medium">
-        <span aria-hidden="true" className="bg-pine size-1.5 rounded-full" />
-        In public code
-      </span>
+}): ReactNode => {
+  const isRosterFilter = active === "missionary";
+
+  return (
+    <div className="min-w-0 space-y-2 lg:col-start-1 lg:row-start-2 lg:pl-2.5">
+      <div className="flex items-center justify-center gap-2">
+        <span aria-hidden="true" className="bg-pine/55 h-4 w-px shrink-0" />
+        <span
+          className={cn(
+            "grid rounded-full border px-2.5 py-0.5 text-center text-xs transition-colors duration-180",
+            isRosterFilter
+              ? "border-pine bg-pine text-background font-medium"
+              : "border-rule bg-card text-muted-foreground"
+          )}
+        >
+          <span
+            aria-hidden={isRosterFilter}
+            className={cn(
+              "col-start-1 row-start-1",
+              isRosterFilter && "invisible"
+            )}
+          >
+            Role-scoped server permissions
+          </span>
+          <span
+            aria-hidden={!isRosterFilter}
+            className={cn(
+              "col-start-1 row-start-1",
+              !isRosterFilter && "invisible"
+            )}
+          >
+            Roster redacted on the server
+          </span>
+        </span>
+        <span aria-hidden="true" className="bg-pine/55 h-4 w-px shrink-0" />
+      </div>
+
+      <div className="border-rule-strong bg-card flex flex-wrap items-center justify-between gap-2 rounded-xl border px-3.5 py-3">
+        <div className="min-w-0">
+          <p className="text-foreground font-sans text-xs font-semibold">
+            One shared record
+          </p>
+          <p className="text-muted-foreground text-xs leading-5">
+            Donors, gifts, funds &amp; receipts in one schema
+          </p>
+        </div>
+        <span
+          translate="no"
+          className="text-pine font-mono text-xs font-medium"
+        >
+          packages/api
+        </span>
+      </div>
     </div>
-
-    <div className="my-5">
-      <svg
-        viewBox="0 0 360 220"
-        fill="none"
-        aria-hidden="true"
-        className="h-auto w-full"
-      >
-        {/* Outer asym datum frame */}
-        <rect
-          x="10"
-          y="10"
-          width="340"
-          height="200"
-          rx="26"
-          stroke="var(--rule-strong)"
-          strokeWidth="1.5"
-          fill="var(--card)"
-        />
-
-        {/* Subtle print registration crosshairs */}
-        <path
-          d="M24 24h8M28 20v8M328 24h8M332 20v8M24 196h8M28 192v8M328 196h8M332 192v8"
-          stroke="var(--rule-strong)"
-          strokeWidth="1"
-          strokeLinecap="round"
-        />
-
-        {/* Top-left pane: Donor */}
-        <rect
-          x="26"
-          y="26"
-          width="118"
-          height="168"
-          rx="14"
-          fill={active === "donor" ? VAR_PINE_SOFT : VAR_BACKGROUND}
-          stroke={active === "donor" ? VAR_PINE : VAR_RULE}
-          strokeWidth={active === "donor" ? "1.75" : "1"}
-        />
-        <circle
-          cx="44"
-          cy="46"
-          r="4"
-          fill={active === "donor" ? VAR_PINE : VAR_RULE_STRONG}
-        />
-        <text
-          x="56"
-          y="50"
-          fill="var(--foreground)"
-          fontSize="12"
-          fontWeight="600"
-          fontFamily="var(--font-sans)"
-        >
-          Donor
-        </text>
-        <text
-          x="40"
-          y="72"
-          fill="var(--muted-foreground)"
-          fontSize="10"
-          fontFamily="var(--font-mono)"
-        >
-          apps/donor
-        </text>
-        {/* Abstract ruled ledger lines (non-UI print texture) */}
-        <path
-          d="M40 102h88M40 120h72M40 138h80M40 156h56"
-          stroke={active === "donor" ? VAR_PINE : VAR_RULE_STRONG}
-          strokeOpacity={active === "donor" ? "0.55" : "0.6"}
-          strokeWidth="1.25"
-          strokeLinecap="round"
-        />
-
-        {/* Top-right pane: Missionary */}
-        <rect
-          x="156"
-          y="26"
-          width="178"
-          height="78"
-          rx="14"
-          fill={active === "missionary" ? VAR_PINE_SOFT : VAR_BACKGROUND}
-          stroke={active === "missionary" ? VAR_PINE : VAR_RULE}
-          strokeWidth={active === "missionary" ? "1.75" : "1"}
-        />
-        <circle
-          cx="174"
-          cy="46"
-          r="4"
-          fill={active === "missionary" ? VAR_PINE : VAR_RULE_STRONG}
-        />
-        <text
-          x="186"
-          y="50"
-          fill="var(--foreground)"
-          fontSize="12"
-          fontWeight="600"
-          fontFamily="var(--font-sans)"
-        >
-          Missionary
-        </text>
-        <text
-          x="170"
-          y="72"
-          fill="var(--muted-foreground)"
-          fontSize="10"
-          fontFamily="var(--font-mono)"
-        >
-          apps/missionary
-        </text>
-        <path
-          d="M276 46h42M276 60h32"
-          stroke={active === "missionary" ? VAR_PINE : VAR_RULE_STRONG}
-          strokeOpacity="0.6"
-          strokeWidth="1.25"
-          strokeDasharray="3 3"
-          strokeLinecap="round"
-        />
-
-        {/* Bottom-right pane: Office */}
-        <rect
-          x="156"
-          y="116"
-          width="178"
-          height="78"
-          rx="14"
-          fill={active === "office" ? VAR_PINE_SOFT : VAR_BACKGROUND}
-          stroke={active === "office" ? VAR_PINE : VAR_RULE}
-          strokeWidth={active === "office" ? "1.75" : "1"}
-        />
-        <circle
-          cx="174"
-          cy="136"
-          r="4"
-          fill={active === "office" ? VAR_PINE : VAR_RULE_STRONG}
-        />
-        <text
-          x="186"
-          y="140"
-          fill="var(--foreground)"
-          fontSize="12"
-          fontWeight="600"
-          fontFamily="var(--font-sans)"
-        >
-          Office
-        </text>
-        <text
-          x="170"
-          y="162"
-          fill="var(--muted-foreground)"
-          fontSize="10"
-          fontFamily="var(--font-mono)"
-        >
-          apps/admin
-        </text>
-        <path
-          d="M266 136h52M266 150h40"
-          stroke={active === "office" ? VAR_PINE : VAR_RULE_STRONG}
-          strokeOpacity="0.65"
-          strokeWidth="1.25"
-          strokeLinecap="round"
-        />
-
-        {/* Connecting asymmetric datum line uniting all three panes */}
-        <path
-          d="M144 110H156"
-          stroke={VAR_PINE}
-          strokeWidth="2"
-          strokeLinecap="round"
-        />
-        <circle cx="150" cy="110" r="3.5" fill={VAR_PINE} />
-      </svg>
-    </div>
-
-    <p className="text-muted-foreground text-xs leading-5">
-      Three separate apps in one monorepo, reading from one shared schema with
-      role-scoped permissions on the server.
-    </p>
-  </div>
-);
+  );
+};
 
 const SurfaceDetailCard = ({
   spec,
+  animated = false,
 }: {
   readonly spec: SurfaceSpec;
+  readonly animated?: boolean;
 }): ReactNode => (
   <article
-    aria-label={`${spec.label} surface specification`}
-    className="border-rule-strong bg-card surface-enter flex min-h-[21rem] flex-col justify-between rounded-xl border p-5 shadow-[var(--shadow-card)] sm:p-7"
+    className={cn(
+      "border-rule-strong bg-card flex h-full min-w-0 flex-col justify-between rounded-xl border p-5 shadow-[var(--shadow-card)] sm:p-7",
+      animated && "surface-enter"
+    )}
   >
     <div>
-      <div className="border-rule flex flex-wrap items-center justify-between gap-2 border-b pb-4 font-mono text-xs">
+      <div className="border-rule flex flex-wrap items-center justify-between gap-2 border-b pb-3.5 font-mono text-xs">
         <span className="text-pine font-medium">
-          {spec.index} · {spec.label} surface
+          {spec.index} · {spec.label}
         </span>
-        <span className="border-pine-border bg-pine-soft text-pine rounded-full border px-2.5 py-0.5">
+        <span
+          translate="no"
+          className="border-pine-border bg-pine-soft text-pine rounded-full border px-2.5 py-0.5"
+        >
           {spec.appPath}
         </span>
       </div>
@@ -324,8 +254,8 @@ const SurfaceDetailCard = ({
         {spec.whatTheyDo}
       </p>
 
-      <div className="border-rule bg-background/70 mt-4 rounded-xl border p-4">
-        <p className="text-foreground font-mono text-xs font-medium">
+      <div className="border-rule bg-background/75 mt-4 rounded-xl border p-4">
+        <p className="text-foreground font-sans text-xs font-semibold">
           {spec.boundaryTitle}
         </p>
         <p className="text-muted-foreground mt-1 text-xs leading-5 sm:text-sm sm:leading-6">
@@ -351,13 +281,16 @@ const SurfaceDetailCard = ({
 
     <div className="border-rule mt-5 flex flex-wrap items-center justify-between gap-3 border-t pt-4 text-xs">
       <span className="text-muted-foreground">
-        Module maturity varies; read Core’s README for current status.
+        Source in{" "}
+        <span translate="no" className="text-foreground font-mono">
+          {spec.appPath}
+        </span>
       </span>
       <a
         href={spec.repoUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-foreground hover:text-pine focus-visible:ring-ring inline-flex items-center gap-1 rounded-xs font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+        className="text-foreground hover:text-pine focus-visible:ring-ring inline-flex items-center gap-1 rounded-xs font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent"
       >
         {spec.repoLinkLabel}
         <span className="sr-only"> (opens in a new tab)</span>
@@ -367,91 +300,160 @@ const SurfaceDetailCard = ({
   </article>
 );
 
+// Invisible copies of every card share the panel's grid cell so switching roles never moves the page at any width.
+const PanelSizers = (): ReactNode => (
+  <>
+    {SURFACES.map((spec) => (
+      <div
+        key={spec.key}
+        aria-hidden="true"
+        inert
+        className={cn(PANEL_STACK_CELL, "invisible")}
+      >
+        <SurfaceDetailCard spec={spec} />
+      </div>
+    ))}
+  </>
+);
+
 export const SurfaceExplorer = (): ReactNode => {
   const isHydrated = useIsClient();
-  const [activeSurface, setActiveSurface] = useState<SurfaceKey>("donor");
+  const [activeSurface, setActiveSurface] = useState<SurfaceKey>(() =>
+    typeof window === "undefined"
+      ? DEFAULT_SURFACE
+      : (readSurfaceFromHash() ?? DEFAULT_SURFACE)
+  );
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      const next = readSurfaceFromHash();
+      if (next) {
+        setActiveSurface(next);
+      }
+    };
+    window.addEventListener("hashchange", handleHashChange);
+    return () => {
+      window.removeEventListener("hashchange", handleHashChange);
+    };
+  }, []);
 
   const handleSurfaceChange = (nextValue: string | null) => {
-    if (nextValue !== null && Object.hasOwn(SURFACE_KEYS, nextValue)) {
-      setActiveSurface(nextValue as SurfaceKey);
+    if (!isSurfaceKey(nextValue)) {
+      return;
+    }
+    setActiveSurface(nextValue);
+    if (readSurfaceFromHash() !== null) {
+      window.history.replaceState(
+        null,
+        "",
+        `${SURFACE_HASH_PREFIX}${nextValue}`
+      );
     }
   };
 
+  const header = (
+    <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 text-xs">
+      <p className="text-muted-foreground leading-5">{HELPER_TEXT}</p>
+      <span className="border-pine-border bg-pine-soft text-pine inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 font-medium">
+        <span aria-hidden="true" className="bg-pine size-1.5 rounded-full" />
+        In public code
+      </span>
+    </div>
+  );
+
+  const gridClass =
+    "mt-4 grid gap-4 lg:grid-cols-[minmax(0,42fr)_minmax(0,58fr)] lg:grid-rows-[auto_1fr] lg:gap-x-5";
+  const listClass =
+    "relative grid min-w-0 gap-2.5 pl-2.5 lg:col-start-1 lg:row-start-1";
+  const stackClass =
+    "grid min-w-0 lg:col-start-2 lg:row-span-2 lg:row-start-1";
+
   return (
-    <div className="surface-folio mt-8 rounded-2xl p-4 sm:p-6">
+    <div className="surface-folio relative mt-8 rounded-2xl p-4 sm:p-6">
+      {/* Scroll targets for the hero plate's role links. */}
+      {SURFACES.map((spec) => (
+        <span
+          key={spec.key}
+          id={`surface-${spec.key}`}
+          className="block h-0 scroll-mt-24"
+        />
+      ))}
+
+      {header}
+
       {isHydrated ? (
         <Tabs
+          orientation="vertical"
           value={activeSurface}
           onValueChange={handleSurfaceChange}
-          className="grid gap-5"
+          className={gridClass}
         >
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <TabsList
-              aria-label="Inspect platform surfaces in public code"
-              className="border-input bg-record relative grid w-full grid-cols-3 rounded-full border p-1 sm:max-w-md"
-            >
-              <TabsIndicator className="specimen-tabs-indicator" />
-              {SURFACES.map((spec) => (
-                <TabsTab
-                  key={spec.key}
-                  value={spec.key}
-                  className="text-foreground/80 hover:text-foreground data-selected:text-background data-selected:hover:text-background focus-visible:ring-ring focus-visible:ring-offset-record relative z-10 inline-flex min-h-11 cursor-pointer items-center justify-center rounded-full px-3 text-sm font-medium transition-colors duration-150 select-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none data-selected:font-semibold sm:min-h-9"
-                >
-                  {spec.label}
-                </TabsTab>
-              ))}
-            </TabsList>
-            <p className="text-muted-foreground font-mono text-xs">
-              Select a role to inspect its real code boundary
-            </p>
+          <TabsList
+            aria-label="Choose a role to see what it handles"
+            className={listClass}
+          >
+            <TabsIndicator className="vertical-tabs-indicator" />
+            {SURFACES.map((spec) => (
+              <TabsTab
+                key={spec.key}
+                value={spec.key}
+                className={cn(ROLE_ROW_CLASS, ROLE_ROW_INTERACTIVE_CLASS)}
+              >
+                <RoleRowBody spec={spec} />
+              </TabsTab>
+            ))}
+          </TabsList>
+
+          <div className={stackClass}>
+            <PanelSizers />
+            {SURFACES.map((spec) => (
+              <TabsPanel
+                key={spec.key}
+                value={spec.key}
+                className={cn(
+                  PANEL_STACK_CELL,
+                  "focus-visible:ring-ring focus-visible:ring-offset-card grid rounded-xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent data-ending-style:hidden"
+                )}
+              >
+                <SurfaceDetailCard spec={spec} animated />
+              </TabsPanel>
+            ))}
           </div>
 
-          <div className="grid gap-5 lg:grid-cols-[minmax(0,40fr)_minmax(0,60fr)] lg:items-stretch">
-            <AsymmetricArchitectureDiagram active={activeSurface} />
-            <div>
-              {SURFACES.map((spec) => (
-                <TabsPanel
-                  key={spec.key}
-                  value={spec.key}
-                  className="focus-visible:ring-ring focus-visible:ring-offset-card rounded-xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
-                >
-                  <SurfaceDetailCard spec={spec} />
-                </TabsPanel>
-              ))}
-            </div>
-          </div>
-
-          <p className="sr-only" role="status" aria-live="polite">
-            {`Showing ${activeSurface} surface architecture in Asymmetric-al/core.`}
-          </p>
+          <SharedRecordFoot active={activeSurface} />
         </Tabs>
       ) : (
-        // Exact-height zero-button SSR shell for 0.0000 CLS and zero inert buttons without JS.
-        <div className="grid gap-5">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div
-              aria-hidden="true"
-              className="border-input bg-record grid w-full grid-cols-3 rounded-full border p-1 sm:max-w-md"
-            >
-              <span className="bg-foreground text-background inline-flex min-h-11 items-center justify-center rounded-full px-3 text-sm font-semibold sm:min-h-9">
-                Donor
-              </span>
-              <span className="text-foreground/80 inline-flex min-h-11 items-center justify-center rounded-full px-3 text-sm font-medium sm:min-h-9">
-                Missionary
-              </span>
-              <span className="text-foreground/80 inline-flex min-h-11 items-center justify-center rounded-full px-3 text-sm font-medium sm:min-h-9">
-                Office
-              </span>
+        // Same geometry as the hydrated explorer, with no buttons, so nothing is inert without JavaScript and nothing shifts on hydration.
+        <div className={gridClass}>
+          <ul className={listClass}>
+            {SURFACES.map((spec) => {
+              const isSelected = spec.key === DEFAULT_SURFACE;
+              return (
+                <li
+                  key={spec.key}
+                  data-selected={isSelected ? "" : undefined}
+                  className={ROLE_ROW_CLASS}
+                >
+                  {isSelected ? (
+                    <span
+                      aria-hidden="true"
+                      className="bg-foreground absolute -top-px -bottom-px -left-[calc(0.625rem+1px)] w-[3px] rounded-full"
+                    />
+                  ) : null}
+                  <RoleRowBody spec={spec} />
+                </li>
+              );
+            })}
+          </ul>
+
+          <div className={stackClass}>
+            <PanelSizers />
+            <div className={cn(PANEL_STACK_CELL, "grid")}>
+              <SurfaceDetailCard spec={SURFACES[0]} />
             </div>
-            <p className="text-muted-foreground font-mono text-xs">
-              Three connected surfaces in Asymmetric-al/core
-            </p>
           </div>
 
-          <div className="grid gap-5 lg:grid-cols-[minmax(0,40fr)_minmax(0,60fr)] lg:items-stretch">
-            <AsymmetricArchitectureDiagram active="donor" />
-            <SurfaceDetailCard spec={SURFACES[0]} />
-          </div>
+          <SharedRecordFoot active={DEFAULT_SURFACE} />
         </div>
       )}
 

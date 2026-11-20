@@ -212,7 +212,7 @@ test.describe("responsive regression coverage", () => {
 
     await setViewport(page, { label: "640x900", width: 640, height: 900 });
     await expectNoHorizontalOverflow(page, "home @ 640x900");
-    await expect(page.getByRole("tab", { name: "Donor" })).toBeVisible();
+    await expect(page.getByRole("tab", { name: /^Donor/iu })).toBeVisible();
   });
 
   test("home footer remains accessible after repeated viewport changes", async ({
