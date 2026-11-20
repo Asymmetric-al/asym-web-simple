@@ -222,7 +222,7 @@ test.describe("homepage smoke tests", () => {
 
     if (formCount === 0) {
       await expect(page.locator("#early-access")).toContainText(
-        "Early-access sign-ups aren’t open yet."
+        "Sign\u2011ups aren’t open yet."
       );
       await expect(
         page
@@ -235,6 +235,23 @@ test.describe("homepage smoke tests", () => {
     const form = earlyAccessForm(page);
     await expect(form).toHaveAttribute("method", "post");
     await expect(form).toHaveAttribute("action", "/api/early-access");
+
+    const emailInput = form.getByLabel("Email");
+    for (const malformedEmail of [
+      "sam..lee@example.org",
+      "sam.@example.org",
+      ".sam@example.org",
+      `${"a".repeat(65)}@example.org`,
+      "hello@-invalid.org",
+    ]) {
+      await emailInput.fill(malformedEmail);
+      expect(
+        await emailInput.evaluate((node: HTMLInputElement) =>
+          node.checkValidity()
+        )
+      ).toBeFalsy();
+    }
+    await emailInput.fill("");
 
     await form.getByRole("button", { name: "Request early access" }).click();
 
@@ -269,7 +286,7 @@ test.describe("homepage smoke tests", () => {
     await form.getByRole("button", { name: "Request early access" }).click();
 
     await expect(form.getByRole("alert")).toContainText(
-      "Early-access sign-ups aren’t open right now."
+      "Early\u2011access sign\u2011ups aren’t open right now."
     );
     await expect(form.getByLabel("Email")).toHaveValue("director@example.org");
     await expect(form.getByLabel("Organization")).toHaveValue(

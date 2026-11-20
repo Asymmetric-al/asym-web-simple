@@ -97,8 +97,7 @@ const buildStatusContent = ({
       tone: "neutral",
       eyebrow: "Opening soon",
       title: earlyAccessCopy.notConfigured,
-      description:
-        "We’re not taking early access requests yet. You can read the code and follow the work on GitHub.",
+      description: "You can read the code and follow development on GitHub.",
       primaryLabel: BACK_TO_HOMEPAGE_LABEL,
       primaryHref: "/",
       primaryIcon: "back",
@@ -121,10 +120,10 @@ const buildStatusContent = ({
   if (isConfigured) {
     return {
       tone: "neutral",
-      eyebrow: EARLY_ACCESS_LABEL,
+      eyebrow: "",
       title: EARLY_ACCESS_STATUS_TITLE,
       description:
-        "This page confirms a request right after you submit the early-access form. If you haven’t sent one yet, you can submit your organization’s details on the homepage.",
+        "This page confirms a request right after you submit the early\u{2011}access form. If you haven’t sent one yet, you can submit your organization’s details on the homepage.",
       primaryLabel: "Request early access",
       primaryHref: EARLY_ACCESS_HREF,
       primaryIcon: "none",
@@ -133,10 +132,10 @@ const buildStatusContent = ({
 
   return {
     tone: "neutral",
-    eyebrow: EARLY_ACCESS_LABEL,
+    eyebrow: "",
     title: EARLY_ACCESS_STATUS_TITLE,
     description:
-      "We’re not taking early access requests yet. You can read the code and follow the work on GitHub.",
+      "Sign\u{2011}ups aren’t open yet. You can read the code and follow development on GitHub.",
     primaryLabel: BACK_TO_HOMEPAGE_LABEL,
     primaryHref: "/",
     primaryIcon: "back",
@@ -163,7 +162,9 @@ export default async function EarlyAccessStatusPage({
   });
   const contactEmail = getVerifiedContactEmail();
 
-  let statusIcon = <StatusPill>{content.eyebrow}</StatusPill>;
+  let statusIcon = content.eyebrow ? (
+    <StatusPill>{content.eyebrow}</StatusPill>
+  ) : null;
   if (content.tone === "success") {
     statusIcon = (
       <CircleCheck className="text-primary size-7" aria-hidden="true" />
@@ -172,6 +173,11 @@ export default async function EarlyAccessStatusPage({
     statusIcon = (
       <CircleAlert className="text-destructive size-7" aria-hidden="true" />
     );
+  }
+
+  let headingSpacing = "mt-0";
+  if (statusIcon) {
+    headingSpacing = content.tone === "neutral" ? "mt-5" : "mt-3";
   }
 
   return (
@@ -191,7 +197,7 @@ export default async function EarlyAccessStatusPage({
           <h1
             className={cn(
               "font-heading text-foreground text-[clamp(1.9rem,4vw,2.75rem)] leading-[1.06] font-semibold tracking-[-0.035em] text-balance",
-              content.tone === "neutral" ? "mt-5" : "mt-3"
+              headingSpacing
             )}
           >
             {content.title}

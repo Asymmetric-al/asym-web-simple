@@ -32,7 +32,8 @@ Next.js matches **more specific** `app/api/...` routes first; everything else un
 
 | Path | Implemented in |
 | --- | --- |
-| `POST /api/contact` | `app/api/contact/route.ts` (Resend; not Payload) |
+| `POST /api/early-access` | `app/api/early-access/route.ts` (Resend; not Payload) |
+| `POST /api/contact`, `POST /api/donations/*` | Retired first-party routes (`410 Gone`) |
 | `GET /api/draft`, `GET /api/disable-draft` | `app/api/draft`, `app/api/disable-draft` (Next draft mode) |
 | `POST /api/revalidate` | `app/api/revalidate/route.ts` (on-demand ISR) |
 | `GET/POST /api/graphql`, playground | `app/(payload)/api/graphql/...` |
@@ -48,9 +49,9 @@ The `(payload)` segment is a **route group** only; it does **not** add `/payload
 | `PAYLOAD_SECRET` | Payload auth / sessions | Long random string; **never commit**. |
 | `PAYLOAD_DRAFT_SECRET` | `/api/draft` preview links | Shared secret in preview URLs. |
 | `REVALIDATION_SECRET` | `/api/revalidate` | Bearer token for ISR/webhook-style revalidation. |
-| `RESEND_API_KEY` | `/api/contact` (Resend) | Required at runtime for the contact form to send mail; optional for `next build` / browsing. |
+| `RESEND_API_KEY` | `/api/early-access` (Resend) | Required at runtime for early-access intake to send mail; optional for `next build` / browsing. |
 | `BLOB_READ_WRITE_TOKEN` | Vercel Blob (media plugin) | Needed when the `media` collection is enabled in the Blob plugin. |
-| `NEXT_PUBLIC_SITE_URL` | Canonical URLs | Defaults to `https://asymmetric.al` in `lib/env.ts`. |
+| `NEXT_PUBLIC_SITE_URL` | Canonical URLs | Defaults to `https://asym.app` in `lib/env.ts`. |
 
 Copy **`.env.example`** to `.env.local` and fill values (`.env.local` is gitignored).
 

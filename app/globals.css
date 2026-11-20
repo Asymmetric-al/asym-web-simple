@@ -195,30 +195,6 @@
     text-rendering: optimizelegibility;
   }
 
-  body::after {
-    position: absolute;
-    z-index: -30;
-    height: 58rem;
-    background: var(--page-gradient);
-    content: "";
-    inset: 0 0 auto;
-    pointer-events: none;
-  }
-
-  body::before {
-    position: absolute;
-    z-index: -20;
-    height: 58rem;
-    background-image: url("/brand/grain-neutral.png");
-    background-repeat: repeat;
-    background-size: 128px 128px;
-    content: "";
-    inset: 0 0 auto;
-    mask-image: linear-gradient(black 42%, transparent 100%);
-    opacity: var(--grain-opacity);
-    pointer-events: none;
-  }
-
   ::selection {
     background-color: color-mix(in srgb, var(--ring) 32%, transparent);
     color: var(--foreground);
@@ -303,6 +279,35 @@
   left: 1rem;
   outline: 2px solid var(--ring);
   outline-offset: 3px;
+}
+
+.page-atmosphere {
+  position: absolute;
+  z-index: -10;
+  height: 48rem;
+  background: var(--page-gradient);
+  contain: strict;
+  inset: 0 0 auto;
+  pointer-events: none;
+}
+
+.page-atmosphere::before {
+  position: absolute;
+  background-image: url("/brand/grain-neutral.png");
+  background-repeat: repeat;
+  background-size: 128px 128px;
+  content: "";
+  inset: 0;
+  opacity: var(--grain-opacity);
+  pointer-events: none;
+}
+
+.page-atmosphere::after {
+  position: absolute;
+  background: linear-gradient(180deg, transparent 48%, var(--background) 100%);
+  content: "";
+  inset: 0;
+  pointer-events: none;
 }
 
 .surface-panel {
@@ -405,10 +410,12 @@
   left: 1.875rem;
   height: 1.5px;
   background: var(--ink);
+  clip-path: inset(0 calc(100% - var(--land, 14%)) 0 var(--land, 14%));
+  opacity: 0;
   pointer-events: none;
-  transform: scaleX(0);
-  transform-origin: var(--land, 14%) 50%;
-  transition: transform 240ms var(--ease-out-expo) 90ms;
+  transition:
+    clip-path 240ms var(--ease-out-expo) 90ms,
+    opacity 80ms linear 90ms;
 }
 
 .wf-node {
@@ -447,7 +454,8 @@
 }
 
 .wf-plate[data-active] .wf-datum-ink {
-  transform: scaleX(1);
+  clip-path: inset(0 calc(100% - var(--to, 100%)) 0 var(--from, 0%));
+  opacity: 1;
 }
 
 .wf-plate[data-active="1"] .wf-step[data-step="1"] .wf-stem-ink,
@@ -464,8 +472,17 @@
   color: var(--primary);
 }
 
-.dark .wf-plate[data-active] .wf-step .wf-step-title {
-  color: var(--foreground);
+.wf-step-records {
+  display: none;
+}
+
+@media (width < 80rem) {
+  .wf-plate[data-active="1"] .wf-step[data-step="1"] .wf-step-records,
+  .wf-plate[data-active="2"] .wf-step[data-step="2"] .wf-step-records,
+  .wf-plate[data-active="3"] .wf-step[data-step="3"] .wf-step-records,
+  .wf-plate[data-active="4"] .wf-step[data-step="4"] .wf-step-records {
+    display: block;
+  }
 }
 
 .wf-plate[data-active="1"] .wf-node[data-steps~="1"],
@@ -518,6 +535,7 @@
 }
 
 @media (forced-colors: active) {
+  .wf-step-card:has(button:focus-visible),
   .wf-plate[data-active="1"] .wf-node[data-steps~="1"],
   .wf-plate[data-active="2"] .wf-node[data-steps~="2"],
   .wf-plate[data-active="3"] .wf-node[data-steps~="3"],
@@ -540,7 +558,7 @@
 
 @media (width >= 40rem) {
   .about-sweep {
-    border-bottom-left-radius: 8.5rem 5rem;
+    border-bottom-left-radius: 7.5rem 8.5rem;
   }
 }
 

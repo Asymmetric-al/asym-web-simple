@@ -8,7 +8,8 @@ export default function AppLayout({
   children: ReactNode;
 }>): ReactNode {
   return (
-    <div className="relative flex min-h-dvh flex-col overflow-x-clip">
+    <div className="relative isolate flex min-h-dvh flex-col overflow-x-clip">
+      <div aria-hidden="true" className="page-atmosphere" />
       <Header />
       {children}
       <Footer />

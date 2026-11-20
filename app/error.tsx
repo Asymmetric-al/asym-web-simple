@@ -1,12 +1,47 @@
 "use client";
 
-import { ArrowRight, RotateCcw } from "lucide-react";
 import Link from "next/link";
 import { useEffect } from "react";
 import { Container } from "@/components/site/container";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { siteConfig } from "@/lib/config";
 import { cn } from "@/lib/utils";
+
+const ReloadIcon = () => (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    data-icon="inline-end"
+    aria-hidden="true"
+  >
+    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+    <path d="M3 3v5h5" />
+  </svg>
+);
+
+const ArrowRightIcon = () => (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    data-icon="inline-end"
+    aria-hidden="true"
+  >
+    <path d="M5 12h14" />
+    <path d="m12 5 7 7-7 7" />
+  </svg>
+);
 
 export default function ErrorPage({
   error,
@@ -22,7 +57,8 @@ export default function ErrorPage({
   }, [error]);
 
   return (
-    <div className="relative flex min-h-dvh flex-col overflow-x-clip">
+    <div className="relative isolate flex min-h-dvh flex-col overflow-x-clip">
+      <div aria-hidden="true" className="page-atmosphere" />
       <main
         id="main-content"
         tabIndex={-1}
@@ -46,7 +82,7 @@ export default function ErrorPage({
               className={cn(buttonVariants({ size: "lg" }), "px-6")}
             >
               Try again
-              <RotateCcw data-icon="inline-end" aria-hidden="true" />
+              <ReloadIcon />
             </button>
             <Link
               href="/"
@@ -56,7 +92,7 @@ export default function ErrorPage({
               )}
             >
               Go to the homepage
-              <ArrowRight data-icon="inline-end" aria-hidden="true" />
+              <ArrowRightIcon />
             </Link>
           </div>
         </Container>

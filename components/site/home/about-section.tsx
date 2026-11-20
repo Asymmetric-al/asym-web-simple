@@ -1,15 +1,15 @@
 import { Container } from "@/components/site/container";
-import { SectionTitle } from "@/components/site/home/section-heading";
+import { Eyebrow, SectionTitle } from "@/components/site/home/section-heading";
 import { siteConfig } from "@/lib/config";
 import { cn } from "@/lib/utils";
 
 const ordinaryWork = [
-  { line: "A donor gives.", indentClass: "sm:pl-7" },
-  { line: "A receipt goes out.", indentClass: "sm:pl-11" },
-  { line: "A missionary sees the gift.", indentClass: "sm:pl-[4.75rem]" },
+  { line: "A donor gives.", indentClass: "sm:pl-8" },
+  { line: "A receipt goes out.", indentClass: "sm:pl-[4.5rem]" },
+  { line: "A missionary sees the gift.", indentClass: "sm:pl-[7rem]" },
   {
     line: "Staff can find the donor and see what happened.",
-    indentClass: "sm:pl-[7.5rem]",
+    indentClass: "sm:pl-[9.5rem]",
   },
 ] as const;
 
@@ -22,7 +22,8 @@ export const AboutSection = () => (
     <Container>
       <div className="grid gap-10 lg:grid-cols-[minmax(0,42fr)_minmax(0,58fr)] lg:gap-16">
         <div>
-          <SectionTitle id="about-title" className="mt-0">
+          <Eyebrow>About</Eyebrow>
+          <SectionTitle id="about-title">
             Why we’re starting with missions teams.
           </SectionTitle>
         </div>
@@ -47,8 +48,8 @@ export const AboutSection = () => (
         </div>
       </div>
 
-      <div className="about-sweep mt-12 pt-1 pb-6 sm:mt-14 sm:pb-8">
-        <p className="text-muted-foreground pl-5 text-sm sm:pl-7 sm:text-[0.9375rem]">
+      <div className="about-sweep mt-12 pt-1 pb-7 sm:mt-14 sm:pb-10">
+        <p className="text-muted-foreground pl-5 text-sm sm:pl-8 sm:text-[0.9375rem]">
           The ordinary work comes first:
         </p>
         <ol className="font-heading text-foreground mt-3.5 text-[clamp(1.375rem,2.5vw,2.25rem)] leading-[1.2] font-semibold tracking-[-0.03em] [word-spacing:0.04em]">

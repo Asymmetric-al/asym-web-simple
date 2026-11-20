@@ -10,23 +10,13 @@ export const buttonVariants = cva(
           "bg-primary bg-clip-border text-primary-foreground hover:bg-primary/90 shadow-[inset_0_1px_0_rgb(255_255_255/12%),inset_0_-1px_0_rgb(0_0_0/18%),0_18px_44px_-28px_rgb(30_58_79/72%)] dark:shadow-[inset_0_1px_0_rgb(255_255_255/55%),inset_0_-1px_0_rgb(13_20_26/16%),0_16px_38px_-24px_rgb(0_0_0/75%)]",
         outline:
           "border-input bg-background/85 text-foreground hover:bg-secondary/72 shadow-sm",
-        secondary:
-          "bg-secondary bg-clip-border text-secondary-foreground hover:bg-secondary/84 shadow-sm",
         ghost: "hover:bg-muted hover:text-foreground",
-        destructive:
-          "bg-destructive bg-clip-border text-destructive-foreground hover:bg-destructive/92 focus-visible:border-destructive focus-visible:ring-destructive shadow-[0_18px_44px_-30px_rgb(201_72_55/55%)]",
-        link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
         default:
           "min-h-11 px-4 py-2 leading-[1.15] sm:min-h-10 has-data-[icon=inline-end]:pr-3 has-data-[icon=inline-start]:pl-3",
-        xs: "min-h-8 px-2.5 py-1 text-xs leading-[1.15] [&_svg:not([class*='size-'])]:size-3",
-        sm: "min-h-9 px-3.5 py-2 leading-[1.15]",
         lg: "min-h-11 px-5 py-2.5 text-[0.95rem] leading-[1.15]",
-        icon: "size-11 shrink-0 sm:size-10",
-        "icon-xs": "size-7 shrink-0 [&_svg:not([class*='size-'])]:size-3",
         "icon-sm": "size-11 shrink-0 sm:size-9",
-        "icon-lg": "size-11 shrink-0",
       },
     },
     defaultVariants: {

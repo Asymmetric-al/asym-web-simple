@@ -26,11 +26,12 @@ export const EARLY_ACCESS_HONEYPOT_FIELD = "website";
 
 /**
 HTML5 `pattern` attribute compatible with Unicode `v`-mode regex compilation.
-Enforces at least two dot-separated ASCII DNS labels (1-63 alnum/hyphen,
-alnum at both ends) alongside `<input type="email">`.
+Matches `isValidEmail()` on both the local part (1-64 allowed chars, no
+leading/trailing/consecutive dots) and the domain (at least two dot-separated
+ASCII DNS labels of 1-63 alnum/hyphen chars, alnum at both ends).
 */
 export const EMAIL_HTML_PATTERN =
-  "[^\\s@]+@[A-Za-z0-9](?:[A-Za-z0-9\\-]{0,61}[A-Za-z0-9])?(?:\\.[A-Za-z0-9](?:[A-Za-z0-9\\-]{0,61}[A-Za-z0-9])?)+";
+  "(?=.{1,64}@)[A-Za-z0-9!#$%&'*+\\/=?^_`\\{\\|\\}~\\-]+(?:\\.[A-Za-z0-9!#$%&'*+\\/=?^_`\\{\\|\\}~\\-]+)*@[A-Za-z0-9](?:[A-Za-z0-9\\-]{0,61}[A-Za-z0-9])?(?:\\.[A-Za-z0-9](?:[A-Za-z0-9\\-]{0,61}[A-Za-z0-9])?)+";
 
 export type EarlyAccessField = "email" | "organization" | "message";
 
@@ -47,7 +48,7 @@ export const earlyAccessCopy = {
   success:
     "Thanks for telling us about your team. We’ll be in touch with launch updates and information about early access.",
   failure: "Your request didn’t go through. Please try again.",
-  notConfigured: "Early-access sign-ups aren’t open right now.",
+  notConfigured: "Early\u{2011}access sign\u{2011}ups aren’t open right now.",
   rateLimited:
     "Too many requests right now. Please wait a few minutes and try again.",
   invalidEmail: "Enter a valid email address.",

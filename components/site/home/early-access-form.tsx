@@ -276,7 +276,7 @@ export const EarlyAccessForm = ({
         <h3
           ref={successRef}
           tabIndex={-1}
-          className="font-heading text-foreground focus-visible:ring-ring focus-visible:ring-offset-background mt-4 rounded-sm text-2xl font-semibold tracking-[-0.025em] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent"
+          className="font-heading text-foreground focus-visible:ring-ring focus-visible:ring-offset-background mt-4 rounded-[0.375rem] text-2xl font-semibold tracking-[-0.025em] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent"
         >
           Request received
         </h3>
@@ -291,7 +291,7 @@ export const EarlyAccessForm = ({
             href={siteConfig.repoUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-foreground hover:text-primary focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center gap-1.5 rounded-sm text-sm font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-9"
+            className="text-foreground hover:text-primary focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center gap-1.5 rounded-[0.375rem] text-sm font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-9"
           >
             Follow development on GitHub
             <ArrowUpRight className="size-3.5" aria-hidden="true" />

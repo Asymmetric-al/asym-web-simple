@@ -84,21 +84,16 @@ export const ProductSection = () => (
         <div className="relative px-5 pt-6 sm:px-8 sm:pt-9">
           <div
             aria-hidden="true"
-            className="bg-rule pointer-events-none absolute top-[3.25rem] right-16 left-16 hidden h-px lg:block"
+            className="bg-rule pointer-events-none absolute top-[3.25rem] right-16 left-16 hidden h-px xl:block"
           />
 
-          <ol className="relative grid gap-6 sm:grid-cols-2 sm:gap-x-8 sm:gap-y-6 lg:grid-cols-4 lg:gap-6">
+          <ol className="relative grid gap-6 sm:grid-cols-2 sm:gap-x-8 sm:gap-y-6 xl:grid-cols-4 xl:gap-6">
             {workflowSteps.map((step, index) => {
               const isLast = index === workflowSteps.length - 1;
               const describedById = `wf-records-${step.number}`;
-              let cardClass = "relative sm:py-4 lg:p-0";
-              if (step.isAiStep) {
-                cardClass =
-                  "border-primary/38 bg-secondary/55 relative rounded-[1.35rem] border border-dashed p-4 sm:-mx-4 sm:px-4 sm:py-4 lg:-mx-3 lg:-mt-5 lg:px-3 lg:pt-5 lg:pb-4";
-              } else if (step.inDevelopment) {
-                cardClass =
-                  "border-foreground/22 bg-card/85 relative rounded-[1.35rem] border border-dashed p-4 sm:-mx-4 sm:px-4 sm:py-4 lg:-mx-3 lg:-mt-5 lg:px-3 lg:pt-5 lg:pb-4";
-              }
+              const cardClass = step.inDevelopment
+                ? "wf-step-card group/step border-primary/34 bg-card/65 relative rounded-[1.35rem] border border-dashed p-4 transition-colors sm:-mx-4 sm:px-4 sm:py-4 xl:-mx-3.5 xl:-mt-5 xl:px-3.5 xl:pt-5 xl:pb-4 has-[button:focus-visible]:ring-2 has-[button:focus-visible]:ring-ring has-[button:focus-visible]:ring-offset-2 has-[button:focus-visible]:ring-offset-card"
+                : "wf-step-card group/step relative rounded-[1.35rem] border border-transparent p-4 transition-colors sm:-mx-4 sm:px-4 sm:py-4 xl:-mx-3.5 xl:-mt-5 xl:px-3.5 xl:pt-5 xl:pb-4 has-[button:focus-visible]:ring-2 has-[button:focus-visible]:ring-ring has-[button:focus-visible]:ring-offset-2 has-[button:focus-visible]:ring-offset-card";
 
               return (
                 <li
@@ -143,12 +138,7 @@ export const ProductSection = () => (
                       >
                         {step.number}
                       </span>
-                      <div
-                        className={cn(
-                          "relative z-10 flex flex-wrap items-center gap-1.5 rounded-full lg:px-1.5 lg:py-0.5",
-                          step.isAiStep ? "lg:bg-secondary/95" : "lg:bg-card"
-                        )}
-                      >
+                      <div className="xl:bg-card relative z-10 flex flex-wrap items-center gap-1.5 rounded-full xl:px-1.5 xl:py-0.5">
                         <span
                           translate={step.actor === "asym" ? "no" : undefined}
                           className={cn(
@@ -181,10 +171,16 @@ export const ProductSection = () => (
                     <p className="text-muted-foreground mt-2 text-sm leading-6 sm:text-[0.96875rem] sm:leading-[1.68]">
                       {step.text}
                     </p>
+                    <p
+                      aria-hidden="true"
+                      className="wf-step-records text-primary dark:text-ring mt-2.5 font-mono text-xs leading-5 tracking-[0.02em] xl:hidden"
+                    >
+                      {step.recordsSummary}
+                    </p>
                   </div>
 
                   {/* Desktop Datum & Sweep curved stem connecting step into the record band */}
-                  <div className="wf-stem hidden lg:block" aria-hidden="true">
+                  <div className="wf-stem hidden xl:block" aria-hidden="true">
                     <span className="wf-stem-ink" />
                   </div>
                 </li>
@@ -193,12 +189,20 @@ export const ProductSection = () => (
           </ol>
         </div>
 
-        <div className="datum-lid bg-record mt-6 px-5 pt-7 pb-6 sm:mt-8 sm:px-8 sm:pt-[1.875rem] sm:pb-7 lg:mt-0">
-          <span className="wf-datum-ink hidden lg:block" aria-hidden="true" />
-          <div className="grid gap-3.5 sm:grid-cols-[10rem_1fr] sm:items-start sm:gap-5 lg:grid-cols-[12.5rem_1fr] lg:gap-6">
-            <p className="text-primary/82 dark:text-ring font-mono text-[0.8125rem] font-medium tracking-[0.02em] sm:pt-1.5">
-              One shared record
-            </p>
+        <div className="datum-lid bg-record mt-6 px-5 pt-7 pb-6 sm:mt-8 sm:px-8 sm:pt-[1.875rem] sm:pb-7 xl:mt-0">
+          <span className="wf-datum-ink hidden xl:block" aria-hidden="true" />
+          <div className="grid gap-3.5 sm:grid-cols-[11rem_1fr] sm:items-start sm:gap-5 xl:grid-cols-[13.5rem_1fr] xl:gap-6">
+            <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 sm:block">
+              <p className="text-primary/82 dark:text-ring font-mono text-[0.8125rem] font-medium tracking-[0.02em] sm:pt-1.5">
+                One shared record
+              </p>
+              <p className="text-muted-foreground hidden text-xs leading-5 sm:mt-1 [.wf-plate[data-interactive='true']_&]:block">
+                <span className="sm:hidden">Tap a step to trace.</span>
+                <span className="hidden sm:inline">
+                  Select a step to trace its records.
+                </span>
+              </p>
+            </div>
             <div className="flex flex-wrap items-center gap-2 sm:grid sm:grid-cols-[repeat(4,max-content)] sm:justify-between sm:gap-3 sm:pr-2">
               {recordNodes.map((node) => (
                 <span

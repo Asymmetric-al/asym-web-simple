@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   EARLY_ACCESS_LIMITS,
   EARLY_ACCESS_RATE_LIMIT_WINDOW_SECONDS,
+  EMAIL_HTML_PATTERN,
   buildEarlyAccessNotification,
   earlyAccessCopy,
   formatRetryWait,
@@ -57,6 +58,28 @@ describe("isValidEmail", () => {
     expect(isValidEmail(`${local}@example.org`)).toBeFalsy();
     expect(isValidEmail(`${overLocal}@example.org`)).toBeFalsy();
     expect(isValidEmail(`director@${overLabel}.org`)).toBeFalsy();
+  });
+
+  it("keeps EMAIL_HTML_PATTERN in strict v-mode parity with isValidEmail", () => {
+    const htmlRegex = new RegExp(`^(?:${EMAIL_HTML_PATTERN})$`, "v");
+    const samples = [
+      "director@example.org",
+      "first.last+tag@mail.example.co.uk",
+      `${"a".repeat(64)}@example.org`,
+      `${"a".repeat(65)}@example.org`,
+      "sam..lee@example.org",
+      "sam.@example.org",
+      ".sam@example.org",
+      "hello@localhost",
+      "hello@-invalid.org",
+      "hello@invalid-.org",
+      "hello@bad_domain.org",
+      "hello@a..org",
+    ];
+
+    for (const sample of samples) {
+      expect(htmlRegex.test(sample)).toBe(isValidEmail(sample));
+    }
   });
 });
 

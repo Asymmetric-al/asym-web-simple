@@ -12,7 +12,7 @@ export const metadata: Metadata = createMetadata({
 });
 
 const contactLinkClassName =
-  "text-foreground hover:text-primary focus-visible:ring-ring focus-visible:ring-offset-background link-resilient inline-flex min-h-11 items-center rounded-sm font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-0";
+  "text-foreground hover:text-primary focus-visible:ring-ring focus-visible:ring-offset-background link-resilient inline-flex min-h-11 items-center rounded-[0.375rem] font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-0";
 
 export default function TermsPage() {
   const contactEmail = getVerifiedContactEmail();

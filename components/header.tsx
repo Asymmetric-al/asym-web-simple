@@ -55,7 +55,10 @@ export const Header = () => {
               </span>
             </>
           ) : (
-            <span>Early access</span>
+            <>
+              <span className="sm:hidden">Early access</span>
+              <span className="hidden sm:inline">Early access status</span>
+            </>
           )}
         </Link>
       </div>

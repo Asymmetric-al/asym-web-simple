@@ -5,6 +5,7 @@ import { Header } from "@/components/header";
 import { Container } from "@/components/site/container";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { navigationLinks, siteConfig } from "@/lib/config";
+import { isEarlyAccessConfigured } from "@/lib/early-access-config";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 
@@ -18,8 +19,11 @@ export const metadata: Metadata = {
 };
 
 export default function NotFound() {
+  const isConfigured = isEarlyAccessConfigured();
+
   return (
-    <div className="relative flex min-h-dvh flex-col overflow-x-clip">
+    <div className="relative isolate flex min-h-dvh flex-col overflow-x-clip">
+      <div aria-hidden="true" className="page-atmosphere" />
       <Header />
       <main
         id="main-content"
@@ -53,7 +57,7 @@ export default function NotFound() {
                 "px-6"
               )}
             >
-              Early access
+              {isConfigured ? siteConfig.cta.primary.label : "Early access status"}
             </Link>
           </div>
           <nav aria-label="Homepage sections" className="mt-10">
@@ -62,7 +66,7 @@ export default function NotFound() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-foreground/78 hover:text-foreground focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center rounded-sm underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-10"
+                    className="text-foreground/78 hover:text-foreground focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center rounded-[0.375rem] underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-10"
                   >
                     {link.label}
                   </Link>

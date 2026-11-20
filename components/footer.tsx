@@ -1,12 +1,11 @@
 import Link from "next/link";
-import { WordmarkSpotlight } from "@/components/react-bits/wordmark-spotlight";
 import { SiteLogoMark } from "@/components/site/site-logo-mark";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { footerLinks, navigationLinks, siteConfig } from "@/lib/config";
 import { getVerifiedContactEmail } from "@/lib/early-access-config";
 
 const linkClassName =
-  "text-foreground/78 hover:text-foreground focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center rounded-sm underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-9";
+  "text-foreground/78 hover:text-foreground focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center rounded-[0.375rem] underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-9";
 
 const currentYear = (): number => {
   const now = new Date();
@@ -23,7 +22,7 @@ export const Footer = () => {
           <div className="max-w-sm min-w-0">
             <Link
               href="/"
-              className="focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center gap-2 rounded-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-9"
+              className="focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center gap-2 rounded-[0.375rem] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-9"
               aria-label={`${siteConfig.shortName} home`}
             >
               <SiteLogoMark className="size-5" size={20} />
@@ -93,9 +92,7 @@ export const Footer = () => {
           </div>
         </div>
 
-        <WordmarkSpotlight text={siteConfig.shortName} />
-
-        <div className="border-rule text-muted-foreground mt-6 flex flex-col items-start gap-4 border-t pt-6 text-xs sm:flex-row sm:items-center sm:justify-between">
+        <div className="border-rule text-muted-foreground mt-8 flex flex-col items-start gap-4 border-t pt-6 text-xs sm:flex-row sm:items-center sm:justify-between">
           <p>
             &copy; {currentYear()} <span translate="no">{siteConfig.name}</span>
           </p>

@@ -191,7 +191,9 @@ test.describe("responsive regression coverage", () => {
     await expect(brandLink).toBeVisible();
     await expect(mainNav).toBeVisible();
     await expect(
-      banner.getByRole("link", { name: /^(Request early access|Early access)$/ })
+      banner.getByRole("link", {
+        name: /^(Request early access|Early access status|Early access)$/,
+      })
     ).toBeVisible();
     await expectNoHorizontalOverflow(page, "home @ 1440x900");
     issues.expectNoUnexpectedIssuesSince(checkpoint, "home @ 1440x900");

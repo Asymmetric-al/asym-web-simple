@@ -26,6 +26,8 @@ const STEP_ANNOUNCEMENTS: Record<string, string> = {
 const NODE_STAGGER_MS = 40;
 const NODE_BASE_DELAY_MS = 150;
 
+const clampPct = (value: number): number => Math.max(0, Math.min(100, value));
+
 /**
 Interactive progressive-enhancement wrapper for the Datum & Sweep workflow plate. Writes state attributes and CSS custom properties directly to the DOM so hover, focus, and click-to-pin never trigger React re-renders or layout thrash.
 */
@@ -44,6 +46,8 @@ export const WorkflowPlate = ({
     if (!plate) {
       return noop;
     }
+
+    plate.dataset.interactive = "true";
 
     let pinnedStep: string | null = null;
     let activeStep: string | null = null;
@@ -72,17 +76,30 @@ export const WorkflowPlate = ({
         ),
       ];
 
+      const nodeCenters = nodes.map((node) => {
+        const rect = node.getBoundingClientRect();
+        return { node, center: rect.left + rect.width / 2 };
+      });
+
       let landPx = 0;
       if (datumInk && stem) {
         const datumRect = datumInk.getBoundingClientRect();
         const stemRect = stem.getBoundingClientRect();
         if (datumRect.width > 0) {
           landPx = stemRect.right;
-          const pct = Math.max(
-            0,
-            Math.min(100, ((landPx - datumRect.left) / datumRect.width) * 100)
+          const landPct = clampPct(
+            ((landPx - datumRect.left) / datumRect.width) * 100
           );
-          datumInk.style.setProperty("--land", `${pct.toFixed(2)}%`);
+          const xs = [landPx, ...nodeCenters.map((entry) => entry.center)];
+          const fromPct = clampPct(
+            ((Math.min(...xs) - datumRect.left) / datumRect.width) * 100
+          );
+          const toPct = clampPct(
+            ((Math.max(...xs) - datumRect.left) / datumRect.width) * 100
+          );
+          datumInk.style.setProperty("--land", `${landPct.toFixed(2)}%`);
+          datumInk.style.setProperty("--from", `${fromPct.toFixed(2)}%`);
+          datumInk.style.setProperty("--to", `${toPct.toFixed(2)}%`);
         }
       }
 
@@ -93,12 +110,11 @@ export const WorkflowPlate = ({
         return;
       }
 
-      const ranked = nodes
-        .map((node) => {
-          const rect = node.getBoundingClientRect();
-          const center = rect.left + rect.width / 2;
-          return { node, dist: Math.abs(center - landPx) };
-        })
+      const ranked = nodeCenters
+        .map((entry) => ({
+          node: entry.node,
+          dist: Math.abs(entry.center - landPx),
+        }))
         .toSorted((a, b) => a.dist - b.dist);
 
       for (const [rank, entry] of ranked.entries()) {
@@ -114,9 +130,13 @@ export const WorkflowPlate = ({
       options: { readonly isInstant: boolean; readonly isPinned: boolean }
     ) => {
       if (nextStep === null) {
+        if (options.isInstant) {
+          plate.dataset.instant = "true";
+        } else {
+          delete plate.dataset.instant;
+        }
         delete plate.dataset.active;
         delete plate.dataset.pinned;
-        delete plate.dataset.instant;
         activeStep = null;
         return;
       }
@@ -193,16 +213,29 @@ export const WorkflowPlate = ({
       if (!step) {
         return;
       }
+
+      const isKeyboard = event.detail === 0;
+      const isTrigger =
+        event.target instanceof Element &&
+        event.target.closest("button[data-wf-trigger]") !== null;
+
+      if (!isKeyboard && !isTrigger) {
+        const selection = window.getSelection()?.toString();
+        if (selection && selection.length > 0) {
+          return;
+        }
+      }
+
       if (pinnedStep === step) {
         pinnedStep = null;
         syncButtons(null);
-        applyState(null, { isInstant: false, isPinned: false });
+        applyState(null, { isInstant: isKeyboard, isPinned: false });
         announce("Workflow step selection cleared.");
         return;
       }
       pinnedStep = step;
       syncButtons(step);
-      applyState(step, { isInstant: false, isPinned: true });
+      applyState(step, { isInstant: isKeyboard, isPinned: true });
       announce(STEP_ANNOUNCEMENTS[step] ?? "");
     };
 
@@ -219,6 +252,13 @@ export const WorkflowPlate = ({
       announce("Workflow step selection cleared.");
     };
 
+    const resizeObserver = new ResizeObserver(() => {
+      if (activeStep !== null) {
+        updateTiming(activeStep, true);
+      }
+    });
+    resizeObserver.observe(plate);
+
     plate.addEventListener("pointerover", handlePointerOver);
     plate.addEventListener("pointerleave", handlePointerLeave);
     plate.addEventListener("focusin", handleFocusIn);
@@ -227,6 +267,8 @@ export const WorkflowPlate = ({
     plate.addEventListener("keydown", handleKeyDown);
 
     return () => {
+      delete plate.dataset.interactive;
+      resizeObserver.disconnect();
       plate.removeEventListener("pointerover", handlePointerOver);
       plate.removeEventListener("pointerleave", handlePointerLeave);
       plate.removeEventListener("focusin", handleFocusIn);
@@ -268,7 +310,7 @@ export const WorkflowStepTitle = ({
       data-wf-trigger={String(stepNumber)}
       aria-pressed="false"
       aria-describedby={describedById}
-      className="focus-visible:ring-ring focus-visible:ring-offset-background cursor-pointer rounded-sm text-left after:absolute after:inset-0 after:rounded-[inherit] after:content-[''] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent"
+      className="decoration-rule group-hover/step:decoration-ink -my-2 inline-flex min-h-11 cursor-pointer items-center py-2 text-left underline decoration-dashed underline-offset-[5px] focus-visible:outline-2 focus-visible:outline-transparent sm:my-0 sm:min-h-0 sm:py-0"
     >
       {title}
     </button>
