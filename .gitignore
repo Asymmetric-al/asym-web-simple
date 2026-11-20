@@ -75,3 +75,6 @@ test-results/
 /.vibe/
 /.windsurf/
 /.zencoder/
+
+# Playwright storage state (Vercel bypass cookie)
+playwright/.auth/
