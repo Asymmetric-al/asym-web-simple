@@ -1,13 +1,16 @@
 import { describe, expect, it } from "vitest";
 import {
   EARLY_ACCESS_LIMITS,
+  EARLY_ACCESS_RATE_LIMIT_WINDOW_SECONDS,
   buildEarlyAccessNotification,
   earlyAccessCopy,
   formatRetryWait,
   hasErrors,
   isHoneypotFilled,
   isValidEmail,
+  isValidSenderAddress,
   normalizeEarlyAccessRequest,
+  parseRetryAfterSeconds,
   validateEarlyAccessRequest,
 } from "./early-access";
 import {
@@ -22,23 +25,51 @@ const validRequest = {
 };
 
 describe("isValidEmail", () => {
-  it("accepts ordinary addresses", () => {
+  it("accepts ordinary and plus-addressed domains with valid DNS labels", () => {
     expect(isValidEmail("director@example.org")).toBeTruthy();
     expect(isValidEmail("first.last+tag@mail.example.co.uk")).toBeTruthy();
+    expect(isValidEmail("ops+appeals@north-field.example.org")).toBeTruthy();
+    expect(isValidEmail("a@x.io")).toBeTruthy();
+    expect(isValidEmail("hello@example.invalid")).toBeTruthy();
   });
 
-  it("rejects addresses without a domain, a dot, or with spaces", () => {
+  it("rejects addresses with malformed domain labels, missing dots, or whitespace", () => {
     expect(isValidEmail("")).toBeFalsy();
     expect(isValidEmail("director")).toBeFalsy();
     expect(isValidEmail("director@example")).toBeFalsy();
+    expect(isValidEmail("hello@localhost")).toBeFalsy();
     expect(isValidEmail("director@.org")).toBeFalsy();
+    expect(isValidEmail("hello@-invalid.org")).toBeFalsy();
+    expect(isValidEmail("hello@invalid-.org")).toBeFalsy();
+    expect(isValidEmail("hello@bad_domain.org")).toBeFalsy();
+    expect(isValidEmail("hello@a..org")).toBeFalsy();
+    expect(isValidEmail(".lead@example.org")).toBeFalsy();
+    expect(isValidEmail("a..b@example.org")).toBeFalsy();
     expect(isValidEmail("dir ector@example.org")).toBeFalsy();
+    expect(isValidEmail(" director@example.org ")).toBeFalsy();
   });
 
-  it("rejects addresses over the length limit", () => {
+  it("rejects addresses over the length limits", () => {
     const local = "a".repeat(EARLY_ACCESS_LIMITS.email);
+    const overLocal = "a".repeat(65);
+    const overLabel = "b".repeat(64);
 
     expect(isValidEmail(`${local}@example.org`)).toBeFalsy();
+    expect(isValidEmail(`${overLocal}@example.org`)).toBeFalsy();
+    expect(isValidEmail(`director@${overLabel}.org`)).toBeFalsy();
+  });
+});
+
+describe("isValidSenderAddress", () => {
+  it("accepts bare and Display Name <mailbox> sender formats", () => {
+    expect(isValidSenderAddress("from@example.invalid")).toBeTruthy();
+    expect(isValidSenderAddress("asym <from@example.invalid>")).toBeTruthy();
+  });
+
+  it("rejects malformed sender mailboxes", () => {
+    expect(isValidSenderAddress("")).toBeFalsy();
+    expect(isValidSenderAddress("asym <from@-invalid.org>")).toBeFalsy();
+    expect(isValidSenderAddress("asym <bad_domain>")).toBeFalsy();
   });
 });
 
@@ -79,7 +110,7 @@ describe("validateEarlyAccessRequest", () => {
   it("reports the invalid email and missing organization together", () => {
     expect(
       validateEarlyAccessRequest({
-        email: "not-an-email",
+        email: "hello@-invalid.org",
         organization: "",
         message: "",
       })
@@ -141,16 +172,28 @@ describe("buildEarlyAccessNotification", () => {
   });
 });
 
-describe("formatRetryWait", () => {
-  it("rounds retry durations honestly to minutes", () => {
+describe("parseRetryAfterSeconds and formatRetryWait", () => {
+  it("clamps retry durations strictly to the rate-limit window", () => {
+    expect(parseRetryAfterSeconds(45)).toBe(45);
+    expect(parseRetryAfterSeconds(EARLY_ACCESS_RATE_LIMIT_WINDOW_SECONDS)).toBe(
+      EARLY_ACCESS_RATE_LIMIT_WINDOW_SECONDS
+    );
+    expect(parseRetryAfterSeconds(0)).toBeUndefined();
+    expect(parseRetryAfterSeconds(-10)).toBeUndefined();
+    expect(parseRetryAfterSeconds(99_999_999)).toBeUndefined();
+    expect(parseRetryAfterSeconds("not-a-number")).toBeUndefined();
+  });
+
+  it("rounds retry durations honestly to minutes and falls back when out of range", () => {
     expect(formatRetryWait(45)).toContain("about a minute");
     expect(formatRetryWait(540)).toContain("about 9 minutes");
+    expect(formatRetryWait(99_999_999)).toBe(earlyAccessCopy.rateLimited);
     expect(formatRetryWait(undefined)).toBe(earlyAccessCopy.rateLimited);
   });
 });
 
 describe("readEarlyAccessDeliveryConfig", () => {
-  it("requires outbound Resend credentials and a verified private contact email", () => {
+  it("requires valid outbound Resend credentials and a verified private contact email", () => {
     const prev = {
       RESEND_API_KEY: process.env.RESEND_API_KEY,
       CONTACT_INBOX_EMAIL: process.env.CONTACT_INBOX_EMAIL,
@@ -167,7 +210,14 @@ describe("readEarlyAccessDeliveryConfig", () => {
       expect(readEarlyAccessDeliveryConfig()).toBeNull();
       expect(isEarlyAccessConfigured()).toBeFalsy();
 
-      for (const badEmail of ["@", "not-an-email", "hello@localhost"]) {
+      for (const badEmail of [
+        "@",
+        "not-an-email",
+        "hello@localhost",
+        "hello@-invalid.org",
+        "hello@invalid-.org",
+        "hello@bad_domain.org",
+      ]) {
         process.env.NEXT_PUBLIC_CONTACT_EMAIL = badEmail;
         expect(readEarlyAccessDeliveryConfig()).toBeNull();
         expect(isEarlyAccessConfigured()).toBeFalsy();
@@ -181,6 +231,9 @@ describe("readEarlyAccessDeliveryConfig", () => {
         contactEmail: "hello@example.invalid",
       });
       expect(isEarlyAccessConfigured()).toBeTruthy();
+
+      process.env.CONTACT_FROM_EMAIL = "asym <from@-invalid.org>";
+      expect(readEarlyAccessDeliveryConfig()).toBeNull();
     } finally {
       for (const [key, val] of Object.entries(prev)) {
         if (val === undefined) {

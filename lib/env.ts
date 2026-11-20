@@ -35,7 +35,7 @@ Typed, safe access to env vars — no throwing, use in server components.
 */
 export const env = {
   NEXT_PUBLIC_SITE_URL:
-    process.env["NEXT_PUBLIC_SITE_URL"] ?? "https://asymmetric.al",
+    process.env["NEXT_PUBLIC_SITE_URL"] ?? "https://asym.app",
   DATABASE_URI: process.env["DATABASE_URI"] ?? "",
   PAYLOAD_SECRET: process.env["PAYLOAD_SECRET"] ?? "",
   RESEND_API_KEY: process.env["RESEND_API_KEY"] ?? "",

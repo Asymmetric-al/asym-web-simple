@@ -62,12 +62,12 @@ Next.js matches **more specific** `app/api/*` routes first; remaining `/api/*` t
 
 ```
 ├── app/
-│   ├── (app)/                # Marketing routes (URLs unchanged: /, /contact, …)
-│   │   ├── layout.tsx        # Header, footer, SiteChrome, background glows
+│   ├── (app)/                # Marketing routes (URLs unchanged: /, /privacy, /terms, /early-access/status)
+│   │   ├── layout.tsx        # Header, footer, background glows
 │   │   ├── page.tsx          # Home
 │   │   └── …/page.tsx        # Other public pages
 │   ├── (payload)/            # Payload admin + REST/GraphQL (URLs: /admin, /api/*)
-│   ├── api/                  # First-party routes: contact, donations, webhooks, draft, revalidate
+│   ├── api/                  # First-party routes: early-access, draft, disable-draft, revalidate (+ retired 410s)
 │   ├── globals.css           # Design tokens, theme colors, surface variables
 │   ├── layout.tsx            # Root: fonts, providers, analytics
 │   └── qa/                   # Optional maintainer pages (e.g. error UI checks)
@@ -190,4 +190,4 @@ Vercel installs with Bun 1.4.5 from `bun.lock` (`installCommand` in `vercel.json
 - **Repository license:** [LICENSE](./LICENSE) is the **GNU General Public License v3**.
 - **React Bits Pro** (and similar registry components) are governed by **their vendor terms** and optional keys in `.env.local` for CLI installs — that is separate from the GPLv3 in `LICENSE`. See `components.json` for configured registries.
 
-Footer links and contact addresses come from **`lib/config.ts`** (`siteConfig.url`, `siteConfig.email`, `footerLinks`).
+Footer links come from **`lib/config.ts`** (`siteConfig.url`, `footerLinks`); the verified private contact email comes from `NEXT_PUBLIC_CONTACT_EMAIL` via `lib/early-access-config.ts`.

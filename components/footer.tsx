@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { WordmarkSpotlight } from "@/components/react-bits/wordmark-spotlight";
 import { SiteLogoMark } from "@/components/site/site-logo-mark";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { footerLinks, navigationLinks, siteConfig } from "@/lib/config";
@@ -92,7 +93,9 @@ export const Footer = () => {
           </div>
         </div>
 
-        <div className="text-muted-foreground mt-8 flex flex-col items-start gap-4 text-xs sm:flex-row sm:items-center sm:justify-between">
+        <WordmarkSpotlight text={siteConfig.shortName} />
+
+        <div className="border-rule text-muted-foreground mt-6 flex flex-col items-start gap-4 border-t pt-6 text-xs sm:flex-row sm:items-center sm:justify-between">
           <p>
             &copy; {currentYear()} <span translate="no">{siteConfig.name}</span>
           </p>

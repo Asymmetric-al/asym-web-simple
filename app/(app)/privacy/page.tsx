@@ -29,7 +29,8 @@ export default function PrivacyPage() {
       footer={
         contactEmail ? (
           <>
-            Private privacy, access, or deletion requests can be sent to{" "}
+            To ask about your information or request access, a correction, or
+            deletion, email{" "}
             <a href={`mailto:${contactEmail}`} className={contactLinkClassName}>
               {contactEmail}
             </a>
@@ -38,13 +39,13 @@ export default function PrivacyPage() {
         ) : (
           <div className="space-y-2">
             <p>
-              Direct private email contact for new privacy or deletion requests
-              will be listed here before early access opens. If you already
-              correspond with us by email, reply to any message to stop hearing
-              from us or request changes.
+              If you’ve already heard from us, you can reply to that email.
+              Please don’t post personal or donor information on GitHub.
             </p>
             <p>
-              You can follow public development in{" "}
+              A direct private email address for new privacy or deletion
+              requests will be listed here before early access opens. You can
+              follow public development in{" "}
               <a
                 href={siteConfig.repoUrl}
                 target="_blank"
@@ -52,8 +53,8 @@ export default function PrivacyPage() {
                 className={contactLinkClassName}
               >
                 the Asymmetric-al/core repository on GitHub
-              </a>{" "}
-              (never post personal or donor information in public repositories).
+              </a>
+              .
             </p>
           </div>
         )

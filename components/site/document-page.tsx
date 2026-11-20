@@ -15,10 +15,14 @@ export const DocumentPage = ({
   readonly children: ReactNode;
   readonly footer?: ReactNode;
 }) => (
-  <main id="main-content" className="relative isolate" tabIndex={-1}>
+  <main
+    id="main-content"
+    className="relative isolate outline-none"
+    tabIndex={-1}
+  >
     <Container>
       <article className="max-w-[48rem] pt-[clamp(7.4rem,9vw,9.5rem)] pb-14 sm:pb-18">
-        <p className="text-primary/80 font-mono text-xs tracking-[0.22em] uppercase">
+        <p className="text-primary/82 dark:text-ring font-mono text-[0.8125rem] font-medium tracking-[0.02em]">
           {eyebrow}
         </p>
         {title}
@@ -49,7 +53,7 @@ export const DocumentSection = ({
 }) => (
   <section className={cn("grid gap-3", className)}>
     {number ? (
-      <p className="text-primary/80 font-mono text-xs tracking-[0.22em] uppercase">
+      <p className="text-primary/82 dark:text-ring font-mono text-[0.8125rem] font-medium tracking-[0.02em]">
         {number}
       </p>
     ) : null}

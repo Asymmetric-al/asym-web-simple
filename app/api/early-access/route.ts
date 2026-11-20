@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import {
+  EARLY_ACCESS_CONFIRMED_COOKIE,
+  EARLY_ACCESS_RATE_LIMIT_WINDOW_SECONDS,
   buildEarlyAccessNotification,
   hasErrors,
   isHoneypotFilled,
@@ -14,9 +16,10 @@ import type { EarlyAccessDeliveryConfig } from "@/lib/early-access-config";
 Generous for three short text fields; larger bodies are not form posts.
 */
 const MAX_BODY_BYTES = 16_000;
-const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
+const RATE_LIMIT_WINDOW_MS = EARLY_ACCESS_RATE_LIMIT_WINDOW_SECONDS * 1000;
 const RATE_LIMIT_MAX_REQUESTS = 8;
 const MAX_TRACKED_KEYS = 2000;
+const CONFIRMED_COOKIE_MAX_AGE_SECONDS = 300;
 
 interface RateLimitBucket {
   count: number;
@@ -117,7 +120,25 @@ const detectContentKind = (
   return "unsupported";
 };
 
+const isSecureRequest = (request: Request): boolean => {
+  const forwardedProto = request.headers
+    .get("x-forwarded-proto")
+    ?.split(",", 1)[0]
+    ?.trim()
+    .toLowerCase();
+  if (forwardedProto) {
+    return forwardedProto === "https";
+  }
+  try {
+    const parsedUrl = new URL(request.url);
+    return parsedUrl.protocol === "https:";
+  } catch {
+    return false;
+  }
+};
+
 const redirectForForm = (
+  request: Request,
   outcome: FormOutcome,
   retryAfterSeconds?: number
 ): NextResponse => {
@@ -125,10 +146,22 @@ const redirectForForm = (
   if (retryAfterSeconds !== undefined) {
     params.set("retry", String(retryAfterSeconds));
   }
-  return new NextResponse(null, {
+  const response = new NextResponse(null, {
     status: 303,
     headers: { Location: `/early-access/status?${params.toString()}` },
   });
+
+  if (outcome === "received") {
+    response.cookies.set(EARLY_ACCESS_CONFIRMED_COOKIE, "1", {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: isSecureRequest(request),
+      path: "/early-access/status",
+      maxAge: CONFIRMED_COOKIE_MAX_AGE_SECONDS,
+    });
+  }
+
+  return response;
 };
 
 const mapStatusToOutcome = (status: number): FormOutcome => {
@@ -145,6 +178,7 @@ const mapStatusToOutcome = (status: number): FormOutcome => {
 };
 
 const respondFailure = (
+  request: Request,
   isUrlEncodedForm: boolean,
   status: number,
   error: string,
@@ -153,6 +187,7 @@ const respondFailure = (
 ): NextResponse => {
   if (isUrlEncodedForm) {
     return redirectForForm(
+      request,
       mapStatusToOutcome(status),
       extra?.retryAfterSeconds
     );
@@ -291,6 +326,7 @@ export const POST = async (request: Request): Promise<NextResponse> => {
 
   if (rateCheck.limited) {
     return respondFailure(
+      request,
       isUrlEncodedForm,
       429,
       "rate_limited",
@@ -301,27 +337,32 @@ export const POST = async (request: Request): Promise<NextResponse> => {
 
   const parsed = await parseBoundedPayload(request, isUrlEncodedForm);
   if (!parsed.ok) {
-    return respondFailure(isUrlEncodedForm, parsed.status, parsed.error);
+    return respondFailure(
+      request,
+      isUrlEncodedForm,
+      parsed.status,
+      parsed.error
+    );
   }
 
   // Automated submissions get a normal-looking response and are dropped.
   if (isHoneypotFilled(parsed.body)) {
     return isUrlEncodedForm
-      ? redirectForForm("received")
+      ? redirectForForm(request, "received")
       : NextResponse.json({ ok: true });
   }
 
   const submission = normalizeEarlyAccessRequest(parsed.body);
   const errors = validateEarlyAccessRequest(submission);
   if (hasErrors(errors)) {
-    return respondFailure(isUrlEncodedForm, 422, "invalid", {
+    return respondFailure(request, isUrlEncodedForm, 422, "invalid", {
       errors,
     });
   }
 
   const config = readEarlyAccessDeliveryConfig();
   if (!config) {
-    return respondFailure(isUrlEncodedForm, 503, "not_configured");
+    return respondFailure(request, isUrlEncodedForm, 503, "not_configured");
   }
 
   const delivered = await wasAcceptedForDelivery(config, {
@@ -331,9 +372,9 @@ export const POST = async (request: Request): Promise<NextResponse> => {
 
   if (delivered) {
     return isUrlEncodedForm
-      ? redirectForForm("received")
+      ? redirectForForm(request, "received")
       : NextResponse.json({ ok: true });
   }
 
-  return respondFailure(isUrlEncodedForm, 502, "delivery_failed");
+  return respondFailure(request, isUrlEncodedForm, 502, "delivery_failed");
 };

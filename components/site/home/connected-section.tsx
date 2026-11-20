@@ -1,24 +1,29 @@
-import { Database, ListChecks, UserCheck } from "lucide-react";
+import { MarkGlyph } from "@/components/site/brand/mark-glyph";
 import { Container } from "@/components/site/container";
 import { Eyebrow, SectionTitle } from "@/components/site/home/section-heading";
+import type { MarkPrimitive } from "@/components/site/brand/mark-glyph";
 
-const principles = [
+const principles: readonly {
+  readonly highlight: MarkPrimitive;
+  readonly title: string;
+  readonly text: string;
+}[] = [
   {
-    icon: Database,
+    highlight: "datum",
     title: "Shared records",
-    text: "Gifts, receipts, and donor history share one set of records, so every step works from the same facts.",
+    text: "Gifts, receipts, and donor history share one set of records. When a donor asks for a receipt, staff shouldn’t have to match an email address to a gift in another system.",
   },
   {
-    icon: ListChecks,
+    highlight: "sweep",
     title: "Defined actions",
     text: "We’re building campaign AI to use the same permission checks as staff, instead of guessing across separate tools. Some staff actions in the public code already preview which records will change.",
   },
   {
-    icon: UserCheck,
+    highlight: "frame",
     title: "People decide",
-    text: "We’re building approval rules for AI-prepared campaigns so your team reviews recipients and proposed changes before anything sends.",
+    text: "We’re building approval rules for AI-prepared campaigns so your team reviews recipients and proposed changes before anything goes live or sends.",
   },
-] as const;
+];
 
 export const ConnectedSection = () => (
   <section
@@ -26,48 +31,48 @@ export const ConnectedSection = () => (
     className="section-wash-sky py-[clamp(3.25rem,6vw,5.25rem)]"
   >
     <Container>
-      <div className="grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1fr)] lg:gap-16">
-        <div>
+      <div className="grid gap-10 lg:grid-cols-[minmax(0,42fr)_minmax(0,58fr)] lg:gap-16">
+        <div className="lg:sticky lg:top-28 lg:self-start">
           <Eyebrow>Why connected</Eyebrow>
           <SectionTitle id="connected-title">
             The work stays connected after the donation.
           </SectionTitle>
         </div>
-        <div className="text-muted-foreground max-w-[42rem] space-y-5 text-base leading-7 sm:text-lg sm:leading-8">
-          <p className="text-foreground">
-            When the website, giving, donor records, and email live in separate
-            tools, AI can draft a message anywhere, but staff still move lists
-            around, check who gave, and match receipts by hand.
-          </p>
-          <p>
-            We’re building these pieces into one platform with shared records
-            and defined actions, so staff can see what happened, what is
-            proposed next, and who signed off.
-          </p>
+
+        <div>
+          <div className="text-muted-foreground max-w-[42rem] space-y-5 text-base leading-7 sm:text-lg sm:leading-8">
+            <p className="text-foreground">
+              When the website, giving, donor records, and email live in
+              separate tools, AI can draft a message anywhere, but staff still
+              move lists around, check who gave, and match receipts by hand.
+            </p>
+            <p>
+              We’re building these pieces into one platform with shared records
+              and defined actions, so staff can see what happened, what is
+              proposed next, and who signed off.
+            </p>
+          </div>
+
+          <ul className="border-rule mt-10 border-t">
+            {principles.map(({ highlight, title, text }) => (
+              <li
+                key={title}
+                className="border-rule grid gap-3 border-b py-6 sm:grid-cols-[3.5rem_10.5rem_1fr] sm:items-start sm:gap-5"
+              >
+                <div className="flex items-center gap-3.5 sm:contents">
+                  <MarkGlyph highlight={highlight} />
+                  <h3 className="font-heading text-foreground text-lg font-semibold tracking-[-0.015em] sm:pt-2.5">
+                    {title}
+                  </h3>
+                </div>
+                <p className="text-muted-foreground max-w-[56ch] text-[0.9375rem] leading-[1.65] sm:pt-2.5">
+                  {text}
+                </p>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
-
-      <p className="text-primary/80 mt-12 font-mono text-xs tracking-[0.22em] uppercase">
-        How we’re building it
-      </p>
-      <ul className="border-foreground/12 divide-foreground/10 mt-4 grid divide-y border-y lg:grid-cols-3 lg:divide-x lg:divide-y-0">
-        {principles.map(({ icon: Icon, title, text }) => (
-          <li
-            key={title}
-            className="flex flex-col py-6 lg:px-7 lg:py-7 lg:first:pl-0 lg:last:pr-0"
-          >
-            <span className="bg-secondary text-primary flex size-10 items-center justify-center rounded-xl">
-              <Icon className="size-5" aria-hidden="true" />
-            </span>
-            <h3 className="font-heading text-foreground mt-4 text-lg font-semibold tracking-[-0.015em]">
-              {title}
-            </h3>
-            <p className="text-muted-foreground mt-2 max-w-[60ch] text-sm leading-6">
-              {text}
-            </p>
-          </li>
-        ))}
-      </ul>
     </Container>
   </section>
 );

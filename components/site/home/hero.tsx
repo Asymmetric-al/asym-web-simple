@@ -1,5 +1,5 @@
-import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { GhostType } from "@/components/react-bits/ghost-type";
 import { Container } from "@/components/site/container";
 import { GitHubMark } from "@/components/site/github-mark";
 import { StatusPill } from "@/components/site/home/section-heading";
@@ -7,6 +7,12 @@ import { buttonVariants } from "@/components/ui/button-variants";
 import { navigationLinks, siteConfig } from "@/lib/config";
 import { isEarlyAccessConfigured } from "@/lib/early-access-config";
 import { cn } from "@/lib/utils";
+
+const HERO_COMPLETIONS = [
+  " prepare an appeal with AI.",
+  " review every change before it goes live.",
+  " trace each gift to its donor and receipt.",
+] as const;
 
 export const HomeHero = () => {
   const isConfigured = isEarlyAccessConfigured();
@@ -17,7 +23,10 @@ export const HomeHero = () => {
       className="pt-[clamp(6.75rem,9vw,8.5rem)] pb-[clamp(2.75rem,5vw,4rem)]"
     >
       <Container>
-        <ul className="flex flex-wrap items-center gap-2 text-sm" aria-label="Status">
+        <ul
+          className="flex flex-wrap items-center gap-2 text-sm"
+          aria-label="Status"
+        >
           <li className="border-foreground/14 bg-card/80 text-foreground inline-flex min-h-8 items-center rounded-full border px-3.5 py-1 font-medium">
             Open-source software for nonprofits
           </li>
@@ -37,9 +46,10 @@ export const HomeHero = () => {
         </h1>
 
         <p className="text-muted-foreground mt-6 max-w-[44rem] text-lg leading-8 text-pretty sm:text-xl sm:leading-9">
-          Starting with missions organizations, we’re building one system for
-          your website, giving, donor records, and email, so AI can prepare
-          campaigns and carry out the steps your team approves.
+          We’re building <span translate="no">asym</span> for missions
+          organizations first. The goal: prepare an appeal with AI, let your
+          team decide what goes live, and keep each gift connected to its donor
+          and receipt.
         </p>
 
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
@@ -48,7 +58,6 @@ export const HomeHero = () => {
             className={cn(buttonVariants({ size: "lg" }), "px-6")}
           >
             {isConfigured ? siteConfig.cta.primary.label : "Early access"}
-            <ArrowRight data-icon="inline-end" aria-hidden="true" />
           </Link>
           <a
             href={siteConfig.repoUrl}
@@ -64,9 +73,20 @@ export const HomeHero = () => {
           </a>
         </div>
 
+        <div className="border-rule mt-7 flex items-baseline gap-2.5 border-t pt-4">
+          <span
+            aria-hidden="true"
+            className="bg-ring mt-2 size-1.5 shrink-0 rounded-full"
+          />
+          <GhostType
+            text="Built so your team can"
+            completions={HERO_COMPLETIONS}
+          />
+        </div>
+
         <nav
           aria-label="On this page"
-          className="border-foreground/10 mt-8 border-t pt-3 md:hidden"
+          className="border-foreground/10 mt-6 border-t pt-3 md:hidden"
         >
           <ul className="flex flex-wrap items-center gap-x-5 gap-y-1 text-sm">
             {navigationLinks.map((link) => (

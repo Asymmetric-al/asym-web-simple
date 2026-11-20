@@ -1,93 +1,145 @@
 import { ArrowLeft, ArrowUpRight, CircleAlert, CircleCheck } from "lucide-react";
+import { cookies } from "next/headers";
 import Link from "next/link";
 import { Container } from "@/components/site/container";
+import { StatusPill } from "@/components/site/home/section-heading";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { siteConfig } from "@/lib/config";
-import { earlyAccessCopy, formatRetryWait } from "@/lib/early-access";
-import { getVerifiedContactEmail } from "@/lib/early-access-config";
+import {
+  EARLY_ACCESS_CONFIRMED_COOKIE,
+  earlyAccessCopy,
+  formatRetryWait,
+  parseRetryAfterSeconds,
+} from "@/lib/early-access";
+import {
+  getVerifiedContactEmail,
+  isEarlyAccessConfigured,
+} from "@/lib/early-access-config";
 import { createMetadata } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
 
+const EARLY_ACCESS_HREF = "/#early-access";
+const EARLY_ACCESS_LABEL = "Early access";
+const EARLY_ACCESS_STATUS_TITLE = "Early access status";
+const BACK_TO_HOMEPAGE_LABEL = "Back to homepage";
+const START_NEW_REQUEST_LABEL = "Start a new request";
+
 export const metadata: Metadata = createMetadata({
-  title: "Early access status",
+  title: EARLY_ACCESS_STATUS_TITLE,
   description: "Status of your early access submission on asym.app.",
   path: "/early-access/status",
   noIndex: true,
 });
 
 interface StatusContent {
-  readonly isSuccess: boolean;
+  readonly tone: "success" | "neutral" | "error";
   readonly eyebrow: string;
   readonly title: string;
   readonly description: string;
   readonly primaryLabel: string;
   readonly primaryHref: string;
+  readonly primaryIcon: "back" | "none";
 }
 
-const EARLY_ACCESS_HREF = "/#early-access";
-const START_NEW_REQUEST_LABEL = "Start a new request";
-
-const buildStatusContent = (
-  state: string | undefined,
-  retrySeconds: number | undefined
-): StatusContent => {
-  if (state === "received") {
+const buildStatusContent = ({
+  state,
+  retrySeconds,
+  isConfirmed,
+  isConfigured,
+}: {
+  readonly state: string | undefined;
+  readonly retrySeconds: number | undefined;
+  readonly isConfirmed: boolean;
+  readonly isConfigured: boolean;
+}): StatusContent => {
+  if (state === "received" && isConfirmed) {
     return {
-      isSuccess: true,
-      eyebrow: "Early access",
+      tone: "success",
+      eyebrow: EARLY_ACCESS_LABEL,
       title: "Request received",
       description: earlyAccessCopy.success,
-      primaryLabel: "Back to homepage",
+      primaryLabel: BACK_TO_HOMEPAGE_LABEL,
       primaryHref: "/",
+      primaryIcon: "back",
     };
   }
 
   if (state === "invalid") {
     return {
-      isSuccess: false,
+      tone: "error",
       eyebrow: "Check your details",
       title: "Your request needs a valid email and organization.",
       description:
         "Use your browser’s Back button to keep and edit what you entered, or start a new request with a valid email address and organization name.",
       primaryLabel: START_NEW_REQUEST_LABEL,
       primaryHref: EARLY_ACCESS_HREF,
+      primaryIcon: "none",
     };
   }
 
   if (state === "rate_limited") {
     return {
-      isSuccess: false,
+      tone: "error",
       eyebrow: "Please wait",
       title: "Please wait before trying again.",
       description: `${formatRetryWait(retrySeconds)} Use your browser’s Back button to keep what you entered.`,
       primaryLabel: START_NEW_REQUEST_LABEL,
       primaryHref: EARLY_ACCESS_HREF,
+      primaryIcon: "none",
     };
   }
 
   if (state === "unavailable") {
     return {
-      isSuccess: false,
+      tone: "neutral",
       eyebrow: "Opening soon",
       title: earlyAccessCopy.notConfigured,
       description:
-        "Follow commits and development progress on GitHub while we prepare for early access.",
-      primaryLabel: "Back to homepage",
+        "We’re not taking early access requests yet. You can read the code and follow the work on GitHub.",
+      primaryLabel: BACK_TO_HOMEPAGE_LABEL,
       primaryHref: "/",
+      primaryIcon: "back",
+    };
+  }
+
+  if (state === "failed") {
+    return {
+      tone: "error",
+      eyebrow: "Submission error",
+      title: earlyAccessCopy.failure,
+      description:
+        "Use your browser’s Back button to keep what you entered and try again, or start a new request.",
+      primaryLabel: START_NEW_REQUEST_LABEL,
+      primaryHref: EARLY_ACCESS_HREF,
+      primaryIcon: "none",
+    };
+  }
+
+  if (isConfigured) {
+    return {
+      tone: "neutral",
+      eyebrow: EARLY_ACCESS_LABEL,
+      title: EARLY_ACCESS_STATUS_TITLE,
+      description:
+        "This page confirms a request right after you submit the early-access form. If you haven’t sent one yet, you can submit your organization’s details on the homepage.",
+      primaryLabel: "Request early access",
+      primaryHref: EARLY_ACCESS_HREF,
+      primaryIcon: "none",
     };
   }
 
   return {
-    isSuccess: false,
-    eyebrow: "Submission error",
-    title: earlyAccessCopy.failure,
+    tone: "neutral",
+    eyebrow: EARLY_ACCESS_LABEL,
+    title: EARLY_ACCESS_STATUS_TITLE,
     description:
-      "Use your browser’s Back button to keep what you entered and try again, or start a new request.",
-    primaryLabel: START_NEW_REQUEST_LABEL,
-    primaryHref: EARLY_ACCESS_HREF,
+      "We’re not taking early access requests yet. You can read the code and follow the work on GitHub.",
+    primaryLabel: BACK_TO_HOMEPAGE_LABEL,
+    primaryHref: "/",
+    primaryIcon: "back",
   };
 };
 
@@ -96,12 +148,31 @@ export default async function EarlyAccessStatusPage({
 }: {
   readonly searchParams: Promise<{ state?: string; retry?: string }>;
 }) {
-  const params = await searchParams;
-  const parsedRetry = params.retry ? Number(params.retry) : NaN;
-  const retrySeconds =
-    Number.isFinite(parsedRetry) && parsedRetry > 0 ? parsedRetry : undefined;
-  const content = buildStatusContent(params.state, retrySeconds);
+  const [params, cookieStore] = await Promise.all([searchParams, cookies()]);
+  const retrySeconds = params.retry
+    ? parseRetryAfterSeconds(params.retry)
+    : undefined;
+  const isConfirmed =
+    cookieStore.get(EARLY_ACCESS_CONFIRMED_COOKIE)?.value === "1";
+  const isConfigured = isEarlyAccessConfigured();
+  const content = buildStatusContent({
+    state: params.state,
+    retrySeconds,
+    isConfirmed,
+    isConfigured,
+  });
   const contactEmail = getVerifiedContactEmail();
+
+  let statusIcon = <StatusPill>{content.eyebrow}</StatusPill>;
+  if (content.tone === "success") {
+    statusIcon = (
+      <CircleCheck className="text-primary size-7" aria-hidden="true" />
+    );
+  } else if (content.tone === "error") {
+    statusIcon = (
+      <CircleAlert className="text-destructive size-7" aria-hidden="true" />
+    );
+  }
 
   return (
     <main
@@ -111,22 +182,22 @@ export default async function EarlyAccessStatusPage({
     >
       <Container className="max-w-2xl">
         <div className="surface-panel rounded-[2rem] p-6 sm:p-9">
-          {content.isSuccess ? (
-            <CircleCheck className="text-primary size-7" aria-hidden="true" />
-          ) : (
-            <CircleAlert
-              className="text-destructive size-7"
-              aria-hidden="true"
-            />
+          {statusIcon}
+          {content.tone === "neutral" ? null : (
+            <p className="text-primary/82 dark:text-ring mt-5 font-mono text-[0.8125rem] font-medium tracking-[0.02em]">
+              {content.eyebrow}
+            </p>
           )}
-          <p className="text-primary/80 mt-5 font-mono text-xs tracking-[0.22em] uppercase">
-            {content.eyebrow}
-          </p>
-          <h1 className="font-heading text-foreground mt-3 text-[clamp(1.9rem,4vw,2.75rem)] leading-[1.06] font-semibold tracking-[-0.035em] text-balance">
+          <h1
+            className={cn(
+              "font-heading text-foreground text-[clamp(1.9rem,4vw,2.75rem)] leading-[1.06] font-semibold tracking-[-0.035em] text-balance",
+              content.tone === "neutral" ? "mt-5" : "mt-3"
+            )}
+          >
             {content.title}
           </h1>
           <p
-            role={content.isSuccess ? "status" : "alert"}
+            role={content.tone === "error" ? "alert" : "status"}
             className="text-muted-foreground mt-4 text-base leading-7 sm:text-lg sm:leading-8"
           >
             {content.description}
@@ -136,25 +207,25 @@ export default async function EarlyAccessStatusPage({
               href={content.primaryHref}
               className={cn(buttonVariants({ size: "lg" }), "px-6")}
             >
-              <ArrowLeft data-icon="inline-start" aria-hidden="true" />
+              {content.primaryIcon === "back" ? (
+                <ArrowLeft data-icon="inline-start" aria-hidden="true" />
+              ) : null}
               {content.primaryLabel}
             </Link>
-            {content.isSuccess ? null : (
-              <a
-                href={siteConfig.repoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={cn(
-                  buttonVariants({ variant: "outline", size: "lg" }),
-                  "px-6"
-                )}
-              >
-                Follow on GitHub
-                <ArrowUpRight data-icon="inline-end" aria-hidden="true" />
-              </a>
-            )}
+            <a
+              href={siteConfig.repoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={cn(
+                buttonVariants({ variant: "outline", size: "lg" }),
+                "px-6"
+              )}
+            >
+              Follow development on GitHub
+              <ArrowUpRight data-icon="inline-end" aria-hidden="true" />
+            </a>
           </div>
-          {contactEmail && !content.isSuccess ? (
+          {contactEmail && content.tone !== "success" ? (
             <p className="text-muted-foreground mt-5 text-sm leading-6">
               For private questions, email{" "}
               <a

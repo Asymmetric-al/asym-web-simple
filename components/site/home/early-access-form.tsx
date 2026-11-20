@@ -1,7 +1,6 @@
 "use client";
 
 import { ArrowRight, ArrowUpRight, CircleCheck, Loader2 } from "lucide-react";
-import Link from "next/link";
 import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { Input } from "@/components/ui/input";
@@ -11,10 +10,12 @@ import { siteConfig } from "@/lib/config";
 import {
   EARLY_ACCESS_HONEYPOT_FIELD,
   EARLY_ACCESS_LIMITS,
+  EMAIL_HTML_PATTERN,
   earlyAccessCopy,
   formatRetryWait,
   hasErrors,
   normalizeEarlyAccessRequest,
+  parseRetryAfterSeconds,
   validateEarlyAccessRequest,
 } from "@/lib/early-access";
 import { cn } from "@/lib/utils";
@@ -46,6 +47,7 @@ const FIELD_ORDER: readonly EarlyAccessField[] = [
   "message",
 ];
 
+const DRAFT_STORAGE_KEY = "asym:early-access-draft:v1";
 const VALIDATION_FAILED = 422;
 const RATE_LIMITED = 429;
 const NOT_CONFIGURED = 503;
@@ -62,6 +64,52 @@ const useIsClient = (): boolean =>
     () => true,
     () => false
   );
+
+const readStoredDraft = (): Partial<EarlyAccessRequest> | null => {
+  try {
+    const raw = window.sessionStorage.getItem(DRAFT_STORAGE_KEY);
+    if (!raw) {
+      return null;
+    }
+    const parsed = JSON.parse(raw) as unknown;
+    if (typeof parsed !== "object" || parsed === null) {
+      return null;
+    }
+    const record = parsed as Record<string, unknown>;
+    return {
+      email: typeof record.email === "string" ? record.email : "",
+      organization:
+        typeof record.organization === "string" ? record.organization : "",
+      message: typeof record.message === "string" ? record.message : "",
+    };
+  } catch {
+    return null;
+  }
+};
+
+const writeStoredDraft = (draft: EarlyAccessRequest) => {
+  try {
+    if (
+      draft.email.length === 0 &&
+      draft.organization.length === 0 &&
+      draft.message.length === 0
+    ) {
+      window.sessionStorage.removeItem(DRAFT_STORAGE_KEY);
+      return;
+    }
+    window.sessionStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(draft));
+  } catch {
+    // Ignore restricted sessionStorage environments.
+  }
+};
+
+const clearStoredDraft = () => {
+  try {
+    window.sessionStorage.removeItem(DRAFT_STORAGE_KEY);
+  } catch {
+    // Ignore restricted sessionStorage environments.
+  }
+};
 
 const errorFor = (
   errors: EarlyAccessErrors,
@@ -92,16 +140,12 @@ const readRetryAfter = (
 ): number | undefined => {
   if (typeof payload === "object" && payload !== null) {
     const { retryAfterSeconds } = payload as { retryAfterSeconds?: unknown };
-    if (
-      typeof retryAfterSeconds === "number" &&
-      Number.isFinite(retryAfterSeconds) &&
-      retryAfterSeconds > 0
-    ) {
-      return retryAfterSeconds;
+    const parsed = parseRetryAfterSeconds(retryAfterSeconds);
+    if (parsed !== undefined) {
+      return parsed;
     }
   }
-  const headerVal = Number(response.headers.get("retry-after") ?? "");
-  return Number.isFinite(headerVal) && headerVal > 0 ? headerVal : undefined;
+  return parseRetryAfterSeconds(response.headers.get("retry-after") ?? "");
 };
 
 const postEarlyAccess = async (body: string): Promise<Response | null> => {
@@ -196,6 +240,30 @@ export const EarlyAccessForm = ({
   const isSubmitting = status === "submitting";
 
   useEffect(() => {
+    const form = formRef.current;
+    if (!form) {
+      return;
+    }
+    const draft = readStoredDraft();
+    if (!draft) {
+      return;
+    }
+    for (const field of FIELD_ORDER) {
+      const control = form.elements.namedItem(field);
+      const savedValue = draft[field];
+      if (
+        (control instanceof HTMLInputElement ||
+          control instanceof HTMLTextAreaElement) &&
+        control.value.length === 0 &&
+        savedValue &&
+        savedValue.length > 0
+      ) {
+        control.value = savedValue;
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     if (status === "success") {
       successRef.current?.focus();
     }
@@ -252,6 +320,19 @@ export const EarlyAccessForm = ({
     );
   };
 
+  const handleDraftInput = () => {
+    const form = formRef.current;
+    if (!form) {
+      return;
+    }
+    const formData = new FormData(form);
+    writeStoredDraft({
+      email: String(formData.get("email") ?? ""),
+      organization: String(formData.get("organization") ?? ""),
+      message: String(formData.get("message") ?? ""),
+    });
+  };
+
   const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (isSubmitting) {
@@ -274,6 +355,7 @@ export const EarlyAccessForm = ({
     const result = await submitEarlyAccess(request, honeypot);
 
     if (result.kind === "accepted") {
+      clearStoredDraft();
       setStatus("success");
       return;
     }
@@ -315,6 +397,7 @@ export const EarlyAccessForm = ({
       method="post"
       action="/api/early-access"
       noValidate={isHydrated}
+      onInput={handleDraftInput}
       onSubmit={handleSubmit}
       aria-label="Request early access"
       className="sm:border-foreground/12 sm:bg-card relative sm:rounded-[1.6rem] sm:border sm:p-7"
@@ -335,6 +418,8 @@ export const EarlyAccessForm = ({
             autoCapitalize="none"
             spellCheck={false}
             required
+            pattern={EMAIL_HTML_PATTERN}
+            title={earlyAccessCopy.invalidEmail}
             maxLength={EARLY_ACCESS_LIMITS.email}
             aria-invalid={Boolean(errors.email)}
             aria-describedby={describedBy("email")}
@@ -469,9 +554,21 @@ export const EarlyAccessForm = ({
         className="text-muted-foreground mt-4 text-xs leading-5 sm:text-sm sm:leading-6"
       >
         {earlyAccessCopy.consent} Read our{" "}
-        <Link href="/privacy" className={inlineLinkClassName}>
-          privacy policy
-        </Link>
+        <a
+          href="/privacy"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={cn(
+            inlineLinkClassName,
+            "inline-flex items-baseline gap-0.5"
+          )}
+        >
+          Privacy policy (opens in a new tab)
+          <ArrowUpRight
+            className="size-3 shrink-0 self-center"
+            aria-hidden="true"
+          />
+        </a>
         .
       </p>
     </form>

@@ -110,32 +110,48 @@ test.describe("homepage smoke tests", () => {
         .first()
     ).toHaveAttribute("href", "/#early-access");
     await expect(
-      page.getByRole("link", { name: "View the code" })
+      page.getByRole("link", { name: "View the code", exact: true })
     ).toHaveAttribute("href", REPO_URL);
   });
 
-  test("workflow is described in text with an honest status", async ({
+  test("workflow plate shows honest status and pins connected records on click", async ({
     page,
   }) => {
     await page.goto("/", { waitUntil: "domcontentloaded" });
+    await waitForUi(page);
     const product = page.locator("#product");
 
     await expect(
       product.getByRole("heading", {
         level: 2,
-        name: "From a brief to a campaign ready for review.",
+        name: "From the appeal brief to the gift receipt.",
       })
     ).toBeVisible();
     await expect(product.getByRole("listitem")).toHaveText([
       /Describe/u,
       /Prepare/u,
       /Review/u,
-      /Follow through/u,
+      /Publish/u,
     ]);
     await expect(
-      product.getByText("In development", { exact: true })
+      product.getByText("In development", { exact: true }).first()
     ).toBeVisible();
     await expect(page.getByText(/sample data/iu)).toHaveCount(0);
+
+    const prepareButton = product.getByRole("button", { name: "Prepare" });
+    await prepareButton.click();
+    await expect(prepareButton).toHaveAttribute("aria-pressed", "true");
+    await expect(product.locator(".wf-plate")).toHaveAttribute(
+      "data-active",
+      "2"
+    );
+    await expect(product.locator(".wf-plate")).toHaveAttribute(
+      "data-pinned",
+      "true"
+    );
+
+    await page.keyboard.press("Escape");
+    await expect(prepareButton).toHaveAttribute("aria-pressed", "false");
   });
 
   test("open source and team sections link to the public code", async ({
@@ -150,7 +166,7 @@ test.describe("homepage smoke tests", () => {
       "Managed donor care"
     );
     await expect(page.locator("#about")).toContainText(
-      "Co-Executive Director of Global Fellowship"
+      "Global Fellowship"
     );
   });
 
@@ -170,7 +186,7 @@ test.describe("homepage smoke tests", () => {
     await expect(
       page.getByRole("heading", {
         level: 2,
-        name: "Open source, with a team to run it for you.",
+        name: "The code is public. Hosting will be a paid subscription.",
       })
     ).toBeInViewport();
   });
@@ -206,7 +222,7 @@ test.describe("homepage smoke tests", () => {
 
     if (formCount === 0) {
       await expect(page.locator("#early-access")).toContainText(
-        "Early-access sign-ups open before launch."
+        "Early-access sign-ups aren’t open yet."
       );
       await expect(
         page
@@ -283,7 +299,7 @@ test.describe("homepage smoke tests", () => {
       page.getByRole("heading", { name: "Request received" })
     ).toBeFocused();
     await expect(page.locator("#early-access")).toContainText(
-      "We’ve received your request."
+      "Thanks for telling us about your team."
     );
     expect(submitted).toMatchObject({
       email: "director@example.org",
@@ -291,6 +307,18 @@ test.describe("homepage smoke tests", () => {
       message: "Year-end appeals",
       website: "",
     });
+  });
+
+  test("standalone early-access status does not spoof received without confirmation", async ({
+    page,
+  }) => {
+    await page.goto("/early-access/status?state=received", {
+      waitUntil: "domcontentloaded",
+    });
+
+    await expect(
+      page.getByRole("heading", { level: 1, name: "Early access status" })
+    ).toBeVisible();
   });
 
   test("theme toggle applies dark mode and swaps the logo artwork", async ({
@@ -339,20 +367,23 @@ test.describe("homepage smoke tests", () => {
     await expect(footer).not.toContainText("EIN");
   });
 
-  test("missing routes land on the custom not-found page with site chrome", async ({
+  test("missing and production qa routes land on custom 404 with site chrome", async ({
     page,
   }) => {
-    await page.goto("/does-not-exist", { waitUntil: "domcontentloaded" });
-
-    await expect(page).toHaveTitle("Page not found | asym");
-    await expect(page.getByRole("banner")).toBeVisible();
-    await expect(page.getByRole("contentinfo")).toBeVisible();
-    await expect(
-      page.getByRole("heading", { level: 1, name: "This page doesn’t exist." })
-    ).toBeVisible();
-    await expect(
-      page.getByRole("link", { name: "Go to the homepage" })
-    ).toHaveAttribute("href", "/");
+    for (const path of ["/does-not-exist", "/qa/error"]) {
+      const response = await page.goto(path, { waitUntil: "domcontentloaded" });
+      expect(response?.status()).toBe(404);
+      await expect(page).toHaveTitle("Page not found | asym");
+      await expect(page.locator("html")).toHaveAttribute("lang", "en");
+      await expect(page.getByRole("banner")).toBeVisible();
+      await expect(page.getByRole("contentinfo")).toBeVisible();
+      await expect(
+        page.getByRole("heading", {
+          level: 1,
+          name: "This page doesn’t exist.",
+        })
+      ).toBeVisible();
+    }
   });
 
   test("legacy routes redirect permanently to homepage sections", async ({
