@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect } from "react";
+import type { ReactNode } from "react";
 
-export function UiReadyMarker() {
+// eslint-disable-next-line sonarjs/function-name -- React component names use PascalCase.
+export const UiReadyMarker = (): ReactNode => {
   useEffect(() => {
     document.documentElement.setAttribute("data-ui-ready", "true");
 
@@ -12,4 +14,4 @@ export function UiReadyMarker() {
   }, []);
 
   return null;
-}
+};

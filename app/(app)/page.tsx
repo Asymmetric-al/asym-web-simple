@@ -21,7 +21,7 @@ const organizationSchema = {
       "@type": "Organization",
       "@id": `${siteConfig.url}#organization`,
       name: siteConfig.name,
-      url: siteConfig.url,
+      url: siteConfig.githubOrgUrl,
       sameAs: [siteConfig.githubOrgUrl, siteConfig.repoUrl],
       description:
         "Independent, for-profit software company building asym for nonprofits, starting with missions organizations.",
@@ -58,8 +58,8 @@ export default function HomePage() {
       />
       <HomeHero />
       <ArchitectureSection />
-      <ProductSection />
       <ConnectedSection />
+      <ProductSection />
       <AboutSection />
       <OpenSourceSection />
       <EarlyAccessSection />

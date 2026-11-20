@@ -1,8 +1,14 @@
-import AxeBuilder from "@axe-core/playwright";
+import { AxeBuilder } from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 import { routeFixtures } from "../fixtures/routes";
+import type { Page } from "@playwright/test";
 
 const WCAG_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
+
+const analyzePage = async (page: Page) => {
+  const builder = new AxeBuilder({ page });
+  return await builder.withTags(WCAG_TAGS).analyze();
+};
 
 test.describe("route accessibility", () => {
   test.describe.configure({ timeout: 90_000 });
@@ -26,9 +32,7 @@ test.describe("route accessibility", () => {
         page.getByRole("heading", { level: 1 }).first()
       ).toBeVisible();
 
-      const lightResults = await new AxeBuilder({ page })
-        .withTags(WCAG_TAGS)
-        .analyze();
+      const lightResults = await analyzePage(page);
       expect(lightResults.violations).toEqual([]);
 
       await page.emulateMedia({
@@ -38,18 +42,9 @@ test.describe("route accessibility", () => {
       await page.waitForFunction(() =>
         document.documentElement.classList.contains("dark")
       );
-      await page.evaluate(
-        () =>
-          new Promise<void>((resolve) => {
-            window.requestAnimationFrame(() => {
-              resolve();
-            });
-          })
-      );
+      await page.waitForTimeout(50);
 
-      const darkResults = await new AxeBuilder({ page })
-        .withTags(WCAG_TAGS)
-        .analyze();
+      const darkResults = await analyzePage(page);
       expect(darkResults.violations).toEqual([]);
     });
   }
@@ -67,22 +62,28 @@ test.describe("route accessibility", () => {
     );
 
     const architecture = page.getByRole("region", {
-      name: /Three surfaces, one shared record/iu,
+      name: /Three workspaces on one shared record/iu,
     });
-    await architecture.getByRole("tab", { name: /^Missionary/iu }).click();
-    const missionaryResults = await new AxeBuilder({ page })
-      .withTags(WCAG_TAGS)
-      .analyze();
+    await architecture.getByRole("tab", { name: /Missionary/iu }).click();
+    const missionaryResults = await analyzePage(page);
     expect(missionaryResults.violations).toEqual([]);
 
     const appeals = page.locator("#appeals");
     await appeals
       .getByRole("tab", { name: /Prepare page, email & recipient scope/iu })
       .click();
-    const governanceResults = await new AxeBuilder({ page })
-      .withTags(WCAG_TAGS)
-      .analyze();
+    const governanceResults = await analyzePage(page);
     expect(governanceResults.violations).toEqual([]);
+
+    // Verify configured early-access form invalid state when enabled on this server
+    const form = page.getByRole("form", { name: "Request early access" });
+    if ((await form.count()) > 0) {
+      await form
+        .getByRole("button", { name: "Request early access" })
+        .click();
+      const formInvalidLight = await analyzePage(page);
+      expect(formInvalidLight.violations).toEqual([]);
+    }
 
     // Verify dark-mode interactive states (Missionary + Step 02 + Step 03)
     await page.emulateMedia({
@@ -92,17 +93,13 @@ test.describe("route accessibility", () => {
     await page.waitForFunction(() =>
       document.documentElement.classList.contains("dark")
     );
-    const darkInteractiveResults = await new AxeBuilder({ page })
-      .withTags(WCAG_TAGS)
-      .analyze();
+    const darkInteractiveResults = await analyzePage(page);
     expect(darkInteractiveResults.violations).toEqual([]);
 
     await appeals
       .getByRole("tab", { name: /Review, edit & approve/iu })
       .click();
-    const darkApprovalResults = await new AxeBuilder({ page })
-      .withTags(WCAG_TAGS)
-      .analyze();
+    const darkApprovalResults = await analyzePage(page);
     expect(darkApprovalResults.violations).toEqual([]);
 
     await page.emulateMedia({
@@ -118,9 +115,7 @@ test.describe("route accessibility", () => {
     await expect(
       page.getByRole("navigation", { name: "Homepage sections" })
     ).toBeVisible();
-    const notFoundMenuResults = await new AxeBuilder({ page })
-      .withTags(WCAG_TAGS)
-      .analyze();
+    const notFoundMenuResults = await analyzePage(page);
     expect(notFoundMenuResults.violations).toEqual([]);
   });
 });

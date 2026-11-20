@@ -1,8 +1,6 @@
 import { siteConfig } from "@/lib/config";
 import type { MetadataRoute } from "next";
 
-const LAST_MODIFIED = "2026-11-20";
-
 const routes: readonly {
   readonly path: string;
   readonly lastModified: string;
@@ -11,19 +9,19 @@ const routes: readonly {
 }[] = [
   {
     path: "/",
-    lastModified: LAST_MODIFIED,
+    lastModified: "2026-11-21",
     changeFrequency: "weekly",
     priority: 1,
   },
   {
     path: "/privacy",
-    lastModified: LAST_MODIFIED,
+    lastModified: "2026-11-19",
     changeFrequency: "monthly",
     priority: 0.6,
   },
   {
     path: "/terms",
-    lastModified: LAST_MODIFIED,
+    lastModified: "2026-11-19",
     changeFrequency: "monthly",
     priority: 0.6,
   },

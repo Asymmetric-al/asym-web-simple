@@ -1,6 +1,6 @@
 # asym.app
 
-The product website for **asym**, open-source software for nonprofits built by **Asymmetric.al**. asym connects a nonprofit's website, giving, donor records, and email so AI can prepare work and carry out the steps a team approves. Missions organizations are the first focus. asym is prelaunch; this site explains the product and collects early-access requests.
+The product website for **asym**, open-source software for nonprofits built by **Asymmetric.al**. asym runs on Core (`Asymmetric-al/core`, AGPL-3.0-only), keeping authenticated donor portals, self-service receipts and statements, redacted missionary rosters, and office CRM/batch previews on one shared record (public giving pages in Core still use demo profiles; hosted teams and human-approved AI appeals are in development). Missions organizations are the first focus. asym is prelaunch; this site explains the product and supports early-access intake when email delivery is configured.
 
 ## What this is
 

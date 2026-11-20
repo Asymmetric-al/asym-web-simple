@@ -2,23 +2,23 @@ import { Container } from "@/components/site/container";
 import { siteConfig } from "@/lib/config";
 
 const ordinaryWork = [
-  { num: "01", line: "A donor gives.", role: "Giving page", italic: false },
+  { num: "01", line: "A gift is recorded.", role: "Shared ledger", italic: false },
   {
     num: "02",
-    line: "A receipt goes out.",
-    role: "Tax receipt",
+    line: "The donor holds their receipt.",
+    role: "Donor portal",
     italic: true,
   },
   {
     num: "03",
-    line: "A missionary sees the gift.",
-    role: "Scoped roster",
+    line: "The missionary sees support, not private details.",
+    role: "Redacted roster",
     italic: false,
   },
   {
     num: "04",
-    line: "Staff have the full picture.",
-    role: "Office ledger",
+    line: "Staff hold the full picture.",
+    role: "Office CRM",
     italic: true,
   },
 ] as const;
@@ -44,8 +44,8 @@ export const AboutSection = () => (
               <span
                 className={
                   italic
-                    ? "font-heading text-night-foreground/86 text-[clamp(2rem,4vw,3.5rem)] leading-[1.08] font-medium tracking-[-0.025em] italic"
-                    : "font-heading text-night-foreground text-[clamp(2rem,4vw,3.5rem)] leading-[1.08] font-medium tracking-[-0.025em]"
+                    ? "font-heading text-night-foreground/86 text-[clamp(1.85rem,3.6vw,3.15rem)] leading-[1.08] font-medium tracking-[-0.025em] italic"
+                    : "font-heading text-night-foreground text-[clamp(1.85rem,3.6vw,3.15rem)] leading-[1.08] font-medium tracking-[-0.025em]"
                 }
               >
                 {line}
@@ -79,8 +79,8 @@ export const AboutSection = () => (
           <p className="text-night-foreground">
             Missions organizations coordinate recurring donor support, field
             workers, designated projects, and donor privacy rules across small
-            staffs. Software that stays accurate through that daily handoff
-            works for nonprofits broadly.
+            staffs. If software holds up for them, it will hold up for most
+            nonprofits.
           </p>
           <p>
             We’re Conrad O’Brien and Blake. We’re building{" "}
@@ -93,7 +93,7 @@ export const AboutSection = () => (
               target="_blank"
               rel="noopener noreferrer"
               translate="no"
-              className="text-night-foreground hover:text-night-accent focus-visible:ring-ring focus-visible:ring-offset-night rounded-xs font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent"
+              className="text-night-foreground focus-visible:ring-ring focus-visible:ring-offset-night rounded-xs font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:text-night-accent"
             >
               {siteConfig.name}
               <span className="sr-only"> (opens in a new tab)</span>

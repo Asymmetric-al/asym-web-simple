@@ -97,14 +97,6 @@ const SpinnerIcon = () => (
   </svg>
 );
 
-type FormStatus =
-  | "idle"
-  | "submitting"
-  | "success"
-  | "failure"
-  | "not_configured"
-  | "rate_limited";
-
 type SubmitResult =
   | { kind: "accepted" }
   | { kind: "invalid"; errors: EarlyAccessErrors }
@@ -123,43 +115,155 @@ const VALIDATION_FAILED = 422;
 const RATE_LIMITED = 429;
 const NOT_CONFIGURED = 503;
 
+const parseDraftObject = (raw: string): Partial<EarlyAccessRequest> | null => {
+  const parsed = JSON.parse(raw) as unknown;
+  if (typeof parsed !== "object" || parsed === null) {
+    return null;
+  }
+  const record = parsed as Record<string, unknown>;
+  return {
+    email: typeof record.email === "string" ? record.email : "",
+    organization:
+      typeof record.organization === "string" ? record.organization : "",
+    message: typeof record.message === "string" ? record.message : "",
+  };
+};
+
+const loadStoredDraftFromSession = (): Partial<EarlyAccessRequest> | null => {
+  const raw = window.sessionStorage.getItem(DRAFT_STORAGE_KEY);
+  return raw ? parseDraftObject(raw) : null;
+};
+
 const readStoredDraft = (): Partial<EarlyAccessRequest> | null => {
   try {
-    const raw = window.sessionStorage.getItem(DRAFT_STORAGE_KEY);
-    if (!raw) {
-      return null;
-    }
-    const parsed = JSON.parse(raw) as unknown;
-    if (typeof parsed !== "object" || parsed === null) {
-      return null;
-    }
-    const record = parsed as Record<string, unknown>;
-    return {
-      email: typeof record.email === "string" ? record.email : "",
-      organization:
-        typeof record.organization === "string" ? record.organization : "",
-      message: typeof record.message === "string" ? record.message : "",
-    };
+    return loadStoredDraftFromSession();
   } catch {
     return null;
   }
 };
 
+const saveDraftToStorage = (draft: EarlyAccessRequest) => {
+  const isEmpty =
+    draft.email.length === 0 &&
+    draft.organization.length === 0 &&
+    draft.message.length === 0;
+  if (isEmpty) {
+    window.sessionStorage.removeItem(DRAFT_STORAGE_KEY);
+    return;
+  }
+  window.sessionStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(draft));
+};
+
 const writeStoredDraft = (draft: EarlyAccessRequest) => {
   try {
-    if (
-      draft.email.length === 0 &&
-      draft.organization.length === 0 &&
-      draft.message.length === 0
-    ) {
-      window.sessionStorage.removeItem(DRAFT_STORAGE_KEY);
-      return;
-    }
-    window.sessionStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(draft));
+    saveDraftToStorage(draft);
   } catch {
     // Ignore restricted sessionStorage environments.
   }
 };
+
+const EarlyAccessSuccessCard = ({
+  successRef,
+}: {
+  readonly successRef: React.RefObject<HTMLHeadingElement | null>;
+}): ReactNode => (
+  <div className="surface-enter border-rule-strong bg-background/70 relative border p-6 sm:p-8">
+    <div className="flex flex-wrap items-center justify-between gap-3">
+      <CircleCheckIcon className="text-pine size-7" />
+      <span className="border-pine-border bg-pine-soft text-pine inline-block border px-2.5 py-1 font-mono text-xs font-medium tracking-[0.06em] uppercase">
+        Received
+      </span>
+    </div>
+    <h3
+      ref={successRef}
+      tabIndex={-1}
+      className="font-heading text-foreground focus-visible:ring-ring focus-visible:ring-offset-background mt-4 rounded-md text-2xl font-medium tracking-[-0.02em] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent"
+    >
+      Request received
+    </h3>
+    <p className="text-muted-foreground mt-2 text-base leading-7" role="status">
+      Thanks for telling us about your team. Until early access opens, you can
+      follow public progress in the repository README.
+    </p>
+    <div className="mt-6">
+      <a
+        href={`${siteConfig.repoUrl}#readme`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center gap-1.5 rounded-md text-sm font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-9 [@media(hover:hover)_and_(pointer:fine)]:hover:text-pine"
+      >
+        Follow development on GitHub
+        <span className="sr-only"> (opens in a new tab)</span>
+        <ArrowUpRightIcon className="size-3.5" />
+      </a>
+    </div>
+  </div>
+);
+
+const isEditableControl = (
+  control: Element | RadioNodeList | null
+): control is HTMLInputElement | HTMLTextAreaElement =>
+  control instanceof HTMLInputElement || control instanceof HTMLTextAreaElement;
+
+const inlineLinkClassName =
+  "text-foreground focus-visible:ring-ring focus-visible:ring-offset-background link-resilient rounded-xs underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:text-primary";
+
+const TRANSIENT_ALERT_STATUSES: Record<string, true> = {
+  failure: true,
+  rate_limited: true,
+  not_configured: true,
+};
+
+const EarlyAccessAlertBanner = ({
+  status,
+  alertHeading,
+  contactEmail,
+}: {
+  readonly status: string;
+  readonly alertHeading: string;
+  readonly contactEmail: string | null | undefined;
+}): ReactNode => (
+  <div
+    role="alert"
+    className={cn(
+      "text-foreground mt-5 border px-4 py-3 text-sm leading-6",
+      status === "not_configured"
+        ? "border-rule bg-record/85"
+        : "border-destructive/30 bg-destructive/8"
+    )}
+  >
+    <p className="font-medium">{alertHeading}</p>
+    <p className="text-muted-foreground mt-1">
+      Your entries are still here.{" "}
+      {contactEmail ? (
+        <>
+          You can also email{" "}
+          <a
+            href={`mailto:${contactEmail}?subject=asym%20early%20access`}
+            className={inlineLinkClassName}
+          >
+            {contactEmail}
+          </a>
+          .
+        </>
+      ) : (
+        <>
+          You can follow development on{" "}
+          <a
+            href={siteConfig.repoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={inlineLinkClassName}
+          >
+            GitHub
+            <span className="sr-only"> (opens in a new tab)</span>
+          </a>
+          .
+        </>
+      )}
+    </p>
+  </div>
+);
 
 const clearStoredDraft = () => {
   try {
@@ -291,8 +395,60 @@ const FieldMessage = ({
   );
 };
 
-const inlineLinkClassName =
-  "text-foreground hover:text-primary focus-visible:ring-ring focus-visible:ring-offset-background link-resilient rounded-xs underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent";
+const EarlyAccessFormFooter = ({
+  consentId,
+  isSubmitting,
+}: {
+  readonly consentId: string;
+  readonly isSubmitting: boolean;
+}): ReactNode => (
+  <>
+    <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <button
+        type="submit"
+        aria-disabled={isSubmitting}
+        aria-describedby={consentId}
+        className={cn(
+          buttonVariants({ size: "lg" }),
+          "w-full px-6 sm:w-auto sm:min-w-[15.5rem]",
+          isSubmitting && "cursor-progress"
+        )}
+      >
+        {isSubmitting ? (
+          <>
+            <SpinnerIcon />
+            {earlyAccessCopy.submitting}
+          </>
+        ) : (
+          <>
+            Request early access
+            <ArrowRightIcon />
+          </>
+        )}
+      </button>
+    </div>
+    <p
+      id={consentId}
+      className="text-muted-foreground mt-4 text-xs leading-5 sm:text-sm sm:leading-6"
+    >
+      {earlyAccessCopy.consent} Read our{" "}
+      <a
+        href="/privacy"
+        target="_blank"
+        rel="noopener noreferrer"
+        className={cn(
+          inlineLinkClassName,
+          "inline-flex items-baseline gap-0.5"
+        )}
+      >
+        Privacy policy
+        <span className="sr-only"> (opens in a new tab)</span>
+        <ArrowUpRightIcon className="size-3 shrink-0 self-center" />
+      </a>
+      .
+    </p>
+  </>
+);
 
 export const EarlyAccessForm = ({
   contactEmail,
@@ -301,6 +457,13 @@ export const EarlyAccessForm = ({
   readonly contactEmail?: string | null;
   readonly onSuccess?: () => void;
 }): ReactNode => {
+  type FormStatus =
+    | "idle"
+    | "submitting"
+    | "success"
+    | "failure"
+    | "not_configured"
+    | "rate_limited";
   const isHydrated = useIsClient();
   const formId = useId();
   const ids = {
@@ -331,13 +494,7 @@ export const EarlyAccessForm = ({
     for (const field of FIELD_ORDER) {
       const control = form.elements.namedItem(field);
       const savedValue = draft[field];
-      if (
-        (control instanceof HTMLInputElement ||
-          control instanceof HTMLTextAreaElement) &&
-        control.value.length === 0 &&
-        savedValue &&
-        savedValue.length > 0
-      ) {
+      if (savedValue && isEditableControl(control) && control.value === "") {
         control.value = savedValue;
       }
     }
@@ -350,42 +507,7 @@ export const EarlyAccessForm = ({
   }, [status]);
 
   if (status === "success") {
-    return (
-      <div className="surface-enter border-rule-strong bg-background/70 relative rounded-xl border p-6 sm:p-8">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <CircleCheckIcon className="text-pine size-7" />
-          <span className="border-pine-border bg-pine-soft text-pine inline-block rounded-md border px-2.5 py-1 font-mono text-xs font-medium tracking-[0.06em] uppercase">
-            Received
-          </span>
-        </div>
-        <h3
-          ref={successRef}
-          tabIndex={-1}
-          className="font-heading text-foreground focus-visible:ring-ring focus-visible:ring-offset-background mt-4 rounded-md text-2xl font-medium tracking-[-0.02em] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent"
-        >
-          Request received
-        </h3>
-        <p
-          className="text-muted-foreground mt-2 text-base leading-7"
-          role="status"
-        >
-          Thanks for telling us about your team. Until early access opens, you
-          can follow public progress in the repository README.
-        </p>
-        <div className="mt-6">
-          <a
-            href={`${siteConfig.repoUrl}#readme`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-foreground hover:text-pine focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center gap-1.5 rounded-md text-sm font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-9"
-          >
-            Follow development on GitHub
-            <span className="sr-only"> (opens in a new tab)</span>
-            <ArrowUpRightIcon className="size-3.5" />
-          </a>
-        </div>
-      </div>
-    );
+    return <EarlyAccessSuccessCard successRef={successRef} />;
   }
 
   const focusFirstInvalid = (fieldErrors: EarlyAccessErrors) => {
@@ -401,11 +523,7 @@ export const EarlyAccessForm = ({
 
   const clearTransientAlert = () => {
     setStatus((current) =>
-      current === "failure" ||
-      current === "rate_limited" ||
-      current === "not_configured"
-        ? "idle"
-        : current
+      Object.hasOwn(TRANSIENT_ALERT_STATUSES, current) ? "idle" : current
     );
   };
 
@@ -434,7 +552,7 @@ export const EarlyAccessForm = ({
 
   const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (submittingRef.current || isSubmitting) {
+    if (isSubmitting || submittingRef.current) {
       return;
     }
 
@@ -453,7 +571,8 @@ export const EarlyAccessForm = ({
     setStatus("submitting");
     const honeypot = String(formData.get(EARLY_ACCESS_HONEYPOT_FIELD) ?? "");
     const result = await submitEarlyAccess(request, honeypot);
-    submittingRef.current = false;
+    const guardRef = submittingRef;
+    guardRef.current = false;
 
     if (result.kind === "accepted") {
       clearStoredDraft();
@@ -595,98 +714,23 @@ export const EarlyAccessForm = ({
       </div>
 
       {hasAlert ? (
-        <div
-          role="alert"
-          className={cn(
-            "text-foreground mt-5 rounded-2xl border px-4 py-3 text-sm leading-6",
-            status === "not_configured"
-              ? "border-rule bg-record/85"
-              : "border-destructive/30 bg-destructive/8"
-          )}
-        >
-          <p className="font-medium">{alertHeading}</p>
-          <p className="text-muted-foreground mt-1">
-            Your entries are still here.{" "}
-            {contactEmail ? (
-              <>
-                You can also email{" "}
-                <a
-                  href={`mailto:${contactEmail}?subject=asym%20early%20access`}
-                  className={inlineLinkClassName}
-                >
-                  {contactEmail}
-                </a>
-                .
-              </>
-            ) : (
-              <>
-                You can follow development on{" "}
-                <a
-                  href={siteConfig.repoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={inlineLinkClassName}
-                >
-                  GitHub
-                  <span className="sr-only"> (opens in a new tab)</span>
-                </a>
-                .
-              </>
-            )}
-          </p>
-        </div>
+        <EarlyAccessAlertBanner
+          status={status}
+          alertHeading={alertHeading}
+          contactEmail={contactEmail}
+        />
       ) : null}
 
-      <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <button
-          type="submit"
-          aria-disabled={isSubmitting}
-          aria-describedby={ids.consent}
-          className={cn(
-            buttonVariants({ size: "lg" }),
-            "w-full px-6 sm:w-auto sm:min-w-[15.5rem]",
-            isSubmitting && "cursor-progress"
-          )}
-        >
-          {isSubmitting ? (
-            <>
-              <SpinnerIcon />
-              {earlyAccessCopy.submitting}
-            </>
-          ) : (
-            <>
-              Request early access
-              <ArrowRightIcon />
-            </>
-          )}
-        </button>
-      </div>
-      <p
-        id={ids.consent}
-        className="text-muted-foreground mt-4 text-xs leading-5 sm:text-sm sm:leading-6"
-      >
-        {earlyAccessCopy.consent} Read our{" "}
-        <a
-          href="/privacy"
-          target="_blank"
-          rel="noopener noreferrer"
-          className={cn(
-            inlineLinkClassName,
-            "inline-flex items-baseline gap-0.5"
-          )}
-        >
-          Privacy policy
-          <span className="sr-only"> (opens in a new tab)</span>
-          <ArrowUpRightIcon className="size-3 shrink-0 self-center" />
-        </a>
-        .
-      </p>
+      <EarlyAccessFormFooter
+        consentId={ids.consent}
+        isSubmitting={isSubmitting}
+      />
     </form>
   );
 };
 
 export const EarlyAccessConfigured = ({
-  contactEmail,
+  contactEmail = null,
 }: {
   readonly contactEmail?: string | null;
 }): ReactNode => {
@@ -712,7 +756,7 @@ export const EarlyAccessConfigured = ({
       </div>
       <div className="min-w-0">
         <EarlyAccessForm
-          contactEmail={contactEmail ?? null}
+          contactEmail={contactEmail}
           onSuccess={() => setSubmitted(true)}
         />
       </div>

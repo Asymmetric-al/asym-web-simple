@@ -1,7 +1,10 @@
 /* eslint-disable @next/next/no-img-element, react-doctor/nextjs-no-img-element -- The plates ship as pre-encoded 640w/1200w WebP files, so they are served as-is instead of being recompressed at request time. */
 import type { ReactNode } from "react";
 
-type PlateName = "three-hands-plate" | "human-seal-plate";
+type PlateName =
+  | "three-hands-plate"
+  | "human-seal-plate"
+  | "archive-ledger-plate";
 type PlateTheme = "light" | "dark";
 
 const PLATE_WIDTH = 1200;
@@ -18,11 +21,11 @@ const plateSources = (name: PlateName, theme: PlateTheme) => {
 /**
 The light and dark editions of one engraved plate.
 
-Both images are lazy so the browser never downloads the hidden theme edition.
-`priority` adds one media-scoped preload per color scheme for the hero plate so
-system-default visitors preload only their active edition. `data-theme-plate`
-lets `ThemeToggle` warm the hidden edition using the exact `srcset` and `sizes`
-the browser will render when toggled.
+`loading="lazy"` keeps the `display: none` opposite-theme edition from
+downloading on initial load, while `priority` pairs media-scoped preloads with
+`fetchPriority="high"` and `decoding="sync"` so the visible hero plate paints
+immediately once bytes arrive. `data-theme-plate` lets `ThemeToggle` warm the
+hidden edition before a click or touch tap using the exact `srcset` and `sizes`.
 */
 export const ThemedPlate = ({
   name,
@@ -68,7 +71,8 @@ export const ThemedPlate = ({
         width={PLATE_WIDTH}
         height={PLATE_HEIGHT}
         loading="lazy"
-        decoding="async"
+        decoding={priority ? "sync" : "async"}
+        fetchPriority={priority ? "high" : undefined}
         data-theme-plate="light"
         className="block h-full w-full object-cover dark:hidden"
       />
@@ -80,7 +84,8 @@ export const ThemedPlate = ({
         width={PLATE_WIDTH}
         height={PLATE_HEIGHT}
         loading="lazy"
-        decoding="async"
+        decoding={priority ? "sync" : "async"}
+        fetchPriority={priority ? "high" : undefined}
         data-theme-plate="dark"
         className="hidden h-full w-full object-cover dark:block"
       />

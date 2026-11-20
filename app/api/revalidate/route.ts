@@ -3,11 +3,15 @@ import { revalidatePath, revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const safeEqual = (a: string, b: string): boolean => {
+const isBufferEqual = (a: string, b: string): boolean => {
+  const ab = Buffer.from(a);
+  const bb = Buffer.from(b);
+  return ab.length === bb.length && timingSafeEqual(ab, bb);
+};
+
+const isTokenEqual = (a: string, b: string): boolean => {
   try {
-    const ab = Buffer.from(a);
-    const bb = Buffer.from(b);
-    return ab.length === bb.length ? timingSafeEqual(ab, bb) : false;
+    return isBufferEqual(a, b);
   } catch {
     return false;
   }
@@ -26,7 +30,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
   const authHeader = request.headers.get("authorization") ?? "";
   const expectedToken = `Bearer ${expectedSecret}`;
 
-  if (!safeEqual(authHeader, expectedToken)) {
+  if (!isTokenEqual(authHeader, expectedToken)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

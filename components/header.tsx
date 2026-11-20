@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { GitHubMark } from "@/components/site/github-mark";
 import { MobileNavMenu } from "@/components/site/mobile-nav-menu";
 import { SiteLogoMark } from "@/components/site/site-logo-mark";
 import { buttonVariants } from "@/components/ui/button-variants";
@@ -10,7 +11,7 @@ export const Header = () => {
   const isConfigured = isEarlyAccessConfigured();
 
   return (
-    <header className="border-rule bg-background/97 md:bg-background/94 fixed inset-x-0 top-0 z-50 border-b pt-[env(safe-area-inset-top)] pr-[env(safe-area-inset-right)] pl-[env(safe-area-inset-left)] md:backdrop-blur-md">
+    <header className="border-rule bg-background fixed inset-x-0 top-0 z-50 border-b pt-[env(safe-area-inset-top)] pr-[env(safe-area-inset-right)] pl-[env(safe-area-inset-left)]">
       <div className="mx-auto flex h-16 max-w-[80rem] items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
         <div className="flex min-w-0 items-center gap-3.5">
           <Link
@@ -45,7 +46,7 @@ export const Header = () => {
                 <Link
                   href={link.href}
                   prefetch={false}
-                  className="text-foreground/82 hover:text-foreground focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-10 items-center rounded-md px-3.5 text-sm font-medium underline-offset-[6px] hover:underline focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-2 focus-visible:outline-transparent"
+                  className="text-foreground/82 focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-10 items-center rounded-md px-3.5 text-sm font-medium underline-offset-[6px] focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:underline"
                 >
                   {link.label}
                 </Link>
@@ -55,31 +56,41 @@ export const Header = () => {
         </nav>
 
         <div className="flex shrink-0 items-center gap-2">
-          <Link
-            href={siteConfig.cta.primary.href}
-            prefetch={false}
-            className={cn(
-              buttonVariants({
-                variant: isConfigured ? "default" : "outline",
-                size: "default",
-              }),
-              "shrink-0 px-4"
-            )}
-          >
-            {isConfigured ? (
-              <>
-                <span className="sm:hidden">Early access</span>
-                <span className="hidden sm:inline">
-                  {siteConfig.cta.primary.label}
-                </span>
-              </>
-            ) : (
-              <>
-                <span className="sm:hidden">Access status</span>
-                <span className="hidden sm:inline">Early access status</span>
-              </>
-            )}
-          </Link>
+          {isConfigured ? (
+            <Link
+              href={siteConfig.cta.primary.href}
+              prefetch={false}
+              className={cn(
+                buttonVariants({
+                  variant: "default",
+                  size: "default",
+                }),
+                "shrink-0 px-4"
+              )}
+            >
+              <span className="sm:hidden">Early access</span>
+              <span className="hidden sm:inline">
+                {siteConfig.cta.primary.label}
+              </span>
+            </Link>
+          ) : (
+            <a
+              href={siteConfig.repoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={cn(
+                buttonVariants({
+                  variant: "ink",
+                  size: "default",
+                }),
+                "shrink-0 px-4"
+              )}
+            >
+              <GitHubMark className="size-3.5" />
+              <span>View the code</span>
+              <span className="sr-only"> on GitHub (opens in a new tab)</span>
+            </a>
+          )}
           <MobileNavMenu />
         </div>
       </div>

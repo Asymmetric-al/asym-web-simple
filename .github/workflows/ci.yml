@@ -30,11 +30,14 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: TypeScript typecheck
-        run: bun run typecheck
+      - name: ESLint (Ultracite)
+        run: bun run lint
 
       - name: Stylelint
         run: bunx stylelint app/globals.css
+
+      - name: TypeScript typecheck
+        run: bun run typecheck
 
       - name: Unit tests
         run: bun run test:unit
@@ -52,7 +55,7 @@ jobs:
       - name: Install Playwright Chromium
         run: bunx playwright install --with-deps chromium
 
-      - name: Run Playwright smoke, responsive, configured form & WCAG 2.2 AA suites
+      - name: Run Playwright smoke, no-JS, responsive, configured form & WCAG 2.2 AA suites
         run: |
           bunx next start -H 127.0.0.1 -p 3100 &
           PID_UNCONFIGURED=$!
@@ -75,4 +78,4 @@ jobs:
           curl -sf http://127.0.0.1:3101/ >/dev/null || { echo "Configured server did not become ready on :3101" >&2; exit 1; }
 
           PLAYWRIGHT_BASE_URL=http://127.0.0.1:3100 bunx playwright test tests/e2e/smoke.spec.ts tests/e2e/responsive.spec.ts tests/a11y/routes.spec.ts --project=chromium --workers=2
-          PLAYWRIGHT_BASE_URL=http://127.0.0.1:3101 bunx playwright test tests/e2e/smoke.spec.ts --project=chromium --workers=2
+          PLAYWRIGHT_BASE_URL=http://127.0.0.1:3101 bunx playwright test tests/e2e/smoke.spec.ts tests/a11y/routes.spec.ts --project=chromium --workers=2

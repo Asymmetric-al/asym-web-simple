@@ -53,18 +53,31 @@ export default function NotFound() {
               Go to the homepage
               <ArrowRightIcon dataIcon="inline-end" />
             </Link>
-            <Link
-              href={siteConfig.cta.primary.href}
-              prefetch={false}
-              className={cn(
-                buttonVariants({ variant: "outline", size: "lg" }),
-                "px-6"
-              )}
-            >
-              {isConfigured
-                ? siteConfig.cta.primary.label
-                : "Early access status"}
-            </Link>
+            {isConfigured ? (
+              <Link
+                href={siteConfig.cta.primary.href}
+                prefetch={false}
+                className={cn(
+                  buttonVariants({ variant: "outline", size: "lg" }),
+                  "px-6"
+                )}
+              >
+                {siteConfig.cta.primary.label}
+              </Link>
+            ) : (
+              <a
+                href={siteConfig.repoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(
+                  buttonVariants({ variant: "outline", size: "lg" }),
+                  "px-6"
+                )}
+              >
+                View the code
+                <span className="sr-only"> on GitHub (opens in a new tab)</span>
+              </a>
+            )}
           </div>
           <nav aria-label="Explore the homepage" className="mt-10">
             <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
@@ -73,7 +86,7 @@ export default function NotFound() {
                   <Link
                     href={link.href}
                     prefetch={false}
-                    className="text-foreground/78 hover:text-foreground focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center rounded-[0.375rem] underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-10"
+                    className="text-foreground/78 focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center rounded-[0.375rem] underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-10 [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground"
                   >
                     {link.label}
                   </Link>

@@ -229,7 +229,7 @@ describe("readEarlyAccessDeliveryConfig", () => {
       NEXT_PUBLIC_CONTACT_EMAIL: process.env.NEXT_PUBLIC_CONTACT_EMAIL,
     };
 
-    try {
+    const runDeliveryChecks = () => {
       process.env.RESEND_API_KEY = "re_test_key";
       process.env.CONTACT_INBOX_EMAIL = "inbox@example.invalid";
       process.env.CONTACT_FROM_EMAIL = "asym <from@example.invalid>";
@@ -262,10 +262,14 @@ describe("readEarlyAccessDeliveryConfig", () => {
 
       process.env.CONTACT_FROM_EMAIL = "asym <from@-invalid.org>";
       expect(readEarlyAccessDeliveryConfig()).toBeNull();
+    };
+
+    try {
+      runDeliveryChecks();
     } finally {
       for (const [key, val] of Object.entries(prev)) {
         if (val === undefined) {
-          delete process.env[key];
+          Reflect.deleteProperty(process.env, key);
         } else {
           process.env[key] = val;
         }
@@ -384,10 +388,10 @@ describe("createEarlyAccessRateLimiter", () => {
       maxTrackedKeys: 2,
     });
 
-    expect(limiter.check("203.0.113.10", 1_000)).toStrictEqual({
+    expect(limiter.check("203.0.113.10", 1000)).toStrictEqual({
       limited: false,
     });
-    expect(limiter.check("203.0.113.10", 2_000)).toStrictEqual({
+    expect(limiter.check("203.0.113.10", 2000)).toStrictEqual({
       limited: false,
     });
     expect(limiter.check("203.0.113.10", 11_000)).toStrictEqual({

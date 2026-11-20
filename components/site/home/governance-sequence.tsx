@@ -29,7 +29,7 @@ interface GovernanceStep {
   readonly actor: string;
   readonly title: string;
   readonly summary: string;
-  readonly detail: string;
+  readonly guardrailLabel: string;
   readonly guardrail: string;
   readonly tone: GovernanceTone;
 }
@@ -45,10 +45,9 @@ const GOVERNANCE_STEPS: readonly [
     actor: "Your team",
     title: "Describe the appeal",
     summary: "Set the goal, designated fund, and audience in plain language.",
-    detail:
-      "Staff start from the real fund and supporter records already in asym instead of pulling donor lists out of separate tools.",
+    guardrailLabel: "Explicit staff trigger",
     guardrail:
-      "Planned trigger rule: AI appeal workflows begin only from an explicit request by an authorized staff member.",
+      "AI appeal workflows start only when an authorized staff member opens a request against existing fund and supporter records.",
     tone: "human",
   },
   {
@@ -56,34 +55,31 @@ const GOVERNANCE_STEPS: readonly [
     actor: "AI draft · planned",
     title: "Prepare page, email & recipient scope",
     summary:
-      "Drafts stay strictly inside the requesting staff member’s permissions.",
-    detail:
-      "We are building AI preparation to draft giving-page copy, donor correspondence, and eligible recipient lists without crossing role boundaries.",
+      "Drafts copy and eligible recipients inside the requester’s role boundary.",
+    guardrailLabel: "Role-scoped read access",
     guardrail:
-      "Permission boundary: planned drafts cannot read restricted funds, other teams, or donor fields outside the staff member’s own role.",
+      "Planned drafts cannot read restricted funds, other teams, or donor fields outside the requesting staff member’s own permissions.",
     tone: "draft",
   },
   {
     step: "03",
     actor: "Staff sign-off · planned",
     title: "Review, edit & approve",
-    summary:
-      "Every AI-drafted word, fund link, and recipient list will wait for staff review.",
-    detail:
-      "Just as key staff actions in the public code preview affected records before running, AI-prepared appeals are designed to hold in draft until a staff member reviews and approves them.",
+    summary: "Hold every draft word, fund link, and recipient list for review.",
+    guardrailLabel: "Separate from routine receipts",
     guardrail:
-      "Planned AI guardrail: AI-prepared appeal emails and campaign pages stay in draft until approved by staff. Routine gift receipts and acknowledgments follow separate organization settings.",
+      "AI-drafted appeals remain in draft until approved by staff. Routine gift receipts and entry-gated thank-yous (ADR 0004) follow separate organization rules.",
     tone: "approval",
   },
   {
     step: "04",
     actor: "After approval · planned",
     title: "Publish & tie gifts to history",
-    summary: "Gifts from the approved page land back on the same fund record.",
-    detail:
-      "Once approved and published, contributions given through the campaign page are designed to record into the same donor history, receipts, missionary progress, and office ledger.",
+    summary:
+      "Connect the approved campaign page back to the same fund ledger.",
+    guardrailLabel: "Single-record continuity",
     guardrail:
-      "Planned continuity: keep the approved appeal, published page, and resulting fund gifts connected on one record.",
+      "Contributions from an approved appeal are designed to record into the same donor portal, redacted missionary roster, and office ledger.",
     tone: "record",
   },
 ];
@@ -91,7 +87,7 @@ const GOVERNANCE_STEPS: readonly [
 const getToneClasses = (tone: GovernanceTone) => {
   if (tone === "approval") {
     return {
-      badge: "border-vermilion-border bg-vermilion-soft text-vermilion",
+      actor: "text-vermilion",
       numberIdle: "border-vermilion-border bg-vermilion-soft text-vermilion",
       numberSelected:
         "border-vermilion bg-vermilion text-primary-foreground font-semibold",
@@ -101,7 +97,7 @@ const getToneClasses = (tone: GovernanceTone) => {
   }
   if (tone === "draft") {
     return {
-      badge: "border-draft-border bg-draft-soft text-draft border-dashed",
+      actor: "text-draft",
       numberIdle: "border-draft-border bg-draft-soft text-draft border-dashed",
       numberSelected:
         "border-foreground bg-foreground text-background font-semibold",
@@ -111,7 +107,7 @@ const getToneClasses = (tone: GovernanceTone) => {
   }
   if (tone === "record") {
     return {
-      badge: "border-pine-border bg-pine-soft text-pine",
+      actor: "text-pine",
       numberIdle: "border-pine-border bg-pine-soft text-pine",
       numberSelected: "border-pine bg-pine text-background font-semibold",
       accentText: "text-pine font-semibold",
@@ -119,8 +115,8 @@ const getToneClasses = (tone: GovernanceTone) => {
     };
   }
   return {
-    badge: "border-rule-strong bg-record text-foreground",
-    numberIdle: "border-rule-strong bg-record text-foreground",
+    actor: "text-muted-foreground",
+    numberIdle: "border-rule-interactive bg-record text-foreground",
     numberSelected:
       "border-foreground bg-foreground text-background font-semibold",
     accentText: "text-foreground font-semibold",
@@ -128,12 +124,12 @@ const getToneClasses = (tone: GovernanceTone) => {
   };
 };
 
-// Selection is shown by the ink rail, the filled step number, and a stronger border; none of them change the row's size.
+// Hairline-ruled press ledger rows — crisp ink rail, filled active index, zero rounded-xl card walls.
 const STEP_ROW_CLASS =
-  "border-rule bg-background/40 data-selected:border-foreground/65 data-selected:bg-card relative z-10 grid w-full min-w-0 grid-cols-[2.25rem_1fr] items-start gap-3 rounded-xl border px-3 py-3 text-left data-selected:shadow-xs forced-colors:data-selected:border-[Highlight]";
+  "border-rule-interactive data-selected:bg-card relative z-10 grid w-full min-w-0 grid-cols-[2rem_1fr] items-start gap-3 border-b px-3 py-3.5 text-left last:border-b-0 forced-colors:data-selected:border-[Highlight]";
 
 const STEP_ROW_INTERACTIVE_CLASS =
-  "hover:border-rule-strong hover:bg-card/75 data-selected:hover:border-foreground/65 data-selected:hover:bg-card focus-visible:ring-ring focus-visible:ring-offset-background cursor-pointer transition-[color,background-color,border-color,scale] duration-150 select-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent active:scale-[0.99]";
+  "focus-visible:ring-ring focus-visible:ring-offset-background cursor-pointer transition-[color,background-color] duration-150 select-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:bg-card/70";
 
 const DETAIL_STACK_CELL = "col-start-1 row-start-1 min-w-0";
 
@@ -151,27 +147,22 @@ const StepRowBody = ({
       <span
         aria-hidden="true"
         className={cn(
-          "mt-0.5 inline-flex size-7 items-center justify-center rounded-full border font-mono text-xs tabular-nums transition-colors duration-150",
+          "mt-0.5 inline-flex size-6 items-center justify-center border font-mono text-[0.6875rem] tabular-nums transition-colors duration-150",
           tone[isSelected ? "numberSelected" : "numberIdle"]
         )}
       >
         {item.step}
       </span>
       <span className="block min-w-0">
-        <span className="flex flex-wrap items-center justify-between gap-2">
+        <span className="flex flex-wrap items-baseline justify-between gap-2">
           <span className="text-foreground font-sans text-sm font-semibold">
             {item.title}
           </span>
-          <span
-            className={cn(
-              "rounded-full border px-2 py-0.5 font-mono text-xs",
-              tone.badge
-            )}
-          >
+          <span className={cn("font-mono text-xs", tone.actor)}>
             {item.actor}
           </span>
         </span>
-        <span className="text-muted-foreground mt-1 block text-sm leading-6">
+        <span className="text-muted-foreground mt-0.5 block text-sm leading-6">
           {item.summary}
         </span>
       </span>
@@ -179,7 +170,7 @@ const StepRowBody = ({
   );
 };
 
-const StepRuleDetail = ({
+const StepGuardrailNote = ({
   item,
   animated = false,
 }: {
@@ -191,40 +182,42 @@ const StepRuleDetail = ({
   return (
     <div
       className={cn(
-        "h-full rounded-xl border p-5 shadow-[var(--shadow-card)]",
+        "h-full border p-4 sm:p-5",
         animated && "surface-enter",
         tone.panel
       )}
     >
-      <div className="flex flex-wrap items-center justify-between gap-2 font-mono text-xs">
+      <div className="flex flex-wrap items-baseline justify-between gap-2 font-mono text-xs">
         <span className={tone.accentText}>
-          Step {item.step} · {item.title}
+          Step {item.step} · {item.guardrailLabel}
         </span>
-        <span className="text-muted-foreground">Planned workflow rule</span>
+        <span className="text-muted-foreground">Planned rule</span>
       </div>
-      <p className="text-foreground mt-2.5 text-sm leading-6 text-pretty sm:text-[0.9375rem]">
-        {item.detail}
-      </p>
-      <p className="border-rule text-muted-foreground mt-3.5 border-t pt-3 text-xs leading-5">
+      <p className="text-foreground mt-2 text-sm leading-6 text-pretty">
         {item.guardrail}
       </p>
     </div>
   );
 };
 
-// Invisible copies of every rule share the panel's grid cell so changing steps never moves the page at any width.
-const DetailSizers = (): ReactNode => (
+const InactiveDetailSizers = ({
+  active,
+}: {
+  readonly active: StepKey;
+}): ReactNode => (
   <>
-    {GOVERNANCE_STEPS.map((item) => (
-      <div
-        key={item.step}
-        aria-hidden="true"
-        inert
-        className={cn(DETAIL_STACK_CELL, "invisible")}
-      >
-        <StepRuleDetail item={item} />
-      </div>
-    ))}
+    {GOVERNANCE_STEPS.map((item) =>
+      item.step === active ? null : (
+        <div
+          key={item.step}
+          aria-hidden="true"
+          inert
+          className={cn(DETAIL_STACK_CELL, "invisible")}
+        >
+          <StepGuardrailNote item={item} />
+        </div>
+      )
+    )}
   </>
 );
 
@@ -250,7 +243,7 @@ export const GovernanceSequence = (): ReactNode => {
         >
           <TabsList
             aria-label="Planned AI appeal approval steps"
-            className="relative grid gap-2 pl-2.5"
+            className="border-rule-strong relative block border-y pl-2.5"
           >
             <TabsIndicator className="vertical-tabs-indicator" />
             {GOVERNANCE_STEPS.map((item) => (
@@ -268,25 +261,24 @@ export const GovernanceSequence = (): ReactNode => {
           </TabsList>
 
           <div className="grid min-w-0">
-            <DetailSizers />
+            <InactiveDetailSizers active={activeStep} />
             {GOVERNANCE_STEPS.map((item) => (
               <TabsPanel
                 key={item.step}
                 value={item.step}
                 className={cn(
                   DETAIL_STACK_CELL,
-                  "focus-visible:ring-ring focus-visible:ring-offset-background grid rounded-xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent data-ending-style:hidden"
+                  "focus-visible:ring-ring focus-visible:ring-offset-background grid focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent data-ending-style:hidden"
                 )}
               >
-                <StepRuleDetail item={item} animated />
+                <StepGuardrailNote item={item} animated />
               </TabsPanel>
             ))}
           </div>
         </Tabs>
       ) : (
-        // Same geometry as the hydrated sequence, with no buttons, so nothing is inert without JavaScript and nothing shifts on hydration.
         <div className="grid gap-4">
-          <ol className="relative grid gap-2 pl-2.5">
+          <ol className="border-rule-strong relative block border-y pl-2.5">
             {GOVERNANCE_STEPS.map((item) => {
               const isSelected = item.step === DEFAULT_STEP;
               return (
@@ -298,7 +290,7 @@ export const GovernanceSequence = (): ReactNode => {
                   {isSelected ? (
                     <span
                       aria-hidden="true"
-                      className="bg-foreground absolute -top-px -bottom-px -left-[calc(0.625rem+1px)] w-[3px] rounded-full"
+                      className="bg-foreground absolute top-0 bottom-0 -left-[0.625rem] w-[3px] rounded-full"
                     />
                   ) : null}
                   <StepRowBody item={item} isSelected={isSelected} />
@@ -308,20 +300,20 @@ export const GovernanceSequence = (): ReactNode => {
           </ol>
 
           <div className="grid min-w-0">
-            <DetailSizers />
+            <InactiveDetailSizers active={DEFAULT_STEP} />
             <div className={cn(DETAIL_STACK_CELL, "grid")}>
-              <StepRuleDetail item={GOVERNANCE_STEPS[2]} />
+              <StepGuardrailNote item={GOVERNANCE_STEPS[2]} />
             </div>
           </div>
         </div>
       )}
 
-      {/* Static fallback exposing the rules for steps 01, 02, and 04 when JavaScript is disabled */}
+      {/* Static fallback exposing the planned rules for steps 01, 02, and 04 when JavaScript is disabled */}
       <noscript>
         <div className="grid gap-3">
-          <StepRuleDetail item={GOVERNANCE_STEPS[0]} />
-          <StepRuleDetail item={GOVERNANCE_STEPS[1]} />
-          <StepRuleDetail item={GOVERNANCE_STEPS[3]} />
+          <StepGuardrailNote item={GOVERNANCE_STEPS[0]} />
+          <StepGuardrailNote item={GOVERNANCE_STEPS[1]} />
+          <StepGuardrailNote item={GOVERNANCE_STEPS[3]} />
         </div>
       </noscript>
     </div>

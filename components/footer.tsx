@@ -8,7 +8,7 @@ import {
 } from "@/lib/early-access-config";
 
 const linkClassName =
-  "text-foreground/82 hover:text-foreground focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center rounded-md underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-9";
+  "text-foreground/82 focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center rounded-md underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-9 [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:underline";
 
 const currentYear = (): number => {
   const now = new Date();

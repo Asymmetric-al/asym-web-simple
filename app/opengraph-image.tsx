@@ -139,14 +139,14 @@ export default async function openGraphImage() {
           <div
             style={{
               marginTop: "22px",
-              fontSize: 22,
+              fontSize: 21,
               lineHeight: 1.44,
               fontWeight: 500,
               color: MUTED,
             }}
           >
-            Giving pages, receipts, donor records, and missionary updates on one
-            shared platform.
+            Donor portals, self-service receipts, redacted missionary rosters,
+            and office CRM on one shared open-source record.
           </div>
         </div>
 
@@ -191,21 +191,19 @@ export default async function openGraphImage() {
                 border: `1.5px dashed ${DRAFT}`,
               }}
             />
-            <span>Human-approved AI appeal drafting in development</span>
+            <span>
+              Hosted teams &amp; human-approved AI appeals in development
+            </span>
           </div>
         </div>
       </div>
 
-      {/* Right framed Hero Plate I copperplate triptych — unified art direction, zero fake UI */}
+      {/* Right embossed Hero Plate I copperplate triptych — unified art direction, zero fake UI */}
       <div
         style={{
           display: "flex",
           flexDirection: "column",
           flex: 1,
-          background: SHEET,
-          border: `1.5px solid rgba(18,32,43,0.28)`,
-          borderRadius: "24px",
-          padding: "18px",
           justifyContent: SPACE_BETWEEN,
         }}
       >
@@ -213,18 +211,18 @@ export default async function openGraphImage() {
           style={{
             display: "flex",
             width: "100%",
-            height: "378px",
-            borderRadius: "14px",
+            height: "414px",
             overflow: "hidden",
-            border: `1px solid ${RULE}`,
-            background: PAPER,
+            border: `1px solid rgba(18,32,43,0.32)`,
+            background: SHEET,
+            padding: "8px",
           }}
         >
           <img
             src={plateSrc}
             alt=""
-            width={501}
-            height={376}
+            width={530}
+            height={398}
             style={{
               display: "block",
               width: "100%",
@@ -239,14 +237,15 @@ export default async function openGraphImage() {
             display: "flex",
             justifyContent: SPACE_BETWEEN,
             alignItems: "center",
-            padding: "14px 8px 4px",
+            padding: "16px 2px 4px",
+            borderTop: `1px solid ${RULE}`,
             gap: "12px",
           }}
         >
           {[
-            { num: "01", role: "Donor", detail: "Giving & receipts" },
-            { num: "02", role: "Missionary", detail: "Scoped roster" },
-            { num: "03", role: "Office", detail: "Full ledger" },
+            { num: "01", role: "Donor", detail: "Portal & receipts" },
+            { num: "02", role: "Missionary", detail: "Redacted roster" },
+            { num: "03", role: "Office", detail: "Ledger & CRM" },
           ].map((item) => (
             <div
               key={item.num}

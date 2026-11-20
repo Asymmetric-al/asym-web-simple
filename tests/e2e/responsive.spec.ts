@@ -30,9 +30,11 @@ function createBrowserIssueTracker(page: Page) {
     pageErrors.push(error.message);
   });
   page.on("response", (response) => {
-    if (response.status() === 404) {
-      notFoundResponses.push(new URL(response.url()).pathname);
+    if (response.status() !== 404) {
+      return;
     }
+    const parsed = new URL(response.url());
+    notFoundResponses.push(parsed.pathname);
   });
 
   return {
@@ -117,9 +119,9 @@ async function expectNoVisibleDialogs(page: Page, context: string) {
       () =>
         page.evaluate(
           () =>
-            Array.from(
-              document.querySelectorAll<HTMLElement>('[role="dialog"]')
-            ).filter((element) => {
+            [
+              ...document.querySelectorAll<HTMLElement>('[role="dialog"]'),
+            ].filter((element) => {
               const styles = window.getComputedStyle(element);
               const rect = element.getBoundingClientRect();
 
@@ -192,7 +194,7 @@ test.describe("responsive regression coverage", () => {
     await expect(mainNav).toBeVisible();
     await expect(
       banner.getByRole("link", {
-        name: /^(Request early access|Early access status|Early access)$/,
+        name: /^(?:Request early access|View the code|Early access)/,
       })
     ).toBeVisible();
     await expectNoHorizontalOverflow(page, "home @ 1440x900");
@@ -204,7 +206,7 @@ test.describe("responsive regression coverage", () => {
     await expect(brandLink).toBeVisible();
     await expect(mainNav).toBeHidden();
     await expect(
-      banner.getByRole("link", { name: /^(Early access|Access status)$/ })
+      banner.getByRole("link", { name: /^(?:Early access|View the code)/ })
     ).toBeVisible();
     await expectNoVisibleDialogs(page, "home @ 390x844");
     await expectNoHorizontalOverflow(page, "home @ 390x844");
@@ -212,7 +214,7 @@ test.describe("responsive regression coverage", () => {
 
     await setViewport(page, { label: "640x900", width: 640, height: 900 });
     await expectNoHorizontalOverflow(page, "home @ 640x900");
-    await expect(page.getByRole("tab", { name: /^Donor/iu })).toBeVisible();
+    await expect(page.getByRole("tab", { name: /Donor/iu })).toBeVisible();
   });
 
   test("home footer remains accessible after repeated viewport changes", async ({

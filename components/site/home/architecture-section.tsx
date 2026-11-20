@@ -10,16 +10,25 @@ export const ArchitectureSection = () => (
   >
     <Container>
       <div className="border-rule border-t pt-12 sm:pt-16">
-        <div className="max-w-[42rem]">
+        <div className="max-w-[44rem]">
           <Eyebrow>In public code</Eyebrow>
           <SectionTitle id="architecture-title">
-            Three surfaces, one shared record.
+            Three workspaces on one shared record.
           </SectionTitle>
           <p className="text-muted-foreground mt-4 text-base leading-7 text-pretty sm:text-[1.0625rem] sm:leading-8">
-            Built in public code; module maturity varies, and Core’s README has
-            the current status. One gift enters once, and donors, missionaries,
-            and office staff each get a dedicated workspace showing only what
-            belongs to their role.
+            <span translate="no" className="text-foreground font-medium">
+              asym
+            </span>{" "}
+            runs on{" "}
+            <span translate="no" className="text-foreground font-medium">
+              Core
+            </span>
+            , our public codebase (
+            <span translate="no" className="text-foreground font-mono text-sm">
+              Asymmetric-al/core
+            </span>
+            ). Donors, missionaries, and office staff each work in a dedicated
+            app reading from the same database tables, scoped to their role.
           </p>
         </div>
 

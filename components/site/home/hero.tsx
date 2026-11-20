@@ -12,19 +12,19 @@ const plateIndex = [
   {
     num: "01",
     role: "Donor",
-    detail: "Giving & receipts",
+    detail: "Portal & receipts",
     href: "#surface-donor",
   },
   {
     num: "02",
     role: "Missionary",
-    detail: "Scoped roster",
+    detail: "Redacted roster",
     href: "#surface-missionary",
   },
   {
     num: "03",
     role: "Office",
-    detail: "Full ledger",
+    detail: "Ledger & CRM",
     href: "#surface-office",
   },
 ] as const;
@@ -33,7 +33,7 @@ const HERO_PLATE_ALT =
   "Copperplate pen-and-ink triptych showing three hands joined by a single continuous ink line: a donor hand sealing a blank envelope, a missionary hand holding a blank folded letter before pine mountains, and an office hand guiding a fountain pen on an open ledger marked with a hatched vermilion wax seal.";
 
 const HERO_PLATE_SIZES =
-  "(min-width: 1024px) 52vw, (min-width: 640px) 33.75rem, calc(100vw - 3.75rem)";
+  "(min-width: 1024px) 54vw, (min-width: 640px) 36rem, calc(100vw - 2rem)";
 
 export const HomeHero = () => {
   const isConfigured = isEarlyAccessConfigured();
@@ -41,10 +41,10 @@ export const HomeHero = () => {
   return (
     <section
       aria-labelledby="hero-title"
-      className="pt-22 pb-12 sm:pt-26 sm:pb-16 xl:flex xl:min-h-[min(56.25rem,100svh)] xl:items-center xl:pt-24 xl:pb-14"
+      className="pt-22 pb-10 sm:pt-26 sm:pb-14 lg:pt-28 lg:pb-16"
     >
       <Container>
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,44fr)_minmax(0,56fr)] lg:items-center lg:gap-12 xl:gap-16">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,44fr)_minmax(0,56fr)] lg:items-center lg:gap-12 xl:gap-16">
           <div className="min-w-0">
             <p className="text-pine font-sans text-sm font-medium">
               Open-source software for missions organizations
@@ -52,7 +52,7 @@ export const HomeHero = () => {
 
             <h1
               id="hero-title"
-              className="font-heading text-foreground mt-3.5 text-[clamp(2.85rem,5.6vw,4.9rem)] leading-[0.96] font-medium tracking-[-0.03em]"
+              className="font-heading text-foreground mt-3 text-[clamp(3rem,5.9vw,5.25rem)] leading-[0.95] font-medium tracking-[-0.03em]"
             >
               <span className="block">One gift.</span>
               <span className="block italic">Three hands.</span>
@@ -62,10 +62,11 @@ export const HomeHero = () => {
               <span translate="no" className="text-foreground font-medium">
                 asym
               </span>{" "}
-              connects giving pages, receipts, donor records, and missionary
-              updates on one shared platform with public open&#8209;source code.
-              A hosted version for your team and human&#8209;approved AI appeal
-              drafting are in development.
+              keeps donor records, self&#8209;service receipts, redacted
+              missionary rosters, and office CRM on one shared open&#8209;source
+              record. Public giving pages in Core still use demo profiles;
+              hosted teams and human&#8209;approved AI appeals are in
+              development.
             </p>
 
             <div className="mt-7 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
@@ -107,56 +108,51 @@ export const HomeHero = () => {
             </div>
           </div>
 
-          {/* Bespoke copperplate triptych ("One gift. Three hands.") — zero fake product UI */}
-          <figure className="relative mx-auto w-full max-w-[36rem] min-w-0 lg:mx-0 lg:max-w-none">
-            <span
-              aria-hidden="true"
-              className="text-rule-strong pointer-events-none absolute -top-3 -left-2 hidden font-mono text-xs select-none sm:block"
-            >
-              +
-            </span>
-            <span
-              aria-hidden="true"
-              className="text-rule-strong pointer-events-none absolute -top-3 -right-2 hidden font-mono text-xs select-none sm:block"
-            >
-              +
-            </span>
+          {/* Plate I: single embossed copperplate impression directly on rag paper */}
+          <figure className="relative mx-auto w-full min-w-0 lg:mx-0">
+            <div className="plate-impression relative aspect-[4/3] overflow-hidden">
+              <ThemedPlate
+                name="three-hands-plate"
+                alt={HERO_PLATE_ALT}
+                sizes={HERO_PLATE_SIZES}
+                priority
+              />
+            </div>
 
-            <div className="surface-hero overflow-hidden rounded-2xl p-3 sm:p-4">
-              <div className="border-rule aspect-[4/3] overflow-hidden rounded-xl border bg-[#f3eee3] dark:bg-[#111e28]">
-                <ThemedPlate
-                  name="three-hands-plate"
-                  alt={HERO_PLATE_ALT}
-                  sizes={HERO_PLATE_SIZES}
-                  priority
-                />
+            {/* Subtle continuous ink thread divider echoing the triptych motif */}
+            <svg
+              viewBox="0 0 320 10"
+              fill="none"
+              aria-hidden="true"
+              className="mt-2.5 block h-2.5 w-full"
+              preserveAspectRatio="none"
+            >
+              <path
+                d="M0 5 C 72 1, 128 9, 184 5 C 236 1.5, 276 8, 320 5"
+                stroke="var(--pine)"
+                strokeOpacity="0.45"
+                strokeWidth="1.25"
+                className="ink-thread-reveal"
+              />
+            </svg>
+
+            <figcaption className="mt-1">
+              <div className="flex flex-wrap items-baseline justify-between gap-2 pb-1.5 text-xs">
+                <span className="text-foreground font-mono font-medium">
+                  Plate I · Three hands, one record
+                </span>
+                <span className="text-muted-foreground font-mono">
+                  Select a role below
+                </span>
               </div>
-
-              {/* Subtle continuous ink thread divider echoing the triptych motif */}
-              <svg
-                viewBox="0 0 320 10"
-                fill="none"
-                aria-hidden="true"
-                className="mt-2.5 block h-2.5 w-full"
-                preserveAspectRatio="none"
-              >
-                <path
-                  d="M0 5 C 72 1, 128 9, 184 5 C 236 1.5, 276 8, 320 5"
-                  stroke="var(--pine)"
-                  strokeOpacity="0.45"
-                  strokeWidth="1.25"
-                  className="ink-thread-reveal"
-                />
-              </svg>
-
-              <figcaption className="mt-0.5 grid grid-cols-3 gap-2 px-1 text-xs">
+              <div className="border-rule grid grid-cols-3 gap-2 border-t pt-1 text-xs">
                 {plateIndex.map((item) => (
                   <a
                     key={item.num}
                     href={item.href}
-                    className="group focus-visible:ring-ring focus-visible:ring-offset-card flex min-h-11 min-w-0 flex-col justify-center rounded-md py-1.5 focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-2 focus-visible:outline-transparent"
+                    className="group focus-visible:ring-ring focus-visible:ring-offset-background flex min-h-11 min-w-0 flex-col justify-center rounded-sm py-1 focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-2 focus-visible:outline-transparent"
                   >
-                    <span className="text-foreground group-hover:text-pine block font-sans leading-4 font-semibold underline-offset-4 group-hover:underline">
+                    <span className="text-foreground block font-sans leading-4 font-semibold underline-offset-4 [@media(hover:hover)_and_(pointer:fine)]:group-hover:text-pine [@media(hover:hover)_and_(pointer:fine)]:group-hover:underline">
                       <span className="text-pine mr-1.5 font-mono font-medium tabular-nums">
                         {item.num}
                       </span>{" "}
@@ -167,8 +163,8 @@ export const HomeHero = () => {
                     </span>
                   </a>
                 ))}
-              </figcaption>
-            </div>
+              </div>
+            </figcaption>
           </figure>
         </div>
 
@@ -183,7 +179,7 @@ export const HomeHero = () => {
                   <Link
                     href={link.href}
                     prefetch={false}
-                    className="text-foreground/82 hover:text-foreground inline-flex min-h-11 items-center rounded-md font-medium underline-offset-4 hover:underline"
+                    className="text-foreground/82 inline-flex min-h-11 items-center rounded-md font-medium underline-offset-4 [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:underline"
                   >
                     {link.label}
                   </Link>

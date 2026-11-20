@@ -8,12 +8,13 @@ export const siteConfig = {
   */
   shortName: "asym",
   description:
-    "Open-source software for missions organizations: giving pages, receipts, donor records, and missionary updates on one shared record, with human-approved AI appeal drafting in development.",
+    "Open-source software for missions organizations: donor portals, self-service receipts, redacted missionary rosters, and office CRM on one shared record. Public giving pages use demo profiles; hosted teams and human-approved AI appeals are in development.",
   /**
   Production domain served by this project (Vercel `asym-web-simple`).
   */
   url: "https://asym.app",
   repoUrl: "https://github.com/Asymmetric-al/core",
+  commitsUrl: "https://github.com/Asymmetric-al/core/commits/develop",
   issuesUrl: "https://github.com/Asymmetric-al/core/issues",
   githubOrgUrl: "https://github.com/Asymmetric-al",
   cta: {
@@ -25,15 +26,18 @@ export const siteConfig = {
 } as const;
 
 /**
-Public figures for Asymmetric-al/core, checked against GitHub on
-19 November 2026 (develop: 4,915 commits; 595 merged pull requests).
-Rounded down so they stay true as the repository grows.
+Public figures for Asymmetric-al/core, verified against origin/develop
+(`337785a7d`) on 21 November 2026: 5,265 commits on `develop` and 601
+repository-wide merged pull requests. Rounded down so counts stay true
+as development continues; repository activity is not production readiness.
 */
 export const repoStats = {
   asOf: "November 2026",
   since: "January 2026",
-  commits: "4,900+",
-  mergedPullRequests: "590+",
+  commits: "5,200+",
+  commitsScope: "commits on develop",
+  mergedPullRequests: "600+",
+  mergedPullRequestsScope: "repository-wide merged PRs",
   license: "AGPL-3.0-only",
 } as const;
 

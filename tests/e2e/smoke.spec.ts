@@ -115,7 +115,7 @@ test.describe("homepage smoke tests", () => {
         .first()
     ).toHaveAttribute("href", /^\/#(?:early-access|product)$/u);
     await expect(
-      page.getByRole("link", { name: /^View the code/u })
+      page.getByRole("link", { name: /^View the code/u }).first()
     ).toHaveAttribute("href", REPO_URL);
   });
 
@@ -126,13 +126,13 @@ test.describe("homepage smoke tests", () => {
     await waitForUi(page);
 
     const architecture = page.getByRole("region", {
-      name: /Three surfaces, one shared record/iu,
+      name: /Three workspaces on one shared record/iu,
     });
     await expect(architecture).toContainText("apps/donor");
     await expect(
       architecture.getByRole("heading", {
         level: 3,
-        name: /Donors give online and download their own tax receipts/iu,
+        name: /Signed-in donors pull their own receipts and annual statements/iu,
       })
     ).toBeVisible();
 
@@ -141,13 +141,13 @@ test.describe("homepage smoke tests", () => {
     );
 
     const missionaryTab = architecture.getByRole("tab", {
-      name: /^Missionary/iu,
+      name: /Missionary/iu,
     });
     await missionaryTab.click();
     await expect(
       architecture.getByRole("heading", {
         level: 3,
-        name: /Field workers track assigned support while anonymous donors stay private/iu,
+        name: /Field workers track assigned support while private donors stay redacted/iu,
       })
     ).toBeVisible();
     await expect(architecture).toContainText("Anonymous partner");
@@ -160,12 +160,12 @@ test.describe("homepage smoke tests", () => {
     await missionaryTab.focus();
     await page.keyboard.press("ArrowDown");
     await expect(
-      architecture.getByRole("tab", { name: /^Office/iu })
+      architecture.getByRole("tab", { name: /Office/iu })
     ).toHaveAttribute("aria-selected", "true");
     await expect(
       architecture.getByRole("heading", {
         level: 3,
-        name: /Staff reconcile funds, receipts, and households from one ledger/iu,
+        name: /Staff manage legal donor records and preview bulk actions before running/iu,
       })
     ).toBeVisible();
 
@@ -177,7 +177,7 @@ test.describe("homepage smoke tests", () => {
     // Clicking the hero plate's Donor caption link selects Donor via #surface-donor
     await page.getByRole("link", { name: /01 Donor/iu }).click();
     await expect(
-      architecture.getByRole("tab", { name: /^Donor/iu })
+      architecture.getByRole("tab", { name: /Donor/iu })
     ).toHaveAttribute("aria-selected", "true");
 
     const appeals = page.locator("#appeals");
@@ -191,13 +191,41 @@ test.describe("homepage smoke tests", () => {
       name: /Prepare page, email & recipient scope/iu,
     });
     await step2Tab.click();
-    await expect(appeals).toContainText("Permission boundary:");
+    await expect(appeals).toContainText("Role-scoped read access");
     await step2Tab.focus();
     await page.keyboard.press("ArrowDown");
     await expect(
       appeals.getByRole("tab", { name: /Review, edit & approve/iu })
     ).toHaveAttribute("aria-selected", "true");
-    await expect(appeals).toContainText("Planned AI guardrail:");
+    await expect(appeals).toContainText("Separate from routine receipts");
+  });
+
+  test("no-JS homepage exposes zero inert buttons, distinct role anchors, and full governance rules", async ({
+    browser,
+    baseURL,
+  }) => {
+    const context = await browser.newContext({
+      ...(baseURL && { baseURL }),
+      javaScriptEnabled: false,
+      viewport: { width: 390, height: 844 },
+    });
+    const page = await context.newPage();
+    await page.goto("/", { waitUntil: "domcontentloaded" });
+
+    await expect(page.locator('button:not([type="submit"])')).toHaveCount(0);
+    await expect(page.locator("#surface-donor")).toBeVisible();
+    await expect(page.locator("#surface-missionary")).toBeVisible();
+    await expect(page.locator("#surface-office")).toBeVisible();
+    await expect(page.locator("#appeals")).toContainText(
+      "Explicit staff trigger"
+    );
+    await expect(page.locator("#appeals")).toContainText(
+      "Role-scoped read access"
+    );
+    await expect(page.locator("#appeals")).toContainText(
+      "Single-record continuity"
+    );
+    await context.close();
   });
 
   test("homepage maintains near-zero CLS across hydration and enforces API origin and config gates", async ({
@@ -206,7 +234,7 @@ test.describe("homepage smoke tests", () => {
   }) => {
     await page.addInitScript(() => {
       let cls = 0;
-      new PerformanceObserver((list) => {
+      const observer = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
           const shift = entry as PerformanceEntry & {
             value: number;
@@ -216,15 +244,16 @@ test.describe("homepage smoke tests", () => {
             cls += shift.value;
           }
         }
-        (window as unknown as { __asymCls: number }).__asymCls = cls;
-      }).observe({ type: "layout-shift", buffered: true });
+        document.documentElement.dataset.asymCls = String(cls);
+      });
+      observer.observe({ type: "layout-shift", buffered: true });
     });
 
     await page.goto("/", { waitUntil: "networkidle" });
     await waitForUi(page);
 
-    const measuredCls = await page.evaluate(
-      () => (window as unknown as { __asymCls?: number }).__asymCls ?? 0
+    const measuredCls = await page.evaluate(() =>
+      Number(document.documentElement.dataset.asymCls ?? "0")
     );
     expect(measuredCls).toBeLessThanOrEqual(0.01);
 
@@ -241,13 +270,14 @@ test.describe("homepage smoke tests", () => {
     });
     expect(crossSiteRes.status()).toBe(403);
 
-    if ((await earlyAccessForm(page).count()) === 0) {
-      const apiRes = await request.post("/api/early-access", {
-        headers: { "content-type": "application/json" },
-        data: { email: "director@example.org" },
-      });
-      expect(apiRes.status()).toBe(503);
+    if ((await earlyAccessForm(page).count()) > 0) {
+      return;
     }
+    const apiRes = await request.post("/api/early-access", {
+      headers: { "content-type": "application/json" },
+      data: { email: "director@example.org" },
+    });
+    expect(apiRes.status()).toBe(503);
   });
 
   test("open source and team sections link to the public code", async ({
@@ -297,7 +327,7 @@ test.describe("homepage smoke tests", () => {
       banner.getByRole("link", { name: /^asym home$/iu })
     ).toBeVisible();
     await expect(
-      banner.getByRole("link", { name: /^(Early access|Access status)$/u })
+      banner.getByRole("link", { name: /^(?:Early access|View the code)/u })
     ).toBeVisible();
     await expect(banner.getByRole("navigation")).toBeHidden();
     const menuTrigger = banner.getByRole("button", { name: "Page sections" });
@@ -327,12 +357,12 @@ test.describe("homepage smoke tests", () => {
       await expect(
         page
           .locator("#early-access")
-          .getByRole("link", { name: "See where things stand" })
-      ).toHaveAttribute("href", "/#where-things-stand");
+          .getByRole("link", { name: /Follow commits on develop/u })
+      ).toHaveAttribute("href", `${REPO_URL}/commits/develop`);
       await expect(
         page
           .locator("#early-access")
-          .getByRole("link", { name: /Follow progress on GitHub/u })
+          .getByRole("link", { name: /Read Core README/u })
       ).toHaveAttribute("href", `${REPO_URL}#readme`);
       return;
     }
@@ -391,7 +421,7 @@ test.describe("homepage smoke tests", () => {
     await form.getByRole("button", { name: "Request early access" }).click();
 
     await expect(form.getByRole("alert")).toContainText(
-      "Early access sign\u2011ups aren’t open right now."
+      "Early access sign\u{2011}ups aren’t open right now."
     );
     await expect(form.getByLabel("Email")).toHaveValue("director@example.org");
     await expect(form.getByLabel("Organization")).toHaveValue(

@@ -37,19 +37,20 @@
   --input: rgb(18 32 43 / 58%);
   --ring: #1b574c;
   --rule: rgb(18 32 43 / 18%);
-  --rule-strong: rgb(18 32 43 / 30%);
+  --rule-strong: rgb(18 32 43 / 34%);
+  --rule-interactive: rgb(18 32 43 / 44%);
   --glyph-stroke: rgb(18 32 43 / 38%);
   --ink: #12202b;
   --record: #e9e2d2;
   --pine: #1b574c;
   --pine-soft: #e3eee9;
-  --pine-border: rgb(27 87 76 / 34%);
+  --pine-border: rgb(27 87 76 / 38%);
   --vermilion: #b33a22;
   --vermilion-soft: #f8ebe6;
-  --vermilion-border: rgb(179 58 34 / 42%);
+  --vermilion-border: rgb(179 58 34 / 44%);
   --draft: #4a5966;
   --draft-soft: #eee9de;
-  --draft-border: rgb(74 89 102 / 42%);
+  --draft-border: rgb(74 89 102 / 46%);
   --night: #0f1d29;
   --night-foreground: #f3eee3;
   --night-muted: #b7c4cd;
@@ -66,6 +67,8 @@
   --shadow-strong:
     0 1px 0 0 rgb(255 255 255 / 84%) inset, 0 2px 6px rgb(18 32 43 / 7%),
     0 28px 64px -36px rgb(18 32 43 / 24%);
+  --plate-bevel:
+    inset 0 1px 0 rgb(255 255 255 / 60%), 0 1px 0 rgb(18 32 43 / 10%);
   --page-gradient:
     radial-gradient(
       ellipse 70% 56% at 24% 0%,
@@ -104,19 +107,20 @@
   --input: rgb(239 233 221 / 52%);
   --ring: #62bda8;
   --rule: rgb(239 233 221 / 16%);
-  --rule-strong: rgb(239 233 221 / 28%);
+  --rule-strong: rgb(239 233 221 / 32%);
+  --rule-interactive: rgb(239 233 221 / 42%);
   --glyph-stroke: rgb(239 233 221 / 50%);
   --ink: #efe9dd;
   --record: #0e1821;
   --pine: #62bda8;
   --pine-soft: #132a27;
-  --pine-border: rgb(98 189 168 / 38%);
+  --pine-border: rgb(98 189 168 / 42%);
   --vermilion: #e56a4e;
   --vermilion-soft: #2a1916;
   --vermilion-border: rgb(229 106 78 / 48%);
   --draft: #96a6b4;
   --draft-soft: #0f1a23;
-  --draft-border: rgb(150 166 180 / 38%);
+  --draft-border: rgb(150 166 180 / 42%);
   --night: #152635;
   --night-foreground: #f3eee3;
   --night-muted: #bcc9d2;
@@ -132,6 +136,8 @@
   --shadow-strong:
     0 1px 0 0 rgb(239 233 221 / 10%) inset, 0 2px 6px rgb(0 0 0 / 40%),
     0 32px 72px -40px rgb(0 0 0 / 78%);
+  --plate-bevel:
+    inset 0 1px 0 rgb(239 233 221 / 10%), 0 1px 0 rgb(0 0 0 / 45%);
   --page-gradient:
     radial-gradient(
       ellipse 70% 54% at 24% 0%,
@@ -169,6 +175,7 @@
   --color-ring: var(--ring);
   --color-rule: var(--rule);
   --color-rule-strong: var(--rule-strong);
+  --color-rule-interactive: var(--rule-interactive);
   --color-ink: var(--ink);
   --color-record: var(--record);
   --color-pine: var(--pine);
@@ -262,11 +269,6 @@
     touch-action: manipulation;
   }
 
-  a,
-  button {
-    transition: transform 150ms var(--ease-out-expo);
-  }
-
   :is(a, button, input, textarea):focus-visible {
     outline: 2px solid var(--ring);
     outline-offset: 2px;
@@ -352,10 +354,25 @@
   background: var(--draft-soft);
 }
 
-.surface-hero {
+/* Single embossed copperplate impression mark directly on paper — no nested cards or shadows */
+.plate-impression {
   border: 1px solid var(--rule-strong);
-  background: var(--card);
-  box-shadow: var(--shadow-strong);
+  background: #f3eee3;
+  box-shadow: var(--plate-bevel);
+}
+
+.dark .plate-impression {
+  background: #111e28;
+}
+
+.plate-impression-draft {
+  border: 1.5px dashed var(--draft-border);
+  background: #f3eee3;
+  box-shadow: var(--plate-bevel);
+}
+
+.dark .plate-impression-draft {
+  background: #111e28;
 }
 
 .link-resilient {
@@ -364,7 +381,7 @@
   word-break: normal;
 }
 
-/* GPU-composited vertical high-contrast rail for SurfaceExplorer and GovernanceSequence @ui-sdk/react/tabs */
+/* Compositor-only vertical high-contrast press rail for SurfaceExplorer and GovernanceSequence tabs */
 .vertical-tabs-indicator {
   position: absolute;
   z-index: 1;
@@ -376,9 +393,7 @@
   background: var(--foreground);
   pointer-events: none;
   transform: translate3d(0, var(--active-tab-top, 0), 0);
-  transition:
-    transform 180ms var(--ease-out-expo),
-    height 180ms var(--ease-out-expo);
+  transition: transform 180ms var(--ease-out-expo);
   will-change: transform;
 }
 
@@ -386,7 +401,7 @@
   transition: none;
 }
 
-/* GPU-composited sliding active pill for ThemeToggle @ui-sdk/react/segmented-control */
+/* Compositor-only sliding active pill for ThemeToggle @ui-sdk/react/segmented-control */
 .theme-toggle-indicator {
   position: absolute;
   z-index: 0;
@@ -400,9 +415,7 @@
   box-shadow: 0 1px 2px rgb(18 32 43 / 12%);
   pointer-events: none;
   transform: translate3d(var(--segmented-control-indicator-left, 4px), 0, 0);
-  transition:
-    transform 180ms var(--ease-out-expo),
-    width 180ms var(--ease-out-expo);
+  transition: transform 180ms var(--ease-out-expo);
   will-change: transform;
 }
 
@@ -455,6 +468,21 @@
   stroke-dashoffset: 0;
 }
 
+@keyframes rule-draw {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.ink-rule-draw {
+  animation: rule-draw 260ms var(--ease-out-expo) both;
+  transform-origin: left center;
+}
+
 @keyframes surface-enter {
   from {
     opacity: 0;
@@ -481,7 +509,8 @@
   .surface-panel,
   .surface-folio,
   .surface-draft,
-  .surface-hero {
+  .plate-impression,
+  .plate-impression-draft {
     border-color: CanvasText;
     box-shadow: none;
   }

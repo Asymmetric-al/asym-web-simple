@@ -41,14 +41,12 @@ export default defineConfig({
       use: { ...devices["iPhone 14"] },
     },
   ],
-  ...(isExternalServer
-    ? {}
-    : {
-        webServer: {
-          command: `bun run build && bunx next start -H 127.0.0.1 -p ${port}`,
-          url: baseURL,
-          reuseExistingServer: !process.env.CI,
-          timeout: 180_000,
-        },
-      }),
+  ...(!isExternalServer && {
+    webServer: {
+      command: `bun run build && bunx next start -H 127.0.0.1 -p ${port}`,
+      url: baseURL,
+      reuseExistingServer: !process.env.CI,
+      timeout: 180_000,
+    },
+  }),
 });
