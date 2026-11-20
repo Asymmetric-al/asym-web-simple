@@ -452,9 +452,9 @@
   top: 0;
   right: 1.875rem;
   left: 1.875rem;
-  height: 1.5px;
-  background: var(--wf-ink-bg, var(--ink));
-  clip-path: inset(0 calc(100% - var(--land, 14%)) 0 var(--land, 14%));
+  height: 0;
+  border-top: 1.5px solid var(--ink);
+  clip-path: inset(-1px calc(100% - var(--land, 14%)) -1px var(--land, 14%));
   opacity: 0;
   pointer-events: none;
   transition:
@@ -462,44 +462,43 @@
     opacity 80ms linear 90ms;
 }
 
+.wf-plate[data-active="2"] .wf-datum-ink,
+.wf-plate[data-active="4"] .wf-datum-ink {
+  border-top-style: dashed;
+}
+
 .wf-node {
   position: relative;
   transition:
     background-color 160ms var(--ease-out-expo) var(--d, 0ms),
     border-color 160ms var(--ease-out-expo) var(--d, 0ms),
-    color 160ms var(--ease-out-expo) var(--d, 0ms);
+    color 160ms var(--ease-out-expo) var(--d, 0ms),
+    opacity 160ms var(--ease-out-expo);
 }
 
 @media (width >= 80rem) {
-  .wf-node::before {
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    width: 1px;
-    height: 31px;
-    background: var(--rule);
-    content: "";
-    pointer-events: none;
-  }
-
   .wf-node::after {
     position: absolute;
     bottom: 100%;
     left: 50%;
-    width: 1.5px;
+    width: 0;
     height: 31px;
-    background: var(--ink);
+    border-left: 1.5px solid var(--ink);
     content: "";
     pointer-events: none;
-    transform: scaleY(0);
-    transform-origin: top;
+    transform: translateX(-50%) scaleY(0);
+    transform-origin: top center;
     transition: transform 160ms var(--ease-out-expo) var(--d, 0ms);
   }
 }
 
 .wf-plate[data-active] .wf-datum-ink {
-  clip-path: inset(0 calc(100% - var(--to, 100%)) 0 var(--from, 0%));
+  clip-path: inset(-1px calc(100% - var(--to, 100%)) -1px var(--from, 0%));
   opacity: 1;
+}
+
+.wf-plate[data-active] .wf-node {
+  opacity: 0.48;
 }
 
 .wf-plate[data-active="1"] .wf-step[data-step="1"] .wf-stem-ink,
@@ -590,11 +589,17 @@
   border-color: var(--ink);
   background: var(--node-lit);
   color: var(--primary);
+  opacity: 1;
 }
 
 .wf-plate[data-active="2"] .wf-node[data-steps~="2"],
 .wf-plate[data-active="4"] .wf-node[data-steps~="4"] {
   border-style: dashed;
+}
+
+.wf-plate[data-active="2"] .wf-node[data-steps~="2"]::after,
+.wf-plate[data-active="4"] .wf-node[data-steps~="4"]::after {
+  border-left-style: dashed;
 }
 
 .dark .wf-plate[data-active="1"] .wf-node[data-steps~="1"],

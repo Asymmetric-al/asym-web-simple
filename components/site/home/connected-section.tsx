@@ -16,7 +16,7 @@ const principles: readonly {
   {
     highlight: "sweep",
     title: "Same permissions as staff",
-    text: "Campaign AI will run through the same permission checks as your staff rather than working around separate tools. Several staff actions in the public code already preview which records will change before running.",
+    text: "Campaign drafts will follow the same permission checks as your staff rather than working around separate tools, so AI only touches the records a team member is allowed to see.",
   },
   {
     highlight: "frame",
@@ -47,11 +47,11 @@ export const ConnectedSection = () => (
               or who is allowed to act.
             </p>
             <p>
-              Putting website pages, giving, donor records, and email on one
-              data model keeps every team working from the same facts. Several
-              staff actions in the public code already preview which records
-              will change; we’re building review and approval history into
-              campaign publishing.
+              Keeping website pages, giving, email, and donor history on the
+              same shared records keeps every team working from the same facts.
+              Several staff actions in the public code already preview which
+              records will change; we’re building review and approval history
+              into campaign publishing.
             </p>
           </div>
 

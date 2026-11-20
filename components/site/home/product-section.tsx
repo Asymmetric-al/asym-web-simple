@@ -79,9 +79,9 @@ export const ProductSection = () => (
 
         <WorkflowPlate className="wf-plate surface-panel mt-6 overflow-hidden rounded-[2rem] lg:mt-7">
           <div className="border-rule/80 bg-record/45 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-b px-5 py-3 sm:px-8">
-            <p className="text-muted-foreground font-mono text-[0.8125rem] tracking-[0.02em]">
+            <p className="text-muted-foreground text-[0.8125rem] leading-5">
               <span className="hidden [.wf-plate[data-interactive='true']_&]:inline xl:[.wf-plate[data-interactive='true']_&]:hidden">
-                Tap a step to highlight its records.
+                Select a step to highlight its records.
               </span>
               <span className="hidden xl:[.wf-plate[data-interactive='true']_&]:inline">
                 Select a step to trace records.
@@ -119,8 +119,8 @@ export const ProductSection = () => (
                 const isLast = index === workflowSteps.length - 1;
                 const describedById = `wf-records-${step.number}`;
                 const cardClass = step.inDevelopment
-                  ? "wf-step-card group/step border-primary/34 relative rounded-[1.35rem] border border-dashed p-4 xl:flex xl:flex-col has-[button:focus-visible]:ring-2 has-[button:focus-visible]:ring-ring has-[button:focus-visible]:ring-offset-2 has-[button:focus-visible]:ring-offset-card"
-                  : "wf-step-card group/step border-rule relative rounded-[1.35rem] border p-4 xl:flex xl:flex-col has-[button:focus-visible]:ring-2 has-[button:focus-visible]:ring-ring has-[button:focus-visible]:ring-offset-2 has-[button:focus-visible]:ring-offset-card";
+                  ? "wf-step-card group/step border-primary/34 relative rounded-[1.35rem] border border-dashed p-4 sm:flex sm:flex-col has-[button:focus-visible]:ring-2 has-[button:focus-visible]:ring-ring has-[button:focus-visible]:ring-offset-2 has-[button:focus-visible]:ring-offset-card"
+                  : "wf-step-card group/step border-rule relative rounded-[1.35rem] border p-4 sm:flex sm:flex-col has-[button:focus-visible]:ring-2 has-[button:focus-visible]:ring-ring has-[button:focus-visible]:ring-offset-2 has-[button:focus-visible]:ring-offset-card";
 
                 return (
                   <li
@@ -200,19 +200,21 @@ export const ProductSection = () => (
                       </p>
                       <div
                         aria-hidden="true"
-                        className="wf-step-records mt-3 flex flex-wrap items-center gap-1.5 text-xs xl:hidden"
+                        className="wf-step-records mt-3 grid grid-cols-[auto_1fr] items-baseline gap-x-2 text-xs sm:mt-auto sm:pt-3.5 xl:hidden"
                       >
                         <span className="text-muted-foreground font-mono tracking-[0.02em]">
                           Records:
                         </span>
-                        {step.records.map((record) => (
-                          <span
-                            key={record}
-                            className="wf-inline-chip border-rule bg-card/85 text-foreground/85 inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium"
-                          >
-                            {record}
-                          </span>
-                        ))}
+                        <div className="flex flex-wrap gap-1.5">
+                          {step.records.map((record) => (
+                            <span
+                              key={record}
+                              className="wf-inline-chip border-rule bg-card/85 text-foreground/85 inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium"
+                            >
+                              {record}
+                            </span>
+                          ))}
+                        </div>
                       </div>
                     </div>
 
@@ -228,11 +230,11 @@ export const ProductSection = () => (
 
           <div className="datum-lid bg-record mt-6 px-5 pt-7 pb-6 sm:mt-8 sm:px-8 md:pt-[1.875rem] md:pb-7 xl:mt-0">
             <span className="wf-datum-ink hidden xl:block" aria-hidden="true" />
-            <div className="grid gap-3.5 md:grid-cols-[11rem_1fr] md:items-center md:gap-5 xl:grid-cols-[13.5rem_1fr] xl:gap-6">
+            <div className="hidden gap-6 xl:grid xl:grid-cols-[13.5rem_1fr] xl:items-center">
               <p className="text-primary/82 dark:text-ring font-mono text-[0.8125rem] font-medium tracking-[0.02em]">
                 Connected records
               </p>
-              <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center md:grid md:grid-cols-[repeat(4,max-content)] md:justify-between md:gap-3 md:pr-2">
+              <div className="grid grid-cols-[repeat(4,max-content)] justify-between gap-3 pr-2">
                 {recordNodes.map((node) => (
                   <span
                     key={node.label}
@@ -245,14 +247,13 @@ export const ProductSection = () => (
               </div>
             </div>
 
-            <p className="text-muted-foreground mt-5 max-w-[54rem] text-sm leading-6 text-pretty">
+            <p className="text-muted-foreground max-w-[54rem] text-sm leading-6 text-pretty xl:mt-5">
               <span className="text-foreground font-medium">
                 Planned workflow:
               </span>{" "}
-              For a year&#8209;end appeal, your team reviews the draft before{" "}
-              <span translate="no">asym</span> publishes the giving page. When a
-              donor gives, the missionary can see the gift and staff can find
-              its receipt in the donor’s history.
+              For a year&#8209;end appeal, your team edits and approves the
+              draft before <span translate="no">asym</span> publishes the giving
+              page and links each gift to the donor’s record.
             </p>
           </div>
         </WorkflowPlate>

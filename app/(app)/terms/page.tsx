@@ -50,6 +50,7 @@ export default function TermsPage() {
                 className={contactLinkClassName}
               >
                 the Asymmetric-al/core repository on GitHub
+                <span className="sr-only"> (opens in a new tab)</span>
               </a>{" "}
               (never share private or donor information in public repositories).
             </p>

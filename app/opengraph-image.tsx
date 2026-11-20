@@ -118,16 +118,16 @@ export default async function openGraphImage() {
             display: "flex",
             flex: 1,
             flexDirection: "column",
-            justifyContent: "space-between",
+            justifyContent: "center",
             background: "#f3eee4",
             borderTop: DATUM_BORDER,
             borderLeft: DATUM_BORDER,
             borderRight: DATUM_BORDER,
-            borderTopLeftRadius: "52px",
-            borderTopRightRadius: "52px",
+            borderTopLeftRadius: "48px",
+            borderTopRightRadius: "48px",
             marginLeft: "-1.5px",
             marginRight: "-1.5px",
-            padding: "48px 56px 44px",
+            padding: "44px 56px 48px",
           }}
         >
           <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
@@ -145,7 +145,7 @@ export default async function openGraphImage() {
               style={{
                 fontSize: 56,
                 lineHeight: 1.06,
-                fontWeight: 600,
+                fontWeight: 500,
                 letterSpacing: "-0.03em",
                 color: MUTED,
               }}
@@ -154,7 +154,7 @@ export default async function openGraphImage() {
             </div>
             <div
               style={{
-                marginTop: "12px",
+                marginTop: "14px",
                 fontSize: 23,
                 lineHeight: 1.4,
                 fontWeight: 500,
@@ -166,7 +166,7 @@ export default async function openGraphImage() {
             </div>
           </div>
 
-          <div style={{ display: "flex", gap: "14px" }}>
+          <div style={{ display: "flex", gap: "14px", marginTop: "36px" }}>
             {["Open source", "Starting with missions organizations"].map(
               (item) => (
                 <div

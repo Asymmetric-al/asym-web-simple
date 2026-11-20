@@ -100,7 +100,7 @@ const buildStatusContent = ({
   if (state === "unavailable") {
     return {
       tone: "neutral",
-      eyebrow: "Opening soon",
+      eyebrow: "Sign\u{2011}ups closed",
       title: earlyAccessCopy.notConfigured,
       description: "You can read the code and follow development on GitHub.",
       primaryLabel: BACK_TO_HOMEPAGE_LABEL,
@@ -229,6 +229,7 @@ export default async function EarlyAccessStatusPage({
               )}
             >
               Follow progress on GitHub
+              <span className="sr-only"> (opens in a new tab)</span>
               <ArrowUpRightIcon dataIcon="inline-end" />
             </a>
           </div>

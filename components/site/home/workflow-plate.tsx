@@ -25,38 +25,8 @@ const STEP_ANNOUNCEMENTS: Record<string, string> = {
 
 const NODE_STAGGER_MS = 40;
 const NODE_BASE_DELAY_MS = 150;
-const GAP_HALF_PX = 5;
 
 const clampPct = (value: number): number => Math.max(0, Math.min(100, value));
-
-const buildDatumInkBackground = (
-  unconnectedCentersPx: readonly number[],
-  datumLeft: number,
-  datumWidth: number
-): string => {
-  if (unconnectedCentersPx.length === 0 || datumWidth <= 0) {
-    return "var(--ink)";
-  }
-  const stops: string[] = [];
-  let cursor = "0px";
-  const sorted = [...unconnectedCentersPx].toSorted((a, b) => a - b);
-  for (const centerPx of sorted) {
-    const relPx = centerPx - datumLeft;
-    if (relPx <= GAP_HALF_PX || relPx >= datumWidth - GAP_HALF_PX) {
-      continue;
-    }
-    const gapStart = `${(relPx - GAP_HALF_PX).toFixed(1)}px`;
-    const gapEnd = `${(relPx + GAP_HALF_PX).toFixed(1)}px`;
-    stops.push(`var(--ink) ${cursor}`, `var(--ink) ${gapStart}`);
-    stops.push(`transparent ${gapStart}`, `transparent ${gapEnd}`);
-    cursor = gapEnd;
-  }
-  if (stops.length === 0) {
-    return "var(--ink)";
-  }
-  stops.push(`var(--ink) ${cursor}`, "var(--ink) 100%");
-  return `linear-gradient(90deg, ${stops.join(", ")})`;
-};
 
 /**
 Interactive progressive-enhancement wrapper for the Datum & Sweep workflow plate. Writes state attributes and CSS custom properties directly to the DOM so hover, focus, and click-to-pin never trigger React re-renders or layout thrash.
@@ -102,14 +72,11 @@ export const WorkflowPlate = ({
       );
       const allNodes = [...plate.querySelectorAll<HTMLElement>(".wf-node")];
       const nodes: HTMLElement[] = [];
-      const unconnectedNodes: HTMLElement[] = [];
 
       for (const node of allNodes) {
         const steps = (node.dataset.steps ?? "").split(" ");
         if (steps.includes(stepNum)) {
           nodes.push(node);
-        } else {
-          unconnectedNodes.push(node);
         }
       }
 
@@ -136,24 +103,10 @@ export const WorkflowPlate = ({
           const toPct = clampPct(
             ((maxX - datumRect.left) / datumRect.width) * 100
           );
-          const interiorUnconnected = unconnectedNodes
-            .map((node) => {
-              const rect = node.getBoundingClientRect();
-              return rect.left + rect.width / 2;
-            })
-            .filter((center) => center > minX + 4 && center < maxX - 4);
 
           datumInk.style.setProperty("--land", `${landPct.toFixed(2)}%`);
           datumInk.style.setProperty("--from", `${fromPct.toFixed(2)}%`);
           datumInk.style.setProperty("--to", `${toPct.toFixed(2)}%`);
-          datumInk.style.setProperty(
-            "--wf-ink-bg",
-            buildDatumInkBackground(
-              interiorUnconnected,
-              datumRect.left,
-              datumRect.width
-            )
-          );
         }
       }
 

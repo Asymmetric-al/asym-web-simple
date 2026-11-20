@@ -45,6 +45,7 @@ export const AboutSection = () => (
               className="text-foreground hover:text-primary focus-visible:ring-ring focus-visible:ring-offset-background rounded-[0.375rem] font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent"
             >
               {siteConfig.name}
+              <span className="sr-only"> (opens in a new tab)</span>
             </a>
             , an independent, for&#8209;profit software company serving
             nonprofits. Conrad’s experience co&#8209;leading Global Fellowship,

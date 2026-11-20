@@ -74,6 +74,7 @@ export const EarlyAccessSection = () => {
                     >
                       <GitHubMark className="size-4" />
                       Follow progress on GitHub
+                      <span className="sr-only"> (opens in a new tab)</span>
                       <ArrowUpRightIcon dataIcon="inline-end" />
                     </a>
                   </div>

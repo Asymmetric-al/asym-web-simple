@@ -3,7 +3,7 @@ import { Container } from "@/components/site/container";
 import { GitHubMark } from "@/components/site/github-mark";
 import { ArrowDownIcon } from "@/components/site/icons";
 import { buttonVariants } from "@/components/ui/button-variants";
-import { navigationLinks, siteConfig } from "@/lib/config";
+import { mobileNavigationLinks, siteConfig } from "@/lib/config";
 import { isEarlyAccessConfigured } from "@/lib/early-access-config";
 import { cn } from "@/lib/utils";
 
@@ -42,12 +42,12 @@ export const HomeHero = () => {
           className="font-heading text-foreground mt-4 max-w-[18ch] text-[clamp(1.9rem,5.1vw,4rem)] leading-[1.03] font-semibold tracking-[-0.025em] text-balance sm:mt-4 sm:max-w-[24ch] sm:tracking-[-0.035em] lg:max-w-none"
         >
           <span className="block">Website, giving, and donor records.</span>{" "}
-          <span className="text-muted-foreground mt-1 block text-[1.45rem] leading-[1.12] min-[375px]:text-[1.8rem] sm:text-[clamp(2.85rem,5vw,4rem)] sm:leading-[1.03]">
+          <span className="text-muted-foreground mt-1 block text-[1.45rem] leading-[1.12] font-medium min-[375px]:text-[1.8rem] sm:text-[1em] sm:leading-[1.03]">
             One platform built to work with AI.
           </span>
         </h1>
 
-        <div className="mt-4 grid gap-5 lg:mt-5 lg:grid-cols-[minmax(0,58fr)_minmax(0,42fr)] lg:items-end lg:gap-12">
+        <div className="mt-4 grid gap-5 lg:mt-5 lg:grid-cols-[minmax(0,58fr)_minmax(0,42fr)] lg:items-start lg:gap-12">
           <div className="min-w-0">
             <p className="text-muted-foreground max-w-[40rem] text-base leading-7 text-pretty sm:text-[1.125rem] sm:leading-8">
               We’re building <span translate="no">asym</span> for missions
@@ -85,11 +85,12 @@ export const HomeHero = () => {
               >
                 <GitHubMark className="size-4" />
                 View the code
+                <span className="sr-only"> (opens in a new tab)</span>
               </a>
             </div>
           </div>
 
-          <dl className="border-rule grid gap-3 border-t pt-4 sm:grid-cols-2 lg:grid-cols-1 lg:gap-3.5 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-7">
+          <dl className="border-rule grid gap-3 border-t pt-4 sm:grid-cols-2 lg:grid-cols-1 lg:gap-4 lg:border-t-0 lg:border-l lg:pt-0.5 lg:pl-7">
             {heroStatus.map((item) => (
               <div key={item.label} className="min-w-0">
                 <dt className="text-muted-foreground flex items-center gap-2 font-mono text-xs font-medium tracking-[0.02em]">
@@ -104,7 +105,7 @@ export const HomeHero = () => {
                 </dt>
                 <dd
                   className={cn(
-                    "mt-1 text-sm leading-5 text-pretty",
+                    "mt-1 text-[0.9375rem] leading-6 text-pretty",
                     item.dashed ? "text-muted-foreground" : "text-foreground"
                   )}
                 >
@@ -121,7 +122,7 @@ export const HomeHero = () => {
             className="border-rule mt-5 border-t pt-2 md:hidden"
           >
             <ul className="flex flex-wrap items-center gap-x-5 gap-y-1 text-sm">
-              {navigationLinks.map((link) => (
+              {mobileNavigationLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}

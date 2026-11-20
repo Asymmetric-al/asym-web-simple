@@ -2,7 +2,10 @@ import Link from "next/link";
 import { SiteLogoMark } from "@/components/site/site-logo-mark";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { footerLinks, navigationLinks, siteConfig } from "@/lib/config";
-import { getVerifiedContactEmail } from "@/lib/early-access-config";
+import {
+  getVerifiedContactEmail,
+  isEarlyAccessConfigured,
+} from "@/lib/early-access-config";
 
 const linkClassName =
   "text-foreground/78 hover:text-foreground focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center rounded-[0.375rem] underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-9";
@@ -14,6 +17,7 @@ const currentYear = (): number => {
 
 export const Footer = () => {
   const contactEmail = getVerifiedContactEmail();
+  const isConfigured = isEarlyAccessConfigured();
 
   return (
     <footer className="pb-8 sm:pb-10">
@@ -56,28 +60,36 @@ export const Footer = () => {
               </ul>
             </nav>
             <ul className="grid gap-0.5 text-sm sm:gap-1" aria-label="Company">
-              {footerLinks.map((link) => (
-                <li key={link.label}>
-                  {link.external ? (
-                    <a
-                      href={link.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={linkClassName}
-                    >
-                      {link.label}
-                    </a>
-                  ) : (
-                    <Link
-                      href={link.href}
-                      prefetch={!link.href.includes("#")}
-                      className={linkClassName}
-                    >
-                      {link.label}
-                    </Link>
-                  )}
-                </li>
-              ))}
+              {footerLinks.map((link) => {
+                const label =
+                  !isConfigured && link.href === siteConfig.cta.primary.href
+                    ? "Early access status"
+                    : link.label;
+
+                return (
+                  <li key={link.label}>
+                    {link.external ? (
+                      <a
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={linkClassName}
+                      >
+                        {label}
+                        <span className="sr-only"> (opens in a new tab)</span>
+                      </a>
+                    ) : (
+                      <Link
+                        href={link.href}
+                        prefetch={!link.href.includes("#")}
+                        className={linkClassName}
+                      >
+                        {label}
+                      </Link>
+                    )}
+                  </li>
+                );
+              })}
               {contactEmail ? (
                 <li>
                   <a href={`mailto:${contactEmail}`} className={linkClassName}>

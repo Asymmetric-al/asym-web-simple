@@ -213,7 +213,7 @@ test.describe("responsive regression coverage", () => {
     await setViewport(page, { label: "640x900", width: 640, height: 900 });
     const clipCheck = await page.evaluate(() => {
       const plate = document.querySelector(".wf-plate");
-      const nodes = [...document.querySelectorAll(".wf-node")];
+      const nodes = [...document.querySelectorAll(".wf-inline-chip")];
       if (!plate || nodes.length === 0) return { ok: false, overflowPx: 999 };
       const plateRight = plate.getBoundingClientRect().right;
       const maxNodeRight = Math.max(
@@ -247,7 +247,7 @@ test.describe("responsive regression coverage", () => {
       await footer.scrollIntoViewIfNeeded();
 
       await expect(
-        footer.getByRole("link", { name: "GitHub", exact: true })
+        footer.getByRole("link", { name: /^GitHub/u })
       ).toBeVisible();
       await expect(footer.getByRole("link", { name: "Privacy" })).toBeVisible();
       await expect(

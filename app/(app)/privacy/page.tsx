@@ -53,6 +53,7 @@ export default function PrivacyPage() {
                 className={contactLinkClassName}
               >
                 the Asymmetric-al/core repository on GitHub
+                <span className="sr-only"> (opens in a new tab)</span>
               </a>
               .
             </p>

@@ -58,7 +58,9 @@ export default function NotFound() {
                 "px-6"
               )}
             >
-              {isConfigured ? siteConfig.cta.primary.label : "Early access"}
+              {isConfigured
+                ? siteConfig.cta.primary.label
+                : "Early access status"}
             </Link>
           </div>
           <nav aria-label="Homepage sections" className="mt-10">

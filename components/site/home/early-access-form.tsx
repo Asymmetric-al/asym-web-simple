@@ -363,7 +363,8 @@ export const EarlyAccessForm = ({
           className="text-muted-foreground mt-2 text-base leading-7"
           role="status"
         >
-          {earlyAccessCopy.success}
+          Thanks for telling us about your team. Until early access opens, you
+          can follow public progress in the repository.
         </p>
         <div className="mt-6">
           <a
@@ -373,6 +374,7 @@ export const EarlyAccessForm = ({
             className="text-foreground hover:text-primary focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center gap-1.5 rounded-[0.375rem] text-sm font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-9"
           >
             Follow development on GitHub
+            <span className="sr-only"> (opens in a new tab)</span>
             <ArrowUpRightIcon className="size-3.5" />
           </a>
         </div>
@@ -620,6 +622,7 @@ export const EarlyAccessForm = ({
                   className={inlineLinkClassName}
                 >
                   GitHub
+                  <span className="sr-only"> (opens in a new tab)</span>
                 </a>
                 .
               </>
@@ -694,12 +697,12 @@ export const EarlyAccessConfigured = ({
           className="font-heading text-foreground mt-3.5 text-[clamp(1.95rem,3.6vw,3.05rem)] leading-[1.04] font-semibold tracking-[-0.04em] text-balance"
         >
           {submitted
-            ? "You’re on the list."
+            ? "What happens next"
             : "Request early access for your team."}
         </h2>
         <p className="text-muted-foreground mt-5 max-w-[34rem] text-base leading-7 text-pretty sm:text-lg sm:leading-8">
           {submitted
-            ? "We review requests from missions organizations as we finish the first campaign workflow."
+            ? "We review requests from missions organizations and follow up by email as early access opens."
             : "Tell us which organization you’re with and what part of fundraising or donor care you’d like help with. We’ll be in touch with launch updates and invitations as early access opens."}
         </p>
       </div>

@@ -113,7 +113,7 @@ test.describe("homepage smoke tests", () => {
         .first()
     ).toHaveAttribute("href", /^\/#(?:early-access|product)$/u);
     await expect(
-      page.getByRole("link", { name: "View the code", exact: true })
+      page.getByRole("link", { name: /^View the code/u })
     ).toHaveAttribute("href", REPO_URL);
   });
 
@@ -187,7 +187,7 @@ test.describe("homepage smoke tests", () => {
     await expect(
       page.getByRole("heading", {
         level: 2,
-        name: "The code is public. The hosted platform will be a paid subscription.",
+        name: "The code is public.",
       })
     ).toBeInViewport();
   });
@@ -212,7 +212,7 @@ test.describe("homepage smoke tests", () => {
     await menuTrigger.focus();
     await page.keyboard.press("Enter");
     await expect(
-      page.getByRole("navigation", { name: "Page sections" })
+      page.getByRole("navigation", { name: "Homepage sections" })
     ).toBeVisible();
     await page.keyboard.press("Escape");
     await expect(menuTrigger).toBeFocused();
@@ -383,10 +383,10 @@ test.describe("homepage smoke tests", () => {
     const footer = page.locator("footer");
 
     await expect(
-      footer.getByRole("link", { name: "GitHub", exact: true })
+      footer.getByRole("link", { name: /^GitHub/u })
     ).toHaveAttribute("href", REPO_URL);
     await expect(
-      footer.getByRole("link", { name: "Early access" })
+      footer.getByRole("link", { name: /^Early access/u })
     ).toHaveAttribute("href", "/#early-access");
     await expect(footer.getByRole("link", { name: "Privacy" })).toHaveAttribute(
       "href",
