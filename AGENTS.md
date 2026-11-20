@@ -16,8 +16,8 @@
 
 - Inspect the codebase before coding. Follow the existing `app/`, `components/`, and `lib/` placement patterns, and keep `lib/config.ts` as the content/configuration source of truth.
 - Preserve the current architecture and avoid broad refactors. Do not convert whole layouts or pages to client components unless there is a clear need.
-- Run `npm run lint`, `npm run typecheck`, and `npm run build` after stack changes or core behavior changes. There is no dedicated test script in this repo today.
-- Prefer retrieval over guessing: read nearby code, the local Next.js docs in `.next-docs/`, installed skills in `.agents/skills/`, and the configured MCP servers before inventing framework behavior.
+- Use Bun (`packageManager: bun@1.4.5`, `bun.lock` is authoritative; Vercel installs with `npx --yes bun@1.4.5 install --frozen-lockfile`). Run `bun run lint`, `bun run typecheck`, `bun run build`, and `bun run test:unit` as appropriate after stack or behavior changes, plus Playwright checks (`bun run qa:smoke`, `bun run qa:a11y`, `bun run qa:e2e`, `bun run qa:visual`) when UI or routes change.
+- Prefer retrieval over guessing: read nearby code, the local Next.js docs in `.next-docs/`, installed skills in `.agents/skills/`, installed `@ui-sdk` docs in `node_modules/@ui-sdk/react/docs/`, and the configured MCP servers before inventing framework behavior.
 
 ## UI System
 
@@ -29,14 +29,31 @@
 - Preserve local styling, spacing, and copy after installing any Shadcnblocks block. Treat installed Shadcnblocks code as local source code and adapt it to Maia, the current tokens, and the Asymmetric.al content system.
 - Prefer shadcn MCP discovery before guessing Shadcnblocks block names. Once the registry is present in `components.json`, the configured shadcn MCP server should be able to browse it naturally.
 - Use `motion/react` for new animation work. Keep motion subtle and performant, and respect reduced-motion preferences.
-- Prefer `@base-ui/react` for new custom primitives when a ready-made shadcn component is not already the right fit. Preserve stable shadcn or Radix-based components that already work, and style new Base UI primitives through Tailwind plus tokens rather than ad hoc overrides.
+- Preserve stable shadcn (`base-maia`) and `@base-ui/react` components that already work in `components/ui/`. For new or substantially revised interactive behavior and custom primitives, follow the **Vercel UI SDK** policy below, styling everything through Tailwind and `app/globals.css` tokens rather than ad hoc overrides.
+
+## Vercel UI SDK
+
+- **Consult on every UI/UX task:** Read `DESIGN.md` and consult the `ui-sdk` skill (`.agents/skills/ui-sdk/SKILL.md`), alongside the existing design, accessibility, animation, and Next.js skills where relevant. Use judgment about whether the task benefits from UI SDK components or behaviors.
+- **Installed docs are authoritative:** Start with `node_modules/@ui-sdk/react/docs/llms.txt`, then read only the relevant component and guide docs under `node_modules/@ui-sdk/react/docs/`. Only for genuinely custom primitives, consult relevant headings in the adjacent `node_modules/@ui-sdk/react/docs/core.md` and `node_modules/@ui-sdk/react/docs/rendering.md` (avoid loading all of `core.md` for standard component work). If `.agents/skills/ui-sdk/SKILL.md` is unavailable or differs from the installed package, fall back to `node_modules/@ui-sdk/core/skills/ui-sdk/SKILL.md` and the matching package docs.
+- **Component-selection order:**
+  1. Reuse a suitable component already established in this website.
+  2. For new or substantially revised interactive behavior, evaluate `@ui-sdk/react` components first.
+  3. Compose lower-level `@ui-sdk/core` behaviors when supplied components do not meet a real requirement.
+  4. Use an existing Base UI / shadcn implementation (`components/ui/`) or another established approach when it is better supported or clearly simpler for the task.
+- **Boundaries & single ownership:** Keep native semantic HTML and Next.js `<Link>` for ordinary content, navigation, and simple controls. Give each widget one clear owner for keyboard handling, focus, dismissal, selection, and ARIA state — never combine overlapping behavior libraries on the same control.
+- **Scope (coding agents only):** UI SDK is installed here for coding agents building and maintaining the site. Runtime `createAgent` bridges, WebMCP registration, and on-site AI assistants are out of scope — skip those steps even when the upstream `ui-sdk` skill recommends them by default.
+- **Next.js & styling rules:**
+  - Import from per-component entry points (e.g. `@ui-sdk/react/menu`, `@ui-sdk/react/dialog`); `@ui-sdk/react` has no root component export. Keep `@ui-sdk/react` and `@ui-sdk/core` pinned to matching exact versions while in beta.
+  - Keep pages and layouts as Server Components where appropriate; UI SDK parts already carry `"use client"`, so isolate custom state, callbacks, hooks, or primitive adapters in small client modules. Preserve SSR/client parity and investigate hydration mismatches instead of masking them.
+  - `@layer ui-sdk;` is declared above `@import "tailwindcss";` in `app/globals.css`. `@ui-sdk/core/web.css` is intentionally omitted so `DESIGN.md` and `app/globals.css` stay authoritative; style parts via documented `data-slot`, state attributes (`data-open`, `data-highlighted`, `data-starting-style`, `data-ending-style`), and CSS variables while preserving focus visibility, contrast, reduced-motion, and light/dark styling.
+  - Forward props and `ref` when using `render`, preserving SDK-managed accessibility attributes. Follow UI SDK's native top-layer popup model instead of assuming Portal or Positioner wrappers.
 
 ## Next.js and Vercel
 
 - For Next.js feature work, read the version-matched local docs in `.next-docs/` first or use the Next.js MCP. Favor current Next 16 patterns, and preserve server/client boundaries.
 - Use the MCP servers defined in `.mcp.json` before guessing at stack behavior: `next-devtools`, `shadcn`, and `vercel`.
 - **Skills CLI:** Add or refresh skills with `npx skills add <source> --skill <name> -a cursor -y` (or a repo URL); commit `skills-lock.json` so others can run `npx skills experimental_install` for the same versions. Browse and verify skills at [skills.sh](https://skills.sh/) (for example, [seo-audit](https://skills.sh/coreyhaines31/marketingskills/seo-audit)). Skills only populate `.agents/skills/` for agents—they are not application runtime dependencies; use MCP servers and version-matched `.next-docs/` for Next.js–accurate behavior.
-- Use the project-local skills in `.agents/skills/` when relevant: `next-best-practices`, `next-cache-components`, `next-upgrade`, `shadcn`, `vercel-react-best-practices`, `vercel-composition-patterns`, `web-design-guidelines`, `deploy-to-vercel`, `agent-browser`, `find-skills`, `emil-design-eng`, `anim`, `animate`, `animate-expo`, `animation-performance`, `animation-vocabulary`, `apple-design`, `ask-emil`, `ask-sonner`, `break-ui`, `choreograph`, `find-animation-opportunities`, `gestures`, `improve-animations`, `learn-taste`, `mobile-native`, `pick-ui-library`, `prototype`, `remove-animations`, `review-animations`, `write-swift`, `building-components`, `playwright-explore-website`, `website-structure`, `ui-ux-pro-max`, `frontend-design`, `seo-audit`, `programmatic-seo`, `seo-geo`, `responsive-design`, `dark-mode-design-expert`, `payload`, `babysit-pr`, `council`, `file-pr`, `full-send`, `full-stop`, `leaving-pr-comments`, `modernize`, `sol-loop`, and `takeover`. The tStack skills (`t3dotgg/tstack`) provide multi-model review loops (`council`, `sol-loop`) and end-to-end GitHub PR workflows (filing, commenting, rebasing, taking over, babysitting, and shipping PRs). Project-local skills live in `.agents/skills/` (natively discovered by Antigravity and Codex; run `npx skills experimental_install -a claude-code` to populate gitignored `.claude/skills/` for Claude Code), and `DESIGN.md` stays authoritative over any conflicting skill guidance.
+- Use the project-local skills in `.agents/skills/` when relevant: `ui-sdk`, `next-best-practices`, `next-cache-components`, `next-upgrade`, `shadcn`, `vercel-react-best-practices`, `vercel-composition-patterns`, `web-design-guidelines`, `deploy-to-vercel`, `agent-browser`, `find-skills`, `emil-design-eng`, `anim`, `animate`, `animate-expo`, `animation-performance`, `animation-vocabulary`, `apple-design`, `ask-emil`, `ask-sonner`, `break-ui`, `choreograph`, `find-animation-opportunities`, `gestures`, `improve-animations`, `learn-taste`, `mobile-native`, `pick-ui-library`, `prototype`, `remove-animations`, `review-animations`, `write-swift`, `building-components`, `playwright-explore-website`, `website-structure`, `ui-ux-pro-max`, `frontend-design`, `seo-audit`, `programmatic-seo`, `seo-geo`, `responsive-design`, `dark-mode-design-expert`, `payload`, `babysit-pr`, `council`, `file-pr`, `full-send`, `full-stop`, `leaving-pr-comments`, `modernize`, `sol-loop`, and `takeover`. The tStack skills (`t3dotgg/tstack`) provide multi-model review loops (`council`, `sol-loop`) and end-to-end GitHub PR workflows (filing, commenting, rebasing, taking over, babysitting, and shipping PRs). Project-local skills live in `.agents/skills/` (natively discovered by Antigravity, Codex, Cursor, Gemini CLI, GitHub Copilot, and OpenCode; run `npx skills experimental_install -a claude-code` to populate gitignored `.claude/skills/` for Claude Code), and `DESIGN.md` stays authoritative over any conflicting skill guidance.
 - Use `npx vercel` for linking, environment pulls, preview deploys, logs, and production deploys. Keep preview and production flows explicit, and never commit secrets.
 - Keep `.env.local` local-only. It is the right place for values such as `REACTBITS_LICENSE_KEY`.
 
@@ -50,22 +67,24 @@
 
 ## Cursor Cloud specific instructions
 
-This is a purely static Next.js 16 marketing site with no backend, database, or external runtime services. The only process needed for development is the Next.js dev server.
+Marketing pages, static builds, lint, typecheck, and unit tests run without external services or `.env` files. API routes (early access via Resend, legacy Stripe giving, and Payload `/admin`) only require environment variables when exercised directly (see `.env.example` and `README.md`).
 
 ### Quick reference
 
-| Task       | Command                   |
-| ---------- | ------------------------- |
-| Dev server | `npm run dev` (port 3000) |
-| Lint       | `npm run lint`            |
-| Type check | `npm run typecheck`       |
-| Build      | `npm run build`           |
+| Task       | Command                                              |
+| ---------- | ---------------------------------------------------- |
+| Install    | `bun install` (uses authoritative `bun.lock`)        |
+| Dev server | `bun run dev` (port 3000)                            |
+| Lint       | `bun run lint` / `bun run check` (Ultracite)         |
+| Type check | `bun run typecheck`                                  |
+| Unit tests | `bun run test:unit` (Vitest)                         |
+| E2E / QA   | `bun run qa:smoke`, `qa:a11y`, `qa:e2e`, `qa:visual` |
+| Build      | `bun run build`                                      |
 
-- Node.js 22 and npm 10+ are required (matches the lockfile).
-- There is no test suite in this repo; `npm run lint` and `npm run typecheck` are the primary correctness checks.
+- Bun `1.4.5` is the declared `packageManager` (`bun.lock` is authoritative; Vercel runs `npx --yes bun@1.4.5 install --frozen-lockfile`). Avoid `npm install` because npm hits peer-dependency conflicts with TypeScript 7.
 - The dev server uses Turbopack by default and starts on port 3000. Add `--hostname 0.0.0.0` if you need to access it from outside localhost.
-- No `.env` file is required to run the site. `REACTBITS_LICENSE_KEY` and `SHADCNBLOCKS_API_KEY` are only needed when installing new UI components via the `shadcn` CLI, not at runtime.
-- Dark mode is wired via `next-themes` but there is currently no visible theme toggle in the UI; dark mode can be tested by adding the `dark` class to `<html>` in devtools or via `next-themes` `forcedTheme`.
+- No `.env` file is required to browse marketing pages or run build, lint, typecheck, or unit tests. `REACTBITS_LICENSE_KEY` and `SHADCNBLOCKS_API_KEY` are only needed when installing new UI components via the `shadcn` CLI.
+- Light, Dark, and System themes are wired via `next-themes` and exposed through the footer theme toggle (`components/theme-toggle.tsx`).
 
 # Ultracite Code Standards
 
