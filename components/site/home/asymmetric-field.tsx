@@ -108,7 +108,7 @@ export const AsymmetricFieldHero = (): ReactNode => (
 
 // Serene modernist overlapping horizon sculpture for the Deep Botanical Charcoal Vision band: warm layered botanical planes and a calm terracotta sunrise arc expressing clarity and multiplied reach.
 export const AsymmetricAiField = (): ReactNode => (
-  <div className="border-night-rule relative overflow-hidden rounded-3xl border bg-[#192b27]">
+  <div className="border-night-rule bg-[var(--vision-art-bg)] relative overflow-hidden rounded-3xl border">
     <svg
       viewBox="0 0 560 320"
       fill="none"
@@ -123,9 +123,9 @@ export const AsymmetricAiField = (): ReactNode => (
           cy="72%"
           r="68%"
         >
-          <stop offset="0%" stopColor="#3c665b" stopOpacity="0.72" />
-          <stop offset="60%" stopColor="#223b35" stopOpacity="0.35" />
-          <stop offset="100%" stopColor="#192b27" stopOpacity="0" />
+          <stop offset="0%" stopColor="var(--vision-art-glow-1)" stopOpacity="0.72" />
+          <stop offset="60%" stopColor="var(--vision-art-glow-2)" stopOpacity="0.35" />
+          <stop offset="100%" stopColor="var(--vision-art-bg)" stopOpacity="0" />
         </radialGradient>
       </defs>
 
@@ -135,21 +135,21 @@ export const AsymmetricAiField = (): ReactNode => (
       {/* Layered matte organic hills/arcs rising gently across the canvas */}
       <path
         d="M -20 230 C 120 156, 280 120, 580 144 V 340 H -20 Z"
-        fill="#213933"
+        fill="var(--vision-art-plane-1)"
       />
       <path
         d="M -20 264 C 138 202, 316 172, 580 202 V 340 H -20 Z"
-        fill="#2b4b43"
+        fill="var(--vision-art-plane-2)"
       />
       <path
         d="M -20 296 C 166 248, 356 230, 580 258 V 340 H -20 Z"
-        fill="#396358"
+        fill="var(--vision-art-plane-3)"
       />
 
       {/* Soft morning horizon light ribbon sweeping into open reach */}
       <path
         d="M -16 248 C 118 242, 206 168, 336 138 C 424 118, 496 112, 576 114"
-        stroke="#72cfb3"
+        stroke="var(--night-accent)"
         strokeOpacity="0.52"
         strokeWidth="2"
         strokeLinecap="round"
@@ -158,15 +158,15 @@ export const AsymmetricAiField = (): ReactNode => (
       {/* Primary warm terracotta sweep echoing the asym horizon arch */}
       <path
         d="M -16 268 C 126 266, 204 188, 324 176 C 414 167, 492 168, 576 172"
-        stroke="#f08265"
+        stroke="var(--vision-art-arc)"
         strokeWidth="3.5"
         strokeLinecap="round"
       />
 
       {/* Gentle sunlit terracotta stone tucked calmly onto the sweep */}
-      <circle cx="192" cy="214" r="24" fill="#f08265" fillOpacity="0.18" />
-      <circle cx="192" cy="214" r="10" fill="#f08265" />
-      <circle cx="192" cy="214" r="3.5" fill="#f7f6f2" />
+      <circle cx="192" cy="214" r="24" fill="var(--vision-art-arc)" fillOpacity="0.18" />
+      <circle cx="192" cy="214" r="10" fill="var(--vision-art-arc)" />
+      <circle cx="192" cy="214" r="3.5" fill="var(--night-foreground)" />
     </svg>
   </div>
 );

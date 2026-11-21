@@ -9,13 +9,13 @@ Built by Asymmetric.al, an independent, for-profit software company serving nonp
 - Practical AI, built into the core (in development): AI built onto the shared giving core to draft campaigns from real fund and donor context, lighten routine donor care, and clear repetitive admin, with teams editing before anything goes out.
 
 ## Status
-- Public codebase: https://github.com/Asymmetric-al/core (AGPL-3.0-only, 5,200+ commits on develop, 600+ repository-wide merged PRs since January 2026, verified November 2026).
+- Public codebase: [Asymmetric-al/core](https://github.com/Asymmetric-al/core) (AGPL-3.0-only, 5,200+ commits on develop, 600+ repository-wide merged PRs since January 2026, verified November 2026).
 - In public code: authenticated donor portal with giving history, recurring-gift review (opening Stripe payment settings when needed), individual receipts, and settled-only annual statements (`apps/donor`, `packages/api/src/donor-portal`); assignment-scoped missionary supporter roster defaulting to `Anonymous partner` with `total_given` and `last_gift_amount` withheld on roster rows while aggregate analytics stay separate (`apps/missionary`, `packages/api/src/missionary-portal`); Mission Control CRM, Payload Web Studio website/template tools, and supported batch previews (`apps/admin`, `packages/api/src/admin/contribution-batches`).
 - Partial: public worker directory and checkout recipient lookup in `apps/donor` still render `@asym/mock-data` sample profiles; offline gift entry orchestration (`packages/api/src/admin/contributions/offline-entry.ts`) is in code with DB persistence intentionally switched off (`501`) pending migration, and accepted design notes (`docs/adr` 0004, 0010, and 0012) specify thank-you, offline-entry, and recurring-gift rules.
 - In development (not open yet): AI campaign drafting and donor-care assistance, hosted team subscription and onboarding (pricing unpublished), and optional future managed donor care.
 
 ## Pages
-- Homepage: https://asym.app/
-- Privacy policy: https://asym.app/privacy
-- Terms of service: https://asym.app/terms
-- Pre-launch early access status: https://asym.app/early-access/status
+- [Homepage](https://asym.app/): Product overview, AI vision, open-source build status, and early access.
+- [Privacy policy](https://asym.app/privacy): Data handling and early-access contact policy.
+- [Terms of service](https://asym.app/terms): Website terms of use.
+- [Pre-launch early access status](https://asym.app/early-access/status): Pre-launch readiness checklist and status route.
