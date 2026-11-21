@@ -51,7 +51,7 @@ const inventoryRows: readonly {
     statusLabel: "In code",
   },
   {
-    module: "Offline gifts, recurring commitments & staff-released thank-yous",
+    module: "Offline gifts, recurring commitments & auto-send thank-yous",
     path: "docs/adr",
     href: `${siteConfig.repoUrl}/tree/develop/docs/adr`,
     status: "in_code",
@@ -214,7 +214,7 @@ export const OpenSourceSection = () => (
             </div>
             <figcaption className="border-rule mt-2.5 flex flex-wrap items-baseline justify-between gap-2 border-t pt-2 text-xs">
               <span className="text-foreground font-mono font-medium">
-                Plate III · Open-source ledger
+                Plate II · Open-source ledger
               </span>
               <span className="text-muted-foreground">
                 Inspect schemas, API rules, and ADRs in Core

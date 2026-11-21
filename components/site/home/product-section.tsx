@@ -49,7 +49,7 @@ export const ProductSection = () => (
 
             <figcaption className="border-rule mt-3 flex flex-wrap items-baseline justify-between gap-2 border-t pt-2.5 text-xs leading-5">
               <span className="text-foreground font-mono font-medium">
-                Plate II · Staff review gate
+                Plate III · Staff review gate
               </span>
               <span className="text-muted-foreground">
                 Draft &rarr; staff review &rarr; publish only after approval

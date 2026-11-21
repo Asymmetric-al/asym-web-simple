@@ -221,15 +221,15 @@ test.describe("homepage smoke tests", () => {
     await expect(page.locator("#surface-donor")).toBeVisible();
     await expect(page.locator("#surface-missionary")).toBeVisible();
     await expect(page.locator("#surface-office")).toBeVisible();
-    await expect(page.locator("#appeals")).toContainText(
-      "Explicit staff trigger"
-    );
-    await expect(page.locator("#appeals")).toContainText(
-      "Role-scoped read access"
-    );
-    await expect(page.locator("#appeals")).toContainText(
-      "Single-record continuity"
-    );
+    await expect(
+      page.locator('noscript nav[aria-label="Homepage sections"]')
+    ).toBeVisible();
+    const noJsAppeals = page.locator("#appeals noscript");
+    await expect(noJsAppeals).toBeVisible();
+    const noJsAppealsText = (await noJsAppeals.textContent()) ?? "";
+    expect(noJsAppealsText).toContain("Explicit staff trigger");
+    expect(noJsAppealsText).toContain("Role-scoped read access");
+    expect(noJsAppealsText).toContain("Single-record continuity");
     await context.close();
   });
 
@@ -470,7 +470,7 @@ test.describe("homepage smoke tests", () => {
       page.getByRole("heading", { name: "Request received" })
     ).toBeFocused();
     await expect(page.locator("#early-access")).toContainText(
-      "Thanks for telling us about your team."
+      "Your request was accepted for delivery to the Asymmetric.al team."
     );
     expect(submitted).toMatchObject({
       email: "director@example.org",

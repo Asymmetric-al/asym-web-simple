@@ -21,7 +21,7 @@ const organizationSchema = {
       "@type": "Organization",
       "@id": `${siteConfig.url}#organization`,
       name: siteConfig.name,
-      url: siteConfig.githubOrgUrl,
+      url: siteConfig.url,
       sameAs: [siteConfig.githubOrgUrl, siteConfig.repoUrl],
       description:
         "Independent, for-profit software company building asym for nonprofits, starting with missions organizations.",

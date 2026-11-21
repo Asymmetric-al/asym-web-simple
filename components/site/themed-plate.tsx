@@ -21,11 +21,10 @@ const plateSources = (name: PlateName, theme: PlateTheme) => {
 /**
 The light and dark editions of one engraved plate.
 
-The default light edition loads eagerly (`fetchPriority="high"` for the hero
-plate, `fetchPriority="low"` below the fold) so Plate I paints immediately and
-Plates II/III never appear blank on scroll or full-page captures. Dark editions
-stay `loading="lazy"` (with a `prefers-color-scheme: dark` preload on the hero
-plate) so light visitors never download hidden dark plates on first paint.
+Only the hero plate (`priority={true}`) loads eagerly with `fetchPriority="high"`
+so mobile Slow 4G bandwidth goes straight to Plate I. Below-the-fold plates and
+hidden dark editions stay `loading="lazy"` (with a `prefers-color-scheme: dark`
+preload on the hero plate) so light visitors never contend with off-screen art.
 */
 export const ThemedPlate = ({
   name,
@@ -60,9 +59,9 @@ export const ThemedPlate = ({
         alt={alt}
         width={PLATE_WIDTH}
         height={PLATE_HEIGHT}
-        loading="eager"
+        loading={priority ? "eager" : "lazy"}
         decoding={priority ? "sync" : "async"}
-        fetchPriority={priority ? "high" : "low"}
+        fetchPriority={priority ? "high" : undefined}
         data-theme-plate="light"
         data-priority={priority ? "true" : undefined}
         className="block h-full w-full object-cover dark:hidden"

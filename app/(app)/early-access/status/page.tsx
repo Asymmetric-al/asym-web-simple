@@ -40,6 +40,12 @@ export const metadata: Metadata = createMetadata({
   noIndex: true,
 });
 
+const BUILT_TODAY_ITEMS = [
+  "Authenticated donor portal with own-account giving history, pledge management, receipts, and settled-only annual statements (apps/donor).",
+  "Private-by-default missionary roster where non-opted-in donors default to Anonymous partner and lifetime/last-gift amounts stay withheld (apps/missionary).",
+  "Office CRM, Payload Web Studio, email/PDF templates, and server-side batch action previews (apps/admin).",
+] as const;
+
 const PRELAUNCH_MILESTONES = [
   "Replace @asym/mock-data demo profiles on public worker directory and giving pages with live organization data.",
   "Finish hosted team subscription billing and guided onboarding from existing donor records.",
@@ -85,7 +91,7 @@ const buildStatusContent = ({
       eyebrow: "Check your details",
       title: "Your request needs a valid email and organization.",
       description:
-        "Use your browser’s Back button to keep and edit what you entered, or start a new request with a valid email address and organization name.",
+        "Use your browser’s Back button, which may keep what you entered so you can edit it, or start a new request with a valid email address and organization name.",
       primaryLabel: START_NEW_REQUEST_LABEL,
       primaryHref: EARLY_ACCESS_HREF,
       primaryIcon: "none",
@@ -97,7 +103,7 @@ const buildStatusContent = ({
       tone: "error",
       eyebrow: "Please wait",
       title: "Please wait before trying again.",
-      description: `${formatRetryWait(retrySeconds)} Use your browser’s Back button to keep what you entered.`,
+      description: `${formatRetryWait(retrySeconds)} Your browser’s Back button may keep what you entered.`,
       primaryLabel: START_NEW_REQUEST_LABEL,
       primaryHref: EARLY_ACCESS_HREF,
       primaryIcon: "none",
@@ -123,7 +129,7 @@ const buildStatusContent = ({
       eyebrow: "Submission error",
       title: earlyAccessCopy.failure,
       description:
-        "Use your browser’s Back button to keep what you entered and try again, or start a new request.",
+        "Use your browser’s Back button, which may keep what you entered so you can try again, or start a new request.",
       primaryLabel: START_NEW_REQUEST_LABEL,
       primaryHref: EARLY_ACCESS_HREF,
       primaryIcon: "none",
@@ -221,21 +227,39 @@ export default async function EarlyAccessStatusPage({
             {content.description}
           </p>
           {!isConfigured && content.tone === "neutral" ? (
-            <div className="border-rule mt-6 border-t pt-5">
-              <p className="text-foreground font-mono text-xs font-medium">
-                Before hosted intake opens
-              </p>
-              <ul className="text-muted-foreground mt-3 space-y-2 text-sm leading-6">
-                {PRELAUNCH_MILESTONES.map((item) => (
-                  <li key={item} className="flex items-start gap-2.5">
-                    <span
-                      aria-hidden="true"
-                      className="border-draft mt-2 size-2 shrink-0 rounded-full border border-dashed"
-                    />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
+            <div className="border-rule mt-6 space-y-5 border-t pt-5">
+              <div>
+                <p className="text-pine font-mono text-xs font-medium">
+                  In public code today
+                </p>
+                <ul className="text-muted-foreground mt-3 space-y-2 text-sm leading-6">
+                  {BUILT_TODAY_ITEMS.map((item) => (
+                    <li key={item} className="flex items-start gap-2.5">
+                      <span
+                        aria-hidden="true"
+                        className="bg-pine mt-2 size-1.5 shrink-0 rounded-full"
+                      />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="border-rule border-t pt-5">
+                <p className="text-foreground font-mono text-xs font-medium">
+                  Before hosted intake opens
+                </p>
+                <ul className="text-muted-foreground mt-3 space-y-2 text-sm leading-6">
+                  {PRELAUNCH_MILESTONES.map((item) => (
+                    <li key={item} className="flex items-start gap-2.5">
+                      <span
+                        aria-hidden="true"
+                        className="border-draft mt-2 size-2 shrink-0 rounded-full border border-dashed"
+                      />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           ) : null}
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
@@ -265,18 +289,33 @@ export default async function EarlyAccessStatusPage({
               <ArrowUpRightIcon dataIcon="inline-end" />
             </a>
           </div>
-          {contactEmail && content.tone !== "success" ? (
+          {content.tone === "success" ? null : (
             <p className="text-muted-foreground mt-5 text-sm leading-6">
-              For private questions, email{" "}
+              Prefer a feed reader? Subscribe to the{" "}
               <a
-                href={`mailto:${contactEmail}?subject=asym%20early%20access`}
+                href={`${siteConfig.commitsUrl}.atom`}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-background link-resilient rounded-xs underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:text-pine"
               >
-                {contactEmail}
+                development feed (Atom)
+                <span className="sr-only"> (opens in a new tab)</span>
               </a>
+              {contactEmail ? (
+                <>
+                  {" "}
+                  or email{" "}
+                  <a
+                    href={`mailto:${contactEmail}?subject=asym%20early%20access`}
+                    className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-background link-resilient rounded-xs underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:text-pine"
+                  >
+                    {contactEmail}
+                  </a>
+                </>
+              ) : null}
               .
             </p>
-          ) : null}
+          )}
         </div>
       </Container>
     </main>

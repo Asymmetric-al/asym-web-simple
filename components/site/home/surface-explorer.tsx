@@ -85,7 +85,7 @@ const SURFACES: readonly [SurfaceSpec, SurfaceSpec, SurfaceSpec] = [
     shortOutcome: "Portal, receipts & statements",
     appPath: "apps/donor",
     proofNote:
-      "Online checkout is built; public worker directory & lookup still show sample profiles (@asym/mock-data)",
+      "Public worker pages and checkout recipient lookup still show sample profiles (@asym/mock-data)",
     repoUrl: `${siteConfig.repoUrl}/blob/develop/packages/api/src/donor-portal/statements.ts`,
     repoLinkLabel: "statements.ts",
     heading: "Signed-in donors pull their own receipts and annual statements.",
@@ -98,7 +98,7 @@ const SURFACES: readonly [SurfaceSpec, SurfaceSpec, SurfaceSpec] = [
       "Authenticated donor portal",
       "Individual receipt downloads",
       "Settled annual statements",
-      "Online checkout (sample public profiles)",
+      "Online checkout (sample profiles)",
     ],
   },
   {
@@ -153,11 +153,12 @@ const SURFACES: readonly [SurfaceSpec, SurfaceSpec, SurfaceSpec] = [
 
 // Single responsive tab row per role: compact 3-up horizontal ledger bar on <lg; vertical hairline-ruled ledger rows on lg+.
 // Hover fill is scoped strictly to unselected tabs (`not-data-selected:`) so fine-pointer hover never lowers selected tab contrast (<1024px SC 1.4.3).
-const ROLE_TAB_CLASS =
-  "group border-rule-interactive data-selected:border-foreground data-selected:bg-foreground data-selected:text-background lg:data-selected:border-rule-interactive lg:data-selected:bg-card lg:data-selected:text-foreground relative z-10 flex min-h-11 w-full min-w-0 items-center justify-center gap-1.5 border px-2.5 py-2 text-center lg:min-h-0 lg:items-start lg:justify-between lg:gap-3 lg:border-x-0 lg:border-t-0 lg:border-b lg:px-3.5 lg:py-3.5 lg:text-left lg:last:border-b-0 forced-colors:data-selected:border-[Highlight] forced-colors:data-selected:outline-2 forced-colors:data-selected:outline-offset-[-2px] forced-colors:data-selected:outline-[Highlight]";
+// Below lg, the sliding `.horizontal-tabs-indicator` owns the active dark fill on hydrated tabs; SSR fallback retains `data-selected:bg-foreground`.
+const ROLE_TAB_BASE_CLASS =
+  "group border-rule-interactive data-selected:border-foreground data-selected:text-background lg:data-selected:border-rule-interactive lg:data-selected:bg-card lg:data-selected:text-foreground relative z-10 flex min-h-11 w-full min-w-0 items-center justify-center gap-1.5 border px-2.5 py-2 text-center lg:min-h-0 lg:items-start lg:justify-between lg:gap-3 lg:border-x-0 lg:border-t-0 lg:border-b lg:px-3.5 lg:py-3.5 lg:text-left lg:last:border-b-0 forced-colors:data-selected:border-[Highlight] forced-colors:data-selected:bg-[Highlight] forced-colors:data-selected:text-[HighlightText] forced-colors:data-selected:forced-color-adjust-none forced-colors:data-selected:outline-2 forced-colors:data-selected:outline-offset-[-2px] forced-colors:data-selected:outline-[Highlight]";
 
 const ROLE_TAB_INTERACTIVE_CLASS =
-  "focus-visible:ring-ring focus-visible:ring-offset-background cursor-pointer transition-[color,background-color,border-color] duration-150 select-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent lg:focus-visible:ring-inset lg:focus-visible:ring-offset-0 not-data-selected:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-card/80";
+  "focus-visible:ring-ring focus-visible:ring-offset-background cursor-pointer transition-[color,background-color,border-color,scale] duration-150 select-none active:scale-[0.98] lg:active:scale-100 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent lg:focus-visible:ring-inset lg:focus-visible:ring-offset-0 not-data-selected:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-card/80";
 
 const PANEL_STACK_CELL = "col-start-1 row-start-1 min-w-0";
 
@@ -196,7 +197,7 @@ const SharedRecordFoot = ({
   const isRosterFilter = active === "missionary";
 
   return (
-    <div className="border-rule-strong bg-card/65 mt-3 min-w-0 border-t px-3.5 py-3">
+    <div className="border-rule-strong bg-card/65 mt-3 hidden min-w-0 border-t px-3.5 py-3 lg:block">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2 text-[0.8125rem]">
           <span
@@ -355,6 +356,14 @@ export const SurfaceExplorer = (): ReactNode => {
   const [hasInteracted, setHasInteracted] = useState(false);
 
   useEffect(() => {
+    const focusSurfaceTab = (key: SurfaceKey) => {
+      window.requestAnimationFrame(() => {
+        const targetTab = document.querySelector<HTMLButtonElement>(
+          `[data-surface-tab="${CSS.escape(key)}"]`
+        );
+        targetTab?.focus({ preventScroll: true });
+      });
+    };
     const handleHashChange = () => {
       const next = readSurfaceFromHash();
       if (!next) {
@@ -362,16 +371,30 @@ export const SurfaceExplorer = (): ReactNode => {
       }
       setHasInteracted(true);
       setActiveSurface(next);
-      window.requestAnimationFrame(() => {
-        const targetTab = document.querySelector<HTMLButtonElement>(
-          `[data-surface-tab="${CSS.escape(next)}"]`
-        );
-        targetTab?.focus({ preventScroll: true });
-      });
+      focusSurfaceTab(next);
+    };
+    const handleSameHashClick = (event: MouseEvent) => {
+      const target =
+        event.target instanceof Element
+          ? event.target.closest<HTMLAnchorElement>('a[href^="#surface-"]')
+          : null;
+      const href = target?.getAttribute("href");
+      if (!href || href !== window.location.hash) {
+        return;
+      }
+      const key = href.slice(SURFACE_HASH_PREFIX.length);
+      if (!isSurfaceKey(key)) {
+        return;
+      }
+      setHasInteracted(true);
+      setActiveSurface(key);
+      focusSurfaceTab(key);
     };
     window.addEventListener("hashchange", handleHashChange);
+    document.addEventListener("click", handleSameHashClick);
     return () => {
       window.removeEventListener("hashchange", handleHashChange);
+      document.removeEventListener("click", handleSameHashClick);
     };
   }, []);
 
@@ -420,13 +443,14 @@ export const SurfaceExplorer = (): ReactNode => {
               aria-label="Choose a role to inspect its workspace"
               className={listClass}
             >
+              <TabsIndicator className="horizontal-tabs-indicator lg:hidden" />
               <TabsIndicator className="vertical-tabs-indicator hidden lg:block" />
               {SURFACES.map((spec) => (
                 <TabsTab
                   key={spec.key}
                   value={spec.key}
                   data-surface-tab={spec.key}
-                  className={cn(ROLE_TAB_CLASS, ROLE_TAB_INTERACTIVE_CLASS)}
+                  className={cn(ROLE_TAB_BASE_CLASS, ROLE_TAB_INTERACTIVE_CLASS)}
                 >
                   <RoleTabBody spec={spec} />
                 </TabsTab>
@@ -462,7 +486,10 @@ export const SurfaceExplorer = (): ReactNode => {
                   <li
                     key={spec.key}
                     data-selected={isSelected ? "" : undefined}
-                    className={ROLE_TAB_CLASS}
+                    className={cn(
+                      ROLE_TAB_BASE_CLASS,
+                      "data-selected:bg-foreground"
+                    )}
                   >
                     {isSelected ? (
                       <span
@@ -480,7 +507,6 @@ export const SurfaceExplorer = (): ReactNode => {
           </div>
 
           <div className="grid min-w-0">
-            <InactivePanelSizers active={DEFAULT_SURFACE} />
             <div className={cn(PANEL_STACK_CELL, "grid")}>
               <SurfaceLedgerSheet spec={SURFACES[0]} id="surface-donor" />
             </div>

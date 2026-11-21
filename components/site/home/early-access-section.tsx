@@ -97,18 +97,31 @@ export const EarlyAccessSection = () => {
                     <ArrowUpRightIcon dataIcon="inline-end" />
                   </a>
                 </div>
-                {contactEmail ? (
-                  <p className="text-muted-foreground mt-5 text-sm leading-6">
-                    Questions before intake opens? Email{" "}
-                    <a
-                      href={`mailto:${contactEmail}?subject=asym%20early%20access`}
-                      className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-card link-resilient rounded-xs underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:text-pine"
-                    >
-                      {contactEmail}
-                    </a>
-                    .
-                  </p>
-                ) : null}
+                <p className="text-muted-foreground mt-5 text-sm leading-6">
+                  Prefer a feed reader? Subscribe to the{" "}
+                  <a
+                    href={`${siteConfig.commitsUrl}.atom`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-card link-resilient inline-flex items-center gap-0.5 rounded-xs underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:text-pine"
+                  >
+                    development feed (Atom)
+                    <span className="sr-only"> (opens in a new tab)</span>
+                  </a>
+                  {contactEmail ? (
+                    <>
+                      {" "}
+                      or email{" "}
+                      <a
+                        href={`mailto:${contactEmail}?subject=asym%20early%20access`}
+                        className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-card link-resilient rounded-xs underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:text-pine"
+                      >
+                        {contactEmail}
+                      </a>
+                    </>
+                  ) : null}
+                  .
+                </p>
               </div>
             </div>
           )}

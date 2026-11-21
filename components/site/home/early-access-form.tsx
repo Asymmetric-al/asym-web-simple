@@ -182,8 +182,7 @@ const EarlyAccessSuccessCard = ({
       Request received
     </h3>
     <p className="text-muted-foreground mt-2 text-base leading-7" role="status">
-      Thanks for telling us about your team. Until early access opens, you can
-      follow public progress in the repository README.
+      {earlyAccessCopy.success}
     </p>
     <div className="mt-6">
       <a
@@ -229,7 +228,7 @@ const EarlyAccessAlertBanner = ({
       "text-foreground mt-5 border px-4 py-3 text-sm leading-6",
       status === "not_configured"
         ? "border-rule bg-record/85"
-        : "border-destructive/30 bg-destructive/8"
+        : "border-destructive-border bg-destructive/8"
     )}
   >
     <p className="font-medium">{alertHeading}</p>
@@ -696,7 +695,7 @@ export const EarlyAccessForm = ({
             aria-invalid={Boolean(errors.message)}
             aria-describedby={describedBy("message")}
             onChange={() => clearError("message")}
-            placeholder="For example: year-end appeals, recurring gifts, receipts, or our website…"
+            placeholder="For example: donor portals, annual statements, missionary rosters, or offline gifts…"
             className="mt-2 min-h-28"
           />
           <FieldMessage id={`${ids.message}-error`}>

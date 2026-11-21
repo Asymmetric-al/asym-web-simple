@@ -68,7 +68,7 @@ const GOVERNANCE_STEPS: readonly [
     summary: "Hold every draft word, fund link, and recipient list for review.",
     guardrailLabel: "Separate from routine receipts",
     guardrail:
-      "AI-drafted appeals remain in draft until approved by staff. Routine gift receipts and staff-released thank-yous (ADR 0004) follow separate organization rules.",
+      "AI-drafted appeals remain in draft until approved by staff. Routine gift receipts and entry-gated auto-send thank-yous (ADR 0004) follow separate organization rules.",
     tone: "approval",
   },
   {
@@ -332,7 +332,6 @@ export const GovernanceSequence = (): ReactNode => {
           </ol>
 
           <div className="grid min-w-0">
-            <InactiveDetailSizers active={DEFAULT_STEP} />
             <div className={cn(DETAIL_STACK_CELL, "grid")}>
               <StepGuardrailNote item={GOVERNANCE_STEPS[2]} />
             </div>

@@ -164,10 +164,15 @@ describe("design token WCAG 2.2 AA contrast", () => {
       ["--rule-interactive", "--card"],
       ["--pine-border", "--background"],
       ["--pine-border", "--card"],
+      ["--pine-border", "--pine-soft"],
       ["--vermilion-border", "--background"],
       ["--vermilion-border", "--card"],
+      ["--vermilion-border", "--vermilion-soft"],
       ["--draft-border", "--background"],
       ["--draft-border", "--card"],
+      ["--draft-border", "--draft-soft"],
+      ["--destructive-border", "--background"],
+      ["--destructive-border", "--card"],
     ];
 
     for (const [fg, bg] of borderPairs) {

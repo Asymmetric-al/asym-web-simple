@@ -31,10 +31,10 @@ const giftTrace: readonly {
   {
     step: "03",
     desk: "Missionary tracks support",
-    title: "No weekly spreadsheet redaction",
-    text: "Field workers follow assigned support without manual exports. Donors stay Anonymous partner until they opt in; lifetime and last-gift amounts stay withheld.",
-    linkLabel: "redaction.ts",
-    repoPath: "blob/develop/packages/api/src/missionary-portal/redaction.ts",
+    title: "Support progress without manual exports",
+    text: "Field workers follow assigned support without office spreadsheet exports. Donors stay Anonymous partner until they opt in; lifetime and last-gift amounts stay withheld on the roster.",
+    linkLabel: "donors.ts",
+    repoPath: "blob/develop/packages/api/src/missionary-portal/donors.ts",
   },
 ];
 

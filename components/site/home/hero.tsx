@@ -4,7 +4,7 @@ import { GitHubMark } from "@/components/site/github-mark";
 import { ArrowRightIcon } from "@/components/site/icons";
 import { ThemedPlate } from "@/components/site/themed-plate";
 import { buttonVariants } from "@/components/ui/button-variants";
-import { mobileNavigationLinks, siteConfig } from "@/lib/config";
+import { siteConfig } from "@/lib/config";
 import { isEarlyAccessConfigured } from "@/lib/early-access-config";
 import { cn } from "@/lib/utils";
 
@@ -60,15 +60,12 @@ export const HomeHero = () => {
             </h1>
 
             <p className="text-foreground/88 mt-4 max-w-[33rem] text-base leading-7 text-pretty sm:mt-5 sm:text-[1.09375rem] sm:leading-7">
-              Staff enter a gift once. Signed&#8209;in donors download their own
-              receipts and annual statements, missionaries track assigned
-              support with donors private by default, and the office keeps one
-              ledger.
+              Staff enter a gift once. Donors download their own receipts.
+              Missionaries follow assigned support without private contact
+              details by default, and the office keeps one ledger.
             </p>
             <p className="text-muted-foreground mt-2.5 max-w-[33rem] text-sm leading-6 text-pretty sm:mt-3">
-              The codebase is open source today; hosted access isn’t open yet.
-              Public giving pages still use sample profiles, and AI appeals are
-              in development.
+              Open source today; hosted access isn’t open yet.
             </p>
 
             <div className="mt-6 flex flex-col gap-2.5 sm:mt-7 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
@@ -161,12 +158,12 @@ export const HomeHero = () => {
                       <span>{item.role}</span>
                       <span
                         aria-hidden="true"
-                        className="text-pine opacity-60 transition-opacity duration-150 group-focus-visible:opacity-100 [@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100"
+                        className="text-pine opacity-60 transition-[opacity,transform] duration-150 group-focus-visible:opacity-100 [@media(hover:hover)_and_(pointer:fine)]:group-hover:translate-y-0.5 [@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100"
                       >
                         &darr;
                       </span>
                     </span>
-                    <span className="text-muted-foreground mt-0.5 block text-[0.75rem] leading-4">
+                    <span className="text-muted-foreground mt-0.5 block text-[0.8125rem] leading-4">
                       {item.detail}
                     </span>
                   </a>
@@ -175,27 +172,6 @@ export const HomeHero = () => {
             </figcaption>
           </figure>
         </div>
-
-        <noscript>
-          <nav
-            aria-label="Homepage sections"
-            className="border-rule mt-8 border-t pt-2 md:hidden"
-          >
-            <ul className="flex flex-wrap items-center gap-x-5 gap-y-1 text-sm">
-              {mobileNavigationLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    prefetch={false}
-                    className="text-foreground/82 inline-flex min-h-11 items-center rounded-md font-medium underline-offset-4 [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:underline"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        </noscript>
       </Container>
     </section>
   );

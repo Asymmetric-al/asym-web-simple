@@ -10,7 +10,7 @@ const ordinaryWork = [
   },
   {
     num: "03",
-    line: "The missionary sees support, never gift totals.",
+    line: "The roster hides lifetime and last-gift totals.",
     italic: false,
   },
   {

@@ -10,12 +10,14 @@ export const ArchitectureSection = () => (
   >
     <Container>
       <div className="border-rule border-t pt-12 sm:pt-16">
-        <div className="max-w-[46rem]">
-          <Eyebrow>In public code</Eyebrow>
-          <SectionTitle id="architecture-title">
-            Three workspaces on one shared record.
-          </SectionTitle>
-          <p className="text-muted-foreground mt-4 text-base leading-7 text-balance sm:text-[1.0625rem] sm:leading-7">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between lg:gap-12">
+          <div className="max-w-[34rem]">
+            <Eyebrow>In public code</Eyebrow>
+            <SectionTitle id="architecture-title">
+              Three workspaces on one shared record.
+            </SectionTitle>
+          </div>
+          <p className="text-muted-foreground max-w-[32rem] text-sm leading-6 text-pretty sm:text-base sm:leading-7">
             <span translate="no" className="text-foreground font-medium">
               asym
             </span>{" "}
