@@ -36,7 +36,7 @@ export default buildConfig({
   ],
   globals: [
     // TODO Phase 2: Add globals
-    // - SiteSettings (name, description, email, EIN, location, CTA config)
+    // - SiteSettings (name, description, email, location, CTA config)
     // - Navigation (primary nav, support links)
     // - Footer (link groups, copyright)
     // - SEODefaults (default OG image, description, site name)

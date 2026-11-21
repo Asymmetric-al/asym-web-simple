@@ -1,16 +1,39 @@
 import { siteConfig } from "@/lib/config";
 import type { MetadataRoute } from "next";
 
-const routes = ["/", "/statement-of-faith", "/privacy", "/terms"] as const;
+const routes: readonly {
+  readonly path: string;
+  readonly lastModified: string;
+  readonly changeFrequency: "weekly" | "monthly";
+  readonly priority: number;
+}[] = [
+  {
+    path: "/",
+    lastModified: "2026-11-21",
+    changeFrequency: "weekly",
+    priority: 1,
+  },
+  {
+    path: "/privacy",
+    lastModified: "2026-11-20",
+    changeFrequency: "monthly",
+    priority: 0.6,
+  },
+  {
+    path: "/terms",
+    lastModified: "2026-11-20",
+    changeFrequency: "monthly",
+    priority: 0.6,
+  },
+];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = siteConfig.url;
-  const now = new Date();
 
-  return routes.map((route, index) => ({
-    url: route === "/" ? baseUrl : `${baseUrl}${route}`,
-    lastModified: now,
-    changeFrequency: route === "/" ? "weekly" : "monthly",
-    priority: index === 0 ? 1 : 0.8,
+  return routes.map(({ path, lastModified, changeFrequency, priority }) => ({
+    url: path === "/" ? baseUrl : `${baseUrl}${path}`,
+    lastModified,
+    changeFrequency,
+    priority,
   }));
 }

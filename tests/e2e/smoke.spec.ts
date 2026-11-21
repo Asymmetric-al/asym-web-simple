@@ -90,67 +90,204 @@ test.describe("homepage smoke tests", () => {
   test("hero states the product, stage, and primary action", async ({
     page,
   }) => {
-    await page.goto("/", { waitUntil: "domcontentloaded" });
+    const response = await page.goto("/", { waitUntil: "domcontentloaded" });
+    const csp = response?.headers()["content-security-policy"] ?? "";
+    const scriptSrc =
+      csp
+        .split(";")
+        .map((part) => part.trim())
+        .find((part) => part.startsWith("script-src ")) ?? "";
+    expect(scriptSrc).toContain("'nonce-");
+    expect(scriptSrc).toContain("'strict-dynamic'");
+    expect(scriptSrc).not.toContain("'unsafe-inline'");
+    expect(csp).toContain("object-src 'none'");
 
     await expect(page).toHaveTitle(
-      "asym | Open-source AI software for nonprofits"
+      "asym | Open-source giving and donor-care software for nonprofits"
     );
     await expect(
       page.getByRole("heading", {
         level: 1,
-        name: "Your website, fundraising, and CRM. Built to work together with AI.",
+        name: "Less overhead. Outsized impact.",
       })
     ).toBeVisible();
-    await expect(page.getByText("Launching soon")).toBeVisible();
+    await expect(
+      page.getByText("Open-source software for nonprofits", {
+        exact: true,
+      })
+    ).toBeVisible();
     await expect(
       page
         .getByRole("main")
-        .getByRole("link", { name: /^Request early access/u })
+        .getByRole("link", {
+          name: /^(?:Request early access|See what’s built)$/u,
+        })
         .first()
-    ).toHaveAttribute("href", "/#early-access");
+    ).toHaveAttribute("href", /^\/#(?:early-access|where-things-stand)$/u);
     await expect(
-      page.getByRole("link", { name: "View the code" })
+      page.getByRole("link", { name: /^View the code/u }).first()
     ).toHaveAttribute("href", REPO_URL);
   });
 
-  test("workflow is described in text with an honest status", async ({
+  test("vision, human outcomes, and filterable open-source status ledger work with keyboard", async ({
     page,
   }) => {
     await page.goto("/", { waitUntil: "domcontentloaded" });
-    const product = page.locator("#product");
+    await waitForUi(page);
 
+    const vision = page.locator("#vision");
     await expect(
-      product.getByRole("heading", {
+      vision.getByRole("heading", {
         level: 2,
-        name: "From a brief to a campaign ready for review.",
+        name: "Practical AI, built for real work.",
       })
     ).toBeVisible();
-    await expect(product.getByRole("listitem")).toHaveText([
-      /Describe/u,
-      /Prepare/u,
-      /Review/u,
-      /Follow through/u,
-    ]);
+    await expect(vision).toContainText("AI in development");
+
+    const outcomes = page.locator("#product");
     await expect(
-      product.getByText("In development", { exact: true })
+      outcomes.getByRole("heading", {
+        level: 2,
+        name: "One foundation. Clear for everyone involved.",
+      })
     ).toBeVisible();
-    await expect(page.getByText(/sample data/iu)).toHaveCount(0);
+    await expect(outcomes).toContainText("apps/donor");
+    await expect(outcomes).toContainText("apps/missionary");
+    await expect(outcomes).toContainText("apps/admin");
+    await expect(outcomes).toContainText("Anonymous partner");
+
+    const openSource = page.locator("#open-source");
+    const filterGroup = openSource.getByRole("radiogroup", {
+      name: "Filter build status",
+    });
+    const partialFilter = filterGroup.getByRole("radio", {
+      name: /^Partial/u,
+    });
+    await partialFilter.click();
+    await expect(partialFilter).toHaveAttribute("aria-checked", "true");
+    await expect(openSource.locator("li")).toHaveCount(2);
+
+    await partialFilter.focus();
+    await page.keyboard.press("ArrowRight");
+    await expect(
+      filterGroup.getByRole("radio", { name: /^Planned/u })
+    ).toHaveAttribute("aria-checked", "true");
+    await expect(openSource.locator("li")).toHaveCount(2);
+    await expect(openSource).toContainText("AI campaign drafting");
   });
 
-  test("open source and team sections link to the public code", async ({
+  test("no-JS homepage exposes zero inert buttons, distinct outcome anchors, and full build status list", async ({
+    browser,
+    baseURL,
+  }) => {
+    const context = await browser.newContext({
+      ...(baseURL && { baseURL }),
+      javaScriptEnabled: false,
+      viewport: { width: 390, height: 844 },
+    });
+    const page = await context.newPage();
+    await page.goto("/", { waitUntil: "domcontentloaded" });
+
+    await expect(page.locator('button:not([type="submit"])')).toHaveCount(0);
+    await expect(page.locator("#surface-donor")).toBeVisible();
+    await expect(page.locator("#surface-missionary")).toBeVisible();
+    await expect(page.locator("#surface-office")).toBeVisible();
+    await expect(
+      page.locator('noscript nav[aria-label="Homepage sections"]')
+    ).toBeVisible();
+    await expect(page.locator("#open-source ul > li")).toHaveCount(7);
+    await context.close();
+  });
+
+  test("homepage maintains near-zero CLS across hydration and enforces API origin and config gates", async ({
+    page,
+    request,
+  }) => {
+    await page.addInitScript(() => {
+      let cls = 0;
+      const observer = new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          const shift = entry as PerformanceEntry & {
+            value: number;
+            hadRecentInput: boolean;
+          };
+          if (!shift.hadRecentInput) {
+            cls += shift.value;
+          }
+        }
+        document.documentElement.dataset.asymCls = String(cls);
+      });
+      observer.observe({ type: "layout-shift", buffered: true });
+    });
+
+    await page.goto("/", { waitUntil: "networkidle" });
+    await waitForUi(page);
+
+    const measuredCls = await page.evaluate(() =>
+      Number(document.documentElement.dataset.asymCls ?? "0")
+    );
+    expect(measuredCls).toBeLessThanOrEqual(0.01);
+
+    const crossSiteRes = await request.post("/api/early-access", {
+      headers: {
+        "content-type": "application/json",
+        origin: "https://evil.example",
+        "sec-fetch-site": "cross-site",
+      },
+      data: {
+        email: "director@example.org",
+        organization: "Example Missions",
+      },
+    });
+    expect(crossSiteRes.status()).toBe(403);
+
+    if ((await earlyAccessForm(page).count()) > 0) {
+      return;
+    }
+    const apiRes = await request.post("/api/early-access", {
+      headers: { "content-type": "application/json" },
+      data: { email: "director@example.org" },
+    });
+    expect(apiRes.status()).toBe(503);
+  });
+
+  test("open source, sustainability, and company sections link to public code and match intake state", async ({
     page,
   }) => {
     await page.goto("/", { waitUntil: "domcontentloaded" });
 
+    const openSource = page.locator("#open-source");
     await expect(
-      page.getByRole("link", { name: /Explore the code on GitHub/u })
+      openSource.getByRole("link", { name: /Explore the code on GitHub/u })
     ).toHaveAttribute("href", REPO_URL);
-    await expect(page.locator("#open-source")).toContainText(
-      "Managed donor care"
-    );
-    await expect(page.locator("#about")).toContainText(
-      "Co-Executive Director of Global Fellowship"
-    );
+    await expect(openSource).toContainText("managed donor care");
+
+    const isConfigured = (await earlyAccessForm(page).count()) > 0;
+    if (isConfigured) {
+      await expect(
+        openSource.getByRole("link", { name: /Request early access/u })
+      ).toHaveAttribute("href", "/#early-access");
+      await expect(page.getByRole("main")).toContainText(
+        "Early-access requests are open for hosted pilots"
+      );
+    } else {
+      await expect(
+        openSource.getByRole("link", {
+          name: /Read the pre-launch checklist/u,
+        })
+      ).toHaveAttribute("href", "/early-access/status?state=unavailable");
+      await expect(page.getByRole("main")).toContainText(
+        "Hosted access and AI tools aren’t open yet"
+      );
+    }
+
+    await expect(
+      page.locator("#about").getByRole("heading", {
+        level: 2,
+        name: "Built from inside the work.",
+      })
+    ).toBeVisible();
+    await expect(page.locator("#about")).toContainText("Global Fellowship");
   });
 
   test("main navigation reaches each homepage section", async ({ page }) => {
@@ -169,12 +306,12 @@ test.describe("homepage smoke tests", () => {
     await expect(
       page.getByRole("heading", {
         level: 2,
-        name: "Open source, with a team to run it for you.",
+        name: "Inspect the software before you trust it.",
       })
     ).toBeInViewport();
   });
 
-  test("mobile header keeps the brand and early access action", async ({
+  test("mobile header keeps the brand and early access action and offers section links", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 390, height: 844 });
@@ -186,19 +323,66 @@ test.describe("homepage smoke tests", () => {
       banner.getByRole("link", { name: /^asym home$/iu })
     ).toBeVisible();
     await expect(
-      banner.getByRole("link", { name: "Early access" })
+      banner.getByRole("link", { name: /^(?:Early access|See what’s built)/u })
     ).toBeVisible();
     await expect(banner.getByRole("navigation")).toBeHidden();
+    const menuTrigger = banner.getByRole("button", { name: "Page sections" });
+    await expect(menuTrigger).toBeVisible();
+    await menuTrigger.focus();
+    await page.keyboard.press("Enter");
+    await expect(
+      page.getByRole("navigation", { name: "Homepage sections" })
+    ).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(menuTrigger).toBeFocused();
 
     await expectNoHorizontalOverflow(page);
   });
 
-  test("early access form explains missing or invalid fields", async ({
+  test("early access discloses unconfigured preview state or validates live form", async ({
     page,
   }) => {
     await page.goto("/", { waitUntil: "domcontentloaded" });
     await waitForUi(page);
+    const formCount = await earlyAccessForm(page).count();
+
+    if (formCount === 0) {
+      await expect(page.locator("#early-access")).toContainText(
+        "Early access isn’t open yet."
+      );
+      await expect(
+        page
+          .locator("#early-access")
+          .getByRole("link", { name: /Follow progress on GitHub/u })
+      ).toHaveAttribute("href", `${REPO_URL}#readme`);
+      await expect(
+        page
+          .locator("#early-access")
+          .getByRole("link", { name: /Pre-launch checklist/u })
+      ).toHaveAttribute("href", "/early-access/status?state=unavailable");
+      return;
+    }
+
     const form = earlyAccessForm(page);
+    await expect(form).toHaveAttribute("method", "post");
+    await expect(form).toHaveAttribute("action", "/api/early-access");
+
+    const emailInput = form.getByLabel("Email");
+    for (const malformedEmail of [
+      "sam..lee@example.org",
+      "sam.@example.org",
+      ".sam@example.org",
+      `${"a".repeat(65)}@example.org`,
+      "hello@-invalid.org",
+    ]) {
+      await emailInput.fill(malformedEmail);
+      expect(
+        await emailInput.evaluate((node: HTMLInputElement) =>
+          node.checkValidity()
+        )
+      ).toBeFalsy();
+    }
+    await emailInput.fill("");
 
     await form.getByRole("button", { name: "Request early access" }).click();
 
@@ -211,9 +395,23 @@ test.describe("homepage smoke tests", () => {
       "aria-invalid",
       "true"
     );
+
+    const { origin } = new URL(page.url());
+    const invalidFormPost = await page.request.post("/api/early-access", {
+      headers: {
+        "content-type": "application/x-www-form-urlencoded",
+        origin,
+      },
+      data: "email=invalid-email&organization=",
+      maxRedirects: 0,
+    });
+    expect(invalidFormPost.status()).toBe(303);
+    expect(invalidFormPost.headers().location).toContain(
+      "/early-access/status?state=invalid"
+    );
   });
 
-  test("early access keeps entries when the request is not accepted", async ({
+  test("early access keeps entries when the request is not accepted (configured mode)", async ({
     page,
   }) => {
     await page.route(EARLY_ACCESS_API, (route) =>
@@ -224,12 +422,16 @@ test.describe("homepage smoke tests", () => {
     );
     await page.goto("/", { waitUntil: "domcontentloaded" });
     await waitForUi(page);
+    if ((await earlyAccessForm(page).count()) === 0) {
+      test.skip(true, "Deployment has no email delivery configured.");
+    }
+
     const form = await fillEarlyAccess(page);
 
     await form.getByRole("button", { name: "Request early access" }).click();
 
     await expect(form.getByRole("alert")).toContainText(
-      "Your request didn’t go through. Please try again."
+      "Early access sign\u{2011}ups aren’t open right now."
     );
     await expect(form.getByLabel("Email")).toHaveValue("director@example.org");
     await expect(form.getByLabel("Organization")).toHaveValue(
@@ -237,7 +439,7 @@ test.describe("homepage smoke tests", () => {
     );
   });
 
-  test("early access confirms only after the request is accepted", async ({
+  test("early access confirms only after the request is accepted (configured mode)", async ({
     page,
   }) => {
     let submitted: unknown = null;
@@ -247,6 +449,10 @@ test.describe("homepage smoke tests", () => {
     });
     await page.goto("/", { waitUntil: "domcontentloaded" });
     await waitForUi(page);
+    if ((await earlyAccessForm(page).count()) === 0) {
+      test.skip(true, "Deployment has no email delivery configured.");
+    }
+
     const form = await fillEarlyAccess(page);
 
     await form.getByRole("button", { name: "Request early access" }).click();
@@ -255,7 +461,7 @@ test.describe("homepage smoke tests", () => {
       page.getByRole("heading", { name: "Request received" })
     ).toBeFocused();
     await expect(page.locator("#early-access")).toContainText(
-      "We’ve received your request."
+      "We’ve received your request and passed it to the Asymmetric.al team."
     );
     expect(submitted).toMatchObject({
       email: "director@example.org",
@@ -265,7 +471,19 @@ test.describe("homepage smoke tests", () => {
     });
   });
 
-  test("theme toggle applies dark mode and swaps the logo artwork", async ({
+  test("standalone early-access status does not spoof received without confirmation", async ({
+    page,
+  }) => {
+    await page.goto("/early-access/status?state=received", {
+      waitUntil: "domcontentloaded",
+    });
+
+    await expect(
+      page.getByRole("heading", { level: 1, name: "Early access status" })
+    ).toBeVisible();
+  });
+
+  test("theme toggle applies dark mode, supports arrow keys, and swaps the logo artwork", async ({
     page,
   }) => {
     const projectName = test.info().project.name;
@@ -273,52 +491,70 @@ test.describe("homepage smoke tests", () => {
     await waitForUi(page);
     await page.locator("footer").scrollIntoViewIfNeeded();
 
-    await activate(
-      page.getByRole("button", { name: /change color theme/iu }).first(),
-      projectName
-    );
-    await page.getByRole("menuitem", { name: /dark/iu }).click();
+    const themeGroup = page.getByRole("radiogroup", { name: /color theme/iu });
+    const darkOption = themeGroup.getByRole("radio", { name: /^Dark$/u });
+    const lightOption = themeGroup.getByRole("radio", { name: /^Light$/u });
 
+    await activate(darkOption, projectName);
+
+    await expect(darkOption).toHaveAttribute("aria-checked", "true");
     await expect(page.locator("html")).toHaveClass(/dark/u);
     await expect(
-      page.locator(
-        'header a[aria-label="asym home"] img[src*="asym-mark-light"]'
-      )
+      page.locator('header a[aria-label="asym home"] svg')
     ).toBeVisible();
+
+    await darkOption.focus();
+    await page.keyboard.press("ArrowLeft");
+    await expect(lightOption).toHaveAttribute("aria-checked", "true");
+    await expect(page.locator("html")).not.toHaveClass(/dark/u);
   });
 
-  test("footer links to code, contact, and legal pages", async ({ page }) => {
+  test("footer links to code, early access, and legal pages", async ({
+    page,
+  }) => {
     await page.goto("/", { waitUntil: "domcontentloaded" });
     const footer = page.locator("footer");
 
-    await expect(footer.getByRole("link", { name: "GitHub" })).toHaveAttribute(
-      "href",
-      REPO_URL
-    );
-    await expect(footer.getByRole("link", { name: "Contact" })).toHaveAttribute(
-      "href",
-      /^mailto:/u
-    );
+    await expect(
+      footer.getByRole("link", { name: /^GitHub/u })
+    ).toHaveAttribute("href", REPO_URL);
+    await expect(
+      footer.getByRole("link", { name: /^Early access/u })
+    ).toHaveAttribute("href", "/#early-access");
     await expect(footer.getByRole("link", { name: "Privacy" })).toHaveAttribute(
       "href",
       "/privacy"
+    );
+    await expect(footer.getByRole("link", { name: "Terms" })).toHaveAttribute(
+      "href",
+      "/terms"
     );
     await expect(footer).toContainText("Asymmetric.al");
     await expect(footer).not.toContainText("EIN");
   });
 
-  test("missing routes land on the custom not-found page", async ({ page }) => {
-    await page.goto("/does-not-exist", { waitUntil: "domcontentloaded" });
-
-    await expect(
-      page.getByRole("heading", { level: 1, name: "This page doesn’t exist." })
-    ).toBeVisible();
-    await expect(
-      page.getByRole("link", { name: "Go to the homepage" })
-    ).toHaveAttribute("href", "/");
+  test("missing and production qa routes land on custom 404 with site chrome", async ({
+    page,
+  }) => {
+    for (const path of ["/does-not-exist", "/qa/error"]) {
+      const response = await page.goto(path, { waitUntil: "domcontentloaded" });
+      expect(response?.status()).toBe(404);
+      await expect(page).toHaveTitle("Page not found | asym");
+      await expect(page.locator("html")).toHaveAttribute("lang", "en");
+      await expect(page.getByRole("banner")).toBeVisible();
+      await expect(page.getByRole("contentinfo")).toBeVisible();
+      await expect(
+        page.getByRole("heading", {
+          level: 1,
+          name: "This page doesn’t exist.",
+        })
+      ).toBeVisible();
+    }
   });
 
-  test("legacy routes redirect to homepage sections", async ({ page }) => {
+  test("legacy routes redirect permanently to homepage sections", async ({
+    page,
+  }) => {
     await page.goto("/waitlist", { waitUntil: "domcontentloaded" });
 
     await expect(page).toHaveURL(/\/#early-access$/u);

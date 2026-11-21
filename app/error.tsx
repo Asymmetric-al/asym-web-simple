@@ -1,11 +1,30 @@
 "use client";
 
-import { RotateCcw, ShieldAlert } from "lucide-react";
 import Link from "next/link";
 import { useEffect } from "react";
+import { Container } from "@/components/site/container";
+import { ArrowRightIcon } from "@/components/site/icons";
 import { buttonVariants } from "@/components/ui/button-variants";
-import { Container, PageHero, Section } from "@/components/site/page";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { siteConfig } from "@/lib/config";
+import { cn } from "@/lib/utils";
+
+const ReloadIcon = () => (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    data-icon="inline-end"
+    aria-hidden="true"
+  >
+    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+    <path d="M3 3v5h5" />
+  </svg>
+);
 
 export default function ErrorPage({
   error,
@@ -21,65 +40,49 @@ export default function ErrorPage({
   }, [error]);
 
   return (
-    <main id="main-content" tabIndex={-1}>
-      <PageHero
-        eyebrow="Unexpected error"
-        density="legal"
-        title={
-          <h1 className="font-heading text-foreground text-[clamp(2.9rem,5vw,4.8rem)] leading-[0.95] font-semibold tracking-[-0.07em] text-balance">
-            Something failed inside the current page.
+    <div className="relative isolate flex min-h-dvh flex-col overflow-x-clip">
+      <div aria-hidden="true" className="page-atmosphere" />
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="flex flex-1 items-center py-24 outline-none"
+      >
+        <Container className="max-w-3xl">
+          <p className="text-destructive font-mono text-[0.8125rem] font-medium tracking-[0.02em]">
+            Something went wrong
+          </p>
+          <h1 className="font-heading text-foreground mt-4 text-[clamp(2.4rem,5vw,3.8rem)] leading-[1.02] font-medium tracking-[-0.03em] text-balance">
+            This page couldn’t finish loading.
           </h1>
-        }
-        description="The site shell is still intact, but this route hit an unexpected error. You can retry the page or step back to a stable route."
-        meta={["Graceful recovery", "Route-level boundary", "Reduced panic UX"]}
-      />
-
-      <Section density="legal" className="pt-0">
-        <Container className="grid gap-6 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
-          <Card className="page-shell-glow surface-panel surface-interactive rounded-[2rem]">
-            <CardHeader>
-              <div className="bg-secondary text-primary flex size-11 items-center justify-center rounded-2xl shadow-sm">
-                <ShieldAlert className="size-5" />
-              </div>
-              <CardTitle className="font-heading text-3xl font-semibold tracking-[-0.05em]">
-                Retry first, then route around it.
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="flex flex-col gap-3 sm:flex-row">
-              <button
-                type="button"
-                onClick={() => reset()}
-                className={buttonVariants({ size: "lg" })}
-              >
-                Retry this page
-                <RotateCcw data-icon="inline-end" />
-              </button>
-              <Link
-                href="/"
-                className={buttonVariants({ size: "lg", variant: "outline" })}
-              >
-                Return home
-              </Link>
-            </CardContent>
-          </Card>
-
-          <Card className="surface-card surface-interactive rounded-[2rem]">
-            <CardHeader>
-              <CardTitle className="font-heading text-2xl font-semibold tracking-[-0.05em]">
-                What we preserve during failure
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="text-muted-foreground space-y-4 text-base leading-7">
-              <p>The header, footer, and navigation remain available.</p>
-              <p>Keyboard users still have a clear exit path.</p>
-              <p>
-                If the problem persists, use the contact route and include what
-                page you were on when this happened.
-              </p>
-            </CardContent>
-          </Card>
+          <p className="text-muted-foreground mt-5 max-w-[38rem] text-lg leading-7">
+            Try loading the page again, or return to the{" "}
+            <span translate="no">{siteConfig.shortName}</span> homepage.
+          </p>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <button
+              type="button"
+              onClick={() => reset()}
+              className={cn(
+                buttonVariants({ variant: "ink", size: "lg" }),
+                "px-6"
+              )}
+            >
+              Try again
+              <ReloadIcon />
+            </button>
+            <Link
+              href="/"
+              className={cn(
+                buttonVariants({ variant: "outline", size: "lg" }),
+                "px-6"
+              )}
+            >
+              Go to the homepage
+              <ArrowRightIcon dataIcon="inline-end" />
+            </Link>
+          </div>
         </Container>
-      </Section>
-    </main>
+      </main>
+    </div>
   );
 }

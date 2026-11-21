@@ -1,69 +1,107 @@
-import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { Container } from "@/components/site/container";
 import { GitHubMark } from "@/components/site/github-mark";
-import { Container } from "@/components/site/page";
+import { AsymmetricFieldHero } from "@/components/site/home/asymmetric-field";
+import { ArrowRightIcon } from "@/components/site/icons";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { siteConfig } from "@/lib/config";
+import { isEarlyAccessConfigured } from "@/lib/early-access-config";
 import { cn } from "@/lib/utils";
 
-export const HomeHero = () => (
-  <section
-    aria-labelledby="hero-title"
-    className="pt-[clamp(7rem,9vw,8.5rem)] pb-[clamp(3rem,5vw,4rem)]"
-  >
-    <Container>
-      <ul className="flex flex-wrap gap-2 text-sm" aria-label="Status">
-        <li className="border-foreground/12 bg-card/70 text-foreground rounded-full border px-3.5 py-1.5 font-medium">
-          Open-source software for nonprofits
-        </li>
-        <li className="border-foreground/12 bg-card/70 text-muted-foreground inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5">
-          <span className="bg-ring size-1.5 rounded-full" aria-hidden="true" />
-          Launching soon
-        </li>
-      </ul>
+const HERO_CTA_CLASS = "px-4 text-sm sm:px-5 sm:text-[0.9375rem] xl:px-6";
 
-      <h1
-        id="hero-title"
-        className="font-heading text-foreground mt-6 max-w-[19ch] text-[clamp(2.6rem,6vw,4.4rem)] leading-[0.98] font-semibold tracking-[-0.06em] text-balance lg:max-w-none"
-      >
-        <span className="lg:block">Your website, fundraising, and CRM.</span>{" "}
-        <span className="text-muted-foreground lg:block">
-          Built to work together with AI.
-        </span>
-      </h1>
+export const HomeHero = () => {
+  const isConfigured = isEarlyAccessConfigured();
 
-      <p className="text-muted-foreground mt-6 max-w-[42rem] text-lg leading-8 text-pretty sm:text-xl sm:leading-9">
-        We’re building one system for your website, giving, donor records, and
-        email, so AI can prepare campaigns and carry out the steps your team
-        approves.
-      </p>
+  return (
+    <section
+      aria-labelledby="hero-title"
+      className="pt-24 pb-12 sm:pt-28 sm:pb-16 lg:pt-32 lg:pb-20"
+    >
+      <Container>
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,52fr)_minmax(0,48fr)] lg:items-center lg:gap-12 xl:gap-16">
+          <div className="min-w-0">
+            <p className="text-signal font-sans text-sm font-medium">
+              Open-source software for nonprofits
+            </p>
 
-      <div className="mt-8 flex flex-col gap-x-6 gap-y-4 sm:flex-row sm:flex-wrap sm:items-center">
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <Link
-            href={siteConfig.cta.primary.href}
-            className={cn(buttonVariants({ size: "lg" }), "px-6")}
-          >
-            {siteConfig.cta.primary.label}
-            <ArrowRight data-icon="inline-end" aria-hidden="true" />
-          </Link>
-          <a
-            href={siteConfig.repoUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={cn(
-              buttonVariants({ variant: "outline", size: "lg" }),
-              "px-6"
-            )}
-          >
-            <GitHubMark className="size-4" />
-            View the code
-          </a>
+            <h1
+              id="hero-title"
+              className="font-heading text-foreground mt-3 text-[clamp(2.85rem,6.2vw,4.85rem)] leading-[1.01] font-bold tracking-[-0.035em]"
+            >
+              <span className="block">Less overhead.</span>
+              <span className="block">Outsized impact.</span>
+            </h1>
+
+            <p className="text-foreground/88 mt-5 max-w-[36rem] text-base leading-7 text-pretty sm:text-[1.125rem] sm:leading-8">
+              <span translate="no" className="text-foreground font-medium">
+                {siteConfig.shortName}
+              </span>{" "}
+              brings giving, donor care, and operations onto one open-source
+              foundation for nonprofits of any size, with practical AI in
+              development to take campaign prep and routine admin off your
+              plate. Named for asymmetric leverage: outsized impact from the
+              care and effort your people put in.
+            </p>
+
+            <p className="text-muted-foreground mt-3.5 inline-flex max-w-[36rem] items-center gap-2 font-sans text-sm leading-6">
+              <span
+                aria-hidden="true"
+                className={cn(
+                  "size-2 shrink-0 rounded-full",
+                  isConfigured
+                    ? "bg-human"
+                    : "border-draft border border-dashed"
+                )}
+              />
+              <span>
+                {isConfigured
+                  ? "Public open-source code today. Early-access requests are open for hosted pilots; AI tools are in development."
+                  : "Public open-source code today. Hosted access and AI tools aren’t open yet."}
+              </span>
+            </p>
+
+            <div className="mt-6 flex flex-row flex-wrap items-center gap-x-3 gap-y-2.5 sm:mt-8 sm:gap-x-4">
+              {isConfigured ? (
+                <Link
+                  href={siteConfig.cta.primary.href}
+                  prefetch={false}
+                  className={cn(buttonVariants({ size: "lg" }), HERO_CTA_CLASS)}
+                >
+                  {siteConfig.cta.primary.label}
+                  <ArrowRightIcon dataIcon="inline-end" />
+                </Link>
+              ) : (
+                <Link
+                  href="/#where-things-stand"
+                  prefetch={false}
+                  className={cn(
+                    buttonVariants({ variant: "ink", size: "lg" }),
+                    HERO_CTA_CLASS
+                  )}
+                >
+                  See what’s built
+                  <ArrowRightIcon dataIcon="inline-end" />
+                </Link>
+              )}
+              <a
+                href={siteConfig.repoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center gap-1.5 rounded-md px-1.5 text-sm font-medium whitespace-nowrap underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:gap-2 [@media(hover:hover)_and_(pointer:fine)]:hover:text-signal"
+              >
+                <GitHubMark className="size-4 shrink-0" />
+                View the code
+                <span className="sr-only"> (opens in a new tab)</span>
+              </a>
+            </div>
+          </div>
+
+          <div className="min-w-0">
+            <AsymmetricFieldHero />
+          </div>
         </div>
-        <p className="text-muted-foreground text-sm">
-          Starting with missions organizations.
-        </p>
-      </div>
-    </Container>
-  </section>
-);
+      </Container>
+    </section>
+  );
+};

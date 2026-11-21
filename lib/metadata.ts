@@ -3,23 +3,14 @@ import type { Metadata } from "next";
 
 export const siteMetadata = {
   name: siteConfig.shortName,
-  title: "asym | Open-source AI software for nonprofits",
+  title: "asym | Open-source giving and donor-care software for nonprofits",
   description: siteConfig.description,
   socialTitle:
-    "Your website, fundraising, and CRM. Built to work together with AI.",
+    "Less overhead. Outsized impact. Open-source nonprofit software from Asymmetric.al.",
   socialDescription:
-    "An open-source platform for nonprofit work. Launching soon, starting with missions organizations.",
+    "Open-source giving, donor care, and operations on one shared foundation, with practical AI in development. Hosted access isn’t open yet.",
   url: siteConfig.url,
   ogImage: "/opengraph-image",
-  keywords: [
-    "nonprofit software",
-    "open-source nonprofit CRM",
-    "nonprofit fundraising software",
-    "AI for nonprofits",
-    "donor management",
-    "missions organization software",
-    "asym",
-  ],
 } as const;
 
 export const baseMetadata: Metadata = {
@@ -29,7 +20,6 @@ export const baseMetadata: Metadata = {
     template: `%s | ${siteMetadata.name}`,
   },
   description: siteMetadata.description,
-  keywords: [...siteMetadata.keywords],
   authors: [{ name: siteConfig.name, url: siteConfig.url }],
   creator: siteConfig.name,
   publisher: siteConfig.name,
@@ -93,10 +83,10 @@ export const createMetadata = ({
   const socialTitle = title ?? siteMetadata.socialTitle;
 
   return {
-    title,
-    description,
+    ...(title && { title }),
+    ...(description && { description }),
     alternates: {
-      canonical: canonicalPath,
+      canonical: noIndex ? null : canonicalPath,
     },
     openGraph: {
       url,

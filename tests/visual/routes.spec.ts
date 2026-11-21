@@ -25,13 +25,28 @@ test.describe("route visuals", () => {
             reducedMotion: "reduce",
           });
 
-          await page.goto(route.path, { waitUntil: "domcontentloaded" });
+          await page.goto(route.path, { waitUntil: "networkidle" });
 
           await expect(
             page.getByRole("heading", { level: 1 }).first()
           ).toBeVisible();
 
-          await page.waitForTimeout(150);
+          await page.waitForFunction(
+            () =>
+              document.documentElement.getAttribute("data-ui-ready") === "true"
+          );
+
+          if (theme.colorScheme === "dark") {
+            await page.waitForFunction(() =>
+              document.documentElement.classList.contains("dark")
+            );
+          }
+
+          await page.evaluate(async () => {
+            if (document.fonts?.ready) {
+              await document.fonts.ready;
+            }
+          });
 
           await expect(page).toHaveScreenshot(
             `${route.slug}-${theme.name}.png`,

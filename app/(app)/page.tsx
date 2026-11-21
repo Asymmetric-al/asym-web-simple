@@ -1,55 +1,77 @@
 import { AboutSection } from "@/components/site/home/about-section";
-import { ConnectedSection } from "@/components/site/home/connected-section";
 import { EarlyAccessSection } from "@/components/site/home/early-access-section";
 import { HomeHero } from "@/components/site/home/hero";
 import { OpenSourceSection } from "@/components/site/home/open-source-section";
-import { ProductSection } from "@/components/site/home/product-section";
+import { OutcomesSection } from "@/components/site/home/outcomes-section";
+import { VisionSection } from "@/components/site/home/vision-section";
 import { siteConfig } from "@/lib/config";
-import { siteMetadata } from "@/lib/metadata";
+import { createMetadata, siteMetadata } from "@/lib/metadata";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: { absolute: siteMetadata.title },
+export const metadata: Metadata = createMetadata({
   description: siteMetadata.description,
-  alternates: { canonical: "/" },
-};
+  path: "/",
+});
 
-const structuredData = {
+const organizationSchema = {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "Organization",
-      "@id": `${siteConfig.url}/#organization`,
+      "@id": `${siteConfig.url}#organization`,
       name: siteConfig.name,
       url: siteConfig.url,
-      sameAs: [siteConfig.githubOrgUrl],
+      sameAs: [siteConfig.githubOrgUrl, siteConfig.repoUrl],
+      description:
+        "Independent, for-profit software company building asym, open-source giving and donor-care software for nonprofits.",
     },
     {
       "@type": "SoftwareApplication",
+      "@id": `${siteConfig.url}#software`,
       name: siteConfig.shortName,
       applicationCategory: "BusinessApplication",
       operatingSystem: "Web",
-      description: siteMetadata.socialDescription,
-      license: "https://www.gnu.org/licenses/agpl-3.0.html",
+      url: siteConfig.url,
+      license: "https://spdx.org/licenses/AGPL-3.0-only.html",
+      publisher: {
+        "@id": `${siteConfig.url}#organization`,
+      },
+      isBasedOn: {
+        "@id": `${siteConfig.url}#source`,
+      },
+      description: siteMetadata.description,
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "@id": `${siteConfig.url}#source`,
+      name: "Asymmetric-al/core",
       codeRepository: siteConfig.repoUrl,
-      publisher: { "@id": `${siteConfig.url}/#organization` },
+      license: "https://spdx.org/licenses/AGPL-3.0-only.html",
+      programmingLanguage: "TypeScript",
+      creator: {
+        "@id": `${siteConfig.url}#organization`,
+      },
     },
   ],
 };
 
 export default function HomePage() {
   return (
-    <main id="main-content" tabIndex={-1} className="relative outline-none">
+    <main
+      id="main-content"
+      className="relative isolate outline-none"
+      tabIndex={-1}
+    >
       <script
         type="application/ld+json"
-        // eslint-disable-next-line react/no-danger -- JSON-LD per the Next.js guide; `<` is escaped below.
+        // eslint-disable-next-line react/no-danger -- Static JSON-LD structured data for search engines.
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(structuredData).replaceAll("<", "\\u003c"),
+          __html: JSON.stringify(organizationSchema),
         }}
       />
       <HomeHero />
-      <ProductSection />
-      <ConnectedSection />
+      <VisionSection />
+      <OutcomesSection />
       <OpenSourceSection />
       <AboutSection />
       <EarlyAccessSection />

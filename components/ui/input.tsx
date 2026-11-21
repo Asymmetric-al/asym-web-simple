@@ -1,20 +1,21 @@
 import * as React from "react";
-import { Input as InputPrimitive } from "@base-ui/react/input";
 
 import { cn } from "@/lib/utils";
 
-function Input({ className, type, ...props }: React.ComponentProps<"input">) {
-  return (
-    <InputPrimitive
-      type={type}
-      data-slot="input"
-      className={cn(
-        "border-input bg-background/76 file:text-foreground placeholder:text-muted-foreground/90 hover:border-foreground/14 focus-visible:border-ring focus-visible:bg-background focus-visible:ring-ring/45 aria-invalid:border-destructive aria-invalid:ring-destructive/20 h-11 w-full min-w-0 rounded-full border px-4 py-2 text-base shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] transition-[border-color,box-shadow,background-color] duration-200 outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:ring-[3px] md:text-sm",
-        className
-      )}
-      {...props}
-    />
-  );
-}
+const Input = ({
+  className,
+  type,
+  ...props
+}: React.ComponentProps<"input">) => (
+  <input
+    type={type}
+    data-slot="input"
+    className={cn(
+      "border-input bg-background/85 placeholder:text-muted-foreground focus-visible:border-ring focus-visible:bg-background focus-visible:ring-ring/85 aria-invalid:border-destructive aria-invalid:ring-destructive/30 aria-invalid:focus-visible:border-destructive aria-invalid:focus-visible:ring-destructive aria-invalid:focus-visible:ring-offset-background [@media(hover:hover)_and_(pointer:fine)]:hover:border-foreground/75 h-11 w-full min-w-0 rounded-md border px-3.5 py-2 text-base shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] transition-[border-color,background-color] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] focus-visible:ring-2 focus-visible:outline-2 focus-visible:outline-transparent disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:ring-2 aria-invalid:focus-visible:ring-offset-2 md:text-sm",
+      className
+    )}
+    {...props}
+  />
+);
 
 export { Input };

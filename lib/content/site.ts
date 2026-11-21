@@ -4,6 +4,7 @@
  */
 
 import { footerLinks, navigationLinks, siteConfig } from "@/lib/config";
+import { getVerifiedContactEmail } from "@/lib/early-access-config";
 import type { NavLink, SiteGlobal } from "./types";
 
 export const getSiteGlobal = (): Promise<SiteGlobal> =>
@@ -12,7 +13,7 @@ export const getSiteGlobal = (): Promise<SiteGlobal> =>
     shortName: siteConfig.shortName,
     description: siteConfig.description,
     url: siteConfig.url,
-    email: siteConfig.email,
+    email: getVerifiedContactEmail() ?? "",
     repoUrl: siteConfig.repoUrl,
     cta: {
       primary: { ...siteConfig.cta.primary },

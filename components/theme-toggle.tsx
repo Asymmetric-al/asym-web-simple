@@ -1,83 +1,112 @@
 "use client";
 
-import { Check, LaptopMinimal, MoonStar, SunMedium } from "lucide-react";
-import { useTheme } from "next-themes";
-import { useSyncExternalStore } from "react";
-import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  SegmentedControl,
+  SegmentedControlIndicator,
+  SegmentedControlItem,
+} from "@ui-sdk/react/segmented-control";
+import { useTheme } from "next-themes";
+import { useIsClient } from "@/lib/use-is-client";
+import { cn } from "@/lib/utils";
+import type { ReactNode } from "react";
 
-const emptySubscribe = () => () => {};
+const SunIcon = (): ReactNode => (
+  <svg
+    viewBox="0 0 16 16"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="size-3.5 shrink-0"
+    aria-hidden="true"
+  >
+    <circle cx="8" cy="8" r="2.75" />
+    <path d="M8 1.75v1.25M8 13v1.25M1.75 8H3M13 8h1.25M3.6 3.6l.9.9M11.5 11.5l.9.9M12.4 3.6l-.9.9M4.5 11.5l-.9.9" />
+  </svg>
+);
 
-function useIsClient(): boolean {
-  return useSyncExternalStore(
-    emptySubscribe,
-    () => true,
-    () => false
-  );
-}
+const MoonIcon = (): ReactNode => (
+  <svg
+    viewBox="0 0 16 16"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="size-3.5 shrink-0"
+    aria-hidden="true"
+  >
+    <path d="M13.25 9.8A5.5 5.5 0 0 1 6.2 2.75a5.5 5.5 0 1 0 7.05 7.05Z" />
+  </svg>
+);
+
+const SystemIcon = (): ReactNode => (
+  <svg
+    viewBox="0 0 16 16"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="size-3.5 shrink-0"
+    aria-hidden="true"
+  >
+    <rect x="2.25" y="3" width="11.5" height="8" rx="1.5" />
+    <path d="M1.5 13h13" />
+  </svg>
+);
 
 const themes = [
-  { value: "light", label: "Light", icon: SunMedium },
-  { value: "dark", label: "Dark", icon: MoonStar },
-  { value: "system", label: "System", icon: LaptopMinimal },
+  { value: "light", label: "Light", renderIcon: SunIcon },
+  { value: "dark", label: "Dark", renderIcon: MoonIcon },
+  { value: "system", label: "System", renderIcon: SystemIcon },
 ] as const;
 
-export function ThemeToggle() {
-  const isMounted = useIsClient();
-  const { resolvedTheme, setTheme, theme } = useTheme();
-  const activeTheme = theme ?? "system";
+type ThemeValue = (typeof themes)[number]["value"];
 
-  // Avoid hydration mismatch: resolvedTheme differs between server and first client render.
-  const TriggerIcon = isMounted
-    ? resolvedTheme === "dark"
-      ? MoonStar
-      : SunMedium
-    : LaptopMinimal;
+const isThemeValue = (value: string | null): value is ThemeValue =>
+  value !== null && themes.some((option) => option.value === value);
+
+export const ThemeToggle = () => {
+  const isMounted = useIsClient();
+  const { setTheme, theme = "system" } = useTheme();
+
+  if (!isMounted) {
+    return <div className="h-[3.375rem] sm:h-[2.625rem]" aria-hidden="true" />;
+  }
+
+  const currentTheme: ThemeValue = isThemeValue(theme) ? theme : "system";
+
+  const handleValueChange = (nextValue: string | null) => {
+    if (!isThemeValue(nextValue)) {
+      return;
+    }
+    setTheme(nextValue);
+  };
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger
-        render={
-          <Button
-            variant="outline"
-            size="icon-sm"
-            aria-label="Change color theme"
-          />
-        }
-      >
-        <TriggerIcon />
-        <span className="sr-only">Change color theme</span>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-52">
-        <DropdownMenuGroup>
-          <DropdownMenuLabel>Appearance</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          {themes.map((option) => {
-            const Icon = option.icon;
-
-            return (
-              <DropdownMenuItem
-                key={option.value}
-                onClick={() => setTheme(option.value)}
-              >
-                <Icon />
-                <span>{option.label}</span>
-                {activeTheme === option.value ? (
-                  <Check className="ml-auto" />
-                ) : null}
-              </DropdownMenuItem>
-            );
-          })}
-        </DropdownMenuGroup>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <SegmentedControl
+      aria-label="Color theme"
+      value={currentTheme}
+      onValueChange={handleValueChange}
+      className="border-rule bg-record has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-background relative isolate inline-flex w-fit items-center self-start rounded-full border p-1 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2 sm:self-auto forced-colors:border-[ButtonBorder]"
+    >
+      <SegmentedControlIndicator className="segmented-indicator" />
+      {themes.map((option) => (
+        <SegmentedControlItem
+          key={option.value}
+          value={option.value}
+          className={cn(
+            "text-muted-foreground relative z-10 inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-full border border-transparent px-3 text-xs font-medium transition-transform duration-150 select-none focus-visible:outline-2 focus-visible:outline-transparent active:scale-[0.97] sm:min-h-8 sm:px-2.5 [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground",
+            "data-checked:text-foreground data-checked:font-semibold",
+            "forced-colors:data-checked:border-[Highlight] forced-colors:data-checked:bg-[Highlight] forced-colors:data-checked:text-[HighlightText] forced-colors:data-checked:forced-color-adjust-none"
+          )}
+        >
+          {option.renderIcon()}
+          <span>{option.label}</span>
+        </SegmentedControlItem>
+      ))}
+    </SegmentedControl>
   );
-}
+};

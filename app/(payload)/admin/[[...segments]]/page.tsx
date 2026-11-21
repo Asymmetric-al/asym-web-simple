@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import { RootPage, generatePageMetadata } from "@payloadcms/next/views";
 import config from "@payload-config";
 
@@ -11,13 +12,27 @@ interface Args {
   searchParams: Promise<Record<string, string | string[]>>;
 }
 
+const isPayloadConfigured = (): boolean =>
+  Boolean(process.env.DATABASE_URI?.trim() && process.env.PAYLOAD_SECRET?.trim());
+
 export const generateMetadata = ({
   params,
   searchParams,
-}: Args): Promise<Metadata> =>
-  generatePageMetadata({ config, params, searchParams });
+}: Args): Promise<Metadata> => {
+  if (!isPayloadConfigured()) {
+    return Promise.resolve({
+      title: "Page not found",
+      robots: { index: false, follow: false },
+    });
+  }
+  return generatePageMetadata({ config, params, searchParams });
+};
 
-const Page = ({ params, searchParams }: Args) =>
-  RootPage({ config, params, searchParams, importMap });
+const Page = ({ params, searchParams }: Args) => {
+  if (!isPayloadConfigured()) {
+    notFound();
+  }
+  return RootPage({ config, params, searchParams, importMap });
+};
 
 export default Page;

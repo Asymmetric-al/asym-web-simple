@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import { QaErrorTrigger } from "./error-trigger";
 
 export const metadata = {
@@ -13,6 +14,10 @@ export default async function QaErrorHarnessPage({
 }: {
   readonly searchParams: Promise<{ trigger?: string }>;
 }) {
+  if (process.env.NODE_ENV === "production") {
+    notFound();
+  }
+
   const params = await searchParams;
 
   return <QaErrorTrigger shouldThrowInitially={params.trigger === "1"} />;

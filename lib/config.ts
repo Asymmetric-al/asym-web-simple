@@ -8,17 +8,14 @@ export const siteConfig = {
   */
   shortName: "asym",
   description:
-    "Connected websites, fundraising, donor records, and email, built to work with AI. asym is launching soon. Request early access.",
+    "Open-source giving, donor care, and operations on one shared foundation for nonprofits, with practical AI in development. Hosted access is not open yet.",
   /**
   Production domain served by this project (Vercel `asym-web-simple`).
   */
   url: "https://asym.app",
-  /**
-  Public contact address. Before launch, confirm this inbox receives mail:
-  as of November 2026 asymmetric.al publishes no MX records.
-  */
-  email: "info@asymmetric.al",
   repoUrl: "https://github.com/Asymmetric-al/core",
+  commitsUrl: "https://github.com/Asymmetric-al/core/commits/develop",
+  issuesUrl: "https://github.com/Asymmetric-al/core/issues",
   githubOrgUrl: "https://github.com/Asymmetric-al",
   cta: {
     primary: {
@@ -29,31 +26,35 @@ export const siteConfig = {
 } as const;
 
 /**
-Public figures for Asymmetric-al/core, checked against GitHub on
-19 November 2026 (develop: 4,915 commits; 595 merged pull requests).
-Rounded down so they stay true as the repository grows.
+Public figures for Asymmetric-al/core, verified against origin/develop
+(`337785a7d`) on 21 November 2026: 5,265 commits on `develop` and 601
+repository-wide merged pull requests. Rounded down so counts stay true
+as development continues; repository activity is not production readiness.
 */
 export const repoStats = {
   asOf: "November 2026",
   since: "January 2026",
-  commits: "4,900+",
-  mergedPullRequests: "590+",
-  license: "AGPL-3.0",
+  commits: "5,200+",
+  commitsScope: "commits on develop",
+  mergedPullRequests: "600+",
+  mergedPullRequestsScope: "repository-wide merged PRs",
+  license: "AGPL-3.0-only",
 } as const;
 
 export const navigationLinks = [
+  { label: "Vision", href: "/#vision" },
   { label: "Product", href: "/#product" },
   { label: "Open source", href: "/#open-source" },
-  { label: "About", href: "/#about" },
+  { label: "Company", href: "/#about" },
 ] as const;
 
 export const footerLinks = [
   { label: "GitHub", href: siteConfig.repoUrl, external: true },
-  { label: "Contact", href: `mailto:${siteConfig.email}`, external: false },
+  { label: "Early access", href: siteConfig.cta.primary.href, external: false },
   { label: "Privacy", href: "/privacy", external: false },
   { label: "Terms", href: "/terms", external: false },
 ] as const;
 
 export const siteFeatures = {
-  smoothScroll: true,
+  smoothScroll: false,
 } as const;

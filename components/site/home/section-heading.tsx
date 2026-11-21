@@ -10,7 +10,7 @@ export const Eyebrow = ({
 }) => (
   <p
     className={cn(
-      "text-primary/75 font-mono text-xs tracking-[0.24em] uppercase",
+      "text-signal font-sans text-sm font-medium tracking-[-0.005em]",
       className
     )}
   >
@@ -30,7 +30,7 @@ export const SectionTitle = ({
   <h2
     id={id}
     className={cn(
-      "font-heading text-foreground mt-4 text-[clamp(2rem,3.6vw,3.1rem)] leading-[1.03] font-semibold tracking-[-0.055em] text-balance",
+      "font-heading text-foreground mt-2.5 text-[clamp(2rem,3.8vw,3.15rem)] leading-[1.06] font-semibold tracking-[-0.03em] text-balance",
       className
     )}
   >
@@ -39,7 +39,7 @@ export const SectionTitle = ({
 );
 
 /**
-Small status label, used wherever planned or sample content appears.
+Small status label used on standalone status routes.
 */
 export const StatusPill = ({
   children,
@@ -50,12 +50,12 @@ export const StatusPill = ({
 }) => (
   <p
     className={cn(
-      "border-foreground/12 bg-card/80 text-muted-foreground inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1.5 font-mono text-xs tracking-[0.08em]",
+      "border-rule-strong bg-card text-muted-foreground inline-flex min-h-8 w-fit items-center gap-2 rounded-lg border px-2.5 py-1 font-mono text-xs tracking-[0.02em]",
       className
     )}
   >
     <span
-      className="bg-ring size-1.5 shrink-0 rounded-full"
+      className="bg-draft size-1.5 shrink-0 rounded-full"
       aria-hidden="true"
     />
     {children}

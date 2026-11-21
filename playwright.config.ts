@@ -5,8 +5,8 @@ const localURL = `http://127.0.0.1:${port}`;
 
 // Set PLAYWRIGHT_BASE_URL to test a deployed URL (such as a Vercel preview)
 // instead of building and serving the site locally.
-const remoteURL = process.env.PLAYWRIGHT_BASE_URL;
-const baseURL = remoteURL ?? localURL;
+const remoteURL = process.env.PLAYWRIGHT_BASE_URL?.trim();
+const baseURL = remoteURL || localURL;
 
 // Vercel previews sit behind Deployment Protection. With a bypass secret, the
 // global setup trades it for a bypass cookie saved here, so the secret itself is
@@ -57,7 +57,7 @@ export default defineConfig({
   ],
   ...(!remoteURL && {
     webServer: {
-      command: `npm run build && npx next start -H 127.0.0.1 -p ${port}`,
+      command: `bun run build && bunx next start -H 127.0.0.1 -p ${port}`,
       url: localURL,
       reuseExistingServer: !process.env.CI,
       timeout: 180_000,

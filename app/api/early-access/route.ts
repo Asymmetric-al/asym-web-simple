@@ -1,62 +1,284 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import {
+  EARLY_ACCESS_CONFIRMED_COOKIE,
   buildEarlyAccessNotification,
   hasErrors,
   isHoneypotFilled,
   normalizeEarlyAccessRequest,
   validateEarlyAccessRequest,
 } from "@/lib/early-access";
+import { readEarlyAccessDeliveryConfig } from "@/lib/early-access-config";
+import {
+  createEarlyAccessRateLimiter,
+  isSameOriginRequest,
+} from "@/lib/early-access-guard";
+import type { EarlyAccessDeliveryConfig } from "@/lib/early-access-config";
 
 /**
 Generous for three short text fields; larger bodies are not form posts.
 */
 const MAX_BODY_BYTES = 16_000;
+const CONFIRMED_COOKIE_MAX_AGE_SECONDS = 300;
 
-interface DeliveryConfig {
-  apiKey: string;
-  inbox: string;
-  from: string;
-}
+type FormOutcome =
+  "received" | "invalid" | "rate_limited" | "unavailable" | "failed";
+
+const rateLimitHolder: {
+  instance: ReturnType<typeof createEarlyAccessRateLimiter> | null;
+} = { instance: null };
+
+const getRateLimiter = () => {
+  if (!rateLimitHolder.instance) {
+    rateLimitHolder.instance = createEarlyAccessRateLimiter();
+  }
+  return rateLimitHolder.instance;
+};
 
 /**
-All three values are required. There is deliberately no default inbox, so a request is only acknowledged once someone has chosen where it goes.
+Prefer edge-injected headers over client-supplied leading X-Forwarded-For hops.
+Note: in-memory Map buckets apply per serverless isolate (documented for prelaunch).
 */
-const readDeliveryConfig = (): DeliveryConfig | null => {
-  const apiKey = process.env.RESEND_API_KEY?.trim();
-  const inbox = process.env.CONTACT_INBOX_EMAIL?.trim();
-  const from = process.env.CONTACT_FROM_EMAIL?.trim();
+const readClientIp = (request: Request): string => {
+  const vercelForwarded = request.headers.get("x-vercel-forwarded-for");
+  if (vercelForwarded) {
+    const rightmost = vercelForwarded.split(",").at(-1)?.trim();
+    if (rightmost) {
+      return rightmost;
+    }
+  }
 
-  return apiKey && inbox && from ? { apiKey, inbox, from } : null;
+  const realIp = request.headers.get("x-real-ip")?.trim();
+  if (realIp) {
+    return realIp;
+  }
+
+  const forwarded = request.headers.get("x-forwarded-for");
+  if (forwarded) {
+    const parts = forwarded.split(",");
+    const rightmost = parts.at(-1)?.trim();
+    if (rightmost) {
+      return rightmost;
+    }
+  }
+
+  return "unknown";
 };
 
-const failure = (status: number, error: string, extra?: object) =>
-  NextResponse.json({ ok: false, error, ...extra }, { status });
+const detectContentKind = (
+  request: Request
+): "json" | "urlencoded" | "unsupported" => {
+  const contentType = request.headers.get("content-type")?.toLowerCase() ?? "";
+  if (contentType.includes("application/x-www-form-urlencoded")) {
+    return "urlencoded";
+  }
+  if (
+    contentType.includes("application/json") ||
+    contentType.trim().length === 0
+  ) {
+    return "json";
+  }
+  return "unsupported";
+};
 
-const readJson = async (request: Request): Promise<unknown> => {
+const isSecureRequest = (request: Request): boolean => {
+  const forwardedProto = request.headers
+    .get("x-forwarded-proto")
+    ?.split(",", 1)[0]
+    ?.trim()
+    .toLowerCase();
+  if (forwardedProto) {
+    return forwardedProto === "https";
+  }
   try {
-    return (await request.json()) as unknown;
+    const parsedUrl = new URL(request.url);
+    return parsedUrl.protocol === "https:";
   } catch {
-    return undefined;
+    return false;
   }
 };
+
+const redirectForForm = (
+  request: Request,
+  outcome: FormOutcome,
+  retryAfterSeconds?: number
+): NextResponse => {
+  const params = new URLSearchParams({ state: outcome });
+  if (retryAfterSeconds !== undefined) {
+    params.set("retry", String(retryAfterSeconds));
+  }
+  const response = new NextResponse(null, {
+    status: 303,
+    headers: { Location: `/early-access/status?${params.toString()}` },
+  });
+
+  if (outcome === "received") {
+    response.cookies.set(EARLY_ACCESS_CONFIRMED_COOKIE, "1", {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: isSecureRequest(request),
+      path: "/early-access/status",
+      maxAge: CONFIRMED_COOKIE_MAX_AGE_SECONDS,
+    });
+  }
+
+  return response;
+};
+
+const mapStatusToOutcome = (status: number): FormOutcome => {
+  if (status === 422) {
+    return "invalid";
+  }
+  if (status === 429) {
+    return "rate_limited";
+  }
+  if (status === 503) {
+    return "unavailable";
+  }
+  return "failed";
+};
+
+const respondFailure = (
+  request: Request,
+  isUrlEncodedForm: boolean,
+  status: number,
+  error: string,
+  extra?: { errors?: unknown; retryAfterSeconds?: number },
+  headers?: HeadersInit
+): NextResponse => {
+  if (isUrlEncodedForm) {
+    return redirectForForm(
+      request,
+      mapStatusToOutcome(status),
+      extra?.retryAfterSeconds
+    );
+  }
+
+  return NextResponse.json(
+    { ok: false, error, ...extra },
+    headers ? { status, headers } : { status }
+  );
+};
+
+/**
+Reads the raw request stream with a hard byte ceiling so chunked bodies
+without `content-length` cannot exceed `MAX_BODY_BYTES`.
+*/
+const readStreamBounded = (
+  stream: ReadableStream<Uint8Array>
+): Promise<Uint8Array | "too_large"> => {
+  const reader = stream.getReader();
+  const chunks: Uint8Array[] = [];
+  let totalBytes = 0;
+
+  const nextChunk = async (): Promise<Uint8Array | "too_large"> => {
+    const { done, value } = await reader.read();
+    if (done) {
+      const merged = new Uint8Array(totalBytes);
+      let offset = 0;
+      for (const chunk of chunks) {
+        merged.set(chunk, offset);
+        offset += chunk.byteLength;
+      }
+      return merged;
+    }
+    totalBytes += value.byteLength;
+    if (totalBytes > MAX_BODY_BYTES) {
+      await reader.cancel();
+      return "too_large";
+    }
+    chunks.push(value);
+    return nextChunk();
+  };
+
+  return nextChunk();
+};
+
+const decodeStreamBounded = async (
+  stream: ReadableStream<Uint8Array>
+): Promise<{ ok: true; text: string } | { ok: false; reason: "too_large" }> => {
+  const bytes = await readStreamBounded(stream);
+  if (bytes === "too_large") {
+    return { ok: false, reason: "too_large" };
+  }
+  const decoder = new TextDecoder();
+  return { ok: true, text: decoder.decode(bytes) };
+};
+
+const readBoundedText = async (
+  request: Request
+): Promise<
+  { ok: true; text: string } | { ok: false; reason: "too_large" | "unreadable" }
+> => {
+  const declaredLength = Number(request.headers.get("content-length") ?? 0);
+  if (Number.isFinite(declaredLength) && declaredLength > MAX_BODY_BYTES) {
+    return { ok: false, reason: "too_large" };
+  }
+
+  if (!request.body) {
+    return { ok: true, text: "" };
+  }
+
+  try {
+    return await decodeStreamBounded(request.body);
+  } catch {
+    return { ok: false, reason: "unreadable" };
+  }
+};
+
+const parseBoundedPayload = async (
+  request: Request,
+  isUrlEncodedForm: boolean
+): Promise<
+  { ok: true; body: unknown } | { ok: false; status: number; error: string }
+> => {
+  const raw = await readBoundedText(request);
+  if (!raw.ok) {
+    return raw.reason === "too_large"
+      ? { ok: false, status: 413, error: "too_large" }
+      : { ok: false, status: 400, error: "invalid_body" };
+  }
+
+  if (isUrlEncodedForm) {
+    const params = new URLSearchParams(raw.text);
+    return { ok: true, body: Object.fromEntries(params) };
+  }
+
+  try {
+    return { ok: true, body: JSON.parse(raw.text) as unknown };
+  } catch {
+    return { ok: false, status: 400, error: "invalid_json" };
+  }
+};
+
+const sendNotification = (
+  config: EarlyAccessDeliveryConfig,
+  message: { replyTo: string; subject: string; text: string }
+) => {
+  const resend = new Resend(config.apiKey);
+  return resend.emails.send({
+    from: config.from,
+    to: [config.inbox],
+    ...message,
+  });
+};
+
+const isAcceptedResendResult = (
+  result: Awaited<ReturnType<typeof sendNotification>>
+): boolean =>
+  result.error === null &&
+  typeof result.data?.id === "string" &&
+  result.data.id.length > 0;
 
 /**
 True only when Resend accepted the message for delivery.
 */
 const wasAcceptedForDelivery = async (
-  config: DeliveryConfig,
+  config: EarlyAccessDeliveryConfig,
   message: { replyTo: string; subject: string; text: string }
 ): Promise<boolean> => {
-  const resend = new Resend(config.apiKey);
-
   try {
-    const { error } = await resend.emails.send({
-      from: config.from,
-      to: [config.inbox],
-      ...message,
-    });
-    return error === null;
+    return isAcceptedResendResult(await sendNotification(config, message));
   } catch {
     return false;
   }
@@ -64,30 +286,60 @@ const wasAcceptedForDelivery = async (
 
 // eslint-disable-next-line sonarjs/function-name -- Next.js route handlers must be named after the HTTP method.
 export const POST = async (request: Request): Promise<NextResponse> => {
-  const declaredLength = Number(request.headers.get("content-length") ?? 0);
-  if (declaredLength > MAX_BODY_BYTES) {
-    return failure(413, "too_large");
+  const contentKind = detectContentKind(request);
+  if (contentKind === "unsupported") {
+    return NextResponse.json(
+      { ok: false, error: "unsupported_media_type" },
+      { status: 415 }
+    );
   }
 
-  const body = await readJson(request);
-  if (body === undefined) {
-    return failure(400, "invalid_json");
+  const isUrlEncodedForm = contentKind === "urlencoded";
+  if (!isSameOriginRequest(request)) {
+    return respondFailure(request, isUrlEncodedForm, 403, "forbidden_origin");
+  }
+
+  const config = readEarlyAccessDeliveryConfig();
+  if (!config) {
+    return respondFailure(request, isUrlEncodedForm, 503, "not_configured");
+  }
+
+  const rateCheck = getRateLimiter().check(readClientIp(request), Date.now());
+
+  if (rateCheck.limited) {
+    return respondFailure(
+      request,
+      isUrlEncodedForm,
+      429,
+      "rate_limited",
+      { retryAfterSeconds: rateCheck.retryAfterSeconds },
+      { "Retry-After": String(rateCheck.retryAfterSeconds) }
+    );
+  }
+
+  const parsed = await parseBoundedPayload(request, isUrlEncodedForm);
+  if (!parsed.ok) {
+    return respondFailure(
+      request,
+      isUrlEncodedForm,
+      parsed.status,
+      parsed.error
+    );
   }
 
   // Automated submissions get a normal-looking response and are dropped.
-  if (isHoneypotFilled(body)) {
-    return NextResponse.json({ ok: true });
+  if (isHoneypotFilled(parsed.body)) {
+    return isUrlEncodedForm
+      ? redirectForForm(request, "received")
+      : NextResponse.json({ ok: true });
   }
 
-  const submission = normalizeEarlyAccessRequest(body);
+  const submission = normalizeEarlyAccessRequest(parsed.body);
   const errors = validateEarlyAccessRequest(submission);
   if (hasErrors(errors)) {
-    return failure(422, "invalid", { errors });
-  }
-
-  const config = readDeliveryConfig();
-  if (!config) {
-    return failure(503, "not_configured");
+    return respondFailure(request, isUrlEncodedForm, 422, "invalid", {
+      errors,
+    });
   }
 
   const delivered = await wasAcceptedForDelivery(config, {
@@ -95,7 +347,11 @@ export const POST = async (request: Request): Promise<NextResponse> => {
     ...buildEarlyAccessNotification(submission, new Date()),
   });
 
-  return delivered
-    ? NextResponse.json({ ok: true })
-    : failure(502, "delivery_failed");
+  if (delivered) {
+    return isUrlEncodedForm
+      ? redirectForForm(request, "received")
+      : NextResponse.json({ ok: true });
+  }
+
+  return respondFailure(request, isUrlEncodedForm, 502, "delivery_failed");
 };

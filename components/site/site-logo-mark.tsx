@@ -1,43 +1,64 @@
-import Image from "next/image";
+import {
+  MARK_DATUM_PATH,
+  MARK_FRAME_RECT,
+  MARK_SWEEP_PATH,
+  MARK_VIEWBOX,
+} from "@/components/site/brand/mark-geometry";
 import { cn } from "@/lib/utils";
 import type { ComponentPropsWithoutRef } from "react";
 
 type SiteLogoMarkProps = ComponentPropsWithoutRef<"span"> & {
-  readonly imageSizes?: string;
+  readonly size?: number;
+  readonly eager?: boolean;
   readonly priority?: boolean;
 };
 
+const MARK_STROKE_WIDTH = 44;
+
 /**
-Transparent Asym mark with explicit light/dark artwork.
+Inline vector asym mark built directly from the measured official mark geometry.
+Adapts instantaneously to light, dark, and Forced Colors themes with zero image
+requests or `<head>` preload tags.
 */
-export function SiteLogoMark({
+export const SiteLogoMark = ({
   className,
-  imageSizes = "24px",
-  priority = false,
+  size = 24,
+  eager: _eager,
+  priority: _priority,
   ...props
-}: SiteLogoMarkProps) {
-  return (
-    <span
-      className={cn("relative inline-block shrink-0", className)}
+}: SiteLogoMarkProps) => (
+  <span
+    className={cn(
+      "text-foreground relative inline-flex shrink-0 items-center justify-center",
+      className
+    )}
+    aria-hidden="true"
+    {...props}
+  >
+    <svg
+      width={size}
+      height={size}
+      viewBox={MARK_VIEWBOX}
+      fill="none"
       aria-hidden="true"
-      {...props}
+      focusable="false"
+      className="size-full overflow-visible"
     >
-      <Image
-        src="/brand/asym-mark-dark.png"
-        alt=""
-        fill
-        priority={priority}
-        sizes={imageSizes}
-        className="object-contain dark:hidden"
+      <rect
+        {...MARK_FRAME_RECT}
+        stroke="currentColor"
+        strokeWidth={MARK_STROKE_WIDTH}
       />
-      <Image
-        src="/brand/asym-mark-light.png"
-        alt=""
-        fill
-        priority={priority}
-        sizes={imageSizes}
-        className="hidden object-contain dark:block"
+      <path
+        d={MARK_DATUM_PATH}
+        stroke="currentColor"
+        strokeWidth={MARK_STROKE_WIDTH}
       />
-    </span>
-  );
-}
+      <path
+        d={MARK_SWEEP_PATH}
+        stroke="currentColor"
+        strokeWidth={MARK_STROKE_WIDTH}
+      />
+    </svg>
+  </span>
+);

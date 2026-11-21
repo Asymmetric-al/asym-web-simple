@@ -30,9 +30,11 @@ function createBrowserIssueTracker(page: Page) {
     pageErrors.push(error.message);
   });
   page.on("response", (response) => {
-    if (response.status() === 404) {
-      notFoundResponses.push(new URL(response.url()).pathname);
+    if (response.status() !== 404) {
+      return;
     }
+    const parsed = new URL(response.url());
+    notFoundResponses.push(parsed.pathname);
   });
 
   return {
@@ -117,9 +119,9 @@ async function expectNoVisibleDialogs(page: Page, context: string) {
       () =>
         page.evaluate(
           () =>
-            Array.from(
-              document.querySelectorAll<HTMLElement>('[role="dialog"]')
-            ).filter((element) => {
+            [
+              ...document.querySelectorAll<HTMLElement>('[role="dialog"]'),
+            ].filter((element) => {
               const styles = window.getComputedStyle(element);
               const rect = element.getBoundingClientRect();
 
@@ -191,7 +193,9 @@ test.describe("responsive regression coverage", () => {
     await expect(brandLink).toBeVisible();
     await expect(mainNav).toBeVisible();
     await expect(
-      banner.getByRole("link", { name: "Request early access" })
+      banner.getByRole("link", {
+        name: /^(?:Request early access|See what’s built|Early access)/,
+      })
     ).toBeVisible();
     await expectNoHorizontalOverflow(page, "home @ 1440x900");
     issues.expectNoUnexpectedIssuesSince(checkpoint, "home @ 1440x900");
@@ -202,11 +206,41 @@ test.describe("responsive regression coverage", () => {
     await expect(brandLink).toBeVisible();
     await expect(mainNav).toBeHidden();
     await expect(
-      banner.getByRole("link", { name: "Early access" })
+      banner.getByRole("link", { name: /^(?:Early access|See what’s built)/ })
     ).toBeVisible();
+
+    // Verify Hero primary CTA and "View the code" share one row at 390px
+    const heroPrimaryBox = await page
+      .getByRole("main")
+      .getByRole("link", {
+        name: /^(?:Request early access|See what’s built)$/u,
+      })
+      .first()
+      .boundingBox();
+    const heroCodeBox = await page
+      .getByRole("main")
+      .getByRole("link", { name: /^View the code/u })
+      .first()
+      .boundingBox();
+    expect(heroPrimaryBox).not.toBeNull();
+    expect(heroCodeBox).not.toBeNull();
+    expect(
+      Math.abs((heroPrimaryBox?.y ?? 0) - (heroCodeBox?.y ?? 0))
+    ).toBeLessThanOrEqual(4);
+
+    // Verify status filter segmented control supports keyboard arrow navigation on 390px
+    const allFilter = page.getByRole("radio", { name: /^All/u });
+    await allFilter.focus();
+    await page.keyboard.press("ArrowRight");
+    await expect(
+      page.getByRole("radio", { name: /^In code/u })
+    ).toHaveAttribute("aria-checked", "true");
     await expectNoVisibleDialogs(page, "home @ 390x844");
     await expectNoHorizontalOverflow(page, "home @ 390x844");
     issues.expectNoUnexpectedIssuesSince(checkpoint, "home @ 390x844");
+
+    await setViewport(page, { label: "1024x900", width: 1024, height: 900 });
+    await expectNoHorizontalOverflow(page, "home @ 1024x900");
   });
 
   test("home footer remains accessible after repeated viewport changes", async ({
@@ -228,10 +262,12 @@ test.describe("responsive regression coverage", () => {
       }
       await footer.scrollIntoViewIfNeeded();
 
-      await expect(footer.getByRole("link", { name: "GitHub" })).toBeVisible();
+      await expect(
+        footer.getByRole("link", { name: /^GitHub/u })
+      ).toBeVisible();
       await expect(footer.getByRole("link", { name: "Privacy" })).toBeVisible();
       await expect(
-        footer.getByRole("button", { name: /change color theme/i })
+        footer.getByRole("radiogroup", { name: /color theme/i })
       ).toBeVisible();
       await expectNoHorizontalOverflow(page, `home footer @ ${viewport.label}`);
       issues.expectNoUnexpectedIssuesSince(

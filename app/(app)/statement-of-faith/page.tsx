@@ -16,7 +16,7 @@ const faithPoints = [
   {
     number: "03",
     title: "Humanity and sin",
-    text: "We believe humanity was created in the image of God to glorify Him and enjoy Him forever. Because of Adam's sin, all people are now born with a sinful nature, separated from God, and unable to save themselves.",
+    text: "We believe humanity was created in the image of God to glorify Him and enjoy Him forever. Because of Adam’s sin, all people are now born with a sinful nature, separated from God, and unable to save themselves.",
   },
   {
     number: "04",
@@ -31,11 +31,11 @@ const faithPoints = [
   {
     number: "06",
     title: "Church and ordinances",
-    text: "We believe in one church, the body of Christ, made up of all who have been born again by the Holy Spirit. We affirm baptism and the Lord's Supper as practices for believers in Jesus Christ.",
+    text: "We believe in one church, the body of Christ, made up of all who have been born again by the Holy Spirit. We affirm baptism and the Lord’s Supper as practices for believers in Jesus Christ.",
   },
   {
     number: "07",
-    title: "Christ's return",
+    title: "Christ’s return",
     text: "We believe Jesus Christ is coming again in glory to receive His church to Himself and to judge the world in righteousness.",
   },
   {
@@ -48,8 +48,9 @@ const faithPoints = [
 export const metadata: Metadata = createMetadata({
   title: "Statement of Faith",
   description:
-    "The core Christian convictions behind Asym and the nonprofit ministry behind it.",
+    "The personal Christian convictions of the founders building asym at Asymmetric.al.",
   path: "/statement-of-faith",
+  noIndex: true,
 });
 
 export default function StatementOfFaithPage() {
@@ -57,11 +58,11 @@ export default function StatementOfFaithPage() {
     <DocumentPage
       eyebrow="Statement of Faith"
       title={
-        <h1 className="font-heading text-foreground mt-5 text-[clamp(3rem,6vw,5rem)] leading-[0.94] font-semibold tracking-[-0.07em] text-balance">
+        <h1 className="font-heading text-foreground mt-5 text-[clamp(2.8rem,5.5vw,4.6rem)] leading-[0.98] font-medium tracking-[-0.03em] text-balance">
           Statement of Faith
         </h1>
       }
-      description="Asym is openly Christian. These are the core convictions behind the work and the nonprofit ministry behind it."
+      description="Asymmetric.al is a for-profit software company building asym for nonprofits, starting with missions organizations. These are the personal Christian convictions of the founders behind the work."
     >
       {faithPoints.map((point) => (
         <DocumentSection
