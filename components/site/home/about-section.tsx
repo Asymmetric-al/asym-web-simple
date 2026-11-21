@@ -10,7 +10,7 @@ const ordinaryWork = [
   },
   {
     num: "03",
-    line: "The roster hides lifetime and last-gift totals.",
+    line: "The missionary sees assigned support, with donor privacy intact.",
     italic: false,
   },
   {
@@ -94,10 +94,10 @@ export const AboutSection = () => (
               {siteConfig.name}
               <span className="sr-only"> (opens in a new tab)</span>
             </a>
-            , an independent, for&#8209;profit software company serving
-            nonprofits. Conrad’s work co&#8209;leading Global Fellowship, a
-            missions organization, keeps our focus on the real office and field
-            coordination small teams handle every week.
+            , an independent, for-profit software company serving nonprofits.
+            Conrad’s work co-leading Global Fellowship, a missions organization,
+            keeps our focus on the real office and field coordination small
+            teams handle every week.
           </p>
 
           <div className="flex items-center gap-3.5 pt-2">

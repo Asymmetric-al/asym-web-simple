@@ -170,7 +170,7 @@ test.describe("homepage smoke tests", () => {
     await expect(
       architecture.getByRole("heading", {
         level: 3,
-        name: /Staff manage legal donor records and preview bulk actions before running/iu,
+        name: /Staff manage donor and household records and preview bulk actions before running/iu,
       })
     ).toBeVisible();
 
@@ -470,7 +470,7 @@ test.describe("homepage smoke tests", () => {
       page.getByRole("heading", { name: "Request received" })
     ).toBeFocused();
     await expect(page.locator("#early-access")).toContainText(
-      "Your request was accepted for delivery to the Asymmetric.al team."
+      "We’ve received your request and passed it to the Asymmetric.al team."
     );
     expect(submitted).toMatchObject({
       email: "director@example.org",

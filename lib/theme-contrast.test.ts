@@ -127,6 +127,7 @@ describe("design token WCAG 2.2 AA contrast", () => {
       ["--foreground", "--background"],
       ["--muted-foreground", "--background"],
       ["--muted-foreground", "--card"],
+      ["--muted-foreground", "--record"],
       ["--pine", "--background"],
       ["--pine", "--card"],
       ["--pine", "--pine-soft"],
@@ -154,6 +155,16 @@ describe("design token WCAG 2.2 AA contrast", () => {
         `dark ${fg} on ${bg}`
       ).toBeGreaterThanOrEqual(AA_TEXT_MIN);
     }
+
+    // Verify muted-alpha nav and recovery links (`text-foreground/78`) remain >= 4.5:1
+    expect(
+      contrastRatio("rgb(18 32 43 / 78%)", requireToken(light, "--background")),
+      "light text-foreground/78 on --background"
+    ).toBeGreaterThanOrEqual(AA_TEXT_MIN);
+    expect(
+      contrastRatio("rgb(239 233 221 / 78%)", requireToken(dark, "--background")),
+      "dark text-foreground/78 on --background"
+    ).toBeGreaterThanOrEqual(AA_TEXT_MIN);
   });
 
   it("keeps all interactive and semantic borders >= 3.0:1 (WCAG 1.4.11)", () => {

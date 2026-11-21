@@ -46,7 +46,7 @@ export type EarlyAccessErrors = Partial<Record<EarlyAccessField, string>>;
 export const earlyAccessCopy = {
   submitting: "Sending your request…",
   success:
-    "Your request was accepted for delivery to the Asymmetric.al team. Submitting does not guarantee immediate access; until onboarding opens, you can follow progress on GitHub.",
+    "We’ve received your request and passed it to the Asymmetric.al team. Submitting does not guarantee immediate access; until onboarding opens, you can follow progress on GitHub.",
   failure: "Your request didn’t go through. Please try again.",
   notConfigured: "Early access sign\u{2011}ups aren’t open right now.",
   rateLimited:

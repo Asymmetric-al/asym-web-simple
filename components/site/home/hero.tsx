@@ -60,15 +60,15 @@ export const HomeHero = () => {
             </h1>
 
             <p className="text-foreground/88 mt-4 max-w-[33rem] text-base leading-7 text-pretty sm:mt-5 sm:text-[1.09375rem] sm:leading-7">
-              Staff enter a gift once. Donors download their own receipts.
-              Missionaries follow assigned support without private contact
-              details by default, and the office keeps one ledger.
+              One record serves three hands. Supporters pull their own receipts.
+              Missionaries track assigned support while donors stay private by
+              default. Office staff keep one ledger.
             </p>
             <p className="text-muted-foreground mt-2.5 max-w-[33rem] text-sm leading-6 text-pretty sm:mt-3">
               Open source today; hosted access isn’t open yet.
             </p>
 
-            <div className="mt-6 flex flex-col gap-2.5 sm:mt-7 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
+            <div className="mt-5 flex flex-row flex-wrap items-center gap-2.5 sm:mt-7 sm:gap-3">
               {isConfigured ? (
                 <Link
                   href={siteConfig.cta.primary.href}

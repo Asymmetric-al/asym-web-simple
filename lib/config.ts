@@ -47,11 +47,6 @@ export const navigationLinks = [
   { label: "About", href: "/#about" },
 ] as const;
 
-export const mobileNavigationLinks = [
-  ...navigationLinks,
-  { label: "Where things stand", href: "/#where-things-stand" },
-] as const;
-
 export const footerLinks = [
   { label: "GitHub", href: siteConfig.repoUrl, external: true },
   { label: "Early access", href: siteConfig.cta.primary.href, external: false },

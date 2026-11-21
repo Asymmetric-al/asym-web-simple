@@ -126,7 +126,7 @@
   --night: #152635;
   --night-foreground: #f3eee3;
   --night-muted: #bcc9d2;
-  --night-rule: rgb(243 238 227 / 22%);
+  --night-rule: rgb(111 181 162 / 26%);
   --night-accent: #6fb5a2;
   --selection-bg: rgb(98 189 168 / 28%);
   --frame: #0b131a;
@@ -406,15 +406,16 @@
   transition: none;
 }
 
-/* Compositor-only horizontal sliding press fill for <1024px SurfaceExplorer tabs */
+/* Compositor-only 3px Field Pine underline rail below <1024px SurfaceExplorer tabs (never crosses tab text) */
 .horizontal-tabs-indicator {
   position: absolute;
-  z-index: 0;
-  top: 0;
-  bottom: 0;
+  z-index: 1;
+  bottom: -6px;
   left: 0;
   width: var(--active-tab-width);
-  background: var(--foreground);
+  height: 3px;
+  border-radius: 999px;
+  background: var(--pine);
   pointer-events: none;
   transform: translate3d(var(--active-tab-left, 0), 0, 0);
   transition: transform 180ms var(--ease-out-expo);
@@ -423,7 +424,7 @@
 
 @media (forced-colors: active) {
   .horizontal-tabs-indicator {
-    display: none;
+    background: Highlight;
   }
 }
 
@@ -469,6 +470,14 @@
   isolation: isolate;
 }
 
+.dark .midnight-band {
+  background-image: radial-gradient(
+    ellipse 76% 64% at 78% 12%,
+    rgb(111 181 162 / 16%),
+    transparent 68%
+  );
+}
+
 /* Fine neutral grain breaks up 8-bit radial gradient banding on dark displays */
 .midnight-band::before {
   position: absolute;
@@ -482,20 +491,18 @@
   pointer-events: none;
 }
 
-@keyframes thread-draw {
+@keyframes thread-reveal {
   from {
-    stroke-dashoffset: 320;
+    clip-path: inset(0 100% 0 0);
   }
 
   to {
-    stroke-dashoffset: 0;
+    clip-path: inset(0 0 0 0);
   }
 }
 
 .ink-thread-reveal {
-  animation: thread-draw 850ms var(--ease-out-expo) both;
-  stroke-dasharray: 320;
-  stroke-dashoffset: 0;
+  animation: thread-reveal 850ms var(--ease-out-expo) both;
 }
 
 @keyframes rule-draw {

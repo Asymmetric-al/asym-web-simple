@@ -13,9 +13,9 @@ const giftTrace: readonly {
 }[] = [
   {
     step: "01",
-    desk: "Office enters it",
-    title: "Recorded once, previewed before batch runs",
-    text: "Online or offline gifts land in one contribution ledger. Supported bulk actions preview affected and skipped rows before staff confirm.",
+    desk: "Office keeps one ledger",
+    title: "Entered once, shared by role",
+    text: "Contributions land in one shared table. Each desk reads from that same record instead of reconciling exported spreadsheets.",
     linkLabel: "preview.ts",
     repoPath:
       "blob/develop/packages/api/src/admin/contribution-batches/preview.ts",
@@ -31,8 +31,8 @@ const giftTrace: readonly {
   {
     step: "03",
     desk: "Missionary tracks support",
-    title: "Support progress without manual exports",
-    text: "Field workers follow assigned support without office spreadsheet exports. Donors stay Anonymous partner until they opt in; lifetime and last-gift amounts stay withheld on the roster.",
+    title: "Support updates without manual exports",
+    text: "Field workers follow their assigned support directly, while donor privacy rules run on the server instead of in a weekly spreadsheet.",
     linkLabel: "donors.ts",
     repoPath: "blob/develop/packages/api/src/missionary-portal/donors.ts",
   },

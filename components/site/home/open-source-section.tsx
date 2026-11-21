@@ -51,11 +51,12 @@ const inventoryRows: readonly {
     statusLabel: "In code",
   },
   {
-    module: "Offline gifts, recurring commitments & auto-send thank-yous",
+    module: "Offline gift entry & architecture decisions",
+    note: "Offline entry orchestration is in code with DB persistence gated (501); ADRs 0004, 0010, and 0012 document thank-you and recurring-gift designs",
     path: "docs/adr",
     href: `${siteConfig.repoUrl}/tree/develop/docs/adr`,
-    status: "in_code",
-    statusLabel: "In code",
+    status: "partial",
+    statusLabel: "Partial",
   },
   {
     module: "Hosted team subscription & onboarding",
@@ -97,7 +98,10 @@ export const OpenSourceSection = () => (
           </SectionTitle>
           <p className="text-muted-foreground mt-4 max-w-[38rem] text-base leading-7 text-pretty sm:text-[1.0625rem] sm:leading-8">
             Inspect the work directly in{" "}
-            <span translate="no" className="text-foreground font-mono text-sm">
+            <span
+              translate="no"
+              className="text-foreground font-mono text-sm whitespace-nowrap"
+            >
               Asymmetric-al/core
             </span>{" "}
             under{" "}
@@ -202,8 +206,8 @@ export const OpenSourceSection = () => (
           </div>
         </div>
 
-        {/* Right column: Plate III engraving + commercial model */}
-        <div className="min-w-0 space-y-8">
+        {/* Right column: Plate II engraving */}
+        <div className="min-w-0 lg:pt-20">
           <figure className="min-w-0">
             <div className="plate-impression aspect-[4/3] overflow-hidden">
               <ThemedPlate
@@ -221,42 +225,44 @@ export const OpenSourceSection = () => (
               </span>
             </figcaption>
           </figure>
+        </div>
+      </div>
 
-          <div className="border-rule border-t pt-7">
-            <h3 className="font-heading text-foreground text-2xl font-medium tracking-[-0.02em] sm:text-[1.75rem]">
-              How we’ll charge.
-            </h3>
-            <div className="text-muted-foreground mt-3.5 space-y-3.5 text-base leading-7 text-pretty">
-              <p>
-                The hosted platform will be a paid subscription covering
-                hosting, AI workflows, updates, and product support, so your
-                team never maintains servers. Pricing is not published yet.
-              </p>
-              <p>
-                When hosted onboarding opens, we’ll help your office move
-                existing donor records and configure giving pages before
-                switching over. Later, we also plan to offer optional managed
-                donor care as a separate service for routine requests like
-                receipt copies and recurring&#8209;gift updates.
-              </p>
-            </div>
-
-            <div className="mt-5">
-              <a
-                href={siteConfig.repoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center gap-2 rounded-md text-sm font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:text-pine"
-              >
-                <GitHubMark className="size-4" />
-                <span className="underline underline-offset-4">
-                  Explore the code on GitHub
-                </span>
-                <span className="sr-only"> (opens in a new tab)</span>
-                <ArrowUpRightIcon />
-              </a>
-            </div>
+      {/* Dedicated commercial model band so "How we'll charge." breathes at full width */}
+      <div className="border-rule mt-10 grid gap-6 border-t pt-8 lg:grid-cols-[minmax(0,38fr)_minmax(0,62fr)] lg:items-start lg:gap-12">
+        <div className="min-w-0">
+          <h3 className="font-heading text-foreground text-2xl font-medium tracking-[-0.02em] sm:text-[1.75rem]">
+            How we’ll charge.
+          </h3>
+          <div className="mt-4">
+            <a
+              href={siteConfig.repoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center gap-2 rounded-md text-sm font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:text-pine"
+            >
+              <GitHubMark className="size-4" />
+              <span className="underline underline-offset-4">
+                Explore the code on GitHub
+              </span>
+              <span className="sr-only"> (opens in a new tab)</span>
+              <ArrowUpRightIcon />
+            </a>
           </div>
+        </div>
+        <div className="text-muted-foreground grid gap-4 text-base leading-7 text-pretty sm:grid-cols-2 sm:gap-8">
+          <p>
+            The hosted platform will be a paid subscription covering hosting, AI
+            workflows, updates, and product support, so your team never
+            maintains servers. Pricing is not published yet.
+          </p>
+          <p>
+            When hosted onboarding opens, we’ll help your office move existing
+            donor records and configure giving pages before switching over.
+            Later, we also plan to offer optional managed donor care as a
+            separate service for routine requests like receipt copies and
+            recurring-gift updates.
+          </p>
         </div>
       </div>
       </div>

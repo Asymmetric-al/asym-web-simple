@@ -41,9 +41,10 @@ export default function NotFound() {
             This page doesn’t exist.
           </h1>
           <p className="text-muted-foreground mt-5 max-w-[38rem] text-lg leading-8">
-            The link may be from an older version of the site. Everything about{" "}
-            <span translate="no">{siteConfig.shortName}</span> is on the
-            homepage now.
+            The link may be from an older version of the site. The product
+            overview and public code links for{" "}
+            <span translate="no">{siteConfig.shortName}</span> are on the
+            homepage.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link

@@ -87,7 +87,7 @@ export const createMetadata = ({
     ...(title && { title }),
     ...(description && { description }),
     alternates: {
-      canonical: canonicalPath,
+      canonical: noIndex ? null : canonicalPath,
     },
     openGraph: {
       url,

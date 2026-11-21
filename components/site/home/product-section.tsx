@@ -31,13 +31,13 @@ export const ProductSection = () => (
           <p className="text-muted-foreground mt-4 text-base leading-7 text-pretty sm:text-[1.0625rem] sm:leading-7">
             When a field project needs support, small teams shouldn’t rebuild
             giving pages, donor lists, and updates by hand. We’re building
-            AI&#8209;drafted appeals that stay inside your existing permissions
-            and wait for staff review before sending or publishing.
+            AI-drafted appeals that stay inside your existing permissions and
+            wait for staff review before sending or publishing.
           </p>
         </div>
 
         <div className="mt-8 grid gap-10 lg:grid-cols-[minmax(0,45fr)_minmax(0,55fr)] lg:items-start lg:gap-12">
-          {/* Plate II: single dashed copperplate impression directly on paper */}
+          {/* Plate III: single dashed copperplate impression directly on paper */}
           <figure className="min-w-0">
             <div className="plate-impression-draft aspect-[4/3] overflow-hidden">
               <ThemedPlate

@@ -68,7 +68,7 @@ const GOVERNANCE_STEPS: readonly [
     summary: "Hold every draft word, fund link, and recipient list for review.",
     guardrailLabel: "Separate from routine receipts",
     guardrail:
-      "AI-drafted appeals remain in draft until approved by staff. Routine gift receipts and entry-gated auto-send thank-yous (ADR 0004) follow separate organization rules.",
+      "AI-drafted appeals remain in draft until approved by staff. Routine gift receipts and planned entry-gated auto-send thank-yous (ADR 0004 design) follow separate organization rules.",
     tone: "approval",
   },
   {
@@ -133,7 +133,7 @@ const STEP_INDICATOR_INK: Record<StepKey, string> = {
 
 // Hairline-ruled press ledger rows — crisp ink rail, filled active index, zero rounded-xl card walls.
 const STEP_ROW_CLASS =
-  "border-rule-interactive data-selected:bg-card relative z-10 grid w-full min-w-0 grid-cols-[2rem_1fr] items-start gap-3 border-b px-3 py-3.5 text-left last:border-b-0 forced-colors:data-selected:border-[Highlight] forced-colors:data-selected:outline-2 forced-colors:data-selected:outline-offset-[-2px] forced-colors:data-selected:outline-[Highlight]";
+  "group border-rule-interactive data-selected:bg-card relative z-10 grid w-full min-w-0 grid-cols-[2rem_1fr] items-start gap-3 border-b px-3 py-3.5 text-left last:border-b-0 forced-colors:data-selected:border-[Highlight] forced-colors:data-selected:outline-2 forced-colors:data-selected:outline-offset-[-2px] forced-colors:data-selected:outline-[Highlight]";
 
 const STEP_ROW_INTERACTIVE_CLASS =
   "focus-visible:ring-ring cursor-pointer transition-[color,background-color] duration-150 select-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:outline-2 focus-visible:outline-transparent not-data-selected:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-card/75";
@@ -168,7 +168,10 @@ const StepRowBody = ({
           <span className={cn("inline-flex items-center gap-1.5 font-mono text-xs", tone.actor)}>
             <span>{item.actor}</span>
             {isSelected ? null : (
-              <span aria-hidden="true" className="text-muted-foreground/70">
+              <span
+                aria-hidden="true"
+                className="text-muted-foreground/70 inline-block transition-transform duration-150 [@media(hover:hover)_and_(pointer:fine)]:group-hover:translate-x-0.5"
+              >
                 &rsaquo;
               </span>
             )}
