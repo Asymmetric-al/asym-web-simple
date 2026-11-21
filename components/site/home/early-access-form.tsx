@@ -1,6 +1,11 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import {
+  ArrowRightIcon,
+  ArrowUpRightIcon,
+  CircleCheckIcon,
+} from "@/components/site/icons";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -25,60 +30,6 @@ import type {
   EarlyAccessRequest,
 } from "@/lib/early-access";
 import type { ReactNode, SubmitEvent } from "react";
-
-const CircleCheckIcon = ({ className }: { readonly className?: string }) => (
-  <svg
-    width="28"
-    height="28"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-    className={className}
-  >
-    <circle cx="12" cy="12" r="10" />
-    <path d="m9 12 2 2 4-4" />
-  </svg>
-);
-
-const ArrowRightIcon = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    data-icon="inline-end"
-    aria-hidden="true"
-  >
-    <path d="M5 12h14" />
-    <path d="m12 5 7 7-7 7" />
-  </svg>
-);
-
-const ArrowUpRightIcon = ({ className }: { readonly className?: string }) => (
-  <svg
-    width="14"
-    height="14"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-    className={className}
-  >
-    <path d="M7 7h10v10" />
-    <path d="M7 17 17 7" />
-  </svg>
-);
 
 const SpinnerIcon = () => (
   <svg
@@ -167,17 +118,17 @@ const EarlyAccessSuccessCard = ({
 }: {
   readonly successRef: React.RefObject<HTMLHeadingElement | null>;
 }): ReactNode => (
-  <div className="surface-enter border-rule-strong bg-background/70 relative border p-6 sm:p-8">
+  <div className="surface-enter border-rule-strong bg-background/70 relative rounded-xl border p-6 sm:p-8">
     <div className="flex flex-wrap items-center justify-between gap-3">
-      <CircleCheckIcon className="text-pine size-7" />
-      <span className="border-pine-border bg-pine-soft text-pine inline-block border px-2.5 py-1 font-mono text-xs font-medium tracking-[0.06em] uppercase">
+      <CircleCheckIcon className="text-signal size-7" />
+      <span className="border-signal-border bg-signal-soft text-signal inline-block rounded-md border px-2.5 py-1 font-mono text-xs font-medium tracking-[0.06em] uppercase">
         Received
       </span>
     </div>
     <h3
       ref={successRef}
       tabIndex={-1}
-      className="font-heading text-foreground focus-visible:ring-ring focus-visible:ring-offset-background mt-4 rounded-md text-2xl font-medium tracking-[-0.02em] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent"
+      className="font-heading text-foreground focus-visible:ring-ring focus-visible:ring-offset-background mt-4 rounded-md text-2xl font-semibold tracking-[-0.025em] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent"
     >
       Request received
     </h3>
@@ -189,7 +140,7 @@ const EarlyAccessSuccessCard = ({
         href={`${siteConfig.repoUrl}#readme`}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center gap-1.5 rounded-md text-sm font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-9 [@media(hover:hover)_and_(pointer:fine)]:hover:text-pine"
+        className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center gap-1.5 rounded-md text-sm font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-9 [@media(hover:hover)_and_(pointer:fine)]:hover:text-signal"
       >
         Follow development on GitHub
         <span className="sr-only"> (opens in a new tab)</span>
@@ -427,7 +378,7 @@ const EarlyAccessFormFooter = ({
         ) : (
           <>
             Request early access
-            <ArrowRightIcon />
+            <ArrowRightIcon dataIcon="inline-end" />
           </>
         )}
       </button>
@@ -627,7 +578,7 @@ export const EarlyAccessForm = ({
       onInput={handleDraftInput}
       onSubmit={handleSubmit}
       aria-label="Request early access"
-      className="sm:border-rule sm:bg-background/60 relative sm:border sm:p-7"
+      className="sm:border-rule sm:bg-background/60 relative sm:rounded-xl sm:border sm:p-7"
     >
       <p className="sr-only" role="status" aria-live="polite">
         {isSubmitting ? earlyAccessCopy.submitting : ""}
@@ -744,10 +695,12 @@ export const EarlyAccessConfigured = ({
   return (
     <div className="relative z-10 grid gap-8 lg:grid-cols-[minmax(0,44fr)_minmax(0,56fr)] lg:items-start lg:gap-12">
       <div className="min-w-0">
-        <p className="text-pine font-sans text-sm font-medium">Pilot intake</p>
+        <p className="text-signal font-sans text-sm font-medium">
+          Pilot intake
+        </p>
         <h2
           id="early-access-title"
-          className="font-heading text-foreground mt-3 text-[clamp(2rem,3.8vw,3.25rem)] leading-[1.03] font-medium tracking-[-0.025em] text-balance"
+          className="font-heading text-foreground mt-3 text-[clamp(2rem,3.8vw,3.25rem)] leading-[1.03] font-semibold tracking-[-0.035em] text-balance"
         >
           {submitted
             ? "What happens next."
@@ -755,8 +708,8 @@ export const EarlyAccessConfigured = ({
         </h2>
         <p className="text-muted-foreground mt-4 max-w-[34rem] text-base leading-7 text-pretty sm:text-[1.0625rem] sm:leading-8">
           {submitted
-            ? "The Asymmetric.al team reviews requests from missions organizations as onboarding capacity opens and follows up by email."
-            : "Tell us which organization you’re with and what part of fundraising or donor care you’d like help with. This requests a team conversation, not an account or reservation; please don’t include donor information."}
+            ? "The Asymmetric.al team reviews requests from nonprofit teams as onboarding capacity opens and follows up by email."
+            : "Tell us which organization you’re with and what part of giving or donor care you’d like help with. This requests a team conversation, not an account or reservation; please don’t include donor information."}
         </p>
       </div>
       <div className="min-w-0">

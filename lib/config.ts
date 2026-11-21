@@ -8,7 +8,7 @@ export const siteConfig = {
   */
   shortName: "asym",
   description:
-    "Open-source donor portals, self-service receipts, redacted missionary rosters, and office CRM on one shared record for missions organizations. Hosted access is not open yet.",
+    "Open-source giving, donor care, and operations on one shared foundation for nonprofits, with practical AI in development. Hosted access is not open yet.",
   /**
   Production domain served by this project (Vercel `asym-web-simple`).
   */
@@ -42,9 +42,10 @@ export const repoStats = {
 } as const;
 
 export const navigationLinks = [
+  { label: "Vision", href: "/#vision" },
   { label: "Product", href: "/#product" },
   { label: "Open source", href: "/#open-source" },
-  { label: "About", href: "/#about" },
+  { label: "Company", href: "/#about" },
 ] as const;
 
 export const footerLinks = [

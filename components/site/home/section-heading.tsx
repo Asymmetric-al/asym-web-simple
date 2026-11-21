@@ -10,7 +10,7 @@ export const Eyebrow = ({
 }) => (
   <p
     className={cn(
-      "text-pine font-sans text-sm font-medium tracking-[0.005em]",
+      "text-signal font-sans text-sm font-medium tracking-[-0.005em]",
       className
     )}
   >
@@ -30,7 +30,7 @@ export const SectionTitle = ({
   <h2
     id={id}
     className={cn(
-      "font-heading text-foreground mt-3 text-[clamp(2rem,3.8vw,3.25rem)] leading-[1.03] font-medium tracking-[-0.025em] text-balance",
+      "font-heading text-foreground mt-2.5 text-[clamp(2rem,3.8vw,3.15rem)] leading-[1.06] font-semibold tracking-[-0.03em] text-balance",
       className
     )}
   >
@@ -50,7 +50,7 @@ export const StatusPill = ({
 }) => (
   <p
     className={cn(
-      "border-rule-strong bg-card text-muted-foreground inline-flex min-h-8 w-fit items-center gap-2 border px-2.5 py-1 font-mono text-xs tracking-[0.02em]",
+      "border-rule-strong bg-card text-muted-foreground inline-flex min-h-8 w-fit items-center gap-2 rounded-lg border px-2.5 py-1 font-mono text-xs tracking-[0.02em]",
       className
     )}
   >

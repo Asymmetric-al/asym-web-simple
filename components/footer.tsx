@@ -38,8 +38,8 @@ export const Footer = () => {
               </span>
             </Link>
             <p className="text-muted-foreground mt-2.5 text-sm leading-6 text-pretty">
-              Open-source software for nonprofits, starting with missions
-              organizations. Built by{" "}
+              Open-source giving and donor-care software for nonprofits. Built
+              by{" "}
               <span translate="no" className="text-foreground font-medium">
                 {siteConfig.name}
               </span>
@@ -105,19 +105,16 @@ export const Footer = () => {
           </div>
         </div>
 
-        {/* Archival colophon + theme selector */}
+        {/* Footer bar + theme selector */}
         <div className="border-rule text-muted-foreground mt-8 flex flex-col items-start gap-4 border-t pt-6 text-xs sm:flex-row sm:items-center sm:justify-between">
-          <div className="space-y-1">
-            <p>
-              &copy; {currentYear()}{" "}
-              <span translate="no">{siteConfig.name}</span> · Code:{" "}
-              <span translate="no" className="font-mono">
-                Asymmetric-al/core
-              </span>{" "}
-              (AGPL-3.0-only)
-            </p>
-            <p>Set in Newsreader, Instrument Sans, and IBM Plex Mono.</p>
-          </div>
+          <p>
+            &copy; {currentYear()}{" "}
+            <span translate="no">{siteConfig.name}</span> · Code:{" "}
+            <span translate="no" className="font-mono">
+              Asymmetric-al/core
+            </span>{" "}
+            (AGPL-3.0-only)
+          </p>
           <ThemeToggle />
         </div>
       </div>

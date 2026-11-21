@@ -22,30 +22,23 @@ export const Header = () => {
     <>
       <header className="border-rule bg-background fixed inset-x-0 top-0 z-50 border-b pt-[env(safe-area-inset-top)] pr-[env(safe-area-inset-right)] pl-[env(safe-area-inset-left)]">
         <div className="mx-auto flex h-16 max-w-[82rem] items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
-          <div className="flex min-w-0 items-center gap-3.5">
+          <div className="flex min-w-0 items-center">
             <Link
               href="/"
               className="group focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 min-w-0 items-center gap-2.5 rounded-md px-1 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-10"
               aria-label={`${siteConfig.shortName} home`}
             >
               <SiteLogoMark
-                className="size-7 transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] [@media(hover:hover)_and_(pointer:fine)]:group-hover:-translate-y-px"
+                className="size-7 transition-transform duration-150 ease-[cubic-bezier(0.22,1,0.36,1)] [@media(hover:hover)_and_(pointer:fine)]:group-hover:-translate-y-px"
                 size={28}
               />
               <span
                 translate="no"
-                className="text-foreground -translate-y-px font-sans text-[1.125rem] leading-none font-semibold tracking-[-0.03em]"
+                className="text-foreground -translate-y-px font-heading text-[1.2rem] leading-none font-semibold tracking-[-0.03em]"
               >
                 {siteConfig.shortName}
               </span>
             </Link>
-            <span
-              aria-hidden="true"
-              className="bg-rule hidden h-4 w-px lg:block"
-            />
-            <span className="text-muted-foreground hidden text-xs lg:inline">
-              For missions organizations
-            </span>
           </div>
 
           <nav aria-label="Main" className="hidden md:block">

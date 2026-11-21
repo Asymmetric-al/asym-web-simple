@@ -49,7 +49,7 @@ test.describe("route accessibility", () => {
     });
   }
 
-  test("interactive surface explorer, governance steps, and 404 menu states pass WCAG 2.2 AA", async ({
+  test("interactive status filter, configured form, and 404 menu states pass WCAG 2.2 AA", async ({
     page,
   }) => {
     await page.emulateMedia({
@@ -61,31 +61,24 @@ test.describe("route accessibility", () => {
       () => document.documentElement.getAttribute("data-ui-ready") === "true"
     );
 
-    const architecture = page.getByRole("region", {
-      name: /Three workspaces on one shared record/iu,
-    });
-    await architecture.getByRole("tab", { name: /Missionary/iu }).click();
-    const missionaryResults = await analyzePage(page);
-    expect(missionaryResults.violations).toEqual([]);
+    const openSource = page.locator("#open-source");
+    await openSource.getByRole("radio", { name: /^Partial/u }).click();
+    const partialLightResults = await analyzePage(page);
+    expect(partialLightResults.violations).toEqual([]);
 
-    const appeals = page.locator("#appeals");
-    await appeals
-      .getByRole("tab", { name: /Prepare page, email & recipient scope/iu })
-      .click();
-    const governanceResults = await analyzePage(page);
-    expect(governanceResults.violations).toEqual([]);
+    await openSource.getByRole("radio", { name: /^Planned/u }).click();
+    const plannedLightResults = await analyzePage(page);
+    expect(plannedLightResults.violations).toEqual([]);
 
     // Verify configured early-access form invalid state when enabled on this server
     const form = page.getByRole("form", { name: "Request early access" });
     if ((await form.count()) > 0) {
-      await form
-        .getByRole("button", { name: "Request early access" })
-        .click();
+      await form.getByRole("button", { name: "Request early access" }).click();
       const formInvalidLight = await analyzePage(page);
       expect(formInvalidLight.violations).toEqual([]);
     }
 
-    // Verify dark-mode interactive states (Missionary + Step 02 + Step 03)
+    // Verify dark-mode interactive states
     await page.emulateMedia({
       reducedMotion: "reduce",
       colorScheme: "dark",
@@ -96,11 +89,9 @@ test.describe("route accessibility", () => {
     const darkInteractiveResults = await analyzePage(page);
     expect(darkInteractiveResults.violations).toEqual([]);
 
-    await appeals
-      .getByRole("tab", { name: /Review, edit & approve/iu })
-      .click();
-    const darkApprovalResults = await analyzePage(page);
-    expect(darkApprovalResults.violations).toEqual([]);
+    await openSource.getByRole("radio", { name: /^All/u }).click();
+    const darkAllResults = await analyzePage(page);
+    expect(darkAllResults.violations).toEqual([]);
 
     await page.emulateMedia({
       reducedMotion: "reduce",
@@ -117,5 +108,32 @@ test.describe("route accessibility", () => {
     ).toBeVisible();
     const notFoundMenuResults = await analyzePage(page);
     expect(notFoundMenuResults.violations).toEqual([]);
+  });
+
+  test("default motion passes WCAG 2.2 AA across interactive controls", async ({
+    page,
+  }) => {
+    await page.emulateMedia({
+      reducedMotion: "no-preference",
+      colorScheme: "light",
+    });
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/", { waitUntil: "domcontentloaded" });
+    await page.waitForFunction(
+      () => document.documentElement.getAttribute("data-ui-ready") === "true"
+    );
+
+    const openSource = page.locator("#open-source");
+    const inCodeRadio = openSource.getByRole("radio", { name: /^In code/u });
+    await inCodeRadio.click();
+
+    const transitionProp = await inCodeRadio.evaluate(
+      (el) => window.getComputedStyle(el).transitionProperty
+    );
+    expect(transitionProp).not.toContain("color");
+    expect(transitionProp).not.toContain("background");
+
+    const results = await analyzePage(page);
+    expect(results.violations).toEqual([]);
   });
 });

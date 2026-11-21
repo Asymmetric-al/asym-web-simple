@@ -187,7 +187,7 @@ export default async function EarlyAccessStatusPage({
     <StatusPill>{content.eyebrow}</StatusPill>
   ) : null;
   if (content.tone === "success") {
-    statusIcon = <CircleCheckIcon className="text-pine size-7" />;
+    statusIcon = <CircleCheckIcon className="text-signal size-7" />;
   } else if (content.tone === "error") {
     statusIcon = <CircleAlertIcon className="text-destructive size-7" />;
   }
@@ -204,17 +204,20 @@ export default async function EarlyAccessStatusPage({
       className="flex flex-1 items-center pt-32 pb-20 outline-none sm:pt-36"
     >
       <Container className="max-w-2xl">
-        <div className="border-rule-strong bg-card border p-6 sm:p-9">
-          <div aria-hidden="true" className="bg-pine mb-5 h-[2px] w-14" />
+        <div className="border-rule-strong bg-card rounded-2xl border p-6 shadow-[var(--shadow-card)] sm:p-9">
+          <div
+            aria-hidden="true"
+            className="bg-signal mb-5 h-[3px] w-14 rounded-full"
+          />
           {statusIcon}
           {content.tone === "neutral" ? null : (
-            <p className="text-pine mt-5 font-mono text-xs font-medium tracking-[0.02em]">
+            <p className="text-signal mt-5 font-mono text-xs font-medium tracking-[0.02em]">
               {content.eyebrow}
             </p>
           )}
           <h1
             className={cn(
-              "font-heading text-foreground text-[clamp(2rem,4vw,2.9rem)] leading-[1.04] font-medium tracking-[-0.025em] text-balance",
+              "font-heading text-foreground text-[clamp(2rem,4vw,2.9rem)] leading-[1.04] font-semibold tracking-[-0.03em] text-balance",
               headingSpacing
             )}
           >
@@ -229,7 +232,7 @@ export default async function EarlyAccessStatusPage({
           {!isConfigured && content.tone === "neutral" ? (
             <div className="border-rule mt-6 space-y-5 border-t pt-5">
               <div>
-                <p className="text-pine font-mono text-xs font-medium">
+                <p className="text-signal font-mono text-xs font-medium">
                   In public code today
                 </p>
                 <ul className="text-muted-foreground mt-3 space-y-2 text-sm leading-6">
@@ -237,7 +240,7 @@ export default async function EarlyAccessStatusPage({
                     <li key={item} className="flex items-start gap-2.5">
                       <span
                         aria-hidden="true"
-                        className="bg-pine mt-2 size-1.5 shrink-0 rounded-full"
+                        className="bg-signal mt-2 size-1.5 shrink-0 rounded-full"
                       />
                       <span>{item}</span>
                     </li>
@@ -291,23 +294,32 @@ export default async function EarlyAccessStatusPage({
           </div>
           {content.tone === "success" ? null : (
             <p className="text-muted-foreground mt-5 text-sm leading-6">
-              Prefer a feed reader? Subscribe to the{" "}
+              Want to reach the builders? Open a{" "}
+              <a
+                href={siteConfig.issuesUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-background link-resilient rounded-xs font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:text-signal"
+              >
+                public note on GitHub
+                <span className="sr-only"> (opens in a new tab)</span>
+              </a>{" "}
+              (no private donor data), subscribe to the{" "}
               <a
                 href={`${siteConfig.commitsUrl}.atom`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-background link-resilient rounded-xs underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:text-pine"
+                className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-background link-resilient rounded-xs underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:text-signal"
               >
                 development feed (Atom)
                 <span className="sr-only"> (opens in a new tab)</span>
               </a>
               {contactEmail ? (
                 <>
-                  {" "}
-                  or email{" "}
+                  , or email{" "}
                   <a
                     href={`mailto:${contactEmail}?subject=asym%20early%20access`}
-                    className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-background link-resilient rounded-xs underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:text-pine"
+                    className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-background link-resilient rounded-xs underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:text-signal"
                   >
                     {contactEmail}
                   </a>

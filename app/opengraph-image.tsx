@@ -2,6 +2,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { ImageResponse } from "next/og";
+import { isEarlyAccessConfigured } from "@/lib/early-access-config";
 import { siteMetadata } from "@/lib/metadata";
 
 export const runtime = "nodejs";
@@ -12,54 +13,36 @@ export const size = {
 };
 export const contentType = "image/png";
 
-const PAPER = "#F3EEE3";
-const INK = "#12202B";
-const MUTED = "#485763";
-const PINE = "#1B574C";
-const DRAFT = "#4A5966";
-const RULE = "rgba(18,32,43,0.18)";
+const BG = "#FAF9F6";
+const SURFACE = "#FFFFFF";
+const INK = "#14171A";
+const MUTED = "#525860";
+const SIGNAL = "#156651";
+const HUMAN = "#BF3E24";
+const RULE = "rgba(20,23,26,0.12)";
 const SPACE_BETWEEN = "space-between";
-const FONT_NEWSREADER = '"Newsreader"';
+const FONT_SANS = '"Instrument Sans"';
 const FONT_MONO = '"IBM Plex Mono"';
 
 export default async function openGraphImage() {
-  const [
-    logoData,
-    plateData,
-    newsreaderRegular,
-    newsreaderSemiBold,
-    newsreaderItalic,
-    instrumentMedium,
-    instrumentSemiBold,
-    plexMonoMedium,
-  ] = await Promise.all([
-    readFile(
-      path.join(process.cwd(), "public", "brand", "asym-mark-dark.png"),
-      "base64"
-    ),
-    readFile(
-      path.join(process.cwd(), "lib", "art", "three-hands-og.png"),
-      "base64"
-    ),
-    readFile(
-      path.join(process.cwd(), "lib", "fonts", "Newsreader-Regular.ttf")
-    ),
-    readFile(
-      path.join(process.cwd(), "lib", "fonts", "Newsreader-SemiBold.ttf")
-    ),
-    readFile(path.join(process.cwd(), "lib", "fonts", "Newsreader-Italic.ttf")),
-    readFile(
-      path.join(process.cwd(), "lib", "fonts", "InstrumentSans-Medium.ttf")
-    ),
-    readFile(
-      path.join(process.cwd(), "lib", "fonts", "InstrumentSans-SemiBold.ttf")
-    ),
-    readFile(
-      path.join(process.cwd(), "lib", "fonts", "IBMPlexMono-Medium.ttf")
-    ),
-  ]);
+  const [logoData, instrumentMedium, instrumentSemiBold, plexMonoMedium] =
+    await Promise.all([
+      readFile(
+        path.join(process.cwd(), "public", "brand", "asym-mark-dark.png"),
+        "base64"
+      ),
+      readFile(
+        path.join(process.cwd(), "lib", "fonts", "InstrumentSans-Medium.ttf")
+      ),
+      readFile(
+        path.join(process.cwd(), "lib", "fonts", "InstrumentSans-SemiBold.ttf")
+      ),
+      readFile(
+        path.join(process.cwd(), "lib", "fonts", "IBMPlexMono-Medium.ttf")
+      ),
+    ]);
   const logoSrc = `data:image/png;base64,${logoData}`;
-  const plateSrc = `data:image/png;base64,${plateData}`;
+  const isConfigured = isEarlyAccessConfigured();
 
   return new ImageResponse(
     <div
@@ -67,22 +50,22 @@ export default async function openGraphImage() {
         display: "flex",
         width: "100%",
         height: "100%",
-        background: PAPER,
-        padding: "44px 52px",
-        fontFamily: '"Instrument Sans"',
+        background: BG,
+        padding: "46px 54px",
+        fontFamily: FONT_SANS,
         color: INK,
         justifyContent: SPACE_BETWEEN,
         alignItems: "stretch",
         gap: "44px",
       }}
     >
-      {/* Left editorial column */}
+      {/* Left column: warm modern nonprofit proposition */}
       <div
         style={{
           display: "flex",
           flexDirection: "column",
           justifyContent: SPACE_BETWEEN,
-          width: "510px",
+          width: "540px",
           paddingTop: "4px",
           paddingBottom: "4px",
         }}
@@ -105,7 +88,7 @@ export default async function openGraphImage() {
             asym
           </span>
           <span style={{ color: RULE, fontSize: 22 }}>|</span>
-          <span style={{ fontSize: 17, fontWeight: 500, color: PINE }}>
+          <span style={{ fontSize: 16, fontWeight: 600, color: SIGNAL }}>
             Open source &middot; AGPL-3.0-only
           </span>
         </div>
@@ -113,39 +96,36 @@ export default async function openGraphImage() {
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div
             style={{
-              fontFamily: FONT_NEWSREADER,
-              fontSize: 88,
-              lineHeight: 0.95,
+              fontSize: 70,
+              lineHeight: 0.98,
               fontWeight: 600,
-              letterSpacing: "-0.03em",
+              letterSpacing: "-0.04em",
             }}
           >
-            One gift.
+            Less overhead.
           </div>
           <div
             style={{
-              fontFamily: FONT_NEWSREADER,
-              fontStyle: "italic",
-              fontSize: 88,
-              lineHeight: 1,
-              fontWeight: 500,
-              letterSpacing: "-0.03em",
+              fontSize: 70,
+              lineHeight: 1.04,
+              fontWeight: 600,
+              letterSpacing: "-0.04em",
               color: INK,
             }}
           >
-            Three hands.
+            Outsized impact.
           </div>
           <div
             style={{
               marginTop: "22px",
               fontSize: 21,
-              lineHeight: 1.44,
+              lineHeight: 1.45,
               fontWeight: 500,
               color: MUTED,
             }}
           >
-            Donor portals, self-service receipts, redacted missionary rosters,
-            and office CRM on one shared open-source record.
+            Open-source giving and donor-care software for nonprofits of any
+            size, with practical AI in development.
           </div>
         </div>
 
@@ -168,7 +148,7 @@ export default async function openGraphImage() {
               color: MUTED,
             }}
           >
-            <span>Built by Asymmetric.al &middot; Missions organizations</span>
+            <span>Built by Asymmetric.al</span>
             <span style={{ fontFamily: FONT_MONO, fontSize: 15, color: INK }}>
               asym.app
             </span>
@@ -188,121 +168,99 @@ export default async function openGraphImage() {
                 width: "10px",
                 height: "10px",
                 borderRadius: "999px",
-                border: `2px dashed ${DRAFT}`,
+                background: isConfigured ? HUMAN : "transparent",
+                border: isConfigured ? "none" : `2px dashed ${MUTED}`,
               }}
             />
-            <span>Hosted access not open yet &middot; AI appeals planned</span>
+            <span>
+              {isConfigured
+                ? "Early access requests open"
+                : "Hosted access not open yet"}{" "}
+              &middot; AI tools in development
+            </span>
           </div>
         </div>
       </div>
 
-      {/* Right embossed Hero Plate I copperplate triptych — unified art direction, zero fake UI */}
+      {/* Right column: warm sculptural asym architectural planes */}
       <div
         style={{
           display: "flex",
-          flexDirection: "column",
-          flex: 1,
-          justifyContent: SPACE_BETWEEN,
+          width: "508px",
+          height: "538px",
+          borderRadius: "28px",
+          border: "1px solid rgba(20,23,26,0.12)",
+          background: "#F3F1EB",
+          padding: "20px",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
         <div
           style={{
             display: "flex",
-            width: "100%",
-            height: "414px",
+            width: "468px",
+            height: "498px",
+            borderRadius: "22px",
+            border: "1px solid rgba(20,23,26,0.16)",
             overflow: "hidden",
-            border: `1px solid rgba(18,32,43,0.32)`,
-            background: PAPER,
-            padding: "8px",
+            background: "#F5F2EB",
           }}
         >
-          <img
-            src={plateSrc}
-            alt=""
-            width={530}
-            height={398}
-            style={{
-              display: "block",
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-            }}
-          />
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            justifyContent: SPACE_BETWEEN,
-            alignItems: "center",
-            padding: "16px 2px 4px",
-            borderTop: `1px solid ${RULE}`,
-            gap: "12px",
-          }}
-        >
-          {[
-            { num: "01", role: "Donor", detail: "Portal & receipts" },
-            { num: "02", role: "Missionary", detail: "Redacted roster" },
-            { num: "03", role: "Office", detail: "Ledger & CRM" },
-          ].map((item) => (
-            <div
-              key={item.num}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                flex: 1,
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                <span
-                  style={{
-                    fontFamily: FONT_MONO,
-                    fontSize: 14,
-                    color: PINE,
-                    fontWeight: 500,
-                  }}
-                >
-                  {item.num}
-                </span>
-                <span style={{ fontSize: 17, fontWeight: 600, color: INK }}>
-                  {item.role}
-                </span>
-              </div>
-              <span
-                style={{
-                  fontSize: 14,
-                  color: MUTED,
-                  marginTop: "2px",
-                }}
-              >
-                {item.detail}
-              </span>
-            </div>
-          ))}
+          <svg
+            width="468"
+            height="498"
+            viewBox="0 0 468 498"
+            fill="none"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="0" y="0" width="468" height="498" fill="#F5F2EB" />
+            <path
+              d="M 0 0 H 468 V 214 C 384 154, 286 132, 182 148 C 102 160, 44 192, 0 232 Z"
+              fill="#F2DBD3"
+              fillOpacity="0.78"
+            />
+            <path
+              d="M 164 0 H 468 V 498 H 146 C 152 364, 158 182, 164 0 Z"
+              fill="#D5E8E0"
+            />
+            <path
+              d="M 0 194 C 52 162, 108 152, 168 158 V 498 H 0 Z"
+              fill="#E7E2D7"
+              fillOpacity="0.78"
+            />
+            <path
+              d="M 176 0 H 246 C 208 66, 194 148, 208 232 C 228 352, 318 412, 468 414 V 498 H 268 C 186 498, 144 428, 144 318 V 126 C 144 64, 154 24, 176 0 Z"
+              fill={SIGNAL}
+            />
+            <path
+              d="M 222 184 C 268 292, 356 352, 468 354 V 402 C 344 400, 252 336, 208 228 Z"
+              fill={SURFACE}
+              fillOpacity="0.24"
+            />
+            <path
+              d="M 0 228 A 56 56 0 0 1 56 172 H 412 A 56 56 0 0 1 468 228"
+              stroke="#C9583E"
+              strokeWidth="4.5"
+              strokeLinecap="round"
+            />
+            <path
+              d="M 174 172 C 266 172, 358 224, 434 334"
+              stroke={SURFACE}
+              strokeOpacity="0.62"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+            <circle cx="164" cy="172" r="12" fill={SURFACE} />
+            <circle cx="164" cy="172" r="5.5" fill="#C9583E" />
+          </svg>
         </div>
       </div>
     </div>,
     {
       ...size,
       fonts: [
-        {
-          name: "Newsreader",
-          data: newsreaderRegular,
-          style: "normal",
-          weight: 400,
-        },
-        {
-          name: "Newsreader",
-          data: newsreaderSemiBold,
-          style: "normal",
-          weight: 600,
-        },
-        {
-          name: "Newsreader",
-          data: newsreaderItalic,
-          style: "italic",
-          weight: 500,
-        },
         {
           name: "Instrument Sans",
           data: instrumentMedium,

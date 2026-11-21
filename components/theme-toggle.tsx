@@ -6,10 +6,9 @@ import {
   SegmentedControlItem,
 } from "@ui-sdk/react/segmented-control";
 import { useTheme } from "next-themes";
-import { useRef } from "react";
 import { useIsClient } from "@/lib/use-is-client";
 import { cn } from "@/lib/utils";
-import type { PointerEvent, ReactNode } from "react";
+import type { ReactNode } from "react";
 
 const SunIcon = (): ReactNode => (
   <svg
@@ -69,71 +68,15 @@ type ThemeValue = (typeof themes)[number]["value"];
 const isThemeValue = (value: string | null): value is ThemeValue =>
   value !== null && themes.some((option) => option.value === value);
 
-// Warm only the hidden hero plate on hover or focus so toggling themes stays smooth on desktop without extra mobile downloads.
-const prewarmHeroOppositePlate = (resolvedTheme: string | undefined) => {
-  if (typeof document === "undefined") {
-    return;
-  }
-  const selector =
-    resolvedTheme === "dark"
-      ? 'img[data-theme-plate="light"][data-priority="true"]'
-      : 'img[data-theme-plate="dark"][data-priority="true"]';
-  const plate = document.querySelector<HTMLImageElement>(selector);
-  if (!plate) {
-    return;
-  }
-  const avifSource = plate.parentElement?.querySelector<HTMLSourceElement>(
-    'source[type="image/avif"]'
-  );
-  const preloader = new window.Image();
-  preloader.decoding = "async";
-  if (avifSource?.sizes || plate.sizes) {
-    preloader.sizes = avifSource?.sizes || plate.sizes;
-  }
-  if (avifSource?.srcset) {
-    preloader.srcset = avifSource.srcset;
-  } else if (plate.srcset) {
-    preloader.srcset = plate.srcset;
-  } else if (plate.src) {
-    preloader.src = plate.src;
-  }
-};
-
 export const ThemeToggle = () => {
   const isMounted = useIsClient();
-  const { resolvedTheme, setTheme, theme = "system" } = useTheme();
-  const prewarmedRef = useRef<string | null>(null);
+  const { setTheme, theme = "system" } = useTheme();
 
   if (!isMounted) {
     return <div className="h-[3.375rem] sm:h-[2.625rem]" aria-hidden="true" />;
   }
 
   const currentTheme: ThemeValue = isThemeValue(theme) ? theme : "system";
-
-  const prewarmIfNeeded = () => {
-    if (!resolvedTheme || prewarmedRef.current === resolvedTheme) {
-      return;
-    }
-    prewarmedRef.current = resolvedTheme;
-    prewarmHeroOppositePlate(resolvedTheme);
-  };
-
-  const handlePointerEnter = (event: PointerEvent<HTMLDivElement>) => {
-    if (event.pointerType !== "mouse") {
-      return;
-    }
-    prewarmIfNeeded();
-  };
-
-  const handleFocus = () => {
-    if (
-      typeof window !== "undefined" &&
-      !window.matchMedia("(hover: hover) and (pointer: fine)").matches
-    ) {
-      return;
-    }
-    prewarmIfNeeded();
-  };
 
   const handleValueChange = (nextValue: string | null) => {
     if (!isThemeValue(nextValue)) {
@@ -147,17 +90,15 @@ export const ThemeToggle = () => {
       aria-label="Color theme"
       value={currentTheme}
       onValueChange={handleValueChange}
-      onPointerEnter={handlePointerEnter}
-      onFocus={handleFocus}
       className="border-rule bg-record has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-background relative isolate inline-flex w-fit items-center self-start rounded-full border p-1 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2 sm:self-auto forced-colors:border-[ButtonBorder]"
     >
-      <SegmentedControlIndicator className="theme-toggle-indicator" />
+      <SegmentedControlIndicator className="segmented-indicator" />
       {themes.map((option) => (
         <SegmentedControlItem
           key={option.value}
           value={option.value}
           className={cn(
-            "text-muted-foreground relative z-10 inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-full border border-transparent px-3 text-xs font-medium transition-[color,scale] duration-150 select-none focus-visible:outline-2 focus-visible:outline-transparent active:scale-[0.97] sm:min-h-8 sm:px-2.5 [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground",
+            "text-muted-foreground relative z-10 inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-full border border-transparent px-3 text-xs font-medium transition-transform duration-150 select-none focus-visible:outline-2 focus-visible:outline-transparent active:scale-[0.97] sm:min-h-8 sm:px-2.5 [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground",
             "data-checked:text-foreground data-checked:font-semibold",
             "forced-colors:data-checked:border-[Highlight] forced-colors:data-checked:bg-[Highlight] forced-colors:data-checked:text-[HighlightText] forced-colors:data-checked:forced-color-adjust-none"
           )}

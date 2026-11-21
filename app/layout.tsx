@@ -1,4 +1,9 @@
-import { IBM_Plex_Mono, Instrument_Sans, Newsreader } from "next/font/google";
+import {
+  Geist_Mono,
+  Instrument_Sans,
+  Plus_Jakarta_Sans,
+} from "next/font/google";
+import { headers } from "next/headers";
 import { Providers } from "@/components/providers";
 import { SkipToContent } from "@/components/skip-to-content";
 import { baseMetadata } from "@/lib/metadata";
@@ -6,11 +11,10 @@ import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import "./globals.css";
 
-const displayFont = Newsreader({
-  variable: "--font-newsreader",
+const displayFont = Plus_Jakarta_Sans({
+  variable: "--font-plus-jakarta",
   subsets: ["latin"],
-  weight: ["500"],
-  style: ["normal", "italic"],
+  weight: ["500", "600", "700"],
   display: "swap",
 });
 
@@ -18,12 +22,11 @@ const bodyFont = Instrument_Sans({
   variable: "--font-instrument-sans",
   subsets: ["latin"],
   weight: ["400", "500", "600"],
-  style: ["normal"],
   display: "swap",
 });
 
-const monoFont = IBM_Plex_Mono({
-  variable: "--font-ibm-plex-mono",
+const monoFont = Geist_Mono({
+  variable: "--font-geist-mono",
   subsets: ["latin"],
   weight: ["400", "500"],
   preload: false,
@@ -34,8 +37,8 @@ export const metadata: Metadata = baseMetadata;
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f3eee3" },
-    { media: "(prefers-color-scheme: dark)", color: "#0b131a" },
+    { media: "(prefers-color-scheme: light)", color: "#faf9f6" },
+    { media: "(prefers-color-scheme: dark)", color: "#0f1214" },
   ],
   colorScheme: "light dark",
   width: "device-width",
@@ -43,11 +46,14 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: ReactNode;
-}>): ReactNode {
+}>): Promise<ReactNode> {
+  const headerStore = await headers();
+  const nonce = headerStore.get("x-nonce");
+
   return (
     <html
       lang="en"
@@ -55,7 +61,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="bg-background text-foreground min-h-dvh font-sans antialiased">
-        <Providers>
+        <Providers nonce={nonce}>
           <SkipToContent />
           {children}
         </Providers>

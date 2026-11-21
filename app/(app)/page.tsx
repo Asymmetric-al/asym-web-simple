@@ -1,10 +1,9 @@
 import { AboutSection } from "@/components/site/home/about-section";
-import { ArchitectureSection } from "@/components/site/home/architecture-section";
-import { ConnectedSection } from "@/components/site/home/connected-section";
 import { EarlyAccessSection } from "@/components/site/home/early-access-section";
 import { HomeHero } from "@/components/site/home/hero";
 import { OpenSourceSection } from "@/components/site/home/open-source-section";
-import { ProductSection } from "@/components/site/home/product-section";
+import { OutcomesSection } from "@/components/site/home/outcomes-section";
+import { VisionSection } from "@/components/site/home/vision-section";
 import { siteConfig } from "@/lib/config";
 import { createMetadata, siteMetadata } from "@/lib/metadata";
 import type { Metadata } from "next";
@@ -24,7 +23,7 @@ const organizationSchema = {
       url: siteConfig.url,
       sameAs: [siteConfig.githubOrgUrl, siteConfig.repoUrl],
       description:
-        "Independent, for-profit software company building asym for nonprofits, starting with missions organizations.",
+        "Independent, for-profit software company building asym, open-source giving and donor-care software for nonprofits.",
     },
     {
       "@type": "SoftwareApplication",
@@ -71,10 +70,9 @@ export default function HomePage() {
         }}
       />
       <HomeHero />
-      <ConnectedSection />
-      <ArchitectureSection />
+      <VisionSection />
+      <OutcomesSection />
       <OpenSourceSection />
-      <ProductSection />
       <AboutSection />
       <EarlyAccessSection />
     </main>

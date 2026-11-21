@@ -6,7 +6,7 @@ The product website for **asym**, open-source software for nonprofits built by *
 
 This repository is the marketing site served at [asym.app](https://asym.app) (Vercel project `asym-web-simple`, production branch `main`). The product itself lives in [Asymmetric-al/core](https://github.com/Asymmetric-al/core) (AGPL-3.0-only). Product name, URL, navigation, and repository figures live in `lib/config.ts`; the optional private contact address comes from `NEXT_PUBLIC_CONTACT_EMAIL` via `lib/early-access-config.ts`.
 
-The homepage is purely editorial and architectural: it uses custom pen-and-ink printmaking plates and real `Asymmetric-al/core` architecture specs—never mock product screens or fictional donor records. See `DESIGN.md`.
+The homepage uses bespoke inline SVG architectural geometry derived from the `asym` mark and real `Asymmetric-al/core` architecture specs—never mock product screens or fictional donor records. See `DESIGN.md`.
 
 ### What lives in this repository
 
@@ -23,7 +23,7 @@ The **Next.js marketing site**, the **`/api/early-access`** intake route (plus S
 - **shadcn/ui** — `base-maia` style (`components.json`)
 - **next-themes** — light, dark, and system themes (with targeted compositor-only transitions)
 - **Lucide React** — icons
-- **Fonts** (root layout) — Newsreader (editorial display serif), Instrument Sans (UI & reading body), IBM Plex Mono (ledger IDs & repo paths)
+- **Fonts** (root layout) — Funnel Display (geometric display), Instrument Sans (UI & reading body), Geist Mono (code paths & repository counts)
 - **Resend** — `/api/early-access` transactional email
 - **Payload CMS 3** — **Phase 1 (dormant until configured):** Postgres adapter, Lexical editor, Vercel Blob storage plugin, minimal **`users`** collection for `/admin`. **Marketing copy does not load from Payload**; see [docs/PAYLOAD-CMS.md](./docs/PAYLOAD-CMS.md).
 
@@ -97,18 +97,11 @@ Next.js matches **more specific** `app/api/*` routes first; remaining `/api/*` t
 
 ## Getting started
 
-**Declared package manager:** [Bun](https://bun.sh) `1.4.5` (`packageManager` in `package.json`). The repo also contains **`bun.lock`** and **`package-lock.json`**; use **one** package manager locally to avoid inconsistent installs.
+**Declared package manager:** [Bun](https://bun.sh) `1.4.5` (`packageManager` in `package.json`, authoritative `bun.lock`).
 
 ```bash
 bun install
 bun run dev
-```
-
-Equivalent with npm:
-
-```bash
-npm install
-npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000). The dev server uses Turbopack by default.

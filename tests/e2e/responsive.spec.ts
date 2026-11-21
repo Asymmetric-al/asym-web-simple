@@ -209,33 +209,37 @@ test.describe("responsive regression coverage", () => {
       banner.getByRole("link", { name: /^(?:Early access|See what’s built)/ })
     ).toBeVisible();
 
-    // Verify horizontal tab orientation on <1024px viewports (ArrowRight selects Missionary)
-    const donorTab = page.getByRole("tab", { name: /Donor/iu });
-    await donorTab.focus();
+    // Verify Hero primary CTA and "View the code" share one row at 390px
+    const heroPrimaryBox = await page
+      .getByRole("main")
+      .getByRole("link", {
+        name: /^(?:Request early access|See what’s built)$/u,
+      })
+      .first()
+      .boundingBox();
+    const heroCodeBox = await page
+      .getByRole("main")
+      .getByRole("link", { name: /^View the code/u })
+      .first()
+      .boundingBox();
+    expect(heroPrimaryBox).not.toBeNull();
+    expect(heroCodeBox).not.toBeNull();
+    expect(
+      Math.abs((heroPrimaryBox?.y ?? 0) - (heroCodeBox?.y ?? 0))
+    ).toBeLessThanOrEqual(4);
+
+    // Verify status filter segmented control supports keyboard arrow navigation on 390px
+    const allFilter = page.getByRole("radio", { name: /^All/u });
+    await allFilter.focus();
     await page.keyboard.press("ArrowRight");
-    await expect(page.getByRole("tab", { name: /Missionary/iu })).toHaveAttribute(
-      "aria-selected",
-      "true"
-    );
+    await expect(
+      page.getByRole("radio", { name: /^In code/u })
+    ).toHaveAttribute("aria-checked", "true");
     await expectNoVisibleDialogs(page, "home @ 390x844");
     await expectNoHorizontalOverflow(page, "home @ 390x844");
     issues.expectNoUnexpectedIssuesSince(checkpoint, "home @ 390x844");
 
-    await setViewport(page, { label: "1023x900", width: 1023, height: 900 });
-    const roleTabList = page.getByRole("tablist", {
-      name: /Choose a role to inspect its workspace/iu,
-    });
-    const missionaryTab = page.getByRole("tab", { name: /Missionary/iu });
-    await missionaryTab.focus();
-    await expect(roleTabList).toHaveAttribute("data-orientation", "horizontal");
     await setViewport(page, { label: "1024x900", width: 1024, height: 900 });
-    await expect(roleTabList).toHaveAttribute("data-orientation", "vertical");
-    await expect(missionaryTab).toBeFocused();
-    await page.keyboard.press("ArrowDown");
-    await expect(page.getByRole("tab", { name: /Office/iu })).toHaveAttribute(
-      "aria-selected",
-      "true"
-    );
     await expectNoHorizontalOverflow(page, "home @ 1024x900");
   });
 

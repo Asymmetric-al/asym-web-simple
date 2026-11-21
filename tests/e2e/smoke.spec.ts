@@ -90,125 +90,93 @@ test.describe("homepage smoke tests", () => {
   test("hero states the product, stage, and primary action", async ({
     page,
   }) => {
-    await page.goto("/", { waitUntil: "domcontentloaded" });
+    const response = await page.goto("/", { waitUntil: "domcontentloaded" });
+    const csp = response?.headers()["content-security-policy"] ?? "";
+    const scriptSrc =
+      csp
+        .split(";")
+        .map((part) => part.trim())
+        .find((part) => part.startsWith("script-src ")) ?? "";
+    expect(scriptSrc).toContain("'nonce-");
+    expect(scriptSrc).toContain("'strict-dynamic'");
+    expect(scriptSrc).not.toContain("'unsafe-inline'");
+    expect(csp).toContain("object-src 'none'");
 
     await expect(page).toHaveTitle(
-      "asym | Open-source giving and donor records for missions organizations"
+      "asym | Open-source giving and donor-care software for nonprofits"
     );
     await expect(
       page.getByRole("heading", {
         level: 1,
-        name: "One gift. Three hands.",
+        name: "Less overhead. Outsized impact.",
       })
     ).toBeVisible();
     await expect(
-      page.getByText(
-        "Open-source giving and donor records for missions organizations",
-        {
-          exact: true,
-        }
-      )
+      page.getByText("Open-source software for nonprofits", {
+        exact: true,
+      })
     ).toBeVisible();
     await expect(
       page
         .getByRole("main")
         .getByRole("link", {
-          name: /^(?:Request early access|Explore the three roles)$/u,
+          name: /^(?:Request early access|See what’s built)$/u,
         })
         .first()
-    ).toHaveAttribute("href", /^\/#(?:early-access|product)$/u);
+    ).toHaveAttribute("href", /^\/#(?:early-access|where-things-stand)$/u);
     await expect(
       page.getByRole("link", { name: /^View the code/u }).first()
     ).toHaveAttribute("href", REPO_URL);
   });
 
-  test("surface explorer switches real core surfaces with keyboard and governance sequence explains human approval", async ({
+  test("vision, human outcomes, and filterable open-source status ledger work with keyboard", async ({
     page,
   }) => {
     await page.goto("/", { waitUntil: "domcontentloaded" });
     await waitForUi(page);
 
-    const architecture = page.getByRole("region", {
-      name: /Three workspaces on one shared record/iu,
-    });
-    await expect(architecture).toContainText("apps/donor");
+    const vision = page.locator("#vision");
     await expect(
-      architecture.getByRole("heading", {
-        level: 3,
-        name: /Signed-in donors pull their own receipts and annual statements/iu,
-      })
-    ).toBeVisible();
-
-    const donorHeight = await architecture.evaluate(
-      (el) => el.getBoundingClientRect().height
-    );
-
-    const missionaryTab = architecture.getByRole("tab", {
-      name: /Missionary/iu,
-    });
-    await missionaryTab.click();
-    await expect(
-      architecture.getByRole("heading", {
-        level: 3,
-        name: /Field workers follow assigned support with donors private by default/iu,
-      })
-    ).toBeVisible();
-    await expect(architecture).toContainText("Anonymous partner");
-
-    const missionaryHeight = await architecture.evaluate(
-      (el) => el.getBoundingClientRect().height
-    );
-    expect(Math.abs(missionaryHeight - donorHeight)).toBeLessThanOrEqual(2);
-
-    const isDesktop = (page.viewportSize()?.width ?? 1280) >= 1024;
-    await expect(architecture.getByRole("tablist")).toHaveAttribute(
-      "data-orientation",
-      isDesktop ? "vertical" : "horizontal"
-    );
-    await missionaryTab.focus();
-    await page.keyboard.press(isDesktop ? "ArrowDown" : "ArrowRight");
-    await expect(
-      architecture.getByRole("tab", { name: /Office/iu })
-    ).toHaveAttribute("aria-selected", "true");
-    await expect(
-      architecture.getByRole("heading", {
-        level: 3,
-        name: /Staff manage donor and household records and preview bulk actions before running/iu,
-      })
-    ).toBeVisible();
-
-    const officeHeight = await architecture.evaluate(
-      (el) => el.getBoundingClientRect().height
-    );
-    expect(Math.abs(officeHeight - donorHeight)).toBeLessThanOrEqual(2);
-
-    // Clicking the hero plate's Donor caption link selects Donor via #surface-donor
-    await page.getByRole("link", { name: /01 Donor/iu }).click();
-    await expect(
-      architecture.getByRole("tab", { name: /Donor/iu })
-    ).toHaveAttribute("aria-selected", "true");
-
-    const appeals = page.locator("#appeals");
-    await expect(
-      appeals.getByRole("heading", {
+      vision.getByRole("heading", {
         level: 2,
-        name: "Before an appeal goes out.",
+        name: "Practical AI, built for real work.",
       })
     ).toBeVisible();
-    const step2Tab = appeals.getByRole("tab", {
-      name: /Prepare page, email & recipient scope/iu,
-    });
-    await step2Tab.click();
-    await expect(appeals).toContainText("Role-scoped read access");
-    await step2Tab.focus();
-    await page.keyboard.press("ArrowDown");
+    await expect(vision).toContainText("AI in development");
+
+    const outcomes = page.locator("#product");
     await expect(
-      appeals.getByRole("tab", { name: /Review, edit & approve/iu })
-    ).toHaveAttribute("aria-selected", "true");
-    await expect(appeals).toContainText("Separate from routine receipts");
+      outcomes.getByRole("heading", {
+        level: 2,
+        name: "One foundation. Clear for everyone involved.",
+      })
+    ).toBeVisible();
+    await expect(outcomes).toContainText("apps/donor");
+    await expect(outcomes).toContainText("apps/missionary");
+    await expect(outcomes).toContainText("apps/admin");
+    await expect(outcomes).toContainText("Anonymous partner");
+
+    const openSource = page.locator("#open-source");
+    const filterGroup = openSource.getByRole("radiogroup", {
+      name: "Filter build status",
+    });
+    const partialFilter = filterGroup.getByRole("radio", {
+      name: /^Partial/u,
+    });
+    await partialFilter.click();
+    await expect(partialFilter).toHaveAttribute("aria-checked", "true");
+    await expect(openSource.locator("li")).toHaveCount(2);
+
+    await partialFilter.focus();
+    await page.keyboard.press("ArrowRight");
+    await expect(
+      filterGroup.getByRole("radio", { name: /^Planned/u })
+    ).toHaveAttribute("aria-checked", "true");
+    await expect(openSource.locator("li")).toHaveCount(2);
+    await expect(openSource).toContainText("AI campaign drafting");
   });
 
-  test("no-JS homepage exposes zero inert buttons, distinct role anchors, and full governance rules", async ({
+  test("no-JS homepage exposes zero inert buttons, distinct outcome anchors, and full build status list", async ({
     browser,
     baseURL,
   }) => {
@@ -227,12 +195,7 @@ test.describe("homepage smoke tests", () => {
     await expect(
       page.locator('noscript nav[aria-label="Homepage sections"]')
     ).toBeVisible();
-    const noJsAppeals = page.locator("#appeals noscript");
-    await expect(noJsAppeals).toBeVisible();
-    const noJsAppealsText = (await noJsAppeals.textContent()) ?? "";
-    expect(noJsAppealsText).toContain("Explicit staff trigger");
-    expect(noJsAppealsText).toContain("Role-scoped read access");
-    expect(noJsAppealsText).toContain("Single-record continuity");
+    await expect(page.locator("#open-source ul > li")).toHaveCount(7);
     await context.close();
   });
 
@@ -288,17 +251,42 @@ test.describe("homepage smoke tests", () => {
     expect(apiRes.status()).toBe(503);
   });
 
-  test("open source and team sections link to the public code", async ({
+  test("open source, sustainability, and company sections link to public code and match intake state", async ({
     page,
   }) => {
     await page.goto("/", { waitUntil: "domcontentloaded" });
 
+    const openSource = page.locator("#open-source");
     await expect(
-      page.getByRole("link", { name: /Explore the code on GitHub/u })
+      openSource.getByRole("link", { name: /Explore the code on GitHub/u })
     ).toHaveAttribute("href", REPO_URL);
-    await expect(page.locator("#open-source")).toContainText(
-      "managed donor care"
-    );
+    await expect(openSource).toContainText("managed donor care");
+
+    const isConfigured = (await earlyAccessForm(page).count()) > 0;
+    if (isConfigured) {
+      await expect(
+        openSource.getByRole("link", { name: /Request early access/u })
+      ).toHaveAttribute("href", "/#early-access");
+      await expect(page.getByRole("main")).toContainText(
+        "Early-access requests are open for hosted pilots"
+      );
+    } else {
+      await expect(
+        openSource.getByRole("link", {
+          name: /Read the pre-launch checklist/u,
+        })
+      ).toHaveAttribute("href", "/early-access/status?state=unavailable");
+      await expect(page.getByRole("main")).toContainText(
+        "Hosted access and AI tools aren’t open yet"
+      );
+    }
+
+    await expect(
+      page.locator("#about").getByRole("heading", {
+        level: 2,
+        name: "Built from inside the work.",
+      })
+    ).toBeVisible();
     await expect(page.locator("#about")).toContainText("Global Fellowship");
   });
 
@@ -318,7 +306,7 @@ test.describe("homepage smoke tests", () => {
     await expect(
       page.getByRole("heading", {
         level: 2,
-        name: "The code is public.",
+        name: "Inspect the software before you trust it.",
       })
     ).toBeInViewport();
   });

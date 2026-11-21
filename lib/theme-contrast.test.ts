@@ -23,9 +23,18 @@ const CONTRAST_OFFSET = 0.05;
 const AA_TEXT_MIN = 4.5;
 const AA_NON_TEXT_MIN = 3;
 const HEX_LENGTH = 7;
+const SHORT_HEX_LENGTH = 4;
 
 const parseColor = (raw: string): Rgb => {
   const value = raw.trim();
+  if (value.startsWith("#") && value.length === SHORT_HEX_LENGTH) {
+    return {
+      r: Number.parseInt(value.slice(1, 2).repeat(2), HEX_RADIX),
+      g: Number.parseInt(value.slice(2, 3).repeat(2), HEX_RADIX),
+      b: Number.parseInt(value.slice(3, 4).repeat(2), HEX_RADIX),
+      a: 1,
+    };
+  }
   if (value.startsWith("#") && value.length === HEX_LENGTH) {
     return {
       r: Number.parseInt(value.slice(1, 3), HEX_RADIX),
@@ -128,12 +137,12 @@ describe("design token WCAG 2.2 AA contrast", () => {
       ["--muted-foreground", "--background"],
       ["--muted-foreground", "--card"],
       ["--muted-foreground", "--record"],
-      ["--pine", "--background"],
-      ["--pine", "--card"],
-      ["--pine", "--pine-soft"],
-      ["--vermilion", "--background"],
-      ["--vermilion", "--card"],
-      ["--vermilion", "--vermilion-soft"],
+      ["--signal", "--background"],
+      ["--signal", "--card"],
+      ["--signal", "--signal-soft"],
+      ["--human", "--background"],
+      ["--human", "--card"],
+      ["--human", "--human-soft"],
       ["--draft", "--background"],
       ["--draft", "--card"],
       ["--draft", "--draft-soft"],
@@ -158,11 +167,14 @@ describe("design token WCAG 2.2 AA contrast", () => {
 
     // Verify muted-alpha nav and recovery links (`text-foreground/78`) remain >= 4.5:1
     expect(
-      contrastRatio("rgb(18 32 43 / 78%)", requireToken(light, "--background")),
+      contrastRatio("rgb(20 23 26 / 78%)", requireToken(light, "--background")),
       "light text-foreground/78 on --background"
     ).toBeGreaterThanOrEqual(AA_TEXT_MIN);
     expect(
-      contrastRatio("rgb(239 233 221 / 78%)", requireToken(dark, "--background")),
+      contrastRatio(
+        "rgb(241 240 236 / 78%)",
+        requireToken(dark, "--background")
+      ),
       "dark text-foreground/78 on --background"
     ).toBeGreaterThanOrEqual(AA_TEXT_MIN);
   });
@@ -173,12 +185,12 @@ describe("design token WCAG 2.2 AA contrast", () => {
       ["--input", "--card"],
       ["--rule-interactive", "--background"],
       ["--rule-interactive", "--card"],
-      ["--pine-border", "--background"],
-      ["--pine-border", "--card"],
-      ["--pine-border", "--pine-soft"],
-      ["--vermilion-border", "--background"],
-      ["--vermilion-border", "--card"],
-      ["--vermilion-border", "--vermilion-soft"],
+      ["--signal-border", "--background"],
+      ["--signal-border", "--card"],
+      ["--signal-border", "--signal-soft"],
+      ["--human-border", "--background"],
+      ["--human-border", "--card"],
+      ["--human-border", "--human-soft"],
       ["--draft-border", "--background"],
       ["--draft-border", "--card"],
       ["--draft-border", "--draft-soft"],
