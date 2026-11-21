@@ -102,9 +102,12 @@ test.describe("homepage smoke tests", () => {
       })
     ).toBeVisible();
     await expect(
-      page.getByText("Open-source software for missions organizations", {
-        exact: true,
-      })
+      page.getByText(
+        "Open-source giving and donor records for missions organizations",
+        {
+          exact: true,
+        }
+      )
     ).toBeVisible();
     await expect(
       page

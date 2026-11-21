@@ -44,7 +44,7 @@ export const EarlyAccessSection = () => {
           ) : (
             <div className="grid gap-8 lg:grid-cols-[minmax(0,44fr)_minmax(0,56fr)] lg:items-start lg:gap-12">
               <div className="min-w-0">
-                <Eyebrow>Early access</Eyebrow>
+                <Eyebrow>Current status</Eyebrow>
                 <SectionTitle id="early-access-title">
                   Early access isn’t open yet.
                 </SectionTitle>

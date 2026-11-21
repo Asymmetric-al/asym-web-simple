@@ -48,7 +48,7 @@ export const HomeHero = () => {
         <div className="grid gap-7 lg:grid-cols-[minmax(0,46fr)_minmax(0,54fr)] lg:items-center lg:gap-10 xl:grid-cols-[minmax(0,44fr)_minmax(0,56fr)] xl:gap-16">
           <div className="min-w-0">
             <p className="text-pine font-sans text-sm font-medium">
-              Open-source software for missions organizations
+              Open-source giving and donor records for missions organizations
             </p>
 
             <h1
@@ -60,15 +60,15 @@ export const HomeHero = () => {
             </h1>
 
             <p className="text-foreground/88 mt-4 max-w-[33rem] text-base leading-7 text-pretty sm:mt-5 sm:text-[1.09375rem] sm:leading-7">
-              One record serves three hands. Supporters pull their own receipts.
-              Missionaries track assigned support while donors stay private by
-              default. Office staff keep one ledger.
+              Supporters pull their own receipts. Missionaries track assigned
+              support while donors stay private by default. Office staff keep
+              one ledger.
             </p>
-            <p className="text-muted-foreground mt-2.5 max-w-[33rem] text-sm leading-6 text-pretty sm:mt-3">
+            <p className="text-muted-foreground mt-2 max-w-[33rem] text-sm leading-6 text-pretty sm:mt-2.5">
               Open source today; hosted access isn’t open yet.
             </p>
 
-            <div className="mt-5 flex flex-row flex-wrap items-center gap-2.5 sm:mt-7 sm:gap-3">
+            <div className="mt-5 flex flex-row flex-wrap items-center gap-x-4 gap-y-2.5 sm:mt-7">
               {isConfigured ? (
                 <Link
                   href={siteConfig.cta.primary.href}
@@ -95,12 +95,9 @@ export const HomeHero = () => {
                 href={siteConfig.repoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={cn(
-                  buttonVariants({ variant: "outline", size: "lg" }),
-                  HERO_CTA_PADDING
-                )}
+                className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center gap-2 rounded-md px-1 text-sm font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:text-pine"
               >
-                <GitHubMark className="size-4" />
+                <GitHubMark className="size-4 shrink-0" />
                 View the code
                 <span className="sr-only"> (opens in a new tab)</span>
               </a>

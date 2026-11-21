@@ -85,12 +85,12 @@ const SURFACES: readonly [SurfaceSpec, SurfaceSpec, SurfaceSpec] = [
     shortOutcome: "Portal, receipts & statements",
     appPath: "apps/donor",
     recordBoundary: "Own account only; opt-in sharing",
-    proofNote: "Settled-only annual statements and own-account receipt access",
+    proofNote: "Settled gifts only · own-account scope",
     repoUrl: `${siteConfig.repoUrl}/blob/develop/packages/api/src/donor-portal/statements.ts`,
     repoLinkLabel: "statements.ts",
     heading: "Signed-in donors pull their own receipts and annual statements.",
     whatTheyDo:
-      "In the authenticated donor portal, supporters review their own giving history, manage pledges, download individual receipts, and pull annual statements covering settled gifts.",
+      "In the authenticated donor portal, supporters view their own giving history, review recurring gifts (opening Stripe payment settings when needed), download individual receipts, and pull annual statements covering settled gifts.",
     boundaryTitle: "Own-account scope & opt-in sharing",
     boundaryDetail:
       "Each donor sees only their own account’s gifts and preferences. Supporters remain anonymous on a missionary’s roster unless they opt in to share their name, contact details, notes, and recurring-gift info.",
@@ -102,8 +102,7 @@ const SURFACES: readonly [SurfaceSpec, SurfaceSpec, SurfaceSpec] = [
     shortOutcome: "Assigned roster, private by default",
     appPath: "apps/missionary",
     recordBoundary: "Private by default; totals withheld",
-    proofNote:
-      "Server API defaults to Anonymous partner and withholds total_given & last_gift_amount across rows",
+    proofNote: "Anonymous partner default · lifetime & last-gift totals withheld",
     repoUrl: `${siteConfig.repoUrl}/blob/develop/packages/api/src/missionary-portal/donors.ts`,
     repoLinkLabel: "donors.ts",
     heading:
@@ -121,26 +120,25 @@ const SURFACES: readonly [SurfaceSpec, SurfaceSpec, SurfaceSpec] = [
     shortOutcome: "CRM, ledger & batch previews",
     appPath: "apps/admin",
     recordBoundary: "One ledger; batch actions previewed",
-    proofNote:
-      "Supported bulk actions compute affected & skipped rows before staff confirm",
+    proofNote: "Dry-run affected & skipped row counts before running",
     repoUrl: `${siteConfig.repoUrl}/blob/develop/packages/api/src/admin/contribution-batches/preview.ts`,
     repoLinkLabel: "preview.ts",
     heading:
       "Staff manage donor and household records and preview bulk actions before running.",
     whatTheyDo:
-      "Office staff work from the same contribution tables to manage donor and household records, designated funds, website pages, and email or PDF templates.",
+      "Office staff manage donor and household records and designated funds from the shared giving tables, alongside website page and email or PDF template tools in the same admin app.",
     boundaryTitle: "Shared ledger with supported batch previews",
     boundaryDetail:
       "Supported bulk contribution actions compute affected and skipped records before staff confirm, while reading from one ledger reduces manual spreadsheet handoffs between desks.",
   },
 ];
 
-// Single responsive tab row per role: compact 3-up horizontal ledger bar on <lg with stationary solid active fill + 3px bottom Pine rail outside the text area (zero mid-slide contrast collision); vertical hairline-ruled ledger rows on lg+.
+// Single responsive tab row per role: below lg, active color/fill flips immediately (zero 150ms inverse-luminance crossfade under SC 1.4.3) while the external 3px Field Pine rail glides smoothly underneath; on lg+, hairline-ruled vertical ledger rows.
 const ROLE_TAB_BASE_CLASS =
-  "group border-rule-interactive data-selected:border-foreground data-selected:bg-foreground data-selected:text-background lg:data-selected:border-rule-interactive lg:data-selected:bg-card lg:data-selected:text-foreground relative z-10 flex min-h-11 w-full min-w-0 items-center justify-center gap-1.5 border px-2.5 py-2 text-center lg:min-h-0 lg:items-start lg:justify-between lg:gap-3 lg:border-x-0 lg:border-t-0 lg:border-b lg:px-3.5 lg:py-3.5 lg:text-left lg:last:border-b-0 forced-colors:data-selected:border-[Highlight] forced-colors:data-selected:bg-[Highlight] forced-colors:data-selected:text-[HighlightText] forced-colors:data-selected:forced-color-adjust-none";
+  "group border-rule-interactive max-lg:data-selected:border-foreground max-lg:data-selected:bg-foreground max-lg:data-selected:text-background lg:data-selected:border-rule-interactive lg:data-selected:bg-card lg:data-selected:text-foreground relative z-10 flex min-h-11 w-full min-w-0 items-center justify-center gap-1.5 border px-2.5 py-2 text-center lg:min-h-0 lg:items-start lg:justify-between lg:gap-3 lg:border-x-0 lg:border-t-0 lg:border-b lg:px-3.5 lg:py-3.5 lg:text-left lg:last:border-b-0 forced-colors:data-selected:border-[Highlight] forced-colors:data-selected:bg-[Highlight] forced-colors:data-selected:text-[HighlightText] forced-colors:data-selected:forced-color-adjust-none";
 
 const ROLE_TAB_INTERACTIVE_CLASS =
-  "focus-visible:ring-ring focus-visible:ring-offset-background cursor-pointer transition-[color,background-color,border-color,scale] duration-150 select-none active:scale-[0.98] lg:active:scale-100 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent forced-colors:focus-visible:outline-[CanvasText] lg:focus-visible:ring-inset lg:focus-visible:ring-offset-0 not-data-selected:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-card/80";
+  "focus-visible:ring-ring focus-visible:ring-offset-background cursor-pointer transition-transform duration-150 select-none active:scale-[0.98] lg:active:scale-100 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent forced-colors:focus-visible:outline-[CanvasText] lg:focus-visible:ring-inset lg:focus-visible:ring-offset-0 not-data-selected:[@media(hover:hover)_and_(pointer:fine)]:hover:bg-card/80";
 
 const PANEL_STACK_CELL = "col-start-1 row-start-1 min-w-0";
 
@@ -454,10 +452,16 @@ export const SurfaceExplorer = (): ReactNode => {
                     className={ROLE_TAB_BASE_CLASS}
                   >
                     {isSelected ? (
-                      <span
-                        aria-hidden="true"
-                        className="bg-foreground absolute top-0 bottom-0 -left-[0.625rem] hidden w-[3px] rounded-full lg:block"
-                      />
+                      <>
+                        <span
+                          aria-hidden="true"
+                          className="bg-pine absolute inset-x-0 -bottom-1.5 h-[3px] rounded-full lg:hidden"
+                        />
+                        <span
+                          aria-hidden="true"
+                          className="bg-foreground absolute top-0 bottom-0 -left-[0.625rem] hidden w-[3px] rounded-full lg:block"
+                        />
+                      </>
                     ) : null}
                     <RoleTabBody spec={spec} />
                   </li>

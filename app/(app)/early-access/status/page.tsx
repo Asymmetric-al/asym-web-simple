@@ -41,13 +41,13 @@ export const metadata: Metadata = createMetadata({
 });
 
 const BUILT_TODAY_ITEMS = [
-  "Authenticated donor portal with own-account giving history, pledge management, receipts, and settled-only annual statements (apps/donor).",
+  "Authenticated donor portal with own-account giving history, recurring-gift review, individual receipts, and settled-only annual statements (apps/donor).",
   "Private-by-default missionary roster where non-opted-in donors default to Anonymous partner and lifetime/last-gift amounts stay withheld (apps/missionary).",
-  "Office CRM, Payload Web Studio, email/PDF templates, and server-side batch action previews (apps/admin).",
+  "Office CRM, website editor, email/PDF templates, and server-side batch action previews (apps/admin).",
 ] as const;
 
 const PRELAUNCH_MILESTONES = [
-  "Replace @asym/mock-data demo profiles on public worker directory and giving pages with live organization data.",
+  "Replace sample profiles on public worker directory and checkout recipient lookup pages with live organization data.",
   "Finish hosted team subscription billing and guided onboarding from existing donor records.",
   "Publish a verified private support and privacy inbox before opening sign-ups.",
 ] as const;

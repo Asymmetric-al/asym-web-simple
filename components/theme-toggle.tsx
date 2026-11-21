@@ -82,12 +82,17 @@ const prewarmHeroOppositePlate = (resolvedTheme: string | undefined) => {
   if (!plate) {
     return;
   }
+  const avifSource = plate.parentElement?.querySelector<HTMLSourceElement>(
+    'source[type="image/avif"]'
+  );
   const preloader = new window.Image();
   preloader.decoding = "async";
-  if (plate.sizes) {
-    preloader.sizes = plate.sizes;
+  if (avifSource?.sizes || plate.sizes) {
+    preloader.sizes = avifSource?.sizes || plate.sizes;
   }
-  if (plate.srcset) {
+  if (avifSource?.srcset) {
+    preloader.srcset = avifSource.srcset;
+  } else if (plate.srcset) {
     preloader.srcset = plate.srcset;
   } else if (plate.src) {
     preloader.src = plate.src;

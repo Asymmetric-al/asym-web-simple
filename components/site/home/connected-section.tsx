@@ -13,24 +13,24 @@ const giftTrace: readonly {
 }[] = [
   {
     step: "01",
-    desk: "Office keeps one ledger",
-    title: "Entered once, shared by role",
-    text: "Contributions land in one shared table. Each desk reads from that same record instead of reconciling exported spreadsheets.",
+    desk: "Step 01 · Recorded once",
+    title: "Shared across three desks",
+    text: "A recorded contribution lives in one table. Staff preview supported bulk updates before running instead of reconciling exported spreadsheets.",
     linkLabel: "preview.ts",
     repoPath:
       "blob/develop/packages/api/src/admin/contribution-batches/preview.ts",
   },
   {
     step: "02",
-    desk: "Donor downloads theirs",
+    desk: "Step 02 · Receipted directly",
     title: "January receipt requests leave the inbox",
-    text: "Signed-in supporters download individual receipts and settled-only annual statements directly instead of emailing the office.",
+    text: "Signed-in supporters download individual receipts and settled-only annual statements themselves instead of emailing the office.",
     linkLabel: "receipts.ts",
     repoPath: "blob/develop/packages/api/src/donor-portal/receipts.ts",
   },
   {
     step: "03",
-    desk: "Missionary tracks support",
+    desk: "Step 03 · Shared by role",
     title: "Support updates without manual exports",
     text: "Field workers follow their assigned support directly, while donor privacy rules run on the server instead of in a weekly spreadsheet.",
     linkLabel: "donors.ts",

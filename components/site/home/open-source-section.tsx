@@ -1,7 +1,8 @@
+import Link from "next/link";
 import { Container } from "@/components/site/container";
 import { GitHubMark } from "@/components/site/github-mark";
 import { Eyebrow, SectionTitle } from "@/components/site/home/section-heading";
-import { ArrowUpRightIcon } from "@/components/site/icons";
+import { ArrowRightIcon, ArrowUpRightIcon } from "@/components/site/icons";
 import { ThemedPlate } from "@/components/site/themed-plate";
 import { repoStats, siteConfig } from "@/lib/config";
 import { cn } from "@/lib/utils";
@@ -23,7 +24,7 @@ const inventoryRows: readonly {
 }[] = [
   {
     module: "Public website & giving pages",
-    note: "Online checkout is built; public worker pages still show sample profiles (@asym/mock-data)",
+    note: "Online checkout is built; public worker directory and checkout recipient lookup still show sample profiles",
     path: "apps/donor",
     href: `${siteConfig.repoUrl}/tree/develop/apps/donor`,
     status: "partial",
@@ -51,8 +52,8 @@ const inventoryRows: readonly {
     statusLabel: "In code",
   },
   {
-    module: "Offline gift entry & architecture decisions",
-    note: "Offline entry orchestration is in code with DB persistence gated (501); ADRs 0004, 0010, and 0012 document thank-you and recurring-gift designs",
+    module: "Offline gift entry & architecture designs",
+    note: "Offline entry workflow is in code with database saving switched off until migration; design notes (ADRs 0004, 0010, and 0012) specify thank-you, offline-entry, and recurring-gift rules",
     path: "docs/adr",
     href: `${siteConfig.repoUrl}/tree/develop/docs/adr`,
     status: "partial",
@@ -206,7 +207,7 @@ export const OpenSourceSection = () => (
           </div>
         </div>
 
-        {/* Right column: Plate II engraving */}
+        {/* Right column: Plate II engraving + direct GitHub link */}
         <div className="min-w-0 lg:pt-20">
           <figure className="min-w-0">
             <div className="plate-impression aspect-[4/3] overflow-hidden">
@@ -221,20 +222,12 @@ export const OpenSourceSection = () => (
                 Plate II · Open-source ledger
               </span>
               <span className="text-muted-foreground">
-                Inspect schemas, API rules, and ADRs in Core
+                Inspect schemas, API rules, and design notes in Core
               </span>
             </figcaption>
           </figure>
-        </div>
-      </div>
 
-      {/* Dedicated commercial model band so "How we'll charge." breathes at full width */}
-      <div className="border-rule mt-10 grid gap-6 border-t pt-8 lg:grid-cols-[minmax(0,38fr)_minmax(0,62fr)] lg:items-start lg:gap-12">
-        <div className="min-w-0">
-          <h3 className="font-heading text-foreground text-2xl font-medium tracking-[-0.02em] sm:text-[1.75rem]">
-            How we’ll charge.
-          </h3>
-          <div className="mt-4">
+          <div className="mt-5">
             <a
               href={siteConfig.repoUrl}
               target="_blank"
@@ -250,11 +243,34 @@ export const OpenSourceSection = () => (
             </a>
           </div>
         </div>
+      </div>
+
+      {/* Dedicated commercial model band with full editorial presence */}
+      <div className="border-rule mt-12 grid gap-6 border-t pt-10 lg:grid-cols-[minmax(0,38fr)_minmax(0,62fr)] lg:items-start lg:gap-12">
+        <div className="min-w-0">
+          <Eyebrow>Sustainability</Eyebrow>
+          <h3 className="font-heading text-foreground mt-2.5 text-[clamp(1.75rem,3vw,2.5rem)] leading-[1.06] font-medium tracking-[-0.025em]">
+            How we’ll charge.
+          </h3>
+          <p className="text-muted-foreground mt-2.5 font-mono text-xs">
+            Pricing not published yet · hosted subscription planned
+          </p>
+          <div className="mt-4">
+            <Link
+              href="/early-access/status?state=unavailable"
+              prefetch={false}
+              className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center gap-1.5 rounded-md text-sm font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:text-pine"
+            >
+              Read the pre-launch checklist
+              <ArrowRightIcon className="size-3.5" />
+            </Link>
+          </div>
+        </div>
         <div className="text-muted-foreground grid gap-4 text-base leading-7 text-pretty sm:grid-cols-2 sm:gap-8">
           <p>
             The hosted platform will be a paid subscription covering hosting, AI
             workflows, updates, and product support, so your team never
-            maintains servers. Pricing is not published yet.
+            maintains servers.
           </p>
           <p>
             When hosted onboarding opens, we’ll help your office move existing

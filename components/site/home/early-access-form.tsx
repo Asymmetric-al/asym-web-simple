@@ -744,7 +744,7 @@ export const EarlyAccessConfigured = ({
   return (
     <div className="relative z-10 grid gap-8 lg:grid-cols-[minmax(0,44fr)_minmax(0,56fr)] lg:items-start lg:gap-12">
       <div className="min-w-0">
-        <p className="text-pine font-sans text-sm font-medium">Early access</p>
+        <p className="text-pine font-sans text-sm font-medium">Pilot intake</p>
         <h2
           id="early-access-title"
           className="font-heading text-foreground mt-3 text-[clamp(2rem,3.8vw,3.25rem)] leading-[1.03] font-medium tracking-[-0.025em] text-balance"
@@ -756,7 +756,7 @@ export const EarlyAccessConfigured = ({
         <p className="text-muted-foreground mt-4 max-w-[34rem] text-base leading-7 text-pretty sm:text-[1.0625rem] sm:leading-8">
           {submitted
             ? "The Asymmetric.al team reviews requests from missions organizations as onboarding capacity opens and follows up by email."
-            : "Tell us which organization you’re with and what part of fundraising or donor care you’d like help with. The Asymmetric.al team reviews requests as capacity opens; submitting does not guarantee immediate access."}
+            : "Tell us which organization you’re with and what part of fundraising or donor care you’d like help with. This requests a team conversation, not an account or reservation; please don’t include donor information."}
         </p>
       </div>
       <div className="min-w-0">
