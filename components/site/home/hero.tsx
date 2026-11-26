@@ -8,7 +8,8 @@ import { siteConfig } from "@/lib/config";
 import { isEarlyAccessConfigured } from "@/lib/early-access-config";
 import { cn } from "@/lib/utils";
 
-const HERO_CTA_CLASS = "px-4 text-sm sm:px-5 sm:text-[0.9375rem] xl:px-6";
+const HERO_CTA_CLASS =
+  "gap-1.5 px-3 text-sm whitespace-nowrap sm:gap-2 sm:px-5 sm:text-[0.9375rem] xl:px-6";
 
 export const HomeHero = () => {
   const isConfigured = isEarlyAccessConfigured();
@@ -62,7 +63,7 @@ export const HomeHero = () => {
               </span>
             </p>
 
-            <div className="mt-6 flex flex-row flex-wrap items-center gap-x-3 gap-y-2.5 sm:mt-8 sm:gap-x-3.5">
+            <div className="mt-6 flex flex-row flex-wrap items-center gap-x-2.5 gap-y-2.5 sm:mt-8 sm:gap-x-3.5">
               {isConfigured ? (
                 <Link
                   href={siteConfig.cta.primary.href}
@@ -88,7 +89,7 @@ export const HomeHero = () => {
                 rel="noopener noreferrer"
                 className={cn(
                   buttonVariants({ variant: "outline", size: "lg" }),
-                  "px-4 text-sm whitespace-nowrap sm:px-5 sm:text-[0.9375rem]"
+                  "gap-1.5 px-3 text-sm whitespace-nowrap sm:gap-2 sm:px-5 sm:text-[0.9375rem]"
                 )}
               >
                 <GitHubMark className="size-4 shrink-0" />
