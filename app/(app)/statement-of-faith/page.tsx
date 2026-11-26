@@ -45,6 +45,11 @@ const faithPoints = [
   },
 ] as const;
 
+// eslint-disable-next-line sonarjs/variable-name -- Next.js route segment config export name.
+export const unstable_instant = {
+  prefetch: "static",
+};
+
 export const metadata: Metadata = createMetadata({
   title: "Statement of Faith",
   description:
@@ -53,10 +58,17 @@ export const metadata: Metadata = createMetadata({
   noIndex: true,
 });
 
+const faithToc = faithPoints.map((point) => ({
+  id: `sec-${point.number}`,
+  number: point.number,
+  label: point.title,
+}));
+
 export default function StatementOfFaithPage() {
   return (
     <DocumentPage
       eyebrow="Statement of Faith"
+      toc={faithToc}
       title={
         <h1 className="font-heading text-foreground mt-5 text-[clamp(2.8rem,5.5vw,4.6rem)] leading-[0.98] font-medium tracking-[-0.03em] text-balance">
           Statement of Faith
@@ -67,6 +79,7 @@ export default function StatementOfFaithPage() {
       {faithPoints.map((point) => (
         <DocumentSection
           key={point.number}
+          id={`sec-${point.number}`}
           number={point.number}
           title={point.title}
         >

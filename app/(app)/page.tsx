@@ -4,9 +4,15 @@ import { HomeHero } from "@/components/site/home/hero";
 import { OpenSourceSection } from "@/components/site/home/open-source-section";
 import { OutcomesSection } from "@/components/site/home/outcomes-section";
 import { VisionSection } from "@/components/site/home/vision-section";
+import { Faq11 } from "@/components/site/reactbits/faq-11";
 import { siteConfig } from "@/lib/config";
 import { createMetadata, siteMetadata } from "@/lib/metadata";
 import type { Metadata } from "next";
+
+// eslint-disable-next-line sonarjs/variable-name -- Next.js route segment config export name.
+export const unstable_instant = {
+  prefetch: "static",
+};
 
 export const metadata: Metadata = createMetadata({
   description: siteMetadata.description,
@@ -23,7 +29,7 @@ const organizationSchema = {
       url: siteConfig.url,
       sameAs: [siteConfig.githubOrgUrl, siteConfig.repoUrl],
       description:
-        "Independent, for-profit software company building asym, open-source giving and donor-care software for nonprofits.",
+        "Independent, for-profit software company building asym, open-source software for Christian missions organizations covering website publishing, giving, donor care, missionary micro-CRMs, and office workflows on one shared ground truth.",
     },
     {
       "@type": "SoftwareApplication",
@@ -70,10 +76,11 @@ export default function HomePage() {
         }}
       />
       <HomeHero />
-      <VisionSection />
       <OutcomesSection />
       <OpenSourceSection />
+      <VisionSection />
       <AboutSection />
+      <Faq11 />
       <EarlyAccessSection />
     </main>
   );

@@ -2,7 +2,7 @@
 
 import { Popover, PopoverContent, PopoverTrigger } from "@ui-sdk/react/popover";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { CloseIcon, MenuIcon } from "@/components/site/icons";
 import { navigationLinks } from "@/lib/config";
 import { useIsClient } from "@/lib/use-is-client";
@@ -33,6 +33,15 @@ export const MobileNavMenu = ({
   const [suppressReturnFocus, setSuppressReturnFocus] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const restoreOnBlankDismissRef = useRef(false);
+
+  // Close transient menu synchronously when React <Activity> hides a preserved route.
+  useLayoutEffect(
+    () => () => {
+      restoreOnBlankDismissRef.current = false;
+      setOpen(false);
+    },
+    []
+  );
 
   if (!isMounted) {
     return <span className="size-11 shrink-0 md:hidden" aria-hidden="true" />;
@@ -95,7 +104,7 @@ export const MobileNavMenu = ({
       {open ? (
         <div
           aria-hidden="true"
-          className="bg-foreground/20 pointer-events-none fixed inset-0 top-16 z-40 dark:bg-black/50"
+          className="bg-[var(--scrim)] pointer-events-none fixed inset-0 top-16 z-40"
         />
       ) : null}
       <Popover
@@ -106,7 +115,7 @@ export const MobileNavMenu = ({
         <PopoverTrigger
           ref={triggerRef}
           aria-label="Page sections"
-          className="border-input bg-background text-foreground focus-visible:ring-ring focus-visible:ring-offset-background inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-full border transition-transform duration-150 select-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent active:scale-[0.97] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-secondary/72 forced-colors:border-[ButtonBorder]"
+          className="border-input bg-background text-foreground focus-visible:ring-ring focus-visible:ring-offset-background inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-full border transition-transform duration-150 ease-out select-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent active:scale-[0.97] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-secondary/72 forced-colors:border-[ButtonBorder]"
         >
           {open ? (
             <CloseIcon className="size-4" />
@@ -120,7 +129,7 @@ export const MobileNavMenu = ({
           sideOffset={10}
           collisionPadding={16}
           finalFocus={suppressReturnFocus ? "none" : "trigger"}
-          className="border-rule-strong bg-popover text-popover-foreground m-0 w-56 origin-(--transform-origin) rounded-xl border p-2 shadow-[var(--shadow-strong)] transition-[opacity,scale] duration-150 ease-[cubic-bezier(0.22,1,0.36,1)] data-ending-style:scale-96 data-ending-style:opacity-0 data-starting-style:scale-96 data-starting-style:opacity-0 motion-reduce:transition-none forced-colors:border-[CanvasText]"
+          className="border-rule-strong bg-popover text-popover-foreground m-0 w-56 origin-(--transform-origin) rounded-2xl border p-2 shadow-[var(--shadow-strong)] transition-[opacity,scale] duration-180 ease-out data-ending-style:scale-[0.97] data-ending-style:opacity-0 data-ending-style:duration-110 data-starting-style:scale-[0.96] data-starting-style:opacity-0 motion-reduce:transition-none forced-colors:border-[CanvasText]"
         >
           <nav aria-label="Homepage sections">
             <ul className="grid gap-0.5 text-sm">
@@ -135,9 +144,9 @@ export const MobileNavMenu = ({
                 >
                   <Link
                     href={link.href}
-                    prefetch={false}
+                    prefetch={!link.href.includes("#")}
                     onClick={handleNavClick}
-                    className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-popover flex min-h-11 items-center rounded-sm px-3.5 font-medium focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:bg-secondary/72"
+                    className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-popover flex min-h-11 items-center rounded-xl px-3.5 font-medium transition-transform duration-150 ease-out active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:bg-secondary/72"
                   >
                     {link.label}
                   </Link>

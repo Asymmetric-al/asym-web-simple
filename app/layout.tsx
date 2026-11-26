@@ -3,7 +3,6 @@ import {
   Instrument_Sans,
   Plus_Jakarta_Sans,
 } from "next/font/google";
-import { headers } from "next/headers";
 import { Providers } from "@/components/providers";
 import { SkipToContent } from "@/components/skip-to-content";
 import { baseMetadata } from "@/lib/metadata";
@@ -38,7 +37,7 @@ export const metadata: Metadata = baseMetadata;
 export const viewport: Viewport = {
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#faf9f6" },
-    { media: "(prefers-color-scheme: dark)", color: "#0f1214" },
+    { media: "(prefers-color-scheme: dark)", color: "#101214" },
   ],
   colorScheme: "light dark",
   width: "device-width",
@@ -46,14 +45,11 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: ReactNode;
-}>): Promise<ReactNode> {
-  const headerStore = await headers();
-  const nonce = headerStore.get("x-nonce");
-
+}>): ReactNode {
   return (
     <html
       lang="en"
@@ -61,7 +57,7 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <body className="bg-background text-foreground min-h-dvh font-sans antialiased">
-        <Providers nonce={nonce}>
+        <Providers>
           <SkipToContent />
           {children}
         </Providers>

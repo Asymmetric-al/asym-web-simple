@@ -29,7 +29,7 @@ import type {
   EarlyAccessField,
   EarlyAccessRequest,
 } from "@/lib/early-access";
-import type { ReactNode, SubmitEvent } from "react";
+import type { KeyboardEvent, ReactNode, SubmitEvent } from "react";
 
 const SpinnerIcon = () => (
   <svg
@@ -118,10 +118,10 @@ const EarlyAccessSuccessCard = ({
 }: {
   readonly successRef: React.RefObject<HTMLHeadingElement | null>;
 }): ReactNode => (
-  <div className="surface-enter border-rule-strong bg-background/70 relative rounded-xl border p-6 sm:p-8">
+  <div className="surface-enter border-rule-strong bg-background/70 relative rounded-2xl border p-6 sm:p-8">
     <div className="flex flex-wrap items-center justify-between gap-3">
       <CircleCheckIcon className="text-signal size-7" />
-      <span className="border-signal-border bg-signal-soft text-signal inline-block rounded-md border px-2.5 py-1 font-mono text-xs font-medium tracking-[0.06em] uppercase">
+      <span className="border-signal-border bg-signal-soft text-signal inline-block rounded-full border px-3 py-1 font-mono text-xs font-medium">
         Received
       </span>
     </div>
@@ -176,7 +176,7 @@ const EarlyAccessAlertBanner = ({
   <div
     role="alert"
     className={cn(
-      "text-foreground mt-5 border px-4 py-3 text-sm leading-6",
+      "text-foreground mt-5 rounded-xl border px-4 py-3 text-sm leading-6",
       status === "not_configured"
         ? "border-rule bg-record/85"
         : "border-destructive-border bg-destructive/8"
@@ -432,6 +432,7 @@ export const EarlyAccessForm = ({
   const formRef = useRef<HTMLFormElement>(null);
   const successRef = useRef<HTMLHeadingElement>(null);
   const submittingRef = useRef(false);
+  const hasFocusedSuccessRef = useRef(false);
 
   const [status, setStatus] = useState<FormStatus>("idle");
   const [retrySeconds, setRetrySeconds] = useState<number | undefined>();
@@ -457,8 +458,11 @@ export const EarlyAccessForm = ({
   }, []);
 
   useEffect(() => {
-    if (status === "success") {
+    if (status === "success" && !hasFocusedSuccessRef.current) {
+      hasFocusedSuccessRef.current = true;
       successRef.current?.focus();
+    } else if (status !== "success") {
+      hasFocusedSuccessRef.current = false;
     }
   }, [status]);
 
@@ -504,6 +508,20 @@ export const EarlyAccessForm = ({
       organization: String(formData.get("organization") ?? ""),
       message: String(formData.get("message") ?? ""),
     });
+  };
+
+  const handleTextareaKeyDown = (
+    event: KeyboardEvent<HTMLTextAreaElement>
+  ) => {
+    if (
+      event.nativeEvent.isComposing ||
+      event.key !== "Enter" ||
+      (!event.metaKey && !event.ctrlKey)
+    ) {
+      return;
+    }
+    event.preventDefault();
+    formRef.current?.requestSubmit();
   };
 
   const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
@@ -578,7 +596,7 @@ export const EarlyAccessForm = ({
       onInput={handleDraftInput}
       onSubmit={handleSubmit}
       aria-label="Request early access"
-      className="sm:border-rule sm:bg-background/60 relative sm:rounded-xl sm:border sm:p-7"
+      className="sm:border-rule sm:bg-background/60 relative sm:rounded-2xl sm:border sm:p-7"
     >
       <p className="sr-only" role="status" aria-live="polite">
         {isSubmitting ? earlyAccessCopy.submitting : ""}
@@ -646,7 +664,8 @@ export const EarlyAccessForm = ({
             aria-invalid={Boolean(errors.message)}
             aria-describedby={describedBy("message")}
             onChange={() => clearError("message")}
-            placeholder="For example: donor portals, annual statements, missionary rosters, or offline gifts…"
+            onKeyDown={handleTextareaKeyDown}
+            placeholder="For example: donor portals, annual statements, check batches, missionary rosters, or legacy migration…"
             className="mt-2 min-h-28"
           />
           <FieldMessage id={`${ids.message}-error`}>
@@ -696,7 +715,7 @@ export const EarlyAccessConfigured = ({
     <div className="relative z-10 grid gap-8 lg:grid-cols-[minmax(0,44fr)_minmax(0,56fr)] lg:items-start lg:gap-12">
       <div className="min-w-0">
         <p className="text-signal font-sans text-sm font-medium">
-          Pilot intake
+          Early access
         </p>
         <h2
           id="early-access-title"
@@ -708,8 +727,8 @@ export const EarlyAccessConfigured = ({
         </h2>
         <p className="text-muted-foreground mt-4 max-w-[34rem] text-base leading-7 text-pretty sm:text-[1.0625rem] sm:leading-8">
           {submitted
-            ? "The Asymmetric.al team reviews requests from nonprofit teams as onboarding capacity opens and follows up by email."
-            : "Tell us which organization you’re with and what part of giving or donor care you’d like help with. This requests a team conversation, not an account or reservation; please don’t include donor information."}
+            ? "We review requests as we open new spots and follow up by email."
+            : "Tell us which ministry or missions organization you serve and how your office handles giving today. This starts a conversation, not an account signup; please leave out donor names and giving records."}
         </p>
       </div>
       <div className="min-w-0">

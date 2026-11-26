@@ -1,3 +1,4 @@
+import { cacheLife, cacheTag } from "next/cache";
 import Link from "next/link";
 import { SiteLogoMark } from "@/components/site/site-logo-mark";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -10,17 +11,22 @@ import {
 const linkClassName =
   "text-foreground/82 focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center rounded-md underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-9 [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:underline";
 
-const currentYear = (): number => {
+// eslint-disable-next-line require-await -- Next.js "use cache" functions must be async.
+const getCopyrightYear = async (): Promise<number> => {
+  "use cache";
+  cacheLife("days");
+  cacheTag("site-chrome");
   const now = new Date();
   return now.getFullYear();
 };
 
-export const Footer = () => {
+export const Footer = async () => {
   const contactEmail = getVerifiedContactEmail();
   const isConfigured = isEarlyAccessConfigured();
+  const year = await getCopyrightYear();
 
   return (
-    <footer className="pb-10 sm:pb-12">
+    <footer className="pb-[max(2.5rem,env(safe-area-inset-bottom))] sm:pb-[max(3rem,env(safe-area-inset-bottom))]">
       <div className="mx-auto max-w-[82rem] px-4 sm:px-6 lg:px-8">
         <div className="border-rule-strong flex flex-col gap-8 border-t pt-9 lg:flex-row lg:items-start lg:justify-between">
           <div className="max-w-md min-w-0">
@@ -38,8 +44,9 @@ export const Footer = () => {
               </span>
             </Link>
             <p className="text-muted-foreground mt-2.5 text-sm leading-6 text-pretty">
-              Open-source giving and donor-care software for nonprofits. Built
-              by{" "}
+              Open-source software for Christian missions organizations:
+              website, giving, donor care, missionary micro-CRMs, and office
+              workflows on one shared ground truth. Built by{" "}
               <span translate="no" className="text-foreground font-medium">
                 {siteConfig.name}
               </span>
@@ -108,7 +115,7 @@ export const Footer = () => {
         {/* Footer bar + theme selector */}
         <div className="border-rule text-muted-foreground mt-8 flex flex-col items-start gap-4 border-t pt-6 text-xs sm:flex-row sm:items-center sm:justify-between">
           <p>
-            &copy; {currentYear()}{" "}
+            &copy; {year}{" "}
             <span translate="no">{siteConfig.name}</span> · Code:{" "}
             <span translate="no" className="font-mono">
               Asymmetric-al/core

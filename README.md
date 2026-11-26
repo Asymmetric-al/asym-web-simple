@@ -1,6 +1,6 @@
 # asym.app
 
-The product website for **asym**, open-source software for nonprofits built by **Asymmetric.al**. asym runs on Core (`Asymmetric-al/core`, AGPL-3.0-only), keeping authenticated donor portals, self-service receipts and statements, redacted missionary rosters, and office CRM/batch previews on one shared record (public giving pages in Core still use demo profiles; hosted teams and human-approved AI appeals are in development). Missions organizations are the first focus. asym is prelaunch; this site explains the product and supports early-access intake when email delivery is configured.
+The product website for **asym**, open-source giving and donor-care software for nonprofits of any size built by **Asymmetric.al**. asym runs on Core (`Asymmetric-al/core`, AGPL-3.0-only), keeping authenticated donor portals, self-service receipts and statements, redacted missionary rosters, and office CRM/batch previews on one shared record (public giving pages in Core still use sample profiles; hosted teams and practical AI tools are in development). asym is prelaunch; this site explains the product, vision, and current build status, and supports early-access intake when email delivery is configured.
 
 ## What this is
 
@@ -23,7 +23,7 @@ The **Next.js marketing site**, the **`/api/early-access`** intake route (plus S
 - **shadcn/ui** — `base-maia` style (`components.json`)
 - **next-themes** — light, dark, and system themes (with targeted compositor-only transitions)
 - **Lucide React** — icons
-- **Fonts** (root layout) — Funnel Display (geometric display), Instrument Sans (UI & reading body), Geist Mono (code paths & repository counts)
+- **Fonts** (root layout) — Plus Jakarta Sans (warm modern geometric display), Instrument Sans (UI & reading body), Geist Mono (code paths & repository counts)
 - **Resend** — `/api/early-access` transactional email
 - **Payload CMS 3** — **Phase 1 (dormant until configured):** Postgres adapter, Lexical editor, Vercel Blob storage plugin, minimal **`users`** collection for `/admin`. **Marketing copy does not load from Payload**; see [docs/PAYLOAD-CMS.md](./docs/PAYLOAD-CMS.md).
 
@@ -111,7 +111,7 @@ Open [http://localhost:3000](http://localhost:3000). The dev server uses Turbopa
 | Goal | Required env (from `.env.example`) |
 | --- | --- |
 | Browse marketing pages, run `build` / `typecheck` / `lint` | None |
-| **Early-access form** opens and delivers requests | `RESEND_API_KEY`, `CONTACT_INBOX_EMAIL`, `CONTACT_FROM_EMAIL` (sender on a Resend-verified domain), and `NEXT_PUBLIC_CONTACT_EMAIL` (syntactically valid verified private inbox for privacy/deletion inquiries). Without all four, the homepage shows the honest "Opening soon" state and `POST /api/early-access` returns `503`. |
+| **Early-access form** opens and delivers requests | `RESEND_API_KEY`, `CONTACT_INBOX_EMAIL`, `CONTACT_FROM_EMAIL` (sender on a Resend-verified domain), and `NEXT_PUBLIC_CONTACT_EMAIL` (syntactically valid verified private inbox for privacy/deletion inquiries). Without all four, the homepage discloses that early access isn't open yet and `POST /api/early-access` returns `503`. |
 | **Payload `/admin`** + Payload CLI | `DATABASE_URI`, `PAYLOAD_SECRET`; follow Payload migrations |
 | **Draft preview links** | `PAYLOAD_DRAFT_SECRET` |
 | **On-demand revalidate** | `REVALIDATION_SECRET` |

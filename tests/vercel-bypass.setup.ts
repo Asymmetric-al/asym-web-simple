@@ -3,6 +3,10 @@ import type { FullConfig } from "@playwright/test";
 
 const BYPASS_COOKIE = "_vercel_jwt";
 
+const isStorageStatePath = (
+  value: FullConfig["projects"][number]["use"]["storageState"]
+): value is string => typeof value === "string";
+
 /**
  * Trades the Vercel Protection Bypass for Automation secret for Vercel's bypass cookie and saves it as Playwright storage state.
  *
@@ -14,7 +18,7 @@ const vercelBypassSetup = async (config: FullConfig) => {
   const [project] = config.projects;
   const { baseURL, storageState } = project?.use ?? {};
   const secret = process.env.VERCEL_AUTOMATION_BYPASS_SECRET;
-  if (!baseURL || typeof storageState !== "string" || !secret) {
+  if (!baseURL || !secret || !isStorageStatePath(storageState)) {
     return;
   }
 

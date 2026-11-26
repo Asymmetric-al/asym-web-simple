@@ -61,18 +61,36 @@ test.describe("route accessibility", () => {
       () => document.documentElement.getAttribute("data-ui-ready") === "true"
     );
 
+    const product = page.locator("#product");
+    await product.getByRole("radio", { name: "Missionary" }).click();
+    const roleLensLightResults = await analyzePage(page);
+    expect(roleLensLightResults.violations).toEqual([]);
+
+    await product
+      .getByRole("tab", { name: "Missionary micro-CRMs" })
+      .click();
+    const microCrmLightResults = await analyzePage(page);
+    expect(microCrmLightResults.violations).toEqual([]);
+
     const openSource = page.locator("#open-source");
-    await openSource.getByRole("radio", { name: /^Partial/u }).click();
+    await openSource.getByRole("radio", { name: /^Building/u }).click();
     const partialLightResults = await analyzePage(page);
     expect(partialLightResults.violations).toEqual([]);
 
-    await openSource.getByRole("radio", { name: /^Planned/u }).click();
+    await openSource.getByRole("radio", { name: /^Next/u }).click();
     const plannedLightResults = await analyzePage(page);
     expect(plannedLightResults.violations).toEqual([]);
+
+    await openSource.getByRole("radio", { name: "Run again" }).click();
+    const questions = page.locator("#questions");
+    await questions.getByRole("tab").nth(1).click();
+    const faqLightResults = await analyzePage(page);
+    expect(faqLightResults.violations).toEqual([]);
 
     // Verify configured early-access form invalid state when enabled on this server
     const form = page.getByRole("form", { name: "Request early access" });
     if ((await form.count()) > 0) {
+      await expect(form).toHaveAttribute("novalidate", "");
       await form.getByRole("button", { name: "Request early access" }).click();
       const formInvalidLight = await analyzePage(page);
       expect(formInvalidLight.violations).toEqual([]);
@@ -93,10 +111,26 @@ test.describe("route accessibility", () => {
     const darkAllResults = await analyzePage(page);
     expect(darkAllResults.violations).toEqual([]);
 
+    // Verify open Quick-Jump Command Palette dialog passes WCAG 2.2 AA in light & dark
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.getByRole("button", { name: /^Quick jump/u }).click();
+    await expect(
+      page.getByRole("dialog", { name: "Quick jump navigation" })
+    ).toBeVisible();
+    const paletteDarkResults = await analyzePage(page);
+    expect(paletteDarkResults.violations).toEqual([]);
+
     await page.emulateMedia({
       reducedMotion: "reduce",
       colorScheme: "light",
     });
+    await page.waitForFunction(
+      () => !document.documentElement.classList.contains("dark")
+    );
+    const paletteLightResults = await analyzePage(page);
+    expect(paletteLightResults.violations).toEqual([]);
+    await page.keyboard.press("Escape");
+
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/does-not-exist", { waitUntil: "domcontentloaded" });
     await page.waitForFunction(
@@ -124,7 +158,7 @@ test.describe("route accessibility", () => {
     );
 
     const openSource = page.locator("#open-source");
-    const inCodeRadio = openSource.getByRole("radio", { name: /^In code/u });
+    const inCodeRadio = openSource.getByRole("radio", { name: /^In Core/u });
     await inCodeRadio.click();
 
     const transitionProp = await inCodeRadio.evaluate(

@@ -51,6 +51,7 @@ const earlyAccessForm = (page: Page) =>
 
 const fillEarlyAccess = async (page: Page) => {
   const form = earlyAccessForm(page);
+  await expect(form).toHaveAttribute("novalidate", "");
   await form.getByLabel("Email").fill("director@example.org");
   await form.getByLabel("Organization").fill("Example Missions");
   await form
@@ -97,83 +98,350 @@ test.describe("homepage smoke tests", () => {
         .split(";")
         .map((part) => part.trim())
         .find((part) => part.startsWith("script-src ")) ?? "";
-    expect(scriptSrc).toContain("'nonce-");
-    expect(scriptSrc).toContain("'strict-dynamic'");
-    expect(scriptSrc).not.toContain("'unsafe-inline'");
+    expect(scriptSrc).toContain("'self'");
+    expect(scriptSrc).not.toContain("'unsafe-eval'");
+    expect(csp).toContain("default-src 'self'");
     expect(csp).toContain("object-src 'none'");
+    expect(csp).toContain("frame-ancestors 'none'");
+    expect(csp).toContain("base-uri 'self'");
+    expect(csp).toContain("form-action 'self'");
 
     await expect(page).toHaveTitle(
-      "asym | Open-source giving and donor-care software for nonprofits"
+      "asym | Open-source software for Christian missions organizations"
     );
     await expect(
       page.getByRole("heading", {
         level: 1,
-        name: "Less overhead. Outsized impact.",
+        name: "Run a large mission from a small office.",
       })
     ).toBeVisible();
     await expect(
-      page.getByText("Open-source software for nonprofits", {
-        exact: true,
-      })
+      page.getByText(
+        "Open-source software for Christian missions organizations",
+        {
+          exact: true,
+        }
+      )
     ).toBeVisible();
     await expect(
       page
         .getByRole("main")
         .getByRole("link", {
-          name: /^(?:Request early access|See what’s built)$/u,
+          name: /^(?:Request early access|See the platform)$/u,
         })
         .first()
-    ).toHaveAttribute("href", /^\/#(?:early-access|where-things-stand)$/u);
+    ).toHaveAttribute("href", /^\/#(?:early-access|product)$/u);
     await expect(
       page.getByRole("link", { name: /^View the code/u }).first()
     ).toHaveAttribute("href", REPO_URL);
   });
 
-  test("vision, human outcomes, and filterable open-source status ledger work with keyboard", async ({
+  test("platform ground-truth matrix, workflow tabs, real capture, roadmap ledger, and vision section work with keyboard", async ({
     page,
   }) => {
     await page.goto("/", { waitUntil: "domcontentloaded" });
     await waitForUi(page);
 
-    const vision = page.locator("#vision");
-    await expect(
-      vision.getByRole("heading", {
-        level: 2,
-        name: "Practical AI, built for real work.",
-      })
-    ).toBeVisible();
-    await expect(vision).toContainText("AI in development");
-
     const outcomes = page.locator("#product");
     await expect(
       outcomes.getByRole("heading", {
         level: 2,
-        name: "One foundation. Clear for everyone involved.",
+        name: "One ground truth. Every record and workflow.",
       })
     ).toBeVisible();
     await expect(outcomes).toContainText("apps/donor");
     await expect(outcomes).toContainText("apps/missionary");
     await expect(outcomes).toContainText("apps/admin");
     await expect(outcomes).toContainText("Anonymous partner");
+    await expect(outcomes).toContainText("micro-CRM");
+    await expect(outcomes).toContainText("Mission Control");
+    await expect(outcomes).toContainText("Give Hope demo tenant");
+
+    const roleLens = outcomes.getByRole("radiogroup", {
+      name: "Inspect workspace view",
+    });
+    const missionaryLens = roleLens.getByRole("radio", { name: "Missionary" });
+    await missionaryLens.click();
+    await expect(missionaryLens).toHaveAttribute("aria-checked", "true");
+    await expect(outcomes).toContainText(
+      "apps/missionary · Per-worker micro-CRM"
+    );
+    await missionaryLens.focus();
+    await page.keyboard.press("ArrowRight");
+    await expect(roleLens.getByRole("radio", { name: "Office" })).toHaveAttribute(
+      "aria-checked",
+      "true"
+    );
+    await roleLens.getByRole("radio", { name: "Compare all" }).click();
+
+    const workflowTabs = outcomes.getByRole("tablist", {
+      name: "Agency workflows on one ground truth",
+    });
+    const givingTab = workflowTabs.getByRole("tab", {
+      name: "Giving & Finance",
+    });
+    await givingTab.focus();
+    await page.keyboard.press("ArrowRight");
+    const microCrmTab = workflowTabs.getByRole("tab", {
+      name: "Missionary micro-CRMs",
+    });
+    await expect(microCrmTab).toHaveAttribute("aria-selected", "true");
+    await expect(
+      outcomes.getByRole("heading", {
+        level: 4,
+        name: "A built-in micro-CRM for every missionary’s support team.",
+      })
+    ).toBeVisible();
+
+    const webStudioImage = outcomes.locator('img[alt*="Web Studio"]');
+    await webStudioImage.scrollIntoViewIfNeeded();
+    await expect(webStudioImage).toBeVisible();
+    await expect
+      .poll(() =>
+        webStudioImage.evaluate((img: HTMLImageElement) => img.naturalWidth)
+      )
+      .toBeGreaterThan(0);
+    await expect(
+      outcomes.getByRole("button", { name: /Magnify/u })
+    ).toHaveCount(0);
+
+    const screenTabs = outcomes.getByRole("tablist", {
+      name: "Core application screens",
+    });
+    await expect(screenTabs.getByRole("tab")).toHaveCount(4);
+
+    const donorPortalTab = screenTabs.getByRole("tab", {
+      name: "Donor portal",
+    });
+    await donorPortalTab.click();
+    await expect(donorPortalTab).toHaveAttribute("aria-selected", "true");
+    await expect(outcomes).toContainText("givehope.org/donor");
+    const donorPortalImage = outcomes.locator('img[alt*="Donor portal"]');
+    await expect(donorPortalImage).toBeVisible();
+    await expect
+      .poll(() =>
+        donorPortalImage.evaluate((img: HTMLImageElement) => img.naturalWidth)
+      )
+      .toBeGreaterThan(0);
+
+    await outcomes.getByRole("button", { name: "Next screen" }).click();
+    await expect(
+      screenTabs.getByRole("tab", { name: "Public website" })
+    ).toHaveAttribute("aria-selected", "true");
+    const publicSiteImage = outcomes.locator(
+      'img[alt*="Public ministry website"]'
+    );
+    await expect(publicSiteImage).toBeVisible();
+    await expect
+      .poll(() =>
+        publicSiteImage.evaluate((img: HTMLImageElement) => img.naturalWidth)
+      )
+      .toBeGreaterThan(0);
+
+    await screenTabs.getByRole("tab", { name: "Public website" }).focus();
+    await page.keyboard.press("End");
+    await expect(
+      screenTabs.getByRole("tab", { name: "Field updates" })
+    ).toHaveAttribute("aria-selected", "true");
+    await expect(outcomes).toContainText("missionaries.asym.app/updates");
+    const missionaryImage = outcomes.locator(
+      'img[alt*="Missionary workspace updates"]'
+    );
+    await expect(missionaryImage).toBeVisible();
+    await expect
+      .poll(() =>
+        missionaryImage.evaluate((img: HTMLImageElement) => img.naturalWidth)
+      )
+      .toBeGreaterThan(0);
 
     const openSource = page.locator("#open-source");
     const filterGroup = openSource.getByRole("radiogroup", {
       name: "Filter build status",
     });
-    const partialFilter = filterGroup.getByRole("radio", {
-      name: /^Partial/u,
+    const inProgressFilter = filterGroup.getByRole("radio", {
+      name: /^Building/u,
     });
-    await partialFilter.click();
-    await expect(partialFilter).toHaveAttribute("aria-checked", "true");
-    await expect(openSource.locator("li")).toHaveCount(2);
+    await inProgressFilter.click();
+    await expect(inProgressFilter).toHaveAttribute("aria-checked", "true");
+    await expect(openSource.locator("li")).toHaveCount(3);
 
-    await partialFilter.focus();
+    await inProgressFilter.focus();
     await page.keyboard.press("ArrowRight");
     await expect(
-      filterGroup.getByRole("radio", { name: /^Planned/u })
+      filterGroup.getByRole("radio", { name: /^Next/u })
     ).toHaveAttribute("aria-checked", "true");
     await expect(openSource.locator("li")).toHaveCount(2);
-    await expect(openSource).toContainText("AI campaign drafting");
+    await expect(openSource).toContainText("AI care-work drafting");
+    await expect(openSource).toContainText("5,200+");
+    await expect(openSource).toContainText("600+");
+    await expect(openSource).toContainText("Core software license");
+    await expect(openSource).toContainText("Gift processing markup");
+
+    const vision = page.locator("#vision");
+    await expect(
+      vision.getByRole("heading", {
+        level: 2,
+        name: "AI that works from your ground truth.",
+      })
+    ).toBeVisible();
+    await expect(vision).toContainText("Grounded AI");
+    await expect(vision).toContainText("AI drafts; people send.");
+    await expect(vision.getByRole("img", { name: /Grounded AI workflow/u })).toBeVisible();
+
+    const faq = page.locator("#questions");
+    await expect(
+      faq.getByRole("heading", {
+        level: 2,
+        name: "Straight answers from the people building it.",
+      })
+    ).toBeVisible();
+    const faqTabs = faq.getByRole("tablist", {
+      name: "Common leadership questions",
+    });
+    await expect(faqTabs.getByRole("tab")).toHaveCount(8);
+    await expect(faq).not.toContainText("Global Fellowship");
+    await expect(page.getByRole("main")).not.toContainText("O’Brien");
+    await expect(page.getByRole("main")).not.toContainText("O'Brien");
+
+    const stripeQuestion = faqTabs.getByRole("tab", {
+      name: /monthly donors’ cards/u,
+    });
+    await stripeQuestion.click();
+    await expect(stripeQuestion).toHaveAttribute("aria-selected", "true");
+    await expect(faq.getByRole("tabpanel")).toBeVisible();
+    await expect(faq.getByRole("tabpanel")).toContainText(
+      "They stay with your ministry."
+    );
+    await expect(
+      faq.getByRole("tabpanel").getByRole("link", { name: /^Conrad/u })
+    ).toHaveAttribute("href", "https://github.com/cobmojo");
+
+    const missionaryQuestion = faqTabs.getByRole("tab", {
+      name: /missionaries see/u,
+    });
+    await missionaryQuestion.click();
+    await expect(missionaryQuestion).toHaveAttribute("aria-selected", "true");
+    await expect(faq.getByRole("tabpanel")).toBeVisible();
+    await expect(faq.getByRole("tabpanel")).toContainText(
+      "Every missionary gets a personal workspace"
+    );
+
+    const hostingQuestion = faqTabs.getByRole("tab", {
+      name: /run our own servers/u,
+    });
+    await hostingQuestion.click();
+    await expect(hostingQuestion).toHaveAttribute("aria-selected", "true");
+    await expect(faq.getByRole("tabpanel")).toBeVisible();
+    await expect(faq.getByRole("tabpanel")).toContainText(
+      "You will not have to manage servers"
+    );
+    await expect(
+      faq.getByRole("tabpanel").getByRole("link", { name: /^Blake/u })
+    ).toHaveAttribute("href", "https://github.com/II-ricky-bobby-II");
+  });
+
+  test("evaluation brief renders comparison, parallel close, and hosting paths with zero inert no-JS controls", async ({
+    page,
+    browser,
+    baseURL,
+  }) => {
+    await page.goto("/evaluate", { waitUntil: "domcontentloaded" });
+    await waitForUi(page);
+
+    await expect(page).toHaveTitle("Evaluate asym | asym");
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: /board, Finance team, and IT lead/u,
+      })
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", {
+        level: 2,
+        name: "One shared record, instead of stitched tools.",
+      })
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", {
+        level: 2,
+        name: "Reconcile one period before you switch.",
+      })
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", {
+        level: 2,
+        name: "Self-host it, or let us host it.",
+      })
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", {
+        level: 2,
+        name: "Privacy, custody, and separation written into code.",
+      })
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", {
+        level: 2,
+        name: "Primary documents for technical and legal review.",
+      })
+    ).toBeVisible();
+    await expect(
+      page.getByRole("navigation", { name: "Evaluation brief sections" })
+    ).toBeVisible();
+
+    const noJsContext = await browser.newContext({
+      ...(baseURL && { baseURL }),
+      javaScriptEnabled: false,
+      viewport: { width: 390, height: 844 },
+    });
+    const noJsPage = await noJsContext.newPage();
+    await noJsPage.goto("/evaluate", { waitUntil: "domcontentloaded" });
+    await expect(noJsPage.locator('button:not([type="submit"])')).toHaveCount(0);
+    await noJsPage.goto("/privacy", { waitUntil: "domcontentloaded" });
+    await expect(noJsPage.locator('button:not([type="submit"])')).toHaveCount(0);
+    await noJsContext.close();
+  });
+
+  test("desktop quick-jump palette filters, restores focus on Escape, and navigates via Enter", async ({
+    page,
+  }) => {
+    test.skip(
+      test.info().project.name.startsWith("mobile"),
+      "The quick-jump trigger is desktop-only (lg+)."
+    );
+
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto("/", { waitUntil: "domcontentloaded" });
+    await waitForUi(page);
+
+    const trigger = page.getByRole("button", { name: /^Quick jump/u });
+    await expect(trigger).toBeVisible();
+    await trigger.click();
+
+    const dialog = page.getByRole("dialog", { name: "Quick jump navigation" });
+    await expect(dialog).toBeVisible();
+
+    const input = dialog.getByRole("searchbox");
+    await expect(input).toBeFocused();
+    await page.keyboard.press("Escape");
+    await expect(dialog).toBeHidden();
+    await expect(trigger).toBeFocused();
+
+    await trigger.click();
+    await expect(dialog).toBeVisible();
+    await input.fill("zzz-no-match");
+    await expect(dialog).toContainText("No matching pages or files");
+    await dialog.getByRole("button", { name: "Clear search" }).click();
+    await expect(input).toBeFocused();
+    await expect(input).toHaveValue("");
+    await page.keyboard.press("End");
+    await expect(
+      dialog.locator('button[data-highlighted="true"]')
+    ).toBeInViewport();
+    await input.fill("parallel close");
+    await expect(dialog).toContainText("Parallel-close migration steps");
+    await page.keyboard.press("Enter");
+    await expect(page).toHaveURL(/\/evaluate#migration$/u);
   });
 
   test("no-JS homepage exposes zero inert buttons, distinct outcome anchors, and full build status list", async ({
@@ -195,7 +463,7 @@ test.describe("homepage smoke tests", () => {
     await expect(
       page.locator('noscript nav[aria-label="Homepage sections"]')
     ).toBeVisible();
-    await expect(page.locator("#open-source ul > li")).toHaveCount(7);
+    await expect(page.locator("#open-source ul > li")).toHaveCount(9);
     await context.close();
   });
 
@@ -260,7 +528,12 @@ test.describe("homepage smoke tests", () => {
     await expect(
       openSource.getByRole("link", { name: /Explore the code on GitHub/u })
     ).toHaveAttribute("href", REPO_URL);
+    await expect(openSource).toContainText("Keep your cards, records, and code.");
+    await expect(openSource).toContainText("Run Mission Control on your laptop");
     await expect(openSource).toContainText("managed donor care");
+    await expect(
+      page.locator('a[href*="Asymmetric-al/core/issues"]')
+    ).toHaveCount(0);
 
     const isConfigured = (await earlyAccessForm(page).count()) > 0;
     if (isConfigured) {
@@ -268,26 +541,33 @@ test.describe("homepage smoke tests", () => {
         openSource.getByRole("link", { name: /Request early access/u })
       ).toHaveAttribute("href", "/#early-access");
       await expect(page.getByRole("main")).toContainText(
-        "Early-access requests are open for hosted pilots"
+        "Early access is open for hosted pilots"
       );
     } else {
       await expect(
         openSource.getByRole("link", {
-          name: /Read the pre-launch checklist/u,
+          name: /Read the launch roadmap/u,
         })
       ).toHaveAttribute("href", "/early-access/status?state=unavailable");
       await expect(page.getByRole("main")).toContainText(
-        "Hosted access and AI tools aren’t open yet"
+        "Hosted early access opens soon"
       );
     }
 
+    const about = page.locator("#about");
     await expect(
-      page.locator("#about").getByRole("heading", {
+      about.getByRole("heading", {
         level: 2,
         name: "Built from inside the work.",
       })
     ).toBeVisible();
-    await expect(page.locator("#about")).toContainText("Global Fellowship");
+    await expect(about).toContainText("Global Fellowship");
+    await expect(
+      about.getByRole("link", { name: /^Conrad/u })
+    ).toHaveAttribute("href", "https://github.com/cobmojo");
+    await expect(
+      about.getByRole("link", { name: /^Blake/u })
+    ).toHaveAttribute("href", "https://github.com/II-ricky-bobby-II");
   });
 
   test("main navigation reaches each homepage section", async ({ page }) => {
@@ -323,7 +603,7 @@ test.describe("homepage smoke tests", () => {
       banner.getByRole("link", { name: /^asym home$/iu })
     ).toBeVisible();
     await expect(
-      banner.getByRole("link", { name: /^(?:Early access|See what’s built)/u })
+      banner.getByRole("link", { name: /^(?:Early access|See the platform)/u })
     ).toBeVisible();
     await expect(banner.getByRole("navigation")).toBeHidden();
     const menuTrigger = banner.getByRole("button", { name: "Page sections" });
@@ -350,6 +630,9 @@ test.describe("homepage smoke tests", () => {
       await expect(page.locator("#early-access")).toContainText(
         "Early access isn’t open yet."
       );
+      await expect(page.locator("#early-access")).toContainText(
+        "What we’re finishing first"
+      );
       await expect(
         page
           .locator("#early-access")
@@ -364,6 +647,7 @@ test.describe("homepage smoke tests", () => {
     }
 
     const form = earlyAccessForm(page);
+    await expect(form).toHaveAttribute("novalidate", "");
     await expect(form).toHaveAttribute("method", "post");
     await expect(form).toHaveAttribute("action", "/api/early-access");
 

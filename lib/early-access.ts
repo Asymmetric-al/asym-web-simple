@@ -54,7 +54,7 @@ export const earlyAccessCopy = {
   invalidEmail: "Enter a valid email address.",
   missingOrganization: "Enter your organization’s name.",
   consent:
-    "We’ll use your details to reply to you, share launch updates and early access invitations, and understand what nonprofit teams need from asym. To stop hearing from us, reply to any of our emails.",
+    "We’ll use your details to reply to you, share launch updates and early access invitations, and understand what missions agencies and nonprofit teams need from asym. To stop hearing from us, reply to any of our emails.",
 } as const;
 
 export const parseRetryAfterSeconds = (raw: unknown): number | undefined => {

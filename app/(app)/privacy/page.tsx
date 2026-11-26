@@ -4,6 +4,11 @@ import { getVerifiedContactEmail } from "@/lib/early-access-config";
 import { createMetadata } from "@/lib/metadata";
 import type { Metadata } from "next";
 
+// eslint-disable-next-line sonarjs/variable-name -- Next.js route segment config export name.
+export const unstable_instant = {
+  prefetch: "static",
+};
+
 export const metadata: Metadata = createMetadata({
   title: "Privacy policy",
   description:
@@ -14,18 +19,29 @@ export const metadata: Metadata = createMetadata({
 const contactLinkClassName =
   "text-foreground focus-visible:ring-ring focus-visible:ring-offset-background link-resilient rounded-[0.375rem] font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:text-signal";
 
+const PRIVACY_TOC = [
+  { id: "sec-01", number: "01", label: "What this covers" },
+  { id: "sec-02", number: "02", label: "What we collect" },
+  { id: "sec-03", number: "03", label: "How we use it" },
+  { id: "sec-04", number: "04", label: "What we do not do" },
+  { id: "sec-05", number: "05", label: "When we share information" },
+  { id: "sec-06", number: "06", label: "Retention and security" },
+  { id: "sec-07", number: "07", label: "Your choices" },
+] as const;
+
 export default function PrivacyPage() {
   const contactEmail = getVerifiedContactEmail();
 
   return (
     <DocumentPage
       eyebrow="Updated November 20, 2026"
+      toc={PRIVACY_TOC}
       title={
         <h1 className="font-heading text-foreground mt-5 text-[clamp(2.8rem,5.5vw,4.6rem)] leading-[0.98] font-medium tracking-[-0.03em] text-balance">
           Privacy policy
         </h1>
       }
-      description="We collect only what we need to reply to you, share launch updates and early access invitations, run the website, and understand what nonprofit teams need from asym."
+      description="We collect only what we need to reply to you, share launch updates and early access invitations, run the website, and understand what missions agencies and nonprofit teams need from asym."
       footer={
         contactEmail ? (
           <>
@@ -61,7 +77,7 @@ export default function PrivacyPage() {
         )
       }
     >
-      <DocumentSection number="01" title="What this covers">
+      <DocumentSection id="sec-01" number="01" title="What this covers">
         <p>
           This policy covers the asym website at asym.app, operated by
           Asymmetric.al, and the early access requests, emails, and
@@ -69,7 +85,7 @@ export default function PrivacyPage() {
         </p>
       </DocumentSection>
 
-      <DocumentSection number="02" title="What we collect">
+      <DocumentSection id="sec-02" number="02" title="What we collect">
         <p>
           When you request early access, we collect your email address, your
           organization’s name, and anything you choose to tell us about the work
@@ -83,20 +99,20 @@ export default function PrivacyPage() {
         </p>
       </DocumentSection>
 
-      <DocumentSection number="03" title="How we use it">
+      <DocumentSection id="sec-03" number="03" title="How we use it">
         <p>
           We use early access details to reply to you, share launch updates and
-          early access invitations, and understand what nonprofit teams need
-          from asym. We use operational data to keep the website reliable and
-          protect our systems.
+          early access invitations, and understand what missions agencies and
+          nonprofit teams need from asym. We use operational data to keep the
+          website reliable and protect our systems.
         </p>
       </DocumentSection>
 
-      <DocumentSection number="04" title="What we do not do">
+      <DocumentSection id="sec-04" number="04" title="What we do not do">
         <p>We do not sell personal information.</p>
       </DocumentSection>
 
-      <DocumentSection number="05" title="When we share information">
+      <DocumentSection id="sec-05" number="05" title="When we share information">
         <p>
           We share information with service providers that host the site and
           deliver email for us, such as Vercel and Resend, and with professional
@@ -104,7 +120,7 @@ export default function PrivacyPage() {
         </p>
       </DocumentSection>
 
-      <DocumentSection number="06" title="Retention and security">
+      <DocumentSection id="sec-06" number="06" title="Retention and security">
         <p>
           We keep information only as long as reasonably necessary for the
           purpose it was provided, unless legal, operational, or governance
@@ -116,7 +132,7 @@ export default function PrivacyPage() {
         </p>
       </DocumentSection>
 
-      <DocumentSection number="07" title="Your choices">
+      <DocumentSection id="sec-07" number="07" title="Your choices">
         <p>
           You can ask us to stop contacting you at any time by replying to one
           of our emails. You may also ask us to access, correct, or delete

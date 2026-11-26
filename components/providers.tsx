@@ -1,15 +1,14 @@
 "use client";
 
+import { domAnimation, LazyMotion } from "motion/react";
 import { ThemeProvider } from "next-themes";
 import { UiReadyMarker } from "@/components/ui-ready-marker";
 import type { ReactNode } from "react";
 
 export const Providers = ({
   children,
-  nonce,
 }: {
   readonly children: ReactNode;
-  readonly nonce?: string | null;
 }): ReactNode => (
   <ThemeProvider
     attribute="class"
@@ -17,9 +16,10 @@ export const Providers = ({
     enableSystem
     enableColorScheme
     disableTransitionOnChange
-    {...(nonce ? { nonce } : {})}
   >
-    <UiReadyMarker />
-    {children}
+    <LazyMotion features={domAnimation} strict>
+      <UiReadyMarker />
+      {children}
+    </LazyMotion>
   </ThemeProvider>
 );

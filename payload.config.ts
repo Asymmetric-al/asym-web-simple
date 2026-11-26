@@ -1,6 +1,7 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { postgresAdapter } from "@payloadcms/db-postgres";
+import { mcpPlugin } from "@payloadcms/plugin-mcp";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
 import { buildConfig } from "payload";
@@ -15,6 +16,7 @@ Auth collection for Payload admin (`admin.user` must match slug).
 const users: CollectionConfig = {
   slug: "users",
   auth: true,
+  versions: false,
   admin: {
     useAsTitle: "email",
   },
@@ -51,13 +53,35 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URI ?? "",
     },
   }),
-  plugins: [
+  storage: [
     vercelBlobStorage({
       collections: {
         // TODO Phase 2: Add media collection once defined
         // media: true,
       },
       token: process.env.BLOB_READ_WRITE_TOKEN ?? "",
+    }),
+  ],
+  plugins: [
+    mcpPlugin({
+      // Payload v4 MCP plugin exposes collections by default (opt-out).
+      // Explicitly disable all built-in tools on `users` so auth records are never
+      // reachable over `/api/mcp`. Expose public content collections intentionally
+      // when Phase 2 schemas (pages, media, site settings) are added.
+      collections: {
+        users: {
+          tools: {
+            count: false,
+            create: false,
+            delete: false,
+            duplicate: false,
+            find: false,
+            findDistinct: false,
+            getCollectionSchema: false,
+            update: false,
+          },
+        },
+      },
     }),
   ],
 });

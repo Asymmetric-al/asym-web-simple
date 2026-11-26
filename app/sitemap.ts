@@ -9,9 +9,15 @@ const routes: readonly {
 }[] = [
   {
     path: "/",
-    lastModified: "2026-11-21",
+    lastModified: "2026-11-25",
     changeFrequency: "weekly",
     priority: 1,
+  },
+  {
+    path: "/evaluate",
+    lastModified: "2026-11-25",
+    changeFrequency: "weekly",
+    priority: 0.9,
   },
   {
     path: "/privacy",

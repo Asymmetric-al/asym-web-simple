@@ -3,12 +3,11 @@ import type { Metadata } from "next";
 
 export const siteMetadata = {
   name: siteConfig.shortName,
-  title: "asym | Open-source giving and donor-care software for nonprofits",
+  title: "asym | Open-source software for Christian missions organizations",
   description: siteConfig.description,
   socialTitle:
-    "Less overhead. Outsized impact. Open-source nonprofit software from Asymmetric.al.",
-  socialDescription:
-    "Open-source giving, donor care, and operations on one shared foundation, with practical AI in development. Hosted access isn’t open yet.",
+    "Run a large mission from a small office. Open-source software from Asymmetric.al.",
+  socialDescription: siteConfig.description,
   url: siteConfig.url,
   ogImage: "/opengraph-image",
 } as const;
