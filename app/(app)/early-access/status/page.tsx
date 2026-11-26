@@ -8,6 +8,16 @@ import {
   CircleAlertIcon,
   CircleCheckIcon,
 } from "@/components/site/icons";
+import { Frame, FramePanel } from "@/components/site/reui/frame";
+import {
+  Timeline,
+  TimelineContent,
+  TimelineDate,
+  TimelineIndicator,
+  TimelineItem,
+  TimelineSeparator,
+  TimelineTitle,
+} from "@/components/site/reui/timeline";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { siteConfig } from "@/lib/config";
 import {
@@ -23,9 +33,12 @@ import {
 import { isEarlyAccessConfirmationValid } from "@/lib/early-access-guard";
 import { createMetadata } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
+import type { TimelineStepState } from "@/components/site/reui/timeline";
 import type { Metadata } from "next";
 
-export const dynamic = "force-dynamic";
+// Blocking request-time render so no-JS form redirects always receive resolved status HTML without Suspense $RC swap scripts.
+// eslint-disable-next-line unicorn/consistent-boolean-name -- Next.js route segment config export name.
+export const instant = false;
 
 const EARLY_ACCESS_HREF = "/#early-access";
 const EARLY_ACCESS_LABEL = "Early access";
@@ -40,17 +53,34 @@ export const metadata: Metadata = createMetadata({
   noIndex: true,
 });
 
-const BUILT_TODAY_ITEMS = [
-  "Authenticated donor portal with own-account giving history, recurring-gift review, individual receipts, and settled-only annual statements (apps/donor).",
-  "Private-by-default missionary roster where non-opted-in donors default to Anonymous partner and lifetime/last-gift amounts stay withheld (apps/missionary).",
-  "Office CRM, website editor, email/PDF templates, and server-side batch action previews (apps/admin).",
-] as const;
-
-const PRELAUNCH_MILESTONES = [
-  "Replace sample profiles on public worker directory and checkout recipient lookup pages with live organization data.",
-  "Finish hosted team subscription billing and guided onboarding from existing donor records.",
-  "Publish a verified private support and privacy inbox before opening sign-ups.",
-] as const;
+const READINESS_MILESTONES: readonly {
+  readonly date: string;
+  readonly title: string;
+  readonly detail: string;
+  readonly state: TimelineStepState;
+}[] = [
+  {
+    date: "In public code today",
+    title: "Donor portal, missionary micro-CRMs & Mission Control",
+    detail:
+      "Donor portal for giving history, receipts, and annual statements (apps/donor), personal missionary micro-CRMs with automatic Anonymous partner privacy and hidden per-row totals (apps/missionary), plus Mission Control CRM, Web Studio, and batch previews (apps/admin).",
+    state: "completed",
+  },
+  {
+    date: "Building now",
+    title: "Paper check batch saving & live public directories",
+    detail:
+      "Finish saving paper check and cash batches with verified bank-deposit accounting exports, and replace sample demo profiles on public missionary directory and giving pages with live organization data.",
+    state: "active",
+  },
+  {
+    date: "Before hosted intake opens",
+    title: "Hosted Stripe verification, billing & private support inbox",
+    detail:
+      "Complete hosted organization Stripe verification, published flat-tier billing, guided parallel-close onboarding, and a private support inbox before opening cohort sign-ups.",
+    state: "upcoming",
+  },
+];
 
 interface StatusContent {
   readonly tone: "success" | "neutral" | "error";
@@ -204,131 +234,123 @@ export default async function EarlyAccessStatusPage({
       className="flex flex-1 items-center pt-32 pb-20 outline-none sm:pt-36"
     >
       <Container className="max-w-2xl">
-        <div className="border-rule-strong bg-card rounded-2xl border p-6 shadow-[var(--shadow-card)] sm:p-9">
-          <div
-            aria-hidden="true"
-            className="bg-signal mb-5 h-[3px] w-14 rounded-full"
-          />
-          {statusIcon}
-          {content.tone === "neutral" ? null : (
-            <p className="text-signal mt-5 font-mono text-xs font-medium tracking-[0.02em]">
-              {content.eyebrow}
-            </p>
-          )}
-          <h1
-            className={cn(
-              "font-heading text-foreground text-[clamp(2rem,4vw,2.9rem)] leading-[1.04] font-semibold tracking-[-0.03em] text-balance",
-              headingSpacing
+        <Frame variant="default" spacing="lg">
+          <FramePanel className="p-6 sm:p-9">
+            <div
+              aria-hidden="true"
+              className="bg-signal mb-5 h-[3px] w-14 rounded-full"
+            />
+            {statusIcon}
+            {content.tone === "neutral" ? null : (
+              <p className="text-signal mt-5 font-mono text-xs font-medium tracking-[0.02em]">
+                {content.eyebrow}
+              </p>
             )}
-          >
-            {content.title}
-          </h1>
-          <p
-            role={content.tone === "error" ? "alert" : "status"}
-            className="text-muted-foreground mt-4 text-base leading-7 sm:text-lg sm:leading-8"
-          >
-            {content.description}
-          </p>
-          {!isConfigured && content.tone === "neutral" ? (
-            <div className="border-rule mt-6 space-y-5 border-t pt-5">
-              <div>
-                <p className="text-signal font-mono text-xs font-medium">
-                  In public code today
-                </p>
-                <ul className="text-muted-foreground mt-3 space-y-2 text-sm leading-6">
-                  {BUILT_TODAY_ITEMS.map((item) => (
-                    <li key={item} className="flex items-start gap-2.5">
-                      <span
-                        aria-hidden="true"
-                        className="bg-signal mt-2 size-1.5 shrink-0 rounded-full"
-                      />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="border-rule border-t pt-5">
-                <p className="text-foreground font-mono text-xs font-medium">
-                  Before hosted intake opens
-                </p>
-                <ul className="text-muted-foreground mt-3 space-y-2 text-sm leading-6">
-                  {PRELAUNCH_MILESTONES.map((item) => (
-                    <li key={item} className="flex items-start gap-2.5">
-                      <span
-                        aria-hidden="true"
-                        className="border-draft mt-2 size-2 shrink-0 rounded-full border border-dashed"
-                      />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          ) : null}
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <Link
-              href={content.primaryHref}
+            <h1
               className={cn(
-                buttonVariants({ variant: "ink", size: "lg" }),
-                "px-6"
+                "font-heading text-foreground text-[clamp(2rem,4vw,2.9rem)] leading-[1.04] font-semibold tracking-[-0.03em] text-balance",
+                headingSpacing
               )}
             >
-              {content.primaryIcon === "back" ? (
-                <ArrowLeftIcon dataIcon="inline-start" />
-              ) : null}
-              {content.primaryLabel}
-            </Link>
-            <a
-              href={`${siteConfig.repoUrl}#readme`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={cn(
-                buttonVariants({ variant: "outline", size: "lg" }),
-                "px-6"
-              )}
+              {content.title}
+            </h1>
+            <p
+              role={content.tone === "error" ? "alert" : "status"}
+              className="text-muted-foreground mt-4 text-base leading-7 sm:text-lg sm:leading-8"
             >
-              Follow progress on GitHub
-              <span className="sr-only"> (opens in a new tab)</span>
-              <ArrowUpRightIcon dataIcon="inline-end" />
-            </a>
-          </div>
-          {content.tone === "success" ? null : (
-            <p className="text-muted-foreground mt-5 text-sm leading-6">
-              Want to reach the builders? Open a{" "}
-              <a
-                href={siteConfig.issuesUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-background link-resilient rounded-xs font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:text-signal"
-              >
-                public note on GitHub
-                <span className="sr-only"> (opens in a new tab)</span>
-              </a>{" "}
-              (no private donor data), subscribe to the{" "}
-              <a
-                href={`${siteConfig.commitsUrl}.atom`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-background link-resilient rounded-xs underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:text-signal"
-              >
-                development feed (Atom)
-                <span className="sr-only"> (opens in a new tab)</span>
-              </a>
-              {contactEmail ? (
-                <>
-                  , or email{" "}
-                  <a
-                    href={`mailto:${contactEmail}?subject=asym%20early%20access`}
-                    className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-background link-resilient rounded-xs underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:text-signal"
-                  >
-                    {contactEmail}
-                  </a>
-                </>
-              ) : null}
-              .
+              {content.description}
             </p>
-          )}
-        </div>
+            {!isConfigured && content.tone === "neutral" ? (
+              <div className="border-rule mt-6 border-t pt-6">
+                <p className="text-signal font-mono text-xs font-medium">
+                  Pre-launch readiness timeline
+                </p>
+                <Timeline
+                  aria-label="Pre-launch readiness milestones"
+                  className="mt-4"
+                >
+                  {READINESS_MILESTONES.map((milestone) => (
+                    <TimelineItem
+                      key={milestone.title}
+                      state={milestone.state}
+                    >
+                      <TimelineSeparator />
+                      <TimelineIndicator />
+                      <TimelineDate>{milestone.date}</TimelineDate>
+                      <TimelineTitle>{milestone.title}</TimelineTitle>
+                      <TimelineContent>{milestone.detail}</TimelineContent>
+                    </TimelineItem>
+                  ))}
+                </Timeline>
+              </div>
+            ) : null}
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <Link
+                href={content.primaryHref}
+                className={cn(
+                  buttonVariants({ variant: "ink", size: "lg" }),
+                  "px-6"
+                )}
+              >
+                {content.primaryIcon === "back" ? (
+                  <ArrowLeftIcon dataIcon="inline-start" />
+                ) : null}
+                {content.primaryLabel}
+              </Link>
+              <a
+                href={`${siteConfig.repoUrl}#readme`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(
+                  buttonVariants({ variant: "outline", size: "lg" }),
+                  "px-6"
+                )}
+              >
+                Follow progress on GitHub
+                <span className="sr-only"> (opens in a new tab)</span>
+                <ArrowUpRightIcon dataIcon="inline-end" />
+              </a>
+            </div>
+            {content.tone === "success" ? null : (
+              <p className="text-muted-foreground mt-5 text-sm leading-6">
+                Follow public milestones in{" "}
+                <a
+                  href={`${siteConfig.repoUrl}#readme`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-background link-resilient rounded-xs font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:text-signal"
+                >
+                  Core’s README
+                  <span className="sr-only"> (opens in a new tab)</span>
+                </a>{" "}
+                or subscribe to the{" "}
+                <a
+                  href={`${siteConfig.commitsUrl}.atom`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-background link-resilient rounded-xs underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:text-signal"
+                >
+                  development feed (Atom)
+                  <span className="sr-only"> (opens in a new tab)</span>
+                </a>
+                {contactEmail ? (
+                  <>
+                    , or email{" "}
+                    <a
+                      href={`mailto:${contactEmail}?subject=asym%20early%20access`}
+                      className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-background link-resilient rounded-xs underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:text-signal"
+                    >
+                      {contactEmail}
+                    </a>
+                  </>
+                ) : (
+                  ". A direct private inbox will be listed here before hosted pilots open; new GitHub issues are currently limited to collaborators"
+                )}
+                .
+              </p>
+            )}
+          </FramePanel>
+        </Frame>
       </Container>
     </main>
   );

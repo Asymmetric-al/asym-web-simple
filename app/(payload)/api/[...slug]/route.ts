@@ -8,7 +8,7 @@ import {
   REST_POST,
   REST_PUT,
 } from "@payloadcms/next/routes";
-import { NextResponse } from "next/server";
+import { connection, NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 const isPayloadConfigured = (): boolean =>
@@ -20,8 +20,10 @@ const unconfigured = (): NextResponse =>
 type RouteContext = { params: Promise<{ slug: string[] }> };
 type Handler = (request: NextRequest, context: RouteContext) => Promise<Response>;
 
-const guard = (handler: Handler): Handler => (request, context) =>
-  isPayloadConfigured() ? handler(request, context) : Promise.resolve(unconfigured());
+const guard = (handler: Handler): Handler => async (request, context) => {
+  await connection();
+  return isPayloadConfigured() ? handler(request, context) : unconfigured();
+};
 
 export const GET = guard(REST_GET(config) as Handler);
 export const POST = guard(REST_POST(config) as Handler);

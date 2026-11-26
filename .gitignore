@@ -37,6 +37,9 @@ next-env.d.ts
 # next-agents-md
 .next-docs/
 
+# generated cn merge tables (rebuilt by postinstall and withCn)
+lib/cn-tables.ts
+
 # local verification artifacts
 .tmp/
 output/playwright/
@@ -78,3 +81,6 @@ test-results/
 
 # Playwright storage state (Vercel bypass cookie)
 playwright/.auth/
+
+# Playwright CLI output (may contain credentials)
+.playwright-cli/

@@ -194,7 +194,7 @@ test.describe("responsive regression coverage", () => {
     await expect(mainNav).toBeVisible();
     await expect(
       banner.getByRole("link", {
-        name: /^(?:Request early access|See what’s built|Early access)/,
+        name: /^(?:Request early access|See the platform|Early access)/,
       })
     ).toBeVisible();
     await expectNoHorizontalOverflow(page, "home @ 1440x900");
@@ -206,14 +206,14 @@ test.describe("responsive regression coverage", () => {
     await expect(brandLink).toBeVisible();
     await expect(mainNav).toBeHidden();
     await expect(
-      banner.getByRole("link", { name: /^(?:Early access|See what’s built)/ })
+      banner.getByRole("link", { name: /^(?:Early access|See the platform)/ })
     ).toBeVisible();
 
     // Verify Hero primary CTA and "View the code" share one row at 390px
     const heroPrimaryBox = await page
       .getByRole("main")
       .getByRole("link", {
-        name: /^(?:Request early access|See what’s built)$/u,
+        name: /^(?:Request early access|See the platform)$/u,
       })
       .first()
       .boundingBox();
@@ -233,7 +233,7 @@ test.describe("responsive regression coverage", () => {
     await allFilter.focus();
     await page.keyboard.press("ArrowRight");
     await expect(
-      page.getByRole("radio", { name: /^In code/u })
+      page.getByRole("radio", { name: /^In Core/u })
     ).toHaveAttribute("aria-checked", "true");
     await expectNoVisibleDialogs(page, "home @ 390x844");
     await expectNoHorizontalOverflow(page, "home @ 390x844");

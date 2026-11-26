@@ -26,53 +26,74 @@ interface InventoryRow {
 
 const INVENTORY_ROWS: readonly InventoryRow[] = [
   {
-    module: "Authenticated donor portal, receipts & settled annual statements",
+    module: "Donor portal, receipts & year-end tax statements",
+    note: "Supporters view their giving history, manage recurring gifts, and download receipts and completed annual statements",
     path: "donor-portal",
     href: `${siteConfig.repoUrl}/tree/develop/packages/api/src/donor-portal`,
     status: "in_code",
-    statusLabel: "In code",
+    statusLabel: "In Core",
   },
   {
-    module: "Missionary supporter roster & private-by-default redaction",
+    module: "Missionary workspace micro-CRMs & automatic donor privacy",
+    note: "Personal partner care for each missionary, with Anonymous partner defaults and hidden per-row totals enforced automatically",
     path: "missionary-portal",
     href: `${siteConfig.repoUrl}/blob/develop/packages/api/src/missionary-portal/donors.ts`,
     status: "in_code",
-    statusLabel: "In code",
+    statusLabel: "In Core",
   },
   {
-    module: "Donor & gift CRM, website editor & supported batch previews",
+    module: "Mission Control CRM, Web Studio & batch previews",
+    note: "Office workspace for households, partner churches, funds, missionary web pages, and pre-posting batch checks",
     path: "apps/admin",
     href: `${siteConfig.repoUrl}/tree/develop/apps/admin`,
     status: "in_code",
-    statusLabel: "In code",
+    statusLabel: "In Core",
   },
   {
-    module: "Public website & giving pages",
-    note: "Online checkout is built; public worker directory and checkout recipient lookup still show sample profiles",
+    module: "Direct organization Stripe accounts & optional donor fee-cover",
+    note: "Each agency connects its own Stripe account directly, with optional fee-cover at checkout and 0% gift markup",
+    path: "tenant-client.ts",
+    href: `${siteConfig.repoUrl}/blob/develop/packages/api/src/stripe/tenant-client.ts`,
+    status: "in_code",
+    statusLabel: "In Core",
+  },
+  {
+    module: "Public ministry website & multi-fund giving checkout",
+    note: "On-site checkout and public giving pages wired directly to live missionary and project directories",
     path: "apps/donor",
     href: `${siteConfig.repoUrl}/tree/develop/apps/donor`,
     status: "partial",
-    statusLabel: "Partial",
+    statusLabel: "Building",
   },
   {
-    module: "Offline gift entry & architecture designs",
-    note: "Offline entry workflow is in code with database saving switched off until migration; design notes (ADRs 0004, 0010, and 0012) specify thank-you, offline-entry, and recurring-gift rules",
-    path: "docs/adr",
-    href: `${siteConfig.repoUrl}/tree/develop/docs/adr`,
+    module: "Paper check, cash & split church remittance batches",
+    note: "Recording offline gifts and splitting multi-missionary church checks, backed by ADRs 0004, 0010, and 0012",
+    path: "offline-dependencies.ts",
+    href: `${siteConfig.repoUrl}/blob/develop/packages/api/src/admin/contributions/offline-dependencies.ts`,
     status: "partial",
-    statusLabel: "Partial",
+    statusLabel: "Building",
   },
   {
-    module: "AI campaign drafting & donor-care assistance",
-    path: "in development",
-    status: "planned",
-    statusLabel: "Planned",
+    module: "Agency workflows (mobilization, member care, events & templates)",
+    note: "Candidate pipelines, private member-care notes, ministry events, and shared email, letter, and PDF templates",
+    path: "openspec/",
+    href: `${siteConfig.repoUrl}/tree/develop/openspec`,
+    status: "partial",
+    statusLabel: "Building",
   },
   {
-    module: "Hosted team subscription, onboarding & optional managed donor care",
-    path: "in development",
+    module: "AI care-work drafting & donor-support assistance",
+    note: "Drafting gift thank-yous, partner updates, and routine donor replies under the same built-in privacy rules",
+    path: "roadmap",
     status: "planned",
-    statusLabel: "Planned",
+    statusLabel: "Next",
+  },
+  {
+    module: "Hosted plans, parallel-close onboarding & accounting exports",
+    note: "Published flat hosting tiers, Finance-verified historical migration closes, deposit exports, and optional managed donor care",
+    path: "roadmap",
+    status: "planned",
+    statusLabel: "Next",
   },
 ];
 
@@ -80,10 +101,10 @@ const FILTERS: readonly {
   readonly value: FilterKey;
   readonly label: string;
 }[] = [
-  { value: "all", label: "All (7)" },
-  { value: "in_code", label: "In code (3)" },
-  { value: "partial", label: "Partial (2)" },
-  { value: "planned", label: "Planned (2)" },
+  { value: "all", label: "All (9)" },
+  { value: "in_code", label: "In Core (4)" },
+  { value: "partial", label: "Building (3)" },
+  { value: "planned", label: "Next (2)" },
 ];
 
 const isFilterKey = (value: string | null): value is FilterKey =>
@@ -116,18 +137,23 @@ export const StatusLedger = (): ReactNode => {
   };
 
   return (
-    <div className="border-rule-strong bg-card mt-8 overflow-hidden rounded-2xl border shadow-[var(--shadow-card)]">
+    <div className="border-rule-strong bg-card mt-5 overflow-hidden rounded-2xl border shadow-[var(--shadow-card)]">
       <div className="border-rule flex flex-col gap-3 border-b px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-        <p className="text-foreground text-sm font-semibold">
-          Where things stand
-        </p>
+        <div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
+          <p className="text-foreground font-sans text-sm font-medium">
+            Public architecture &amp; build roadmap
+          </p>
+          <span className="text-muted-foreground font-mono text-xs">
+            Asymmetric-al/core
+          </span>
+        </div>
 
         {isHydrated ? (
           <SegmentedControl
             aria-label="Filter build status"
             value={filter}
             onValueChange={handleFilterChange}
-            className="border-rule bg-record has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-card relative isolate inline-flex w-fit max-w-full flex-wrap items-center rounded-full border p-1 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2 forced-colors:border-[ButtonBorder]"
+            className="border-rule bg-record has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-card relative isolate inline-flex w-fit max-w-full flex-nowrap items-center overflow-x-auto rounded-full border p-1 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2 forced-colors:border-[ButtonBorder]"
           >
             <SegmentedControlIndicator className="segmented-indicator" />
             {FILTERS.map((option) => (
@@ -135,8 +161,8 @@ export const StatusLedger = (): ReactNode => {
                 key={option.value}
                 value={option.value}
                 className={cn(
-                  "text-muted-foreground relative z-10 inline-flex min-h-11 cursor-pointer items-center rounded-full border border-transparent px-3 text-xs font-medium whitespace-nowrap transition-transform duration-150 select-none focus-visible:outline-2 focus-visible:outline-transparent active:scale-[0.97] sm:min-h-8 sm:px-2.5 [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground",
-                  "data-checked:text-foreground data-checked:font-semibold",
+                  "text-muted-foreground relative z-10 inline-flex min-h-11 shrink-0 cursor-pointer items-center rounded-full border border-transparent px-2 text-xs font-medium whitespace-nowrap transition-transform duration-150 ease-out select-none focus-visible:outline-2 focus-visible:outline-transparent active:scale-[0.97] sm:min-h-8 sm:px-3 [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground",
+                  "data-checked:text-foreground",
                   "forced-colors:data-checked:border-[Highlight] forced-colors:data-checked:bg-[Highlight] forced-colors:data-checked:text-[HighlightText] forced-colors:data-checked:forced-color-adjust-none"
                 )}
               >
@@ -177,7 +203,7 @@ export const StatusLedger = (): ReactNode => {
             <div className="flex shrink-0 items-center gap-3">
               <span
                 className={cn(
-                  "inline-flex items-center rounded-md border px-2 py-0.5 font-mono text-xs font-medium whitespace-nowrap forced-colors:border-[CanvasText]",
+                  "inline-flex items-center rounded-full border px-2.5 py-0.5 font-mono text-xs font-medium whitespace-nowrap forced-colors:border-[CanvasText]",
                   getStatusBadgeClass(row.status)
                 )}
               >

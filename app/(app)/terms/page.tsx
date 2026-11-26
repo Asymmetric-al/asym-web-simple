@@ -4,6 +4,11 @@ import { getVerifiedContactEmail } from "@/lib/early-access-config";
 import { createMetadata } from "@/lib/metadata";
 import type { Metadata } from "next";
 
+// eslint-disable-next-line sonarjs/variable-name -- Next.js route segment config export name.
+export const unstable_instant = {
+  prefetch: "static",
+};
+
 export const metadata: Metadata = createMetadata({
   title: "Terms of service",
   description:
@@ -14,12 +19,24 @@ export const metadata: Metadata = createMetadata({
 const contactLinkClassName =
   "text-foreground focus-visible:ring-ring focus-visible:ring-offset-background link-resilient rounded-[0.375rem] font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:text-signal";
 
+const TERMS_TOC = [
+  { id: "sec-01", number: "01", label: "Acceptance" },
+  { id: "sec-02", number: "02", label: "Prelaunch product" },
+  { id: "sec-03", number: "03", label: "Accounts and early access" },
+  { id: "sec-04", number: "04", label: "Acceptable use" },
+  { id: "sec-05", number: "05", label: "Managed subscriptions" },
+  { id: "sec-06", number: "06", label: "Open-source ownership" },
+  { id: "sec-07", number: "07", label: "No warranties" },
+  { id: "sec-08", number: "08", label: "Changes" },
+] as const;
+
 export default function TermsPage() {
   const contactEmail = getVerifiedContactEmail();
 
   return (
     <DocumentPage
       eyebrow="Updated November 20, 2026"
+      toc={TERMS_TOC}
       title={
         <h1 className="font-heading text-foreground mt-5 text-[clamp(2.8rem,5.5vw,4.6rem)] leading-[0.98] font-medium tracking-[-0.03em] text-balance">
           Terms of service
@@ -58,7 +75,7 @@ export default function TermsPage() {
         )
       }
     >
-      <DocumentSection number="01" title="Acceptance">
+      <DocumentSection id="sec-01" number="01" title="Acceptance">
         <p>
           By using asym.app or any early access to asym provided by
           Asymmetric.al, you agree to these terms. If you do not agree, do not
@@ -66,7 +83,7 @@ export default function TermsPage() {
         </p>
       </DocumentSection>
 
-      <DocumentSection number="02" title="Prelaunch product">
+      <DocumentSection id="sec-02" number="02" title="Prelaunch product">
         <p>
           asym is open source and currently in prelaunch development. Features,
           workflows, and hosted options may change, break, or be replaced as we
@@ -74,7 +91,7 @@ export default function TermsPage() {
         </p>
       </DocumentSection>
 
-      <DocumentSection number="03" title="Accounts and early access">
+      <DocumentSection id="sec-03" number="03" title="Accounts and early access">
         <p>
           If Asymmetric.al invites your organization into early access, keep
           account credentials secure and use the product only for the
@@ -82,7 +99,7 @@ export default function TermsPage() {
         </p>
       </DocumentSection>
 
-      <DocumentSection number="04" title="Acceptable use">
+      <DocumentSection id="sec-04" number="04" title="Acceptable use">
         <p>
           Do not use the website or product to break the law, harm others, abuse
           systems, interfere with service reliability, or attempt to access data
@@ -90,7 +107,11 @@ export default function TermsPage() {
         </p>
       </DocumentSection>
 
-      <DocumentSection number="05" title="Managed subscriptions and services">
+      <DocumentSection
+        id="sec-05"
+        number="05"
+        title="Managed subscriptions and services"
+      >
         <p>
           Asymmetric.al is a for-profit software company. Any future paid
           managed software subscription or managed donor-care service will be
@@ -99,7 +120,11 @@ export default function TermsPage() {
         </p>
       </DocumentSection>
 
-      <DocumentSection number="06" title="Open-source code and ownership">
+      <DocumentSection
+        id="sec-06"
+        number="06"
+        title="Open-source code and ownership"
+      >
         <p>
           The public source code in Asymmetric-al/core is licensed under the GNU
           AGPL-3.0-only license, which governs your use, modification, and
@@ -112,7 +137,7 @@ export default function TermsPage() {
         </p>
       </DocumentSection>
 
-      <DocumentSection number="07" title="No warranties">
+      <DocumentSection id="sec-07" number="07" title="No warranties">
         <p>
           The website and any early access to asym are provided as is. We do not
           promise that every part will be uninterrupted, error-free, or fit for
@@ -120,7 +145,7 @@ export default function TermsPage() {
         </p>
       </DocumentSection>
 
-      <DocumentSection number="08" title="Changes">
+      <DocumentSection id="sec-08" number="08" title="Changes">
         <p>
           We may update these terms as the website, product, and company
           develop. The latest version will live on this page with an updated

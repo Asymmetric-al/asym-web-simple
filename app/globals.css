@@ -16,60 +16,59 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Warm Modern Daylight (Light) — clean, human, contemporary surfaces & botanical accents */
+  /* Warm Modern Daylight (Light) — soft Shadcn Maia surfaces, muted eucalyptus sage & dusty clay terracotta */
   --background: #faf9f6;
   --foreground: #14171a;
   --card: #fff;
   --card-foreground: #14171a;
   --popover: #fff;
   --popover-foreground: #14171a;
-  --primary: #bf3e24;
+  --primary: #ae4e35;
   --primary-foreground: #fff;
   --secondary: #f1efe9;
   --secondary-foreground: #14171a;
   --muted: #f1efe9;
   --muted-foreground: #525860;
-  --accent: #e8f2ee;
-  --accent-foreground: #104d3d;
+  --accent: #eaf2ed;
+  --accent-foreground: #1c4a38;
   --destructive: #a12645;
   --destructive-foreground: #fff;
   --destructive-border: rgb(161 38 69 / 68%);
   --border: rgb(20 23 26 / 10%);
   --input: rgb(20 23 26 / 56%);
-  --ring: #156651;
+  --ring: #265f48;
   --rule: rgb(20 23 26 / 10%);
   --rule-strong: rgb(20 23 26 / 18%);
   --rule-interactive: rgb(20 23 26 / 50%);
   --ink: #14171a;
   --record: #f1efe9;
-  --signal: #156651;
-  --signal-soft: #e8f2ee;
-  --signal-border: rgb(21 102 81 / 74%);
-  --human: #bf3e24;
-  --human-soft: #fbedea;
-  --human-border: rgb(191 62 36 / 74%);
+  --signal: #265f48;
+  --signal-soft: #eaf2ed;
+  --signal-border: rgb(38 95 72 / 74%);
+  --human: #ae4e35;
+  --human-soft: #faeee9;
+  --human-border: rgb(174 78 53 / 74%);
   --draft: #525860;
   --draft-soft: #efeeea;
   --draft-border: rgb(82 88 96 / 74%);
-  --night: #152421;
+  --night: #1a2320;
   --night-foreground: #f7f6f2;
-  --night-muted: #b7c4bf;
+  --night-muted: #bec8c3;
   --night-rule: rgb(247 246 242 / 14%);
-  --night-accent: #72cfb3;
+  --night-accent: #8fc9a9;
   --sculpt-canvas: #f3f1eb;
-  --sculpt-sage: #d5e8e0;
-  --sculpt-sage-deep: #156651;
-  --sculpt-clay: #f2dbd3;
-  --sculpt-clay-deep: #c9583e;
-  --sculpt-sand: #e7e2d7;
-  --vision-art-bg: #192b27;
-  --vision-art-glow-1: #3c665b;
-  --vision-art-glow-2: #223b35;
-  --vision-art-plane-1: #213933;
-  --vision-art-plane-2: #2b4b43;
-  --vision-art-plane-3: #396358;
-  --vision-art-arc: #f08265;
-  --selection-bg: rgb(21 102 81 / 16%);
+  --sculpt-sage: #d7e5dc;
+  --sculpt-sage-deep: #265f48;
+  --sculpt-clay: #eedcd4;
+  --sculpt-clay-deep: #b8644c;
+  --sculpt-sand: #e8e3d9;
+  --vision-art-bg: #1e2925;
+  --vision-art-plane-1: #24332d;
+  --vision-art-plane-2: #2d4038;
+  --vision-art-plane-3: #395247;
+  --vision-art-arc: #d3876b;
+  --selection-bg: rgb(38 95 72 / 16%);
+  --scrim: rgb(20 23 26 / 34%);
   --frame: #fff;
   --surface-1: #fff;
   --surface-2: #f4f2ec;
@@ -81,68 +80,70 @@
   --page-gradient:
     radial-gradient(
       ellipse 64% 48% at 80% 0%,
-      rgb(213 232 224 / 45%),
+      rgb(215 229 220 / 45%),
       transparent 72%
     ),
     radial-gradient(
       ellipse 50% 42% at 16% 0%,
-      rgb(242 219 211 / 32%),
+      rgb(238 220 212 / 32%),
       transparent 70%
     );
-  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-out-expo: var(--ease-out);
 }
 
 .dark {
-  /* Warm Charcoal Night (Dark) */
-  --background: #0f1214;
+  /* Warm Charcoal Night (Dark) — velvety charcoal, soft eucalyptus sage & warm dusty terracotta */
+  --background: #101214;
   --foreground: #f1f0ec;
-  --card: #161b1e;
+  --card: #171a1d;
   --card-foreground: #f1f0ec;
-  --popover: #1a2024;
+  --popover: #1c2023;
   --popover-foreground: #f1f0ec;
-  --primary: #f08265;
-  --primary-foreground: #0f1214;
-  --secondary: #1c2226;
+  --primary: #d3876b;
+  --primary-foreground: #101214;
+  --secondary: #1d2124;
   --secondary-foreground: #f1f0ec;
-  --muted: #1c2226;
-  --muted-foreground: #a1a8b0;
-  --accent: #132b24;
-  --accent-foreground: #c7efe1;
+  --muted: #1d2124;
+  --muted-foreground: #a4abb1;
+  --accent: #192922;
+  --accent-foreground: #d1ece0;
   --destructive: #ff9cb3;
-  --destructive-foreground: #0f1214;
+  --destructive-foreground: #101214;
   --destructive-border: rgb(255 156 179 / 64%);
   --border: rgb(241 240 236 / 10%);
   --input: rgb(241 240 236 / 56%);
-  --ring: #66cca9;
+  --ring: #8fc9a9;
   --rule: rgb(241 240 236 / 10%);
   --rule-strong: rgb(241 240 236 / 20%);
   --rule-interactive: rgb(241 240 236 / 50%);
   --ink: #f1f0ec;
-  --record: #1c2226;
-  --signal: #66cca9;
-  --signal-soft: #132b24;
-  --signal-border: rgb(102 204 169 / 74%);
-  --human: #f08265;
-  --human-soft: #2d1914;
-  --human-border: rgb(240 130 101 / 74%);
-  --draft: #a1a8b0;
-  --draft-soft: #1a2024;
-  --draft-border: rgb(161 168 176 / 74%);
-  --night: #14221f;
+  --record: #1d2124;
+  --signal: #8fc9a9;
+  --signal-soft: #192922;
+  --signal-border: rgb(143 201 169 / 72%);
+  --human: #d3876b;
+  --human-soft: #28211e;
+  --human-border: rgb(211 135 107 / 74%);
+  --draft: #a4abb1;
+  --draft-soft: #1c2023;
+  --draft-border: rgb(164 171 177 / 74%);
+  --night: #1a2320;
   --night-foreground: #f7f6f2;
-  --night-muted: #bcc9c4;
-  --night-rule: rgb(114 207 179 / 18%);
-  --night-accent: #72cfb3;
-  --sculpt-canvas: #151a1d;
-  --sculpt-sage: #1d362e;
-  --sculpt-sage-deep: #4db392;
-  --sculpt-clay: #33221d;
-  --sculpt-clay-deep: #e28067;
-  --sculpt-sand: #22292d;
-  --selection-bg: rgb(102 204 169 / 24%);
-  --frame: #0f1214;
-  --surface-1: #161b1e;
-  --surface-2: #1c2226;
+  --night-muted: #bec8c3;
+  --night-rule: rgb(143 201 169 / 18%);
+  --night-accent: #8fc9a9;
+  --sculpt-canvas: #171a1d;
+  --sculpt-sage: #303931;
+  --sculpt-sage-deep: #7bb093;
+  --sculpt-clay: #28211e;
+  --sculpt-clay-deep: #c7846c;
+  --sculpt-sand: #23272a;
+  --selection-bg: rgb(143 201 169 / 24%);
+  --scrim: rgb(0 0 0 / 62%);
+  --frame: #101214;
+  --surface-1: #171a1d;
+  --surface-2: #1d2124;
   --shadow-card:
     0 1px 0 0 rgb(241 240 236 / 5%) inset, 0 1px 2px rgb(0 0 0 / 30%),
     0 20px 44px -28px rgb(0 0 0 / 60%);
@@ -152,12 +153,12 @@
   --page-gradient:
     radial-gradient(
       ellipse 64% 48% at 80% 0%,
-      rgb(29 54 46 / 44%),
+      rgb(48 57 49 / 42%),
       transparent 72%
     ),
     radial-gradient(
       ellipse 50% 42% at 16% 0%,
-      rgb(51 34 29 / 28%),
+      rgb(40 33 30 / 28%),
       transparent 70%
     );
 }
@@ -203,6 +204,7 @@
   --color-night-muted: var(--night-muted);
   --color-night-rule: var(--night-rule);
   --color-night-accent: var(--night-accent);
+  --color-vision-art-arc: var(--vision-art-arc);
   --color-surface-1: var(--surface-1);
   --color-surface-2: var(--surface-2);
   --radius-sm: calc(var(--radius) - 4px);
@@ -210,6 +212,7 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   --shadow-card: var(--shadow-card);
+  --ease-out: var(--ease-out);
   --font-heading:
     var(--font-plus-jakarta), var(--font-instrument-sans), system-ui,
     sans-serif;
@@ -301,7 +304,7 @@
 
 .skip-to-content {
   position: absolute;
-  z-index: 9999;
+  z-index: 60;
   top: 0.85rem;
   left: -9999px;
   padding: 0.7rem 1rem;
@@ -361,7 +364,7 @@
 }
 
 .dark .segmented-indicator {
-  border-color: rgb(102 204 169 / 48%);
+  border-color: rgb(143 201 169 / 48%);
   background: var(--secondary);
 }
 
@@ -372,11 +375,17 @@
 .vision-band {
   position: relative;
   background-color: var(--night);
-  background-image: radial-gradient(
-    ellipse 58% 54% at 86% 20%,
-    rgb(114 207 179 / 12%),
-    transparent 68%
-  );
+  background-image:
+    radial-gradient(
+      ellipse 56% 52% at 84% 22%,
+      rgb(143 201 169 / 11%),
+      transparent 68%
+    ),
+    radial-gradient(
+      ellipse 44% 44% at 14% 88%,
+      rgb(211 135 107 / 8%),
+      transparent 66%
+    );
   isolation: isolate;
 }
 
@@ -409,10 +418,57 @@
 }
 
 .surface-enter {
-  animation: surface-enter 160ms var(--ease-out-expo) both;
+  animation: surface-enter 140ms var(--ease-out) both;
+}
+
+.quick-jump-backdrop {
+  background-color: var(--scrim);
+}
+
+.nav-scrollspy-link::after {
+  position: absolute;
+  right: 0.75rem;
+  bottom: 0.3rem;
+  left: 0.75rem;
+  height: 2px;
+  border-radius: 999px;
+  background-color: var(--signal);
+  content: "";
+  opacity: 0;
+  transform: scaleX(0.5);
+  transition:
+    opacity 160ms var(--ease-out-expo),
+    transform 180ms var(--ease-out-expo);
+}
+
+.nav-scrollspy-link[data-active="true"]::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.doc-toc-link[data-active="true"] {
+  border-color: var(--signal);
+  color: var(--foreground);
+}
+
+.evaluate-jump-link[data-active="true"] {
+  border-color: var(--signal-border);
+  background-color: var(--signal-soft);
+  color: var(--signal);
 }
 
 @media (forced-colors: active) {
+  .nav-scrollspy-link[data-active="true"]::after {
+    background-color: Highlight;
+  }
+
+  .doc-toc-link[data-active="true"],
+  .evaluate-jump-link[data-active="true"] {
+    border-color: Highlight;
+    color: HighlightText;
+    forced-color-adjust: none;
+  }
+
   .surface-panel {
     border-color: CanvasText;
     box-shadow: none;
@@ -426,6 +482,236 @@
 
   [role="radio"][aria-checked="true"] :is(*) {
     color: HighlightText;
+  }
+
+  .rb-spotlight-light,
+  .rb-spotlight-edge,
+  .rb-pipeline-beam {
+    display: none;
+  }
+}
+
+/* React Bits: SpotlightCard (calm matte Maia sheen on fine pointer & focus-visible) */
+.rb-spotlight-card {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.rb-spotlight-light {
+  position: absolute;
+  z-index: 0;
+  border-radius: inherit;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.rb-spotlight-edge {
+  position: absolute;
+  z-index: 1;
+  padding: 1px;
+  border-radius: inherit;
+  inset: 0;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* React Bits Pro: Features 22 unified spec viewport mask & focus ring */
+.rb-spec-viewport {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 18px,
+    #000 calc(100% - 40px),
+    transparent
+  );
+}
+
+.rb-spec-region-ring {
+  position: absolute;
+  border-radius: inherit;
+  box-shadow:
+    0 0 0 1px var(--signal-border),
+    0 0 0 4px var(--signal-soft);
+  inset: 0;
+  pointer-events: none;
+}
+
+/* React Bits Pro: Pipeline workflow diagram (Deep Botanical Pine surface) */
+.rb-pipeline-root {
+  position: relative;
+  width: 100%;
+  isolation: isolate;
+  user-select: none;
+}
+
+.rb-pipeline-svg {
+  position: absolute;
+  left: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.rb-pipeline-wire-base {
+  opacity: 0.22;
+}
+
+.rb-pipeline-wire-group {
+  transition: opacity 220ms var(--ease-out-expo);
+}
+
+.rb-pipeline-wire-group[data-faded="true"] {
+  opacity: 0.25;
+}
+
+.rb-pipeline-wire-head {
+  opacity: 0;
+}
+
+.rb-pipeline-node {
+  position: absolute;
+  display: flex;
+  box-sizing: border-box;
+  align-items: center;
+  padding: 0 0.85rem 0 0.7rem;
+  border: 1px solid var(--night-rule);
+  border-radius: 0.875rem;
+  background: var(--vision-art-plane-1);
+  color: var(--night-foreground);
+  gap: 0.65rem;
+  transition:
+    border-color 280ms var(--ease-out-expo),
+    opacity 220ms var(--ease-out-expo);
+}
+
+.rb-pipeline-node[data-compact="true"] {
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 0.5rem;
+  gap: 0.4rem;
+  text-align: center;
+}
+
+.rb-pipeline-node[data-state="running"],
+.rb-pipeline-node[data-state="done"] {
+  border-color: rgb(143 201 169 / 48%);
+}
+
+.rb-pipeline-node[data-tone="human"][data-state="running"],
+.rb-pipeline-node[data-tone="human"][data-state="done"] {
+  border-color: rgb(211 135 107 / 62%);
+}
+
+.rb-pipeline-node[data-faded="true"] {
+  opacity: 0.42;
+}
+
+.rb-pipeline-icon {
+  position: relative;
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  flex: none;
+  border-radius: 0.5rem;
+  background: var(--vision-art-plane-2);
+  color: var(--night-foreground);
+  place-items: center;
+  transition:
+    background-color 260ms var(--ease-out-expo),
+    color 260ms var(--ease-out-expo);
+}
+
+.rb-pipeline-node[data-state="running"] .rb-pipeline-icon {
+  background: rgb(143 201 169 / 18%);
+  color: var(--night-accent);
+}
+
+.rb-pipeline-node[data-tone="human"][data-state="running"] .rb-pipeline-icon {
+  background: rgb(211 135 107 / 20%);
+  color: var(--vision-art-arc);
+}
+
+.rb-pipeline-badge {
+  position: absolute;
+  right: -0.3rem;
+  bottom: -0.3rem;
+  display: grid;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 999px;
+  background: var(--vision-art-plane-1);
+  opacity: 0;
+  place-items: center;
+  transform: scale(0.55);
+  transition:
+    opacity 200ms var(--ease-out-expo),
+    transform 300ms var(--ease-out-expo);
+}
+
+.rb-pipeline-node[data-state="done"] .rb-pipeline-badge {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.rb-pipeline-beam {
+  position: absolute;
+  overflow: hidden;
+  border-radius: 0.925rem;
+  inset: -1px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 280ms var(--ease-out-expo);
+}
+
+.rb-pipeline-node[data-state="running"] .rb-pipeline-beam {
+  opacity: 1;
+}
+
+.rb-pipeline-beam-spin {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 260px;
+  height: 260px;
+  margin-top: -130px;
+  margin-left: -130px;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 200deg,
+    rgb(143 201 169 / 34%) 275deg,
+    var(--night-accent) 336deg,
+    transparent 360deg
+  );
+}
+
+.rb-pipeline-node[data-tone="human"] .rb-pipeline-beam-spin {
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 200deg,
+    rgb(211 135 107 / 36%) 275deg,
+    var(--vision-art-arc) 336deg,
+    transparent 360deg
+  );
+}
+
+.rb-pipeline-beam-mask {
+  position: absolute;
+  border-radius: 0.8125rem;
+  background: var(--vision-art-plane-1);
+  inset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rb-spotlight-light,
+  .rb-spotlight-edge,
+  .rb-pipeline-beam {
+    display: none;
   }
 }
 

@@ -9,6 +9,10 @@ export const routeFixtures: RouteFixture[] = [
     slug: "home",
   },
   {
+    path: "/evaluate",
+    slug: "evaluate",
+  },
+  {
     path: "/privacy",
     slug: "privacy",
   },

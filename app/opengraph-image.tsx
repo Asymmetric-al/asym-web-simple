@@ -1,11 +1,15 @@
-/* eslint-disable @next/next/no-img-element -- ImageResponse renders plain img elements. */
-import { readFile } from "node:fs/promises";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import { ImageResponse } from "next/og";
+import {
+  MARK_DATUM_PATH,
+  MARK_FRAME_RECT,
+  MARK_SWEEP_PATH,
+  MARK_VIEWBOX,
+} from "@/components/site/brand/mark-geometry";
 import { isEarlyAccessConfigured } from "@/lib/early-access-config";
 import { siteMetadata } from "@/lib/metadata";
 
-export const runtime = "nodejs";
 export const alt = siteMetadata.socialTitle;
 export const size = {
   width: 1200,
@@ -13,41 +17,39 @@ export const size = {
 };
 export const contentType = "image/png";
 
-const BG = "#FAF9F6";
-const SURFACE = "#FFFFFF";
-const INK = "#14171A";
-const MUTED = "#525860";
-const SIGNAL = "#156651";
-const HUMAN = "#BF3E24";
-const RULE = "rgba(20,23,26,0.12)";
-const SPACE_BETWEEN = "space-between";
-const FONT_SANS = '"Instrument Sans"';
-const FONT_MONO = '"IBM Plex Mono"';
+const FONTS_DIR = path.join(process.cwd(), "lib", "fonts");
+const jakartaBold = readFileSync(path.join(FONTS_DIR, "PlusJakartaSans-Bold.ttf"));
+const instrumentMedium = readFileSync(
+  path.join(FONTS_DIR, "InstrumentSans-Medium.ttf")
+);
+const instrumentSemiBold = readFileSync(
+  path.join(FONTS_DIR, "InstrumentSans-SemiBold.ttf")
+);
+const geistMonoMedium = readFileSync(
+  path.join(FONTS_DIR, "GeistMono-Medium.ttf")
+);
 
-export default async function openGraphImage() {
-  const [logoData, instrumentMedium, instrumentSemiBold, plexMonoMedium] =
-    await Promise.all([
-      readFile(
-        path.join(process.cwd(), "public", "brand", "asym-mark-dark.png"),
-        "base64"
-      ),
-      readFile(
-        path.join(process.cwd(), "lib", "fonts", "InstrumentSans-Medium.ttf")
-      ),
-      readFile(
-        path.join(process.cwd(), "lib", "fonts", "InstrumentSans-SemiBold.ttf")
-      ),
-      readFile(
-        path.join(process.cwd(), "lib", "fonts", "IBMPlexMono-Medium.ttf")
-      ),
-    ]);
-  const logoSrc = `data:image/png;base64,${logoData}`;
+const BG = "#101214";
+const SURFACE = "#171A1D";
+const INK = "#F1F0EC";
+const MUTED = "#A4ABB1";
+const SIGNAL = "#8FC9A9";
+const HUMAN_LIGHT = "#D3876B";
+const RULE = "rgba(241,240,236,0.12)";
+const RULE_STRONG = "rgba(241,240,236,0.20)";
+const SPACE_BETWEEN = "space-between";
+const FONT_HEADING = '"Plus Jakarta Sans"';
+const FONT_SANS = '"Instrument Sans"';
+const FONT_MONO = '"Geist Mono"';
+
+export default function openGraphImage() {
   const isConfigured = isEarlyAccessConfigured();
 
   return new ImageResponse(
     <div
       style={{
         display: "flex",
+        position: "relative",
         width: "100%",
         height: "100%",
         background: BG,
@@ -59,61 +61,99 @@ export default async function openGraphImage() {
         gap: "44px",
       }}
     >
-      {/* Left column: warm modern nonprofit proposition */}
+      {/* Left column: Warm Charcoal Night Maia proposition */}
       <div
         style={{
           display: "flex",
           flexDirection: "column",
           justifyContent: SPACE_BETWEEN,
-          width: "540px",
+          width: "548px",
           paddingTop: "4px",
           paddingBottom: "4px",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
-          <img
-            src={logoSrc}
-            alt=""
-            width={40}
-            height={40}
-            style={{ display: "block", objectFit: "contain" }}
-          />
-          <span
+        <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            <svg
+              width="34"
+              height="37"
+              viewBox={MARK_VIEWBOX}
+              fill="none"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                x={MARK_FRAME_RECT.x}
+                y={MARK_FRAME_RECT.y}
+                width={MARK_FRAME_RECT.width}
+                height={MARK_FRAME_RECT.height}
+                rx={MARK_FRAME_RECT.rx}
+                stroke={INK}
+                strokeWidth="44"
+              />
+              <path
+                d={MARK_DATUM_PATH}
+                stroke={INK}
+                strokeWidth="44"
+                strokeLinecap="round"
+              />
+              <path
+                d={MARK_SWEEP_PATH}
+                stroke={INK}
+                strokeWidth="44"
+                strokeLinecap="round"
+              />
+            </svg>
+            <span
+              style={{
+                fontFamily: FONT_HEADING,
+                fontSize: 28,
+                fontWeight: 700,
+                letterSpacing: "-0.03em",
+              }}
+            >
+              asym
+            </span>
+          </div>
+
+          <div
             style={{
-              fontSize: 30,
-              fontWeight: 600,
-              letterSpacing: "-0.03em",
+              display: "flex",
+              alignItems: "center",
+              fontFamily: FONT_SANS,
+              fontSize: 18,
+              fontWeight: 500,
+              color: SIGNAL,
             }}
           >
-            asym
-          </span>
-          <span style={{ color: RULE, fontSize: 22 }}>|</span>
-          <span style={{ fontSize: 16, fontWeight: 600, color: SIGNAL }}>
-            Open source &middot; AGPL-3.0-only
-          </span>
+            Open-source software for Christian missions organizations
+          </div>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div
             style={{
-              fontSize: 70,
-              lineHeight: 0.98,
-              fontWeight: 600,
-              letterSpacing: "-0.04em",
-            }}
-          >
-            Less overhead.
-          </div>
-          <div
-            style={{
-              fontSize: 70,
+              fontFamily: FONT_HEADING,
+              fontSize: 56,
               lineHeight: 1.04,
-              fontWeight: 600,
-              letterSpacing: "-0.04em",
+              fontWeight: 700,
+              letterSpacing: "-0.035em",
               color: INK,
             }}
           >
-            Outsized impact.
+            Run a large mission
+          </div>
+          <div
+            style={{
+              fontFamily: FONT_HEADING,
+              fontSize: 56,
+              lineHeight: 1.06,
+              fontWeight: 700,
+              letterSpacing: "-0.035em",
+              color: INK,
+            }}
+          >
+            from a small office.
           </div>
           <div
             style={{
@@ -124,8 +164,8 @@ export default async function openGraphImage() {
               color: MUTED,
             }}
           >
-            Open-source giving and donor-care software for nonprofits of any
-            size, with practical AI in development.
+            Your website, giving, donor care, missionary micro-CRMs, and office
+            workflows on one shared ground truth.
           </div>
         </div>
 
@@ -143,22 +183,22 @@ export default async function openGraphImage() {
               display: "flex",
               justifyContent: SPACE_BETWEEN,
               alignItems: "center",
-              fontSize: 17,
+              fontSize: 16,
               fontWeight: 500,
               color: MUTED,
             }}
           >
             <span>Built by Asymmetric.al</span>
             <span style={{ fontFamily: FONT_MONO, fontSize: 15, color: INK }}>
-              asym.app
+              AGPL-3.0-only &middot; asym.app
             </span>
           </div>
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "8px",
-              fontSize: 17,
+              gap: "10px",
+              fontSize: 16,
               fontWeight: 600,
               color: INK,
             }}
@@ -168,30 +208,29 @@ export default async function openGraphImage() {
                 width: "10px",
                 height: "10px",
                 borderRadius: "999px",
-                background: isConfigured ? HUMAN : "transparent",
-                border: isConfigured ? "none" : `2px dashed ${MUTED}`,
+                background: isConfigured ? HUMAN_LIGHT : "transparent",
+                border: isConfigured ? "none" : `1.5px dashed ${MUTED}`,
               }}
             />
             <span>
               {isConfigured
-                ? "Early access requests open"
-                : "Hosted access not open yet"}{" "}
-              &middot; AI tools in development
+                ? "Open-source Core is public on GitHub. Early access is open for hosted pilots."
+                : "Open-source Core is public on GitHub. Hosted early access opens soon."}
             </span>
           </div>
         </div>
       </div>
 
-      {/* Right column: warm sculptural asym architectural planes */}
+      {/* Right column: soft Maia Warm Charcoal Night sculptural asym planes */}
       <div
         style={{
           display: "flex",
-          width: "508px",
+          width: "500px",
           height: "538px",
-          borderRadius: "28px",
-          border: "1px solid rgba(20,23,26,0.12)",
-          background: "#F3F1EB",
-          padding: "20px",
+          borderRadius: "26px",
+          border: `1px solid ${RULE_STRONG}`,
+          background: "#171A1D",
+          padding: "18px",
           alignItems: "center",
           justifyContent: "center",
         }}
@@ -199,61 +238,61 @@ export default async function openGraphImage() {
         <div
           style={{
             display: "flex",
-            width: "468px",
-            height: "498px",
-            borderRadius: "22px",
-            border: "1px solid rgba(20,23,26,0.16)",
+            width: "464px",
+            height: "502px",
+            borderRadius: "20px",
+            border: `1px solid ${RULE}`,
             overflow: "hidden",
-            background: "#F5F2EB",
+            background: "#23272A",
           }}
         >
           <svg
-            width="468"
-            height="498"
-            viewBox="0 0 468 498"
+            width="464"
+            height="502"
+            viewBox="0 0 464 502"
             fill="none"
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <rect x="0" y="0" width="468" height="498" fill="#F5F2EB" />
+            <rect x="0" y="0" width="464" height="502" fill="#23272A" />
             <path
-              d="M 0 0 H 468 V 214 C 384 154, 286 132, 182 148 C 102 160, 44 192, 0 232 Z"
-              fill="#F2DBD3"
-              fillOpacity="0.78"
+              d="M 0 0 H 464 V 216 C 380 156, 284 134, 180 150 C 102 162, 44 194, 0 234 Z"
+              fill="#28211E"
+              fillOpacity="0.86"
             />
             <path
-              d="M 164 0 H 468 V 498 H 146 C 152 364, 158 182, 164 0 Z"
-              fill="#D5E8E0"
+              d="M 162 0 H 464 V 502 H 144 C 150 366, 156 184, 162 0 Z"
+              fill="#303931"
             />
             <path
-              d="M 0 194 C 52 162, 108 152, 168 158 V 498 H 0 Z"
-              fill="#E7E2D7"
-              fillOpacity="0.78"
+              d="M 0 196 C 52 164, 108 154, 166 160 V 502 H 0 Z"
+              fill="#23272A"
+              fillOpacity="0.86"
             />
             <path
-              d="M 176 0 H 246 C 208 66, 194 148, 208 232 C 228 352, 318 412, 468 414 V 498 H 268 C 186 498, 144 428, 144 318 V 126 C 144 64, 154 24, 176 0 Z"
-              fill={SIGNAL}
+              d="M 174 0 H 244 C 206 66, 192 150, 206 234 C 226 354, 316 414, 464 416 V 502 H 266 C 184 502, 142 432, 142 320 V 128 C 142 66, 152 24, 174 0 Z"
+              fill="#7BB093"
             />
             <path
-              d="M 222 184 C 268 292, 356 352, 468 354 V 402 C 344 400, 252 336, 208 228 Z"
+              d="M 220 186 C 266 294, 354 354, 464 356 V 404 C 342 402, 250 338, 206 230 Z"
               fill={SURFACE}
               fillOpacity="0.24"
             />
             <path
-              d="M 0 228 A 56 56 0 0 1 56 172 H 412 A 56 56 0 0 1 468 228"
-              stroke="#C9583E"
+              d="M 0 230 A 56 56 0 0 1 56 174 H 408 A 56 56 0 0 1 464 230"
+              stroke="#C7846C"
               strokeWidth="4.5"
               strokeLinecap="round"
             />
             <path
-              d="M 174 172 C 266 172, 358 224, 434 334"
+              d="M 172 174 C 264 174, 356 226, 432 336"
               stroke={SURFACE}
-              strokeOpacity="0.62"
+              strokeOpacity="0.58"
               strokeWidth="2"
               strokeLinecap="round"
             />
-            <circle cx="164" cy="172" r="12" fill={SURFACE} />
-            <circle cx="164" cy="172" r="5.5" fill="#C9583E" />
+            <circle cx="162" cy="174" r="12" fill={SURFACE} />
+            <circle cx="162" cy="174" r="5.5" fill="#C7846C" />
           </svg>
         </div>
       </div>
@@ -261,6 +300,12 @@ export default async function openGraphImage() {
     {
       ...size,
       fonts: [
+        {
+          name: "Plus Jakarta Sans",
+          data: jakartaBold,
+          style: "normal",
+          weight: 700,
+        },
         {
           name: "Instrument Sans",
           data: instrumentMedium,
@@ -274,8 +319,8 @@ export default async function openGraphImage() {
           weight: 600,
         },
         {
-          name: "IBM Plex Mono",
-          data: plexMonoMedium,
+          name: "Geist Mono",
+          data: geistMonoMedium,
           style: "normal",
           weight: 500,
         },

@@ -8,7 +8,8 @@ import { siteConfig } from "@/lib/config";
 import { isEarlyAccessConfigured } from "@/lib/early-access-config";
 import { cn } from "@/lib/utils";
 
-const HERO_CTA_CLASS = "px-4 text-sm sm:px-5 sm:text-[0.9375rem] xl:px-6";
+const HERO_CTA_CLASS =
+  "gap-1.5 px-3 text-sm whitespace-nowrap sm:gap-2 sm:px-5 sm:text-[0.9375rem] xl:px-6";
 
 export const HomeHero = () => {
   const isConfigured = isEarlyAccessConfigured();
@@ -21,34 +22,35 @@ export const HomeHero = () => {
       <Container>
         <div className="grid gap-10 lg:grid-cols-[minmax(0,52fr)_minmax(0,48fr)] lg:items-center lg:gap-12 xl:gap-16">
           <div className="min-w-0">
-            <p className="text-signal font-sans text-sm font-medium">
-              Open-source software for nonprofits
+            <p className="text-signal font-sans text-sm font-medium tracking-[-0.005em]">
+              Open-source software for Christian missions organizations
             </p>
 
             <h1
               id="hero-title"
-              className="font-heading text-foreground mt-3 text-[clamp(2.85rem,6.2vw,4.85rem)] leading-[1.01] font-bold tracking-[-0.035em]"
+              className="font-heading text-foreground mt-3.5 text-[clamp(2.2rem,4.7vw,4.15rem)] leading-[1.03] font-bold tracking-[-0.035em]"
             >
-              <span className="block">Less overhead.</span>
-              <span className="block">Outsized impact.</span>
+              <span className="block">Run a large mission</span>{" "}
+              <span className="block">from a small office.</span>
             </h1>
 
-            <p className="text-foreground/88 mt-5 max-w-[36rem] text-base leading-7 text-pretty sm:text-[1.125rem] sm:leading-8">
+            <p className="text-foreground/88 mt-6 max-w-[36rem] text-base leading-7 text-pretty sm:text-lg sm:leading-8">
+              Most missions offices juggle a separate website, giving form,
+              donor database, and spreadsheets just to keep supporters and
+              missionaries informed.{" "}
               <span translate="no" className="text-foreground font-medium">
                 {siteConfig.shortName}
               </span>{" "}
-              brings giving, donor care, and operations onto one open-source
-              foundation for nonprofits of any size, with practical AI in
-              development to take campaign prep and routine admin off your
-              plate. Named for asymmetric leverage: outsized impact from the
-              care and effort your people put in.
+              brings your website, giving, receipts, missionary micro-CRMs, and
+              office workflows into one open-source system, so every team works
+              from the same live records.
             </p>
 
-            <p className="text-muted-foreground mt-3.5 inline-flex max-w-[36rem] items-center gap-2 font-sans text-sm leading-6">
+            <p className="text-muted-foreground mt-3.5 inline-flex max-w-[36rem] items-start gap-2.5 font-sans text-sm leading-6">
               <span
                 aria-hidden="true"
                 className={cn(
-                  "size-2 shrink-0 rounded-full",
+                  "mt-[0.45rem] size-2 shrink-0 rounded-full",
                   isConfigured
                     ? "bg-human"
                     : "border-draft border border-dashed"
@@ -56,12 +58,12 @@ export const HomeHero = () => {
               />
               <span>
                 {isConfigured
-                  ? "Public open-source code today. Early-access requests are open for hosted pilots; AI tools are in development."
-                  : "Public open-source code today. Hosted access and AI tools aren’t open yet."}
+                  ? "The open-source code is public on GitHub today. Early access is open for hosted pilots."
+                  : "The open-source code is public on GitHub today. Hosted early access opens soon."}
               </span>
             </p>
 
-            <div className="mt-6 flex flex-row flex-wrap items-center gap-x-3 gap-y-2.5 sm:mt-8 sm:gap-x-4">
+            <div className="mt-6 flex flex-row flex-wrap items-center gap-x-2.5 gap-y-2.5 sm:mt-8 sm:gap-x-3.5">
               {isConfigured ? (
                 <Link
                   href={siteConfig.cta.primary.href}
@@ -73,14 +75,11 @@ export const HomeHero = () => {
                 </Link>
               ) : (
                 <Link
-                  href="/#where-things-stand"
+                  href="/#product"
                   prefetch={false}
-                  className={cn(
-                    buttonVariants({ variant: "ink", size: "lg" }),
-                    HERO_CTA_CLASS
-                  )}
+                  className={cn(buttonVariants({ size: "lg" }), HERO_CTA_CLASS)}
                 >
-                  See what’s built
+                  See the platform
                   <ArrowRightIcon dataIcon="inline-end" />
                 </Link>
               )}
@@ -88,7 +87,10 @@ export const HomeHero = () => {
                 href={siteConfig.repoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center gap-1.5 rounded-md px-1.5 text-sm font-medium whitespace-nowrap underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:gap-2 [@media(hover:hover)_and_(pointer:fine)]:hover:text-signal"
+                className={cn(
+                  buttonVariants({ variant: "outline", size: "lg" }),
+                  "gap-1.5 px-3 text-sm whitespace-nowrap sm:gap-2 sm:px-5 sm:text-[0.9375rem]"
+                )}
               >
                 <GitHubMark className="size-4 shrink-0" />
                 View the code

@@ -1,5 +1,7 @@
 import Link from "next/link";
+import { HeaderNav } from "@/components/site/header-nav";
 import { MobileNavMenu } from "@/components/site/mobile-nav-menu";
+import { QuickJumpPalette } from "@/components/site/quick-jump-palette";
 import { SiteLogoMark } from "@/components/site/site-logo-mark";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { navigationLinks, siteConfig } from "@/lib/config";
@@ -29,7 +31,7 @@ export const Header = () => {
               aria-label={`${siteConfig.shortName} home`}
             >
               <SiteLogoMark
-                className="size-7 transition-transform duration-150 ease-[cubic-bezier(0.22,1,0.36,1)] [@media(hover:hover)_and_(pointer:fine)]:group-hover:-translate-y-px"
+                className="size-7 transition-transform duration-150 ease-out [@media(hover:hover)_and_(pointer:fine)]:group-hover:-translate-y-px"
                 size={28}
               />
               <span
@@ -41,23 +43,10 @@ export const Header = () => {
             </Link>
           </div>
 
-          <nav aria-label="Main" className="hidden md:block">
-            <ul className="flex items-center gap-1">
-              {navigationLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    prefetch={false}
-                    className="text-foreground/82 focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-10 items-center rounded-md px-3.5 text-sm font-medium underline-offset-[6px] focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:underline"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
+          <HeaderNav />
 
           <div className="flex shrink-0 items-center gap-2">
+            <QuickJumpPalette isConfigured={isConfigured} />
             {isConfigured ? (
               <Link
                 href={siteConfig.cta.primary.href}
@@ -77,17 +66,17 @@ export const Header = () => {
               </Link>
             ) : (
               <Link
-                href="/#where-things-stand"
+                href="/#product"
                 prefetch={false}
                 className={cn(
                   buttonVariants({
-                    variant: "ink",
+                    variant: "default",
                     size: "default",
                   }),
                   "shrink-0 px-4"
                 )}
               >
-                See what’s built
+                See the platform
               </Link>
             )}
             <MobileNavMenu isConfigured={isConfigured} />
@@ -105,7 +94,7 @@ export const Header = () => {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  prefetch={false}
+                  prefetch={!link.href.includes("#")}
                   className="text-foreground/82 inline-flex min-h-11 items-center rounded-md font-medium underline-offset-4 [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground [@media(hover:hover)_and_(pointer:fine)]:hover:underline"
                 >
                   {link.label}

@@ -21,6 +21,7 @@
   "menuColor": "default-translucent",
   "menuAccent": "subtle",
   "registries": {
+    "@react-bits": "https://reactbits.dev/r/{name}.json",
     "@reactbits-starter": {
       "url": "https://pro.reactbits.dev/api/r/starter/{name}.json",
       "headers": {
@@ -33,11 +34,66 @@
         "Authorization": "Bearer ${REACTBITS_LICENSE_KEY}"
       }
     },
+    "@reui": {
+      "url": "https://reui.io/r/{style}/{name}.json",
+      "headers": {
+        "Authorization": "Bearer ${REUI_LICENSE_KEY}"
+      }
+    },
     "@shadcnblocks": {
-      "url": "https://shadcnblocks.com/r/{name}",
+      "url": "https://www.shadcnblocks.com/r/{style}/{name}",
       "headers": {
         "Authorization": "Bearer ${SHADCNBLOCKS_API_KEY}"
       }
-    }
+    },
+    "@shadcnuikit": {
+      "url": "https://shadcnuikit.com/r/{name}.json",
+      "headers": {
+        "Authorization": "Bearer ${SHADCNUIKIT_API_KEY}"
+      }
+    },
+    "@efferd": {
+      "url": "https://efferd.com/r/{style}/{name}.json",
+      "headers": {
+        "Authorization": "Bearer ${EFFERD_REGISTRY_TOKEN}"
+      }
+    },
+    "@shadcn-studio": "https://shadcnstudio.com/r/{style}/{name}.json",
+    "@ss-components": {
+      "url": "https://shadcnstudio.com/r/components/{style}/{name}.json",
+      "params": {
+        "email": "${SHADCN_STUDIO_EMAIL}",
+        "license_key": "${SHADCN_STUDIO_LICENSE_KEY}"
+      }
+    },
+    "@ss-blocks": {
+      "url": "https://shadcnstudio.com/r/blocks/{style}/{name}.json",
+      "params": {
+        "email": "${SHADCN_STUDIO_EMAIL}",
+        "license_key": "${SHADCN_STUDIO_LICENSE_KEY}"
+      }
+    },
+    "@ss-pages": {
+      "url": "https://shadcnstudio.com/r/pages/{style}/{name}.json",
+      "params": {
+        "email": "${SHADCN_STUDIO_EMAIL}",
+        "license_key": "${SHADCN_STUDIO_LICENSE_KEY}"
+      }
+    },
+    "@ss-illustrations": {
+      "url": "https://shadcnstudio.com/r/illustrations/{name}.json",
+      "params": {
+        "email": "${SHADCN_STUDIO_EMAIL}",
+        "license_key": "${SHADCN_STUDIO_LICENSE_KEY}"
+      }
+    },
+    "@ss-themes": {
+      "url": "https://shadcnstudio.com/r/themes/{name}.json",
+      "params": {
+        "email": "${SHADCN_STUDIO_EMAIL}",
+        "license_key": "${SHADCN_STUDIO_LICENSE_KEY}"
+      }
+    },
+    "@shadcn-space": "https://shadcnspace.com/r/{name}.json"
   }
 }

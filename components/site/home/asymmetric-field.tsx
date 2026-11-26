@@ -2,24 +2,24 @@ import type { ReactNode } from "react";
 
 // Warm, sculptural modernist composition derived from the asym mark's Stem, Sweep, and Arch: layered matte botanical, warm sand, and terracotta architectural planes expressing asymmetric leverage without wireframes or fake product UI.
 export const AsymmetricFieldHero = (): ReactNode => (
-  <div className="border-rule bg-[var(--sculpt-canvas)] relative overflow-hidden rounded-3xl border shadow-[var(--shadow-card)]">
+  <div className="border-rule-strong bg-[var(--sculpt-canvas)] relative overflow-hidden rounded-[26px] border shadow-[var(--shadow-card)]">
     <svg
       viewBox="0 0 640 480"
       fill="none"
       role="img"
       aria-label="Warm modernist architectural sculpture derived from the asym mark: sunlit sand, soft clay, sage, and deep botanical curved forms opening smoothly across the frame to express outsized impact from focused care."
-      className="sculpt-reveal block aspect-[4/3] w-full"
+      className="sculpt-reveal block aspect-[4/3] w-full select-none"
     >
       <defs>
         <clipPath id="asym-hero-frame">
-          <rect x="24" y="24" width="592" height="432" rx="30" />
+          <rect x="20" y="20" width="600" height="440" rx="22" />
         </clipPath>
         <linearGradient
           id="asym-hero-base"
-          x1="24"
-          y1="24"
-          x2="616"
-          y2="456"
+          x1="20"
+          y1="20"
+          x2="620"
+          y2="460"
           gradientUnits="userSpaceOnUse"
         >
           <stop offset="0%" stopColor="var(--card)" />
@@ -30,49 +30,49 @@ export const AsymmetricFieldHero = (): ReactNode => (
       <g clipPath="url(#asym-hero-frame)">
         {/* Continuous sunlit sand-to-alabaster base so every layer seats cleanly */}
         <rect
-          x="24"
-          y="24"
-          width="592"
-          height="432"
+          x="20"
+          y="20"
+          width="600"
+          height="440"
           fill="url(#asym-hero-base)"
         />
 
         {/* Soft warm clay horizon arch sweeping across the upper frame */}
         <path
-          d="M 24 24 H 616 V 206 C 514 148, 388 128, 256 144 C 154 156, 78 186, 24 226 Z"
+          d="M 20 20 H 620 V 206 C 514 148, 388 128, 256 144 C 154 156, 78 186, 20 226 Z"
           fill="var(--sculpt-clay)"
           fillOpacity="0.72"
         />
 
         {/* Broad sunlit sage plane opening gracefully across the right two-thirds */}
         <path
-          d="M 218 24 H 616 V 456 H 196 C 204 340, 212 184, 218 24 Z"
+          d="M 218 20 H 620 V 460 H 196 C 204 340, 212 184, 218 20 Z"
           fill="var(--sculpt-sage)"
         />
 
         {/* Grounding left sand column echoing the focused vertical Stem */}
         <path
-          d="M 24 186 C 84 156, 152 146, 224 152 V 456 H 24 Z"
+          d="M 20 186 C 84 156, 152 146, 224 152 V 460 H 20 Z"
           fill="var(--sculpt-sand)"
           fillOpacity="0.78"
         />
 
         {/* Monumental deep Botanical Forest sweeping arch derived from MARK_SWEEP_PATH */}
         <path
-          d="M 232 24 H 316 C 272 78, 256 144, 272 214 C 296 318, 408 370, 616 372 V 456 H 352 C 254 456, 198 394, 198 296 V 132 C 198 78, 208 44, 232 24 Z"
+          d="M 232 20 H 316 C 272 78, 256 144, 272 214 C 296 318, 408 370, 620 372 V 460 H 352 C 254 460, 198 394, 198 296 V 132 C 198 78, 208 44, 232 20 Z"
           fill="var(--sculpt-sage-deep)"
         />
 
         {/* Soft carved daylight ribbon giving subtle ceramic relief across the sweep */}
         <path
-          d="M 288 176 C 344 268, 456 320, 616 322 V 364 C 442 362, 326 306, 270 212 Z"
+          d="M 288 176 C 344 268, 456 320, 620 322 V 364 C 442 362, 326 306, 270 212 Z"
           fill="var(--card)"
           fillOpacity="0.24"
         />
 
         {/* Warm terracotta datum bridge connecting focused effort to broad reach */}
         <path
-          d="M 24 218 A 66 66 0 0 1 90 152 H 550 A 66 66 0 0 1 616 218"
+          d="M 20 218 A 66 66 0 0 1 86 152 H 554 A 66 66 0 0 1 620 218"
           stroke="var(--sculpt-clay-deep)"
           strokeWidth="4.5"
           strokeLinecap="round"
@@ -92,81 +92,16 @@ export const AsymmetricFieldHero = (): ReactNode => (
         <circle cx="222" cy="152" r="5.5" fill="var(--sculpt-clay-deep)" />
       </g>
 
-      {/* Quiet outer hairline framing the sunlit relief */}
+      {/* Quiet sculptural inner plate hairline */}
       <rect
-        x="24"
-        y="24"
-        width="592"
-        height="432"
-        rx="30"
+        x="20"
+        y="20"
+        width="600"
+        height="440"
+        rx="22"
         stroke="var(--rule-strong)"
         strokeWidth="1.25"
       />
-    </svg>
-  </div>
-);
-
-// Serene modernist overlapping horizon sculpture for the Deep Botanical Charcoal Vision band: warm layered botanical planes and a calm terracotta sunrise arc expressing clarity and multiplied reach.
-export const AsymmetricAiField = (): ReactNode => (
-  <div className="border-night-rule bg-[var(--vision-art-bg)] relative overflow-hidden rounded-3xl border">
-    <svg
-      viewBox="0 0 560 320"
-      fill="none"
-      role="img"
-      aria-label="Serene abstract landscape of layered deep botanical planes and warm terracotta horizon arcs opening smoothly from left to right, expressing calm clarity and multiplied reach."
-      className="block aspect-[7/4] w-full"
-    >
-      <defs>
-        <radialGradient
-          id="asym-vision-glow"
-          cx="24%"
-          cy="72%"
-          r="68%"
-        >
-          <stop offset="0%" stopColor="var(--vision-art-glow-1)" stopOpacity="0.72" />
-          <stop offset="60%" stopColor="var(--vision-art-glow-2)" stopOpacity="0.35" />
-          <stop offset="100%" stopColor="var(--vision-art-bg)" stopOpacity="0" />
-        </radialGradient>
-      </defs>
-
-      {/* Soft ambient botanical warmth */}
-      <rect x="0" y="0" width="560" height="320" fill="url(#asym-vision-glow)" />
-
-      {/* Layered matte organic hills/arcs rising gently across the canvas */}
-      <path
-        d="M -20 230 C 120 156, 280 120, 580 144 V 340 H -20 Z"
-        fill="var(--vision-art-plane-1)"
-      />
-      <path
-        d="M -20 264 C 138 202, 316 172, 580 202 V 340 H -20 Z"
-        fill="var(--vision-art-plane-2)"
-      />
-      <path
-        d="M -20 296 C 166 248, 356 230, 580 258 V 340 H -20 Z"
-        fill="var(--vision-art-plane-3)"
-      />
-
-      {/* Soft morning horizon light ribbon sweeping into open reach */}
-      <path
-        d="M -16 248 C 118 242, 206 168, 336 138 C 424 118, 496 112, 576 114"
-        stroke="var(--night-accent)"
-        strokeOpacity="0.52"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-
-      {/* Primary warm terracotta sweep echoing the asym horizon arch */}
-      <path
-        d="M -16 268 C 126 266, 204 188, 324 176 C 414 167, 492 168, 576 172"
-        stroke="var(--vision-art-arc)"
-        strokeWidth="3.5"
-        strokeLinecap="round"
-      />
-
-      {/* Gentle sunlit terracotta stone tucked calmly onto the sweep */}
-      <circle cx="192" cy="214" r="24" fill="var(--vision-art-arc)" fillOpacity="0.18" />
-      <circle cx="192" cy="214" r="10" fill="var(--vision-art-arc)" />
-      <circle cx="192" cy="214" r="3.5" fill="var(--night-foreground)" />
     </svg>
   </div>
 );
@@ -177,7 +112,7 @@ export const PerspectiveFacet = ({
 }: {
   readonly variant: "donor" | "field" | "office";
 }): ReactNode => (
-  <span className="bg-record inline-flex size-10 shrink-0 items-center justify-center rounded-xl">
+  <span className="bg-record inline-flex size-10 shrink-0 items-center justify-center rounded-2xl">
     <svg
       viewBox="0 0 28 28"
       fill="none"

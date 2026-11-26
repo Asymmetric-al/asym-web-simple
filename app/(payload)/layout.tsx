@@ -6,7 +6,7 @@ import { importMap } from "./admin/importMap.js";
 import type { Metadata } from "next";
 import type { ServerFunctionClient } from "payload";
 
-import "./custom.scss";
+import "./custom.css";
 
 interface Args {
   readonly children: React.ReactNode;
