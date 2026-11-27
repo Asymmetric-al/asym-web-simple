@@ -1,16 +1,21 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { startTransition, useEffect, useState } from "react";
 
-const noop = () => {
-  // Static subscription for SSR-safe client hydration detection.
+export const useIsClient = (): boolean => {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => {
+      startTransition(() => {
+        setIsClient(true);
+      });
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+    };
+  }, []);
+
+  return isClient;
 };
-
-const emptySubscribe = () => noop;
-
-export const useIsClient = (): boolean =>
-  useSyncExternalStore(
-    emptySubscribe,
-    () => true,
-    () => false
-  );

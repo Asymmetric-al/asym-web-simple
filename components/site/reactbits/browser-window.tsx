@@ -73,5 +73,3 @@ export const BrowserWindow = ({
     </div>
   );
 };
-
-export default BrowserWindow;

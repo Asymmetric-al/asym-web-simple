@@ -28,7 +28,6 @@ const monoFont = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
   weight: ["400", "500"],
-  preload: false,
   display: "swap",
 });
 

@@ -1,9 +1,8 @@
 "use client";
 
-import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-import { ArrowUpRightIcon } from "@/components/site/icons";
+import { ArrowRightIcon, ArrowUpRightIcon } from "@/components/site/icons";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { repoStats, siteConfig } from "@/lib/config";
 import { cn } from "@/lib/utils";
@@ -138,10 +137,11 @@ export const Pricing17 = ({
         {plans.map((plan, planIndex) => (
           <div
             key={plan.id}
-            className={cn(
-              "flex flex-col p-6 sm:p-8 lg:p-10",
-              planIndex > 0 && "border-rule border-t lg:border-t-0"
-            )}
+            className={
+              planIndex > 0
+                ? "border-rule flex flex-col border-t p-6 sm:p-8 lg:border-t-0 lg:p-10"
+                : "flex flex-col p-6 sm:p-8 lg:p-10"
+            }
           >
             <div>
               <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
@@ -167,10 +167,11 @@ export const Pricing17 = ({
                     setHoveredRow(0);
                   }
                 }}
-                className={cn(
-                  "-mx-6 px-6 pb-5 transition-colors duration-150 ease-out sm:-mx-8 sm:px-8 lg:-mx-10 lg:px-10",
-                  hoveredRow === 0 && "bg-record/55"
-                )}
+                className={
+                  hoveredRow === 0
+                    ? "bg-record/55 -mx-6 px-6 pb-5 transition-colors duration-150 ease-out sm:-mx-8 sm:px-8 lg:-mx-10 lg:px-10"
+                    : "-mx-6 px-6 pb-5 transition-colors duration-150 ease-out sm:-mx-8 sm:px-8 lg:-mx-10 lg:px-10"
+                }
               >
                 <dt className="text-muted-foreground pt-3 font-sans text-xs font-medium">
                   {plan.limitLabel}
@@ -188,10 +189,11 @@ export const Pricing17 = ({
                       setHoveredRow(rowIndex + 1);
                     }
                   }}
-                  className={cn(
-                    "border-rule -mx-6 flex min-h-13 items-center justify-between gap-4 border-t px-6 py-3 transition-colors duration-150 ease-out sm:-mx-8 sm:px-8 lg:-mx-10 lg:px-10",
-                    hoveredRow === rowIndex + 1 && "bg-record/55"
-                  )}
+                  className={
+                    hoveredRow === rowIndex + 1
+                      ? "border-rule bg-record/55 -mx-6 flex min-h-13 items-center justify-between gap-4 border-t px-6 py-3 transition-colors duration-150 ease-out sm:-mx-8 sm:px-8 lg:-mx-10 lg:px-10"
+                      : "border-rule -mx-6 flex min-h-13 items-center justify-between gap-4 border-t px-6 py-3 transition-colors duration-150 ease-out sm:-mx-8 sm:px-8 lg:-mx-10 lg:px-10"
+                  }
                 >
                   <dt className="text-muted-foreground text-sm">{label}</dt>
                   <dd className="text-foreground text-right text-sm font-medium">
@@ -220,19 +222,14 @@ export const Pricing17 = ({
                 ) : (
                   <Link
                     href={plan.ctaHref}
-                    prefetch={!plan.ctaHref.includes("#")}
+                    prefetch={false}
                     className={cn(
                       buttonVariants({ variant: "default", size: "lg" }),
                       "px-5"
                     )}
                   >
                     {plan.ctaLabel}
-                    <ArrowRight
-                      data-icon="inline-end"
-                      className="size-4"
-                      strokeWidth={1.75}
-                      aria-hidden="true"
-                    />
+                    <ArrowRightIcon dataIcon="inline-end" />
                   </Link>
                 )}
                 <p className="text-muted-foreground text-xs leading-5">
@@ -262,11 +259,9 @@ export const Pricing17 = ({
           className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-full font-sans text-sm font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-8 [@media(hover:hover)_and_(pointer:fine)]:hover:text-signal"
         >
           {isConfigured ? "Talk with our team" : "See pre-launch checklist"}
-          <ArrowRight className="size-4" strokeWidth={1.75} aria-hidden="true" />
+          <ArrowRightIcon className="size-4" strokeWidth={1.75} />
         </Link>
       </div>
     </section>
   );
 };
-
-export default Pricing17;

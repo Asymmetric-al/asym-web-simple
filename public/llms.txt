@@ -1,21 +1,23 @@
 # asym (Asymmetric.al)
 
-> Open-source giving, donor care, and operations on one shared foundation for nonprofits, with practical AI in development.
+> Open-source software for Christian missions organizations covering website publishing, giving, receipts, donor care, missionary micro-CRMs, and office workflows on one shared ground truth, with practical AI in development.
 
-Built by Asymmetric.al, an independent, for-profit software company serving nonprofits of any size. Founded by Conrad O'Brien (who co-leads Global Fellowship, a missions organization) and Blake. Named for asymmetric leverage: multiplying what an organization can accomplish without multiplying administrative drag. We are starting with missions organizations because we know that work firsthand, with the goal of modern software any nonprofit can rely on.
+Built by Asymmetric.al, an independent, for-profit software company built first for Christian missions organizations where staff raise designated support, and designed cleanly for any donor-supported nonprofit. Founded by Conrad (who co-leads Global Fellowship, a missions organization) and Blake. Named for asymmetric leverage: helping a small office serve a large mission with care, without adding software drag or vendor lock-in.
 
 ## Vision
-- Less overhead, outsized impact: bring giving, donor care, and operations onto one open-source foundation so nonprofits of any size spend more time with the people they serve.
-- Practical AI, built into the core (in development): AI built onto the shared giving core to draft campaigns from real fund and donor context, lighten routine donor care, and clear repetitive admin, with teams editing before anything goes out.
+- One shared ground truth: unite your public website, Donor portal (`apps/donor`), Missionary workspace micro-CRMs (`apps/missionary`), and Mission Control (`apps/admin`) on shared giving tables with server-enforced donor privacy and direct organization Stripe accounts (0% gift markup).
+- Practical AI, grounded in live records (in development): AI built on top of the same open permissions to draft thank-yous, partner updates, and routine donor replies, with people editing and approving before anything goes out ("AI drafts; people send.").
 
 ## Status
-- Public codebase: [Asymmetric-al/core](https://github.com/Asymmetric-al/core) (AGPL-3.0-only, 5,200+ commits on develop, 600+ repository-wide merged PRs since January 2026, verified November 2026).
-- In public code: authenticated donor portal with giving history, recurring-gift review (opening Stripe payment settings when needed), individual receipts, and settled-only annual statements (`apps/donor`, `packages/api/src/donor-portal`); assignment-scoped missionary supporter roster defaulting to `Anonymous partner` with `total_given` and `last_gift_amount` withheld on roster rows while aggregate analytics stay separate (`apps/missionary`, `packages/api/src/missionary-portal`); Mission Control CRM, Payload Web Studio website/template tools, and supported batch previews (`apps/admin`, `packages/api/src/admin/contribution-batches`).
-- Partial: public worker directory and checkout recipient lookup in `apps/donor` still render `@asym/mock-data` sample profiles; offline gift entry orchestration (`packages/api/src/admin/contributions/offline-entry.ts`) is in code with DB persistence intentionally switched off (`501`) pending migration, and accepted design notes (`docs/adr` 0004, 0010, and 0012) specify thank-you, offline-entry, and recurring-gift rules.
-- In development (not open yet): AI campaign drafting and donor-care assistance, hosted team subscription and onboarding (pricing unpublished), and optional future managed donor care.
+- Public codebase: [Asymmetric-al/core](https://github.com/Asymmetric-al/core) (AGPL-3.0-only, 5,200+ commits on develop, 600+ repository-wide merged PRs since January 2026, verified November 2026 at `1120dc5f9`).
+- In public code: authenticated Donor portal with giving history, recurring-gift management, individual receipts, and settled-only annual tax statements (`apps/donor`, `packages/api/src/donor-portal/statements.ts`); assignment-scoped Missionary workspace micro-CRMs defaulting non-opted-in supporters to `Anonymous partner` with per-row totals hidden (`apps/missionary`, `packages/api/src/missionary-portal/donors.ts`); Mission Control CRM, Payload Web Studio website tools, and pre-posting batch previews (`apps/admin`, `packages/api/src/admin/contribution-batches/preview.ts`); direct per-organization Stripe account connections (`packages/api/src/stripe/tenant-client.ts`, `packages/api/src/donate/fee-policy.ts`).
+- Building now: public missionary and project directories wired to live organization data (replacing `@asym/mock-data` demo profiles in `apps/donor`), paper check / cash / split church remittance batch saving (`packages/api/src/admin/contributions/offline-dependencies.ts`, ADRs 0004, 0010, and 0012), and agency workflows in `openspec/`.
+- Next (not open yet): grounded AI care-work drafting, published flat managed hosting tiers, Finance-verified parallel-close onboarding (February through September only, never November through January), and optional managed donor care.
 
 ## Pages
-- [Homepage](https://asym.app/): Product overview, AI vision, open-source build status, and early access.
-- [Privacy policy](https://asym.app/privacy): Data handling and early-access contact policy.
-- [Terms of service](https://asym.app/terms): Website terms of use.
-- [Pre-launch early access status](https://asym.app/early-access/status): Pre-launch readiness checklist and status route.
+- [Homepage](https://asym.app/): Product overview, privacy matrix, agency workflows, Core screenshots, open-source build status, grounded AI vision, company letter, common questions, and early access.
+- [Evaluation & migration brief](https://asym.app/evaluate): Line-by-line comparison against stitched tools, parallel-close onboarding steps, self-hosted vs. managed hosting, governance controls, and primary review documents.
+- [Privacy policy](https://asym.app/privacy): How asym.app handles visitor and early-access contact information.
+- [Terms of service](https://asym.app/terms): Prelaunch website and early-access terms of use.
+- [Pre-launch early access status](https://asym.app/early-access/status?state=unavailable): Pre-launch readiness milestones and submission confirmation status page (`noindex`).
+- [Statement of Faith](https://asym.app/statement-of-faith): Personal Christian convictions of the founders (`noindex`).

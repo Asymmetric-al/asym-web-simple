@@ -22,9 +22,6 @@ const FRAME_SPACING_CLASS: Record<FrameSpacing, string> = {
   lg: "[--frame-panel-px:1.5rem] [--frame-panel-py:1.5rem] [--frame-panel-header-px:1.5rem] [--frame-panel-header-py:1rem] [--frame-panel-footer-px:1.5rem] [--frame-panel-footer-py:0.875rem]",
 };
 
-/**
-Mathematical concentric-corner container adapted from ReUI (`@reui/frame`) to Asymmetric.al's Warm Modern Leverage tokens (`DESIGN.md`).
-*/
 export const Frame = ({
   className,
   variant = "default",

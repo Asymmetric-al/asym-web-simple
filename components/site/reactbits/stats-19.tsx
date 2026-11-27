@@ -1,9 +1,9 @@
 "use client";
 
-import { animate, useReducedMotion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { ArrowUpRightIcon } from "@/components/site/icons";
 import { repoStats, siteConfig } from "@/lib/config";
+import { useIsReducedMotion } from "@/lib/use-reduced-motion";
 import type { ReactNode } from "react";
 
 interface ProofStat {
@@ -68,6 +68,10 @@ const PROOF_STATS: readonly ProofStat[] = [
   },
 ];
 
+const COUNT_UP_DURATION_MS = 900;
+
+const easeOutQuart = (progress: number): number => 1 - (1 - progress) ** 4;
+
 const formatInteger = (value: number): string =>
   Math.round(value).toLocaleString("en-US");
 
@@ -88,20 +92,34 @@ const AnimatedFigure = ({
 
   useEffect(() => {
     const node = spanRef.current;
-    const shouldAnimate = isTriggered && !isReducedMotion && target > 0;
-    const controls =
-      node && shouldAnimate
-        ? animate(0, target, {
-            duration: 0.9,
-            ease: [0.23, 1, 0.32, 1],
-            onUpdate: (latest) => {
-              node.textContent = `${prefix}${formatInteger(latest)}${suffix}`;
-            },
-          })
-        : null;
+    const finalText = `${prefix}${formatInteger(target)}${suffix}`;
+    let frameId = 0;
+
+    if (node && isTriggered && !isReducedMotion && target > 0) {
+      let startedAt = 0;
+
+      const tick = (now: number): void => {
+        if (startedAt === 0) {
+          startedAt = now;
+        }
+        const progress = Math.min(1, (now - startedAt) / COUNT_UP_DURATION_MS);
+        const value = target * easeOutQuart(progress);
+        node.textContent = `${prefix}${formatInteger(value)}${suffix}`;
+        if (progress < 1) {
+          frameId = window.requestAnimationFrame(tick);
+        }
+      };
+
+      frameId = window.requestAnimationFrame(tick);
+    } else if (node) {
+      node.textContent = finalText;
+    }
 
     return () => {
-      controls?.stop();
+      window.cancelAnimationFrame(frameId);
+      if (node) {
+        node.textContent = finalText;
+      }
     };
   }, [isReducedMotion, isTriggered, prefix, suffix, target]);
 
@@ -114,15 +132,8 @@ const AnimatedFigure = ({
   );
 };
 
-/**
-Footnoted public proof strip adapted from React Bits Pro (`@reactbits-pro/stats-19`)
-with Shadcn Space's cubic ease-out rAF counter (`@shadcn-space/number-ticker-01`).
-Uses `<dl>` + `<div>` footnote rows (zero `<li>` elements inside `#open-source`)
-so `StatusLedger` stays the sole list inventory, and renders exact figures
-immediately on SSR, no-JS, and `prefers-reduced-motion: reduce`.
-*/
 export const Stats19 = (): ReactNode => {
-  const isReducedMotion = Boolean(useReducedMotion());
+  const isReducedMotion = useIsReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
   const [isTriggered, setIsTriggered] = useState(false);
 
@@ -220,7 +231,7 @@ export const Stats19 = (): ReactNode => {
                 href={stat.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-foreground focus-visible:ring-ring inline-flex items-center gap-0.5 rounded-xs font-mono font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:text-signal"
+                className="text-foreground focus-visible:ring-ring [@media(hover:hover)_and_(pointer:fine)]:hover:text-signal inline-flex items-center gap-0.5 rounded-xs font-mono font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-2 focus-visible:outline-transparent"
               >
                 {stat.linkLabel}
                 <ArrowUpRightIcon className="size-3" />

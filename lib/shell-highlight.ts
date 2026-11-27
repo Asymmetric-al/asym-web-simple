@@ -17,6 +17,8 @@ const SHELL_OPERATORS = {
   ";": true,
 } as const;
 const TARGET_PREFIXES = ["https://", "http://", "setup:", "dev:"] as const;
+const TOKEN_SEGMENT = /\s+|\S+/gu;
+const WHITESPACE_ONLY = /^\s+$/u;
 
 const classifyToken = (
   segment: string,
@@ -34,26 +36,24 @@ const classifyToken = (
   return "plain";
 };
 
-/**
-Zero-dependency semantic shell line tokenizer inspired by ReUI's token-mapped code block theming.
-*/
 export const tokenizeShellLine = (line: string): readonly ShellToken[] => {
-  const parts = line.match(/\s+|\S+/gu) ?? [];
+  const parts = line.match(TOKEN_SEGMENT) ?? [];
   const tokens: ShellToken[] = [];
   let isExpectingCommand = true;
 
   for (const part of parts) {
-    if (/^\s+$/u.test(part)) {
+    if (WHITESPACE_ONLY.test(part)) {
       tokens.push({ kind: "plain", text: part });
-    } else {
-      const kind = classifyToken(part, isExpectingCommand);
-      tokens.push({ kind, text: part });
+      continue;
+    }
 
-      if (kind === "operator") {
-        isExpectingCommand = true;
-      } else if (isExpectingCommand) {
-        isExpectingCommand = false;
-      }
+    const kind = classifyToken(part, isExpectingCommand);
+    tokens.push({ kind, text: part });
+
+    if (kind === "operator") {
+      isExpectingCommand = true;
+    } else if (isExpectingCommand) {
+      isExpectingCommand = false;
     }
   }
 

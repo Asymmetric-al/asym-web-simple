@@ -262,9 +262,9 @@ export default async function EarlyAccessStatusPage({
             </p>
             {!isConfigured && content.tone === "neutral" ? (
               <div className="border-rule mt-6 border-t pt-6">
-                <p className="text-signal font-mono text-xs font-medium">
+                <h2 className="text-signal font-mono text-xs font-medium tracking-normal text-wrap">
                   Pre-launch readiness timeline
-                </p>
+                </h2>
                 <Timeline
                   aria-label="Pre-launch readiness milestones"
                   className="mt-4"
@@ -287,6 +287,7 @@ export default async function EarlyAccessStatusPage({
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Link
                 href={content.primaryHref}
+                prefetch={false}
                 className={cn(
                   buttonVariants({ variant: "ink", size: "lg" }),
                   "px-6"

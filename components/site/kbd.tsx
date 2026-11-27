@@ -1,10 +1,6 @@
 import { cn } from "@/lib/utils";
 import type { ComponentProps } from "react";
 
-/**
-Tactile keyboard keycap primitive adapted from Shadcn Space (`@shadcn-space/kbd-02`)
-to Asymmetric.al's Warm Modern Leverage solid surface tokens (`DESIGN.md`).
-*/
 export const Kbd = ({ className, ...props }: ComponentProps<"kbd">) => (
   <kbd
     data-slot="kbd"

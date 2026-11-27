@@ -38,9 +38,6 @@ export interface IconTileProps extends ComponentProps<"span"> {
   readonly radius?: IconTileRadius;
 }
 
-/**
-Double-container icon surface adapted from ReUI (`@reui/icon-tile`). Paints its inset card via `::after` so concentric framing needs zero extra wrapper nodes.
-*/
 export const IconTile = ({
   className,
   variant = "frame",

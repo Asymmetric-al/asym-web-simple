@@ -168,10 +168,9 @@ test.describe("homepage smoke tests", () => {
     );
     await missionaryLens.focus();
     await page.keyboard.press("ArrowRight");
-    await expect(roleLens.getByRole("radio", { name: "Office" })).toHaveAttribute(
-      "aria-checked",
-      "true"
-    );
+    await expect(
+      roleLens.getByRole("radio", { name: "Office" })
+    ).toHaveAttribute("aria-checked", "true");
     await roleLens.getByRole("radio", { name: "Compare all" }).click();
 
     const workflowTabs = outcomes.getByRole("tablist", {
@@ -286,7 +285,9 @@ test.describe("homepage smoke tests", () => {
     ).toBeVisible();
     await expect(vision).toContainText("Grounded AI");
     await expect(vision).toContainText("AI drafts; people send.");
-    await expect(vision.getByRole("img", { name: /Grounded AI workflow/u })).toBeVisible();
+    await expect(
+      vision.getByRole("img", { name: /Grounded AI workflow/u })
+    ).toBeVisible();
 
     const faq = page.locator("#questions");
     await expect(
@@ -396,9 +397,13 @@ test.describe("homepage smoke tests", () => {
     });
     const noJsPage = await noJsContext.newPage();
     await noJsPage.goto("/evaluate", { waitUntil: "domcontentloaded" });
-    await expect(noJsPage.locator('button:not([type="submit"])')).toHaveCount(0);
+    await expect(noJsPage.locator('button:not([type="submit"])')).toHaveCount(
+      0
+    );
     await noJsPage.goto("/privacy", { waitUntil: "domcontentloaded" });
-    await expect(noJsPage.locator('button:not([type="submit"])')).toHaveCount(0);
+    await expect(noJsPage.locator('button:not([type="submit"])')).toHaveCount(
+      0
+    );
     await noJsContext.close();
   });
 
@@ -528,8 +533,12 @@ test.describe("homepage smoke tests", () => {
     await expect(
       openSource.getByRole("link", { name: /Explore the code on GitHub/u })
     ).toHaveAttribute("href", REPO_URL);
-    await expect(openSource).toContainText("Keep your cards, records, and code.");
-    await expect(openSource).toContainText("Run Mission Control on your laptop");
+    await expect(openSource).toContainText(
+      "Keep your cards, records, and code."
+    );
+    await expect(openSource).toContainText(
+      "Run Mission Control on your laptop"
+    );
     await expect(openSource).toContainText("managed donor care");
     await expect(
       page.locator('a[href*="Asymmetric-al/core/issues"]')
@@ -562,12 +571,14 @@ test.describe("homepage smoke tests", () => {
       })
     ).toBeVisible();
     await expect(about).toContainText("Global Fellowship");
-    await expect(
-      about.getByRole("link", { name: /^Conrad/u })
-    ).toHaveAttribute("href", "https://github.com/cobmojo");
-    await expect(
-      about.getByRole("link", { name: /^Blake/u })
-    ).toHaveAttribute("href", "https://github.com/II-ricky-bobby-II");
+    await expect(about.getByRole("link", { name: /^Conrad/u })).toHaveAttribute(
+      "href",
+      "https://github.com/cobmojo"
+    );
+    await expect(about.getByRole("link", { name: /^Blake/u })).toHaveAttribute(
+      "href",
+      "https://github.com/II-ricky-bobby-II"
+    );
   });
 
   test("main navigation reaches each homepage section", async ({ page }) => {
@@ -580,7 +591,8 @@ test.describe("homepage smoke tests", () => {
     await waitForUi(page);
     const nav = page.getByRole("navigation", { name: "Main" });
 
-    await nav.getByRole("link", { name: "Open source" }).click();
+    const openSourceLink = nav.getByRole("link", { name: "Open source" });
+    await openSourceLink.click();
 
     await expect(page).toHaveURL(/#open-source$/u);
     await expect(
@@ -589,6 +601,66 @@ test.describe("homepage smoke tests", () => {
         name: "Inspect the software before you trust it.",
       })
     ).toBeInViewport();
+    await expect(openSourceLink).toHaveAttribute("data-active", "true");
+    await expect(nav.locator('[data-active="true"]')).toHaveCount(1);
+
+    const visionLink = nav.getByRole("link", { name: "Vision" });
+    await visionLink.click();
+    await expect(page).toHaveURL(/#vision$/u);
+    await expect(
+      page.getByRole("heading", {
+        level: 2,
+        name: "AI that works from your ground truth.",
+      })
+    ).toBeInViewport();
+    await expect(visionLink).toHaveAttribute("data-active", "true");
+    await expect(nav.locator('[data-active="true"]')).toHaveCount(1);
+
+    // Re-clicking the current hash after scrolling away still returns and highlights it.
+    await page.evaluate(() => {
+      window.scrollTo({ top: 0, behavior: "instant" });
+    });
+    await expect(nav.locator('[data-active="true"]')).toHaveCount(0);
+    await visionLink.click();
+    await expect(
+      page.getByRole("heading", {
+        level: 2,
+        name: "AI that works from your ground truth.",
+      })
+    ).toBeInViewport();
+    await expect(visionLink).toHaveAttribute("data-active", "true");
+    await expect(nav.locator('[data-active="true"]')).toHaveCount(1);
+
+    const evaluateLink = nav.getByRole("link", { name: "Evaluate" });
+    await evaluateLink.click();
+    await expect(page).toHaveURL(/\/evaluate$/u);
+    await expect(evaluateLink).toHaveAttribute("data-active", "true");
+    await expect(visionLink).not.toHaveAttribute("data-active", "true");
+    await expect(nav.locator('[data-active="true"]')).toHaveCount(1);
+
+    const jumpNav = page.getByRole("navigation", {
+      name: "Evaluation brief sections",
+    });
+    const reviewDocsLink = jumpNav.getByRole("link", { name: "Review docs" });
+    await reviewDocsLink.click();
+    await expect(reviewDocsLink).toHaveAttribute("data-active", "true");
+    await expect(jumpNav.locator('[data-active="true"]')).toHaveCount(1);
+
+    await nav.getByRole("link", { name: "Company" }).click();
+    await expect(page).toHaveURL(/\/#about$/u);
+    await expect(nav.getByRole("link", { name: "Company" })).toHaveAttribute(
+      "data-active",
+      "true"
+    );
+    await expect(evaluateLink).not.toHaveAttribute("data-active", "true");
+    await expect(nav.locator('[data-active="true"]')).toHaveCount(1);
+
+    await page
+      .getByRole("banner")
+      .getByRole("link", { name: /^asym home$/iu })
+      .click();
+    await expect(page).toHaveURL(/\/$/u);
+    await expect(nav.locator('[data-active="true"]')).toHaveCount(0);
   });
 
   test("mobile header keeps the brand and early access action and offers section links", async ({

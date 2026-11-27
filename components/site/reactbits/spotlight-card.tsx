@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { cn } from "@/lib/utils";
 import type { ReactNode } from "react";
 
 type SpotlightTone = "signal" | "human";
@@ -20,6 +19,16 @@ export interface SpotlightCardProps {
   readonly children: ReactNode;
 }
 
+interface SpotlightConfig {
+  readonly colorVar: string;
+  readonly softness: number;
+  readonly size: number;
+  readonly intensity: number;
+  readonly borderGlow: number;
+  readonly proximity: number;
+  readonly smoothing: number;
+}
+
 interface SpotlightSettings {
   readonly fill: string;
   readonly edge: string;
@@ -35,8 +44,15 @@ const MIN_SIZE = 20;
 
 const clampUnit = (value: number): number => Math.min(1, Math.max(0, value));
 
+const falloffCache: Record<string, string> = {};
+
 const buildFalloff = (colorVar: string, softness: number): string => {
   const soft = clampUnit(softness);
+  const cacheKey = `${colorVar}|${soft.toFixed(3)}`;
+  const cached = falloffCache[cacheKey];
+  if (cached) {
+    return cached;
+  }
   const core = (1 - soft) ** 1.5 * 0.85;
   const stop = (alpha: number, at: number): string =>
     `color-mix(in srgb, ${colorVar} ${(alpha * 100).toFixed(2)}%, transparent) ${(at * 100).toFixed(2)}%`;
@@ -48,8 +64,20 @@ const buildFalloff = (colorVar: string, softness: number): string => {
     const glow = Math.exp(-4.6 * g * g) * (1 - g ** 6);
     stops.push(stop(smooth + (glow - smooth) * soft, t));
   }
-  return stops.join(", ");
+  const result = stops.join(", ");
+  falloffCache[cacheKey] = result;
+  return result;
 };
+
+const resolveSettings = (config: SpotlightConfig): SpotlightSettings => ({
+  fill: buildFalloff(config.colorVar, config.softness),
+  edge: buildFalloff(config.colorVar, 1),
+  size: config.size,
+  intensity: config.intensity,
+  borderGlow: config.borderGlow,
+  proximity: config.proximity,
+  smoothing: config.smoothing,
+});
 
 const TONE_COLOR: Record<SpotlightTone, string> = {
   signal: "var(--signal)",
@@ -68,7 +96,7 @@ const attachSpotlight = (
   root: HTMLDivElement,
   light: HTMLSpanElement,
   edge: HTMLSpanElement,
-  settingsRef: { readonly current: SpotlightSettings },
+  configRef: { readonly current: SpotlightConfig },
   wakeRef: { current: (() => void) | null }
 ): (() => void) => {
   const state = {
@@ -79,6 +107,15 @@ const attachSpotlight = (
   };
   const pointer = { x: 0, y: 0, isActive: false };
   const drawn = { light: "", edge: "" };
+  let cachedConfig = configRef.current;
+  let cachedSettings = resolveSettings(cachedConfig);
+  const getSettings = (): SpotlightSettings => {
+    if (configRef.current !== cachedConfig) {
+      cachedConfig = configRef.current;
+      cachedSettings = resolveSettings(cachedConfig);
+    }
+    return cachedSettings;
+  };
   let focusNode: Element | null = null;
   let raf = 0;
   let last = 0;
@@ -113,7 +150,7 @@ const attachSpotlight = (
     if (!isAlive) {
       return;
     }
-    const { current } = settingsRef;
+    const current = getSettings();
     const dt = Math.min(0.05, Math.max(0.001, (now - last) / 1000));
     last = now;
     const rect = root.getBoundingClientRect();
@@ -187,7 +224,7 @@ const attachSpotlight = (
     const targetNode = event.target instanceof Node ? event.target : null;
     if (
       state.presence > 0 ||
-      settingsRef.current.proximity > 0 ||
+      configRef.current.proximity > 0 ||
       (targetNode !== null && root.contains(targetNode))
     ) {
       wake();
@@ -254,7 +291,7 @@ const maybeAttachSpotlight = (
   root: HTMLDivElement | null,
   light: HTMLSpanElement | null,
   edge: HTMLSpanElement | null,
-  settingsRef: { readonly current: SpotlightSettings },
+  configRef: { readonly current: SpotlightConfig },
   wakeRef: { current: (() => void) | null }
 ): (() => void) | null => {
   if (!root || !light || !edge) {
@@ -268,7 +305,7 @@ const maybeAttachSpotlight = (
   ).matches;
   const canAnimate = !isReduced && hasFinePointer;
   return canAnimate
-    ? attachSpotlight(root, light, edge, settingsRef, wakeRef)
+    ? attachSpotlight(root, light, edge, configRef, wakeRef)
     : null;
 };
 
@@ -291,9 +328,9 @@ export const SpotlightCard = ({
   const wakeRef = useRef<(() => void) | null>(null);
 
   const colorVar = TONE_COLOR[tone];
-  const settings: SpotlightSettings = {
-    fill: buildFalloff(colorVar, softness),
-    edge: buildFalloff(colorVar, 1),
+  const config: SpotlightConfig = {
+    colorVar,
+    softness,
     size: Math.max(MIN_SIZE, spotlightSize),
     intensity: clampUnit(intensity),
     borderGlow: clampUnit(borderGlow),
@@ -301,10 +338,10 @@ export const SpotlightCard = ({
     smoothing: clampUnit(smoothing),
   };
 
-  const settingsRef = useRef(settings);
+  const configRef = useRef(config);
 
   useEffect(() => {
-    settingsRef.current = settings;
+    configRef.current = config;
     wakeRef.current?.();
   });
 
@@ -313,7 +350,7 @@ export const SpotlightCard = ({
       rootRef.current,
       lightRef.current,
       edgeRef.current,
-      settingsRef,
+      configRef,
       wakeRef
     );
     return () => {
@@ -329,23 +366,21 @@ export const SpotlightCard = ({
     </>
   );
 
+  const rootClassName = className
+    ? `rb-spotlight-card ${className}`
+    : "rb-spotlight-card";
+
   if (as === "article") {
     return (
-      <article
-        id={id}
-        ref={rootRef}
-        className={cn("rb-spotlight-card", className)}
-      >
+      <article id={id} ref={rootRef} className={rootClassName}>
         {content}
       </article>
     );
   }
 
   return (
-    <div id={id} ref={rootRef} className={cn("rb-spotlight-card", className)}>
+    <div id={id} ref={rootRef} className={rootClassName}>
       {content}
     </div>
   );
 };
-
-export default SpotlightCard;

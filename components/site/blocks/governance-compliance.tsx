@@ -46,12 +46,6 @@ const GOVERNANCE_CARDS = [
   },
 ] as const;
 
-/**
-Two-column governance narrative and stacked architectural assurance cards
-adapted from Shadcnblocks (`@shadcnblocks/compliance1`) inside ReUI `Frame` and
-`IconTile`, replacing generic certification seals with verifiable code and
-custody guarantees.
-*/
 export const GovernanceCompliance = (): ReactNode => (
   <section
     id="governance"
@@ -133,6 +127,7 @@ export const GovernanceCompliance = (): ReactNode => (
                   ) : (
                     <Link
                       href={card.href}
+                      prefetch={false}
                       className="text-foreground focus-visible:ring-ring inline-flex min-h-10 items-center gap-1 rounded-xs font-mono text-xs font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-8 [@media(hover:hover)_and_(pointer:fine)]:hover:text-signal"
                     >
                       {card.linkLabel}

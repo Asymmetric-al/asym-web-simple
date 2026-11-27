@@ -32,6 +32,7 @@ export const Footer = async () => {
           <div className="max-w-md min-w-0">
             <Link
               href="/"
+              prefetch={false}
               className="focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center gap-2 rounded-md focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-9"
               aria-label={`${siteConfig.shortName} home`}
             >
@@ -92,7 +93,7 @@ export const Footer = async () => {
                     ) : (
                       <Link
                         href={link.href}
-                        prefetch={!link.href.includes("#")}
+                        prefetch={false}
                         className={linkClassName}
                       >
                         {label}
@@ -112,7 +113,6 @@ export const Footer = async () => {
           </div>
         </div>
 
-        {/* Footer bar + theme selector */}
         <div className="border-rule text-muted-foreground mt-8 flex flex-col items-start gap-4 border-t pt-6 text-xs sm:flex-row sm:items-center sm:justify-between">
           <p>
             &copy; {year}{" "}

@@ -87,11 +87,6 @@ const DILIGENCE_ARTIFACTS: readonly DiligenceArtifact[] = [
   },
 ];
 
-/**
-Board & IT diligence document index adapted from Shadcn UI Kit
-(`@shadcnuikit/list-block13`) inside ReUI `Frame` and `IconTile`. Every row
-links directly to real, verifiable source code or published legal documents.
-*/
 export const TrustPacket = (): ReactNode => (
   <section
     id="trust-packet"
@@ -126,6 +121,7 @@ export const TrustPacket = (): ReactNode => (
         </div>
         <Link
           href="/statement-of-faith"
+          prefetch={false}
           className="text-muted-foreground focus-visible:ring-ring inline-flex min-h-10 items-center font-mono text-xs underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-8 [@media(hover:hover)_and_(pointer:fine)]:hover:text-signal"
         >
           Founders’ Statement of Faith
@@ -200,6 +196,7 @@ export const TrustPacket = (): ReactNode => (
                   ) : (
                     <Link
                       href={doc.href}
+                      prefetch={false}
                       className="border-rule-strong bg-card text-foreground focus-visible:ring-ring inline-flex min-h-10 items-center gap-1.5 rounded-full border px-4 font-sans text-xs font-medium transition-[transform,border-color,background-color] duration-150 ease-out select-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-2 focus-visible:outline-transparent active:scale-[0.97] sm:min-h-8 [@media(hover:hover)_and_(pointer:fine)]:hover:border-rule-interactive [@media(hover:hover)_and_(pointer:fine)]:hover:bg-record"
                     >
                       <span>{doc.actionLabel}</span>

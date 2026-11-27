@@ -53,6 +53,9 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
   poweredByHeader: false,
+  images: {
+    formats: ["image/avif", "image/webp"],
+  },
   headers: () =>
     Promise.resolve([
       {
@@ -113,13 +116,7 @@ const nextConfig: NextConfig = {
       },
     ]),
   experimental: {
-    inlineCss: true,
-    optimizePackageImports: [
-      "@ui-sdk/react",
-      "@base-ui/react",
-      "lucide-react",
-      "motion",
-    ],
+    optimizePackageImports: ["@ui-sdk/react", "@base-ui/react", "lucide-react"],
     staleTimes: {
       static: 300,
     },

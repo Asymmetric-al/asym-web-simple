@@ -231,10 +231,15 @@ const errorFor = (
 const withoutError = (
   errors: EarlyAccessErrors,
   field: EarlyAccessField
-): EarlyAccessErrors =>
-  Object.fromEntries(
-    Object.entries(errors).filter(([key]) => key !== field)
-  ) as EarlyAccessErrors;
+): EarlyAccessErrors => {
+  const next: EarlyAccessErrors = {};
+  for (const key of FIELD_ORDER) {
+    if (key !== field && errors[key] !== undefined) {
+      next[key] = errors[key];
+    }
+  }
+  return next;
+};
 
 const readServerErrors = (payload: unknown): EarlyAccessErrors => {
   if (typeof payload !== "object" || payload === null) {
@@ -406,7 +411,7 @@ const EarlyAccessFormFooter = ({
   </>
 );
 
-export const EarlyAccessForm = ({
+const EarlyAccessForm = ({
   contactEmail,
   onSuccess,
 }: {
@@ -665,7 +670,7 @@ export const EarlyAccessForm = ({
             aria-describedby={describedBy("message")}
             onChange={() => clearError("message")}
             onKeyDown={handleTextareaKeyDown}
-            placeholder="For example: donor portals, annual statements, check batches, missionary rosters, or legacy migration…"
+            placeholder="For example: donor portals, annual statements, check batches, missionary rosters, or moving records…"
             className="mt-2 min-h-28"
           />
           <FieldMessage id={`${ids.message}-error`}>
