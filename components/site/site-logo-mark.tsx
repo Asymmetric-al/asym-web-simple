@@ -15,11 +15,6 @@ type SiteLogoMarkProps = ComponentPropsWithoutRef<"span"> & {
 
 const MARK_STROKE_WIDTH = 44;
 
-/**
-Inline vector asym mark built directly from the measured official mark geometry.
-Adapts instantaneously to light, dark, and Forced Colors themes with zero image
-requests or `<head>` preload tags.
-*/
 export const SiteLogoMark = ({
   className,
   size = 24,

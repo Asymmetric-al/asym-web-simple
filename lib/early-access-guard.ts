@@ -146,5 +146,3 @@ export const isEarlyAccessConfirmationValid = (
   state: string | undefined,
   cookieValue: string | undefined
 ): boolean => state === "received" && cookieValue === "1";
-
-export { EARLY_ACCESS_CONFIRMED_COOKIE } from "@/lib/early-access";

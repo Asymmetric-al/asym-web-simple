@@ -270,9 +270,6 @@ const isAcceptedResendResult = (
   typeof result.data?.id === "string" &&
   result.data.id.length > 0;
 
-/**
-True only when Resend accepted the message for delivery.
-*/
 const wasAcceptedForDelivery = async (
   config: EarlyAccessDeliveryConfig,
   message: { replyTo: string; subject: string; text: string }

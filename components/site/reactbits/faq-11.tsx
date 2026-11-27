@@ -1,26 +1,12 @@
-"use client";
-
-import { Tabs, TabsList, TabsPanel, TabsTab } from "@ui-sdk/react/tabs";
-import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
 import { Container } from "@/components/site/container";
+import { Faq11Slot } from "@/components/site/home/deferred-widget-slots";
 import { Eyebrow, SectionTitle } from "@/components/site/home/section-heading";
-import { ArrowUpRightIcon } from "@/components/site/icons";
+import { ArrowRightIcon, ArrowUpRightIcon } from "@/components/site/icons";
 import { repoStats, siteConfig } from "@/lib/config";
-import { useIsClient } from "@/lib/use-is-client";
-import { cn } from "@/lib/utils";
 import type { ReactNode } from "react";
 
 type FounderKey = "conrad" | "blake";
-
-interface FounderProfile {
-  readonly initials: string;
-  readonly name: string;
-  readonly role: string;
-  readonly githubUrl: string;
-  readonly tone: "signal" | "human";
-}
 
 interface FaqEntry {
   readonly value: string;
@@ -35,21 +21,9 @@ interface FaqEntry {
   };
 }
 
-const FOUNDERS: Record<FounderKey, FounderProfile> = {
-  conrad: {
-    initials: siteConfig.founders.conrad.initials,
-    name: siteConfig.founders.conrad.name,
-    role: siteConfig.founders.conrad.role,
-    githubUrl: siteConfig.founders.conrad.githubUrl,
-    tone: "signal",
-  },
-  blake: {
-    initials: siteConfig.founders.blake.initials,
-    name: siteConfig.founders.blake.name,
-    role: siteConfig.founders.blake.role,
-    githubUrl: siteConfig.founders.blake.githubUrl,
-    tone: "human",
-  },
+const FOUNDERS = {
+  conrad: { ...siteConfig.founders.conrad, tone: "signal" as const },
+  blake: { ...siteConfig.founders.blake, tone: "human" as const },
 };
 
 const FAQ_ENTRIES: readonly FaqEntry[] = [
@@ -171,99 +145,84 @@ const FAQ_ENTRIES: readonly FaqEntry[] = [
   },
 ];
 
-const FounderByline = ({
-  founderKey,
-  reference,
-}: {
-  readonly founderKey: FounderKey;
-  readonly reference: FaqEntry["reference"];
-}): ReactNode => {
-  const founder = FOUNDERS[founderKey];
+const StaticAnswerBody = ({ entry }: { readonly entry: FaqEntry }): ReactNode => {
+  const founder = FOUNDERS[entry.founder];
   const badgeClass =
     founder.tone === "signal"
       ? "border-rule-strong bg-record text-signal"
       : "border-human-border/45 bg-human-soft text-human";
 
   return (
-    <div className="border-rule mt-6 flex flex-wrap items-center justify-between gap-4 border-t pt-5">
-      <div className="flex min-w-0 items-center gap-3">
-        <span
-          aria-hidden="true"
-          className={cn(
-            "font-heading inline-flex size-9 shrink-0 items-center justify-center rounded-full border text-xs font-semibold tracking-[-0.02em] forced-colors:border-[CanvasText]",
-            badgeClass
-          )}
-        >
-          {founder.initials}
-        </span>
-        <div className="min-w-0 text-xs leading-5">
-          <p className="text-foreground font-sans font-semibold">
+    <div className="flex flex-1 flex-col">
+      <p className="text-signal font-mono text-xs font-medium">
+        {entry.topic} · {repoStats.asOf}
+      </p>
+      <h3 className="font-heading text-foreground mt-2 text-xl leading-snug font-semibold tracking-[-0.02em] sm:text-2xl">
+        {entry.question}
+      </h3>
+      <div className="text-muted-foreground mt-4 flex flex-col gap-3.5 text-sm leading-6 text-pretty sm:text-[0.9375rem] sm:leading-7">
+        {entry.answer.map((paragraph) => (
+          <p key={paragraph}>{paragraph}</p>
+        ))}
+      </div>
+      <div className="mt-auto">
+        <div className="border-rule mt-6 flex flex-wrap items-center justify-between gap-4 border-t pt-5">
+          <div className="flex min-w-0 items-center gap-3">
+            <span
+              aria-hidden="true"
+              className={`font-heading inline-flex size-9 shrink-0 items-center justify-center rounded-full border text-xs font-semibold tracking-[-0.02em] forced-colors:border-[CanvasText] ${badgeClass}`}
+            >
+              {founder.initials}
+            </span>
+            <div className="min-w-0 text-xs leading-5">
+              <p className="text-foreground font-sans font-semibold">
+                <a
+                  href={founder.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-card -my-2 inline-flex min-h-11 items-center gap-0.5 rounded-xs underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:my-0 sm:min-h-6 [@media(hover:hover)_and_(pointer:fine)]:hover:text-signal"
+                >
+                  {founder.name}
+                  <ArrowUpRightIcon className="size-3" />
+                  <span className="sr-only">
+                    {" "}
+                    on GitHub (opens in a new tab)
+                  </span>
+                </a>
+              </p>
+              <p className="text-muted-foreground truncate">{founder.role}</p>
+            </div>
+          </div>
+
+          {entry.reference.external ? (
             <a
-              href={founder.githubUrl}
+              href={entry.reference.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-card -my-2 inline-flex min-h-11 items-center gap-0.5 rounded-xs underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:my-0 sm:min-h-6 [@media(hover:hover)_and_(pointer:fine)]:hover:text-signal"
+              className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-card inline-flex min-h-11 shrink-0 items-center gap-1 rounded-xs font-mono text-xs font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-8 [@media(hover:hover)_and_(pointer:fine)]:hover:text-signal"
             >
-              {founder.name}
-              <ArrowUpRightIcon className="size-3" />
-              <span className="sr-only"> on GitHub (opens in a new tab)</span>
+              {entry.reference.label}
+              <ArrowUpRightIcon className="size-3.5" />
+              <span className="sr-only"> (opens in a new tab)</span>
             </a>
-          </p>
-          <p className="text-muted-foreground truncate">{founder.role}</p>
+          ) : (
+            <Link
+              href={entry.reference.href}
+              prefetch={false}
+              className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-card inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-xs font-sans text-xs font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-8 [@media(hover:hover)_and_(pointer:fine)]:hover:text-signal"
+            >
+              {entry.reference.label}
+              <ArrowRightIcon className="size-3.5" />
+            </Link>
+          )}
         </div>
       </div>
-
-      {reference.external ? (
-        <a
-          href={reference.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-card inline-flex min-h-11 shrink-0 items-center gap-1 rounded-xs font-mono text-xs font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-8 [@media(hover:hover)_and_(pointer:fine)]:hover:text-signal"
-        >
-          {reference.label}
-          <ArrowUpRightIcon className="size-3.5" />
-          <span className="sr-only"> (opens in a new tab)</span>
-        </a>
-      ) : (
-        <Link
-          href={reference.href}
-          className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-card inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-xs font-sans text-xs font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-8 [@media(hover:hover)_and_(pointer:fine)]:hover:text-signal"
-        >
-          {reference.label}
-          <ArrowRight className="size-3.5" aria-hidden="true" />
-        </Link>
-      )}
     </div>
   );
 };
 
-const AnswerBody = ({ entry }: { readonly entry: FaqEntry }): ReactNode => (
-  <div className="flex flex-1 flex-col">
-    <p className="text-signal font-mono text-xs font-medium">
-      {entry.topic} · {repoStats.asOf}
-    </p>
-    <h3 className="font-heading text-foreground mt-2 text-xl leading-snug font-semibold tracking-[-0.02em] sm:text-2xl">
-      {entry.question}
-    </h3>
-    <div className="text-muted-foreground mt-4 flex flex-col gap-3.5 text-sm leading-6 text-pretty sm:text-[0.9375rem] sm:leading-7">
-      {entry.answer.map((paragraph) => (
-        <p key={paragraph}>{paragraph}</p>
-      ))}
-    </div>
-    <div className="mt-auto">
-      <FounderByline founderKey={entry.founder} reference={entry.reference} />
-    </div>
-  </div>
-);
-
 export const Faq11 = (): ReactNode => {
-  const isHydrated = useIsClient();
   const [defaultEntry] = FAQ_ENTRIES;
-  const [selected, setSelected] = useState<string>(
-    defaultEntry?.value ?? "agpl-license"
-  );
-  const [hasSwitched, setHasSwitched] = useState(false);
-
   if (!defaultEntry) {
     return null;
   }
@@ -294,6 +253,7 @@ export const Faq11 = (): ReactNode => {
               team? Start with our{" "}
               <Link
                 href="/evaluate"
+                prefetch={false}
                 className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-background rounded-xs font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:text-signal"
               >
                 leadership evaluation guide
@@ -302,76 +262,17 @@ export const Faq11 = (): ReactNode => {
             </p>
           </div>
 
-          {isHydrated ? (
-            <Tabs
-              value={selected}
-              onValueChange={(nextValue) => {
-                if (nextValue === null) {
-                  return;
-                }
-                setHasSwitched(true);
-                setSelected(nextValue);
-              }}
-              className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,44fr)_minmax(0,56fr)] lg:items-stretch lg:gap-8"
-            >
-              <div className="flex min-w-0 flex-col">
-                <TabsList
-                  aria-label="Common leadership questions"
-                  className="flex flex-col gap-1.5"
-                >
-                  {FAQ_ENTRIES.map((entry) => (
-                    <TabsTab
-                      key={entry.value}
-                      value={entry.value}
-                      className={cn(
-                        "border-rule bg-record/55 text-muted-foreground group flex min-h-12 w-full cursor-pointer items-center justify-between gap-4 rounded-xl border px-4 py-3.5 text-left font-sans text-sm font-medium transition-transform duration-150 ease-out select-none focus-visible:ring-ring focus-visible:ring-offset-background focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent active:scale-[0.99] [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground",
-                        "data-selected:border-signal-border data-selected:bg-card data-selected:text-foreground data-selected:shadow-xs",
-                        "forced-colors:data-selected:border-[Highlight] forced-colors:data-selected:bg-[Highlight] forced-colors:data-selected:text-[HighlightText] forced-colors:data-selected:forced-color-adjust-none"
-                      )}
-                    >
-                      <span className="min-w-0">{entry.question}</span>
-                      <ArrowRight
-                        aria-hidden="true"
-                        className="text-signal size-4 shrink-0 opacity-0 transition-opacity duration-150 ease-out group-data-selected:opacity-100"
-                        strokeWidth={1.75}
-                      />
-                    </TabsTab>
-                  ))}
-                </TabsList>
-              </div>
-
-              <div className="border-rule-strong bg-card flex min-w-0 flex-col rounded-2xl border p-6 shadow-[var(--shadow-card)] sm:p-8">
-                {FAQ_ENTRIES.map((entry) => (
-                  <TabsPanel
-                    key={entry.value}
-                    value={entry.value}
-                    className="flex flex-1 flex-col focus-visible:ring-ring focus-visible:ring-2 focus-visible:outline-2 focus-visible:outline-transparent"
-                  >
-                    <div
-                      className={cn(
-                        "flex flex-1 flex-col",
-                        hasSwitched &&
-                          selected === entry.value &&
-                          "surface-enter"
-                      )}
-                    >
-                      <AnswerBody entry={entry} />
-                    </div>
-                  </TabsPanel>
-                ))}
-              </div>
-            </Tabs>
-          ) : (
+          <Faq11Slot>
             <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,44fr)_minmax(0,56fr)] lg:items-stretch lg:gap-8">
               <div aria-hidden="true" className="flex flex-col gap-1.5">
                 {FAQ_ENTRIES.map((entry, idx) => (
                   <span
                     key={entry.value}
-                    className={cn(
-                      "border-rule bg-record/55 text-muted-foreground flex min-h-12 w-full items-center justify-between gap-4 rounded-xl border px-4 py-3.5 text-left font-sans text-sm font-medium",
-                      idx === 0 &&
-                        "border-signal-border bg-card text-foreground shadow-xs"
-                    )}
+                    className={
+                      idx === 0
+                        ? "border-signal-border bg-card text-foreground flex min-h-12 w-full items-center justify-between gap-4 rounded-xl border px-4 py-3.5 text-left font-sans text-sm font-medium shadow-xs"
+                        : "border-rule bg-record/55 text-muted-foreground flex min-h-12 w-full items-center justify-between gap-4 rounded-xl border px-4 py-3.5 text-left font-sans text-sm font-medium"
+                    }
                   >
                     <span>{entry.question}</span>
                   </span>
@@ -379,7 +280,7 @@ export const Faq11 = (): ReactNode => {
               </div>
 
               <div className="border-rule-strong bg-card flex min-w-0 flex-col rounded-2xl border p-6 shadow-[var(--shadow-card)] sm:p-8">
-                <AnswerBody entry={defaultEntry} />
+                <StaticAnswerBody entry={defaultEntry} />
               </div>
 
               <noscript>
@@ -389,17 +290,15 @@ export const Faq11 = (): ReactNode => {
                       key={entry.value}
                       className="border-rule-strong bg-card rounded-2xl border p-6 shadow-[var(--shadow-card)] sm:p-8"
                     >
-                      <AnswerBody entry={entry} />
+                      <StaticAnswerBody entry={entry} />
                     </div>
                   ))}
                 </div>
               </noscript>
             </div>
-          )}
+          </Faq11Slot>
         </div>
       </Container>
     </section>
   );
 };
-
-export default Faq11;

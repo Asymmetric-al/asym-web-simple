@@ -6,11 +6,13 @@ interface SimpleIconProps {
 
 interface IconProps extends SimpleIconProps {
   readonly dataIcon?: "inline-start" | "inline-end";
+  readonly strokeWidth?: number;
 }
 
 export const ArrowRightIcon = ({
   className,
   dataIcon,
+  strokeWidth = 2,
 }: IconProps): ReactNode => (
   <svg
     width="16"
@@ -18,7 +20,7 @@ export const ArrowRightIcon = ({
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
-    strokeWidth="2"
+    strokeWidth={strokeWidth}
     strokeLinecap="round"
     strokeLinejoin="round"
     data-icon={dataIcon}
@@ -33,6 +35,7 @@ export const ArrowRightIcon = ({
 export const ArrowLeftIcon = ({
   className,
   dataIcon,
+  strokeWidth = 2,
 }: IconProps): ReactNode => (
   <svg
     width="16"
@@ -40,7 +43,7 @@ export const ArrowLeftIcon = ({
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
-    strokeWidth="2"
+    strokeWidth={strokeWidth}
     strokeLinecap="round"
     strokeLinejoin="round"
     data-icon={dataIcon}
@@ -52,31 +55,10 @@ export const ArrowLeftIcon = ({
   </svg>
 );
 
-export const ArrowDownIcon = ({
-  className,
-  dataIcon,
-}: IconProps): ReactNode => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    data-icon={dataIcon}
-    aria-hidden="true"
-    className={className}
-  >
-    <path d="M12 5v14" />
-    <path d="m19 12-7 7-7-7" />
-  </svg>
-);
-
 export const ArrowUpRightIcon = ({
   className,
   dataIcon,
+  strokeWidth = 2,
 }: IconProps): ReactNode => (
   <svg
     width="16"
@@ -84,7 +66,7 @@ export const ArrowUpRightIcon = ({
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
-    strokeWidth="2"
+    strokeWidth={strokeWidth}
     strokeLinecap="round"
     strokeLinejoin="round"
     data-icon={dataIcon}
@@ -167,5 +149,40 @@ export const CloseIcon = ({ className }: SimpleIconProps): ReactNode => (
   >
     <path d="M18 6 6 18" />
     <path d="m6 6 12 12" />
+  </svg>
+);
+
+export const SearchIcon = ({ className }: SimpleIconProps): ReactNode => (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+    className={className}
+  >
+    <path d="m21 21-4.34-4.34" />
+    <circle cx="11" cy="11" r="8" />
+  </svg>
+);
+
+export const CheckIcon = ({ className }: SimpleIconProps): ReactNode => (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+    className={className}
+  >
+    <path d="M20 6 9 17l-5-5" />
   </svg>
 );

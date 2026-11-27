@@ -1,28 +1,23 @@
 "use client";
 
-import { Popover, PopoverContent, PopoverTrigger } from "@ui-sdk/react/popover";
-import Link from "next/link";
-import { useLayoutEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
+import { useLayoutEffect, useState } from "react";
 import { CloseIcon, MenuIcon } from "@/components/site/icons";
-import { navigationLinks } from "@/lib/config";
 import { useIsClient } from "@/lib/use-is-client";
-import type { ComponentProps, ReactNode } from "react";
+import type { ReactNode } from "react";
 
-const INTERACTIVE_OUTSIDE_SELECTOR =
-  'a[href], button, input, textarea, select, summary, [role="button"], [role="radio"], [role="link"], [tabindex="0"]';
+const loadMobileNavPopover = () =>
+  import("@/components/site/mobile-nav-popover").then(
+    (mod) => mod.MobileNavPopover
+  );
 
-const isInteractiveTarget = (target: EventTarget | null | undefined): boolean =>
-  target instanceof Element &&
-  target.closest(INTERACTIVE_OUTSIDE_SELECTOR) !== null;
+const warmPopoverChunk = (): void => {
+  void loadMobileNavPopover();
+};
 
-/**
-Mobile-only section navigation popover powered by `@ui-sdk/react/popover`.
-Renders an exact-width non-interactive spacer pre-hydration so no-JS pages never
-ship inert buttons and mobile headers keep `0px` layout shift. Restores focus
-to the trigger on Escape, trigger close, and non-interactive blank-space
-dismissal, while letting anchor links and interactive outside controls retain
-natural navigation and focus.
-*/
+// eslint-disable-next-line unicorn/no-top-level-side-effects -- Next.js dynamic import registers lazy popover chunk at module scope.
+const MobileNavPopover = dynamic(loadMobileNavPopover, { ssr: false });
+
 export const MobileNavMenu = ({
   isConfigured = false,
 }: {
@@ -30,14 +25,14 @@ export const MobileNavMenu = ({
 }): ReactNode => {
   const isMounted = useIsClient();
   const [open, setOpen] = useState(false);
-  const [suppressReturnFocus, setSuppressReturnFocus] = useState(false);
-  const triggerRef = useRef<HTMLButtonElement>(null);
-  const restoreOnBlankDismissRef = useRef(false);
+  const [hasLoaded, setHasLoaded] = useState(false);
+  const [anchorElement, setAnchorElement] = useState<HTMLButtonElement | null>(
+    null
+  );
 
   // Close transient menu synchronously when React <Activity> hides a preserved route.
   useLayoutEffect(
     () => () => {
-      restoreOnBlankDismissRef.current = false;
       setOpen(false);
     },
     []
@@ -47,56 +42,9 @@ export const MobileNavMenu = ({
     return <span className="size-11 shrink-0 md:hidden" aria-hidden="true" />;
   }
 
-  const menuLinks = [
-    ...navigationLinks,
-    isConfigured
-      ? { label: "Where things stand", href: "/#where-things-stand" }
-      : {
-          label: "Pre-launch checklist",
-          href: "/early-access/status?state=unavailable",
-        },
-  ] as const;
-
-  const restoreTriggerIfNonInteractive = () => {
-    const active = document.activeElement;
-    if (!active || active === document.body || active.tagName === "MAIN") {
-      triggerRef.current?.focus();
-    }
-  };
-
-  const handleOpenChange: NonNullable<
-    ComponentProps<typeof Popover>["onOpenChange"]
-  > = (isNextOpen, details) => {
-    if (isNextOpen) {
-      setSuppressReturnFocus(false);
-      restoreOnBlankDismissRef.current = false;
-      setOpen(true);
-      return;
-    }
-
-    setOpen(false);
-    // `<main tabIndex={-1}>` is programmatically focusable for the skip link, so a click or touch tap on blank page space can move focus to `<main>` instead of returning it to the trigger. Restore trigger focus both on the next frame (mouse) and when exit completes (after touch synthetic focus) unless a real interactive control was targeted.
-    const isOutsideDismiss =
-      details.reason === "outside-press" || details.reason === "focus-out";
-    if (!isOutsideDismiss || isInteractiveTarget(details.event?.target)) {
-      return;
-    }
-    restoreOnBlankDismissRef.current = true;
-    window.requestAnimationFrame(restoreTriggerIfNonInteractive);
-  };
-
-  const handleOpenChangeComplete = (isNowOpen: boolean) => {
-    if (isNowOpen || !restoreOnBlankDismissRef.current) {
-      return;
-    }
-    restoreOnBlankDismissRef.current = false;
-    restoreTriggerIfNonInteractive();
-  };
-
-  const handleNavClick = () => {
-    restoreOnBlankDismissRef.current = false;
-    setSuppressReturnFocus(true);
-    setOpen(false);
+  const handleToggle = (): void => {
+    setHasLoaded(true);
+    setOpen((prev) => !prev);
   };
 
   return (
@@ -107,55 +55,32 @@ export const MobileNavMenu = ({
           className="bg-[var(--scrim)] pointer-events-none fixed inset-0 top-16 z-40"
         />
       ) : null}
-      <Popover
-        open={open}
-        onOpenChange={handleOpenChange}
-        onOpenChangeComplete={handleOpenChangeComplete}
+      <button
+        ref={setAnchorElement}
+        type="button"
+        aria-label="Page sections"
+        aria-expanded={open}
+        aria-haspopup="dialog"
+        onPointerEnter={warmPopoverChunk}
+        onFocus={warmPopoverChunk}
+        onTouchStart={warmPopoverChunk}
+        onClick={handleToggle}
+        className="border-input bg-background text-foreground focus-visible:ring-ring focus-visible:ring-offset-background inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-full border transition-transform duration-150 ease-out select-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent active:scale-[0.97] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-secondary/72 forced-colors:border-[ButtonBorder]"
       >
-        <PopoverTrigger
-          ref={triggerRef}
-          aria-label="Page sections"
-          className="border-input bg-background text-foreground focus-visible:ring-ring focus-visible:ring-offset-background inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-full border transition-transform duration-150 ease-out select-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent active:scale-[0.97] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-secondary/72 forced-colors:border-[ButtonBorder]"
-        >
-          {open ? (
-            <CloseIcon className="size-4" />
-          ) : (
-            <MenuIcon className="size-4" />
-          )}
-        </PopoverTrigger>
-        <PopoverContent
-          side="bottom"
-          align="end"
-          sideOffset={10}
-          collisionPadding={16}
-          finalFocus={suppressReturnFocus ? "none" : "trigger"}
-          className="border-rule-strong bg-popover text-popover-foreground m-0 w-56 origin-(--transform-origin) rounded-2xl border p-2 shadow-[var(--shadow-strong)] transition-[opacity,scale] duration-180 ease-out data-ending-style:scale-[0.97] data-ending-style:opacity-0 data-ending-style:duration-110 data-starting-style:scale-[0.96] data-starting-style:opacity-0 motion-reduce:transition-none forced-colors:border-[CanvasText]"
-        >
-          <nav aria-label="Homepage sections">
-            <ul className="grid gap-0.5 text-sm">
-              {menuLinks.map((link, index) => (
-                <li
-                  key={link.href}
-                  className={
-                    index === menuLinks.length - 1
-                      ? "border-rule mt-1 border-t pt-1"
-                      : undefined
-                  }
-                >
-                  <Link
-                    href={link.href}
-                    prefetch={!link.href.includes("#")}
-                    onClick={handleNavClick}
-                    className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-popover flex min-h-11 items-center rounded-xl px-3.5 font-medium transition-transform duration-150 ease-out active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-2 focus-visible:outline-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:bg-secondary/72"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        </PopoverContent>
-      </Popover>
+        {open ? (
+          <CloseIcon className="size-4" />
+        ) : (
+          <MenuIcon className="size-4" />
+        )}
+      </button>
+      {hasLoaded ? (
+        <MobileNavPopover
+          isConfigured={isConfigured}
+          isOpen={open}
+          onOpenChange={setOpen}
+          anchorElement={anchorElement}
+        />
+      ) : null}
     </div>
   );
 };

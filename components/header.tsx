@@ -27,6 +27,7 @@ export const Header = () => {
           <div className="flex min-w-0 items-center">
             <Link
               href="/"
+              prefetch={false}
               className="group focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 min-w-0 items-center gap-2.5 rounded-md px-1 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-10"
               aria-label={`${siteConfig.shortName} home`}
             >

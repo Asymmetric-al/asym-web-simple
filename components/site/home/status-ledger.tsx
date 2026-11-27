@@ -1,19 +1,9 @@
-"use client";
-
-import {
-  SegmentedControl,
-  SegmentedControlIndicator,
-  SegmentedControlItem,
-} from "@ui-sdk/react/segmented-control";
-import { useState } from "react";
+import { StatusLedgerSlot } from "@/components/site/home/deferred-widget-slots";
 import { ArrowUpRightIcon } from "@/components/site/icons";
 import { siteConfig } from "@/lib/config";
-import { useIsClient } from "@/lib/use-is-client";
-import { cn } from "@/lib/utils";
 import type { ReactNode } from "react";
 
 type InventoryStatus = "in_code" | "partial" | "planned";
-type FilterKey = "all" | InventoryStatus;
 
 interface InventoryRow {
   readonly module: string;
@@ -97,19 +87,6 @@ const INVENTORY_ROWS: readonly InventoryRow[] = [
   },
 ];
 
-const FILTERS: readonly {
-  readonly value: FilterKey;
-  readonly label: string;
-}[] = [
-  { value: "all", label: "All (9)" },
-  { value: "in_code", label: "In Core (4)" },
-  { value: "partial", label: "Building (3)" },
-  { value: "planned", label: "Next (2)" },
-];
-
-const isFilterKey = (value: string | null): value is FilterKey =>
-  value !== null && FILTERS.some((option) => option.value === value);
-
 const getStatusBadgeClass = (status: InventoryStatus): string => {
   if (status === "planned") {
     return "border-draft-border bg-draft-soft text-draft border-dashed";
@@ -120,23 +97,8 @@ const getStatusBadgeClass = (status: InventoryStatus): string => {
   return "border-signal-border bg-signal-soft text-signal";
 };
 
-export const StatusLedger = (): ReactNode => {
-  const isHydrated = useIsClient();
-  const [filter, setFilter] = useState<FilterKey>("all");
-
-  const visibleRows =
-    filter === "all"
-      ? INVENTORY_ROWS
-      : INVENTORY_ROWS.filter((row) => row.status === filter);
-
-  const handleFilterChange = (nextValue: string | null) => {
-    if (!isFilterKey(nextValue)) {
-      return;
-    }
-    setFilter(nextValue);
-  };
-
-  return (
+export const StatusLedger = (): ReactNode => (
+  <StatusLedgerSlot>
     <div className="border-rule-strong bg-card mt-5 overflow-hidden rounded-2xl border shadow-[var(--shadow-card)]">
       <div className="border-rule flex flex-col gap-3 border-b px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
         <div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
@@ -148,49 +110,24 @@ export const StatusLedger = (): ReactNode => {
           </span>
         </div>
 
-        {isHydrated ? (
-          <SegmentedControl
-            aria-label="Filter build status"
-            value={filter}
-            onValueChange={handleFilterChange}
-            className="border-rule bg-record has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-card relative isolate inline-flex w-fit max-w-full flex-nowrap items-center overflow-x-auto rounded-full border p-1 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2 forced-colors:border-[ButtonBorder]"
-          >
-            <SegmentedControlIndicator className="segmented-indicator" />
-            {FILTERS.map((option) => (
-              <SegmentedControlItem
-                key={option.value}
-                value={option.value}
-                className={cn(
-                  "text-muted-foreground relative z-10 inline-flex min-h-11 shrink-0 cursor-pointer items-center rounded-full border border-transparent px-2 text-xs font-medium whitespace-nowrap transition-transform duration-150 ease-out select-none focus-visible:outline-2 focus-visible:outline-transparent active:scale-[0.97] sm:min-h-8 sm:px-3 [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground",
-                  "data-checked:text-foreground",
-                  "forced-colors:data-checked:border-[Highlight] forced-colors:data-checked:bg-[Highlight] forced-colors:data-checked:text-[HighlightText] forced-colors:data-checked:forced-color-adjust-none"
-                )}
-              >
-                <span>{option.label}</span>
-              </SegmentedControlItem>
-            ))}
-          </SegmentedControl>
-        ) : (
-          <span className="text-muted-foreground font-mono text-xs">
-            Status · Code link
-          </span>
-        )}
+        <span className="text-muted-foreground inline-flex min-h-13 items-center font-mono text-xs sm:min-h-10">
+          Status · Code link
+        </span>
       </div>
 
       <ul className="divide-rule divide-y">
-        {visibleRows.map((row) => (
+        {INVENTORY_ROWS.map((row) => (
           <li
             key={row.module}
             className="flex flex-col items-start gap-2.5 px-5 py-4 text-sm sm:flex-row sm:items-center sm:justify-between sm:gap-5 sm:px-6"
           >
             <div className="min-w-0">
               <span
-                className={cn(
-                  "block",
+                className={
                   row.status === "planned"
-                    ? "text-muted-foreground"
-                    : "text-foreground font-medium"
-                )}
+                    ? "text-muted-foreground block"
+                    : "text-foreground block font-medium"
+                }
               >
                 {row.module}
               </span>
@@ -202,10 +139,7 @@ export const StatusLedger = (): ReactNode => {
             </div>
             <div className="flex shrink-0 items-center gap-3">
               <span
-                className={cn(
-                  "inline-flex items-center rounded-full border px-2.5 py-0.5 font-mono text-xs font-medium whitespace-nowrap forced-colors:border-[CanvasText]",
-                  getStatusBadgeClass(row.status)
-                )}
+                className={`inline-flex items-center rounded-full border px-2.5 py-0.5 font-mono text-xs font-medium whitespace-nowrap forced-colors:border-[CanvasText] ${getStatusBadgeClass(row.status)}`}
               >
                 {row.statusLabel}
               </span>
@@ -233,5 +167,5 @@ export const StatusLedger = (): ReactNode => {
         ))}
       </ul>
     </div>
-  );
-};
+  </StatusLedgerSlot>
+);

@@ -60,7 +60,11 @@ export const DocumentPage = ({
               <p className="text-signal font-mono text-xs font-medium tracking-[0.02em]">
                 On this page
               </p>
-              <Scrollspy offset={132} className="mt-3">
+              <Scrollspy
+                offset={132}
+                minWidthMedia="(min-width: 1024px)"
+                className="mt-3"
+              >
                 <ol className="border-rule flex flex-col gap-1 border-l">
                   {toc.map((item) => (
                     <li key={item.id}>

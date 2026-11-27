@@ -1,8 +1,8 @@
 "use client";
 
-import { Check } from "lucide-react";
-import { m, useReducedMotion } from "motion/react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { CheckIcon } from "@/components/site/icons";
+import { useIsReducedMotion } from "@/lib/use-reduced-motion";
 import type { ReactNode } from "react";
 
 interface MigrationStep {
@@ -18,8 +18,6 @@ interface MigrationStep {
   }[];
   readonly footnote: string;
 }
-
-const EASE: [number, number, number, number] = [0.23, 1, 0.32, 1];
 
 const MIGRATION_STEPS: readonly MigrationStep[] = [
   {
@@ -84,12 +82,42 @@ const MIGRATION_STEPS: readonly MigrationStep[] = [
 ];
 
 export const HowItWorks10 = (): ReactNode => {
-  const isReducedMotion = Boolean(useReducedMotion());
+  const isReducedMotion = useIsReducedMotion();
   const [reached, setReached] = useState(0);
+  const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  const reachStep = (index: number): void => {
-    setReached((current) => Math.max(current, index));
-  };
+  useEffect(() => {
+    let observer: IntersectionObserver | null = null;
+
+    if (!isReducedMotion) {
+      observer = new IntersectionObserver(
+        (entries, activeObserver) => {
+          for (const entry of entries) {
+            const rawIndex = entry.isIntersecting
+              ? entry.target.getAttribute("data-step-index")
+              : null;
+            const stepIndex = rawIndex === null ? -1 : Number(rawIndex);
+            if (stepIndex < 0) {
+              continue;
+            }
+            setReached((current) => Math.max(current, stepIndex));
+            activeObserver.unobserve(entry.target);
+          }
+        },
+        { rootMargin: "0px 0px -25% 0px" }
+      );
+
+      for (const node of stepRefs.current) {
+        if (node) {
+          observer.observe(node);
+        }
+      }
+    }
+
+    return () => {
+      observer?.disconnect();
+    };
+  }, [isReducedMotion]);
 
   return (
     <section
@@ -133,11 +161,11 @@ export const HowItWorks10 = (): ReactNode => {
                 </p>
               </div>
 
-              <m.div
-                onViewportEnter={() => {
-                  reachStep(index);
+              <div
+                ref={(node) => {
+                  stepRefs.current[index] = node;
                 }}
-                viewport={{ once: true, margin: "0px 0px -25% 0px" }}
+                data-step-index={index}
                 className="relative pl-9 lg:col-span-10 lg:grid lg:grid-cols-10 lg:gap-8 lg:pl-11"
               >
                 {isLast ? null : (
@@ -145,14 +173,9 @@ export const HowItWorks10 = (): ReactNode => {
                     aria-hidden="true"
                     className="bg-rule-strong absolute top-5 left-[5px] h-[calc(100%+3rem)] w-px overflow-hidden lg:h-[calc(100%+4rem)]"
                   >
-                    <m.span
-                      initial={false}
-                      animate={{ scaleY: isLineLit ? 1 : 0 }}
-                      transition={{
-                        duration: isReducedMotion ? 0 : 0.6,
-                        ease: EASE,
-                      }}
-                      className="bg-signal absolute inset-0 origin-top"
+                    <span
+                      data-lit={isLineLit ? "true" : undefined}
+                      className="migration-line-fill bg-signal absolute inset-0"
                     />
                   </span>
                 )}
@@ -161,17 +184,9 @@ export const HowItWorks10 = (): ReactNode => {
                   aria-hidden="true"
                   className="border-rule-strong bg-background absolute top-2 left-0 flex size-[11px] items-center justify-center rounded-full border"
                 >
-                  <m.span
-                    initial={false}
-                    animate={{
-                      opacity: isLit ? 1 : 0,
-                      scale: isLit ? 1 : 0.85,
-                    }}
-                    transition={{
-                      duration: isReducedMotion ? 0 : 0.24,
-                      ease: EASE,
-                    }}
-                    className="bg-signal absolute -inset-px rounded-full"
+                  <span
+                    data-lit={isLit ? "true" : undefined}
+                    className="migration-step-dot bg-signal absolute -inset-px rounded-full"
                   />
                 </span>
 
@@ -193,11 +208,7 @@ export const HowItWorks10 = (): ReactNode => {
                       {step.artifactTitle}
                     </p>
                     <span className="border-signal-border bg-signal-soft text-signal inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 font-mono text-xs font-medium forced-colors:border-[CanvasText]">
-                      <Check
-                        className="size-3.5"
-                        strokeWidth={2}
-                        aria-hidden="true"
-                      />
+                      <CheckIcon className="size-3.5" />
                       {step.artifactStatus}
                     </span>
                   </div>
@@ -222,7 +233,7 @@ export const HowItWorks10 = (): ReactNode => {
                     {step.footnote}
                   </p>
                 </div>
-              </m.div>
+              </div>
             </li>
           );
         })}
@@ -230,5 +241,3 @@ export const HowItWorks10 = (): ReactNode => {
     </section>
   );
 };
-
-export default HowItWorks10;

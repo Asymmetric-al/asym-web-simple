@@ -3,18 +3,23 @@ import { revalidatePath, revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const isBufferEqual = (a: string, b: string): boolean => {
+const isTokenEqual = (a: string, b: string): boolean => {
   const ab = Buffer.from(a);
   const bb = Buffer.from(b);
   return ab.length === bb.length && timingSafeEqual(ab, bb);
 };
 
-const isTokenEqual = (a: string, b: string): boolean => {
-  try {
-    return isBufferEqual(a, b);
-  } catch {
-    return false;
+const readRevalidateTarget = (
+  body: unknown
+): { tag?: string; path?: string } => {
+  if (typeof body !== "object" || body === null) {
+    return {};
   }
+  const { tag, path } = body as Record<string, unknown>;
+  return {
+    ...(typeof tag === "string" && tag.length > 0 && { tag }),
+    ...(typeof path === "string" && path.length > 0 && { path }),
+  };
 };
 
 // eslint-disable-next-line sonarjs/function-name -- Next.js route handlers must be named after the HTTP method.
@@ -44,7 +49,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
     );
   }
 
-  const { tag, path } = body as { tag?: string; path?: string };
+  const { tag, path } = readRevalidateTarget(body);
 
   if (tag) {
     revalidateTag(tag, "default");

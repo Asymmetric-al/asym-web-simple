@@ -166,9 +166,6 @@ export const isValidSenderAddress = (value: string): boolean => {
   );
 };
 
-/**
-Reads untrusted input into trimmed strings without throwing.
-*/
 export const normalizeEarlyAccessRequest = (
   raw: unknown
 ): EarlyAccessRequest => {
@@ -209,9 +206,6 @@ export const validateEarlyAccessRequest = (
 export const hasErrors = (errors: EarlyAccessErrors): boolean =>
   Object.keys(errors).length > 0;
 
-/**
-Plain-text notification for the team inbox.
-*/
 export const buildEarlyAccessNotification = (
   request: EarlyAccessRequest,
   receivedAt: Date

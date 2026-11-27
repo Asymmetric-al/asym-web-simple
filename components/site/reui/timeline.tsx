@@ -3,9 +3,6 @@ import type { ComponentProps } from "react";
 
 export type TimelineStepState = "completed" | "active" | "upcoming";
 
-/**
-Server-Component-safe vertical timeline adapted from ReUI (`@reui/timeline`) using Asymmetric.al's four-ink status system (`--signal` completed, `--human` active, `--draft` upcoming).
-*/
 export const Timeline = ({ className, ...props }: ComponentProps<"ol">) => (
   <ol
     data-slot="timeline"

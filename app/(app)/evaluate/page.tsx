@@ -48,6 +48,7 @@ export default function EvaluatePage() {
         <div className="pt-24 pb-12 sm:pt-28 sm:pb-16">
           <Link
             href="/"
+            prefetch={false}
             className="text-muted-foreground focus-visible:ring-ring focus-visible:ring-offset-background inline-flex min-h-11 items-center gap-1.5 rounded-full font-sans text-sm font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-8 [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground"
           >
             <ArrowLeftIcon className="size-3.5" />

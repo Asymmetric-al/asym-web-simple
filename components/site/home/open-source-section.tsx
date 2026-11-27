@@ -191,6 +191,7 @@ const OpenBookDecisionGrid = ({
         <div className="border-rule relative z-10 mt-5 flex flex-wrap items-center justify-between gap-2 border-t pt-4">
           <Link
             href="/evaluate#migration"
+            prefetch={false}
             className="text-muted-foreground focus-visible:ring-ring focus-visible:ring-offset-card inline-flex min-h-11 items-center font-mono text-xs underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-8 [@media(hover:hover)_and_(pointer:fine)]:hover:text-signal"
           >
             Parallel-close brief
@@ -207,6 +208,7 @@ const OpenBookDecisionGrid = ({
           ) : (
             <Link
               href="/early-access/status?state=unavailable"
+              prefetch={false}
               className="text-foreground focus-visible:ring-ring focus-visible:ring-offset-card inline-flex min-h-11 items-center gap-1.5 rounded-full text-xs font-medium underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-2 focus-visible:outline-transparent sm:min-h-8 [@media(hover:hover)_and_(pointer:fine)]:hover:text-signal"
             >
               Read the launch roadmap

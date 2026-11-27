@@ -38,9 +38,6 @@ export const SectionTitle = ({
   </h2>
 );
 
-/**
-Small status label used on standalone status routes.
-*/
 export const StatusPill = ({
   children,
   className,

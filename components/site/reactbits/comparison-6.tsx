@@ -163,5 +163,3 @@ export const Comparison6 = (): ReactNode => (
     </div>
   </section>
 );
-
-export default Comparison6;

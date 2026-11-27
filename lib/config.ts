@@ -73,7 +73,3 @@ export const footerLinks = [
   { label: "Privacy", href: "/privacy", external: false },
   { label: "Terms", href: "/terms", external: false },
 ] as const;
-
-export const siteFeatures = {
-  smoothScroll: false,
-} as const;

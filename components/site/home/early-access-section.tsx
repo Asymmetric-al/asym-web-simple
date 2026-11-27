@@ -36,7 +36,6 @@ export const EarlyAccessSection = () => {
     >
       <Container>
         <div className="border-rule-strong bg-card relative rounded-2xl border p-6 shadow-[var(--shadow-card)] sm:p-10 lg:p-12">
-          {/* Soft inset Maia accent pill: Terracotta only when live intake is open */}
           <div
             aria-hidden="true"
             className={cn(
@@ -97,6 +96,7 @@ export const EarlyAccessSection = () => {
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                   <Link
                     href="/early-access/status?state=unavailable"
+                    prefetch={false}
                     className={cn(
                       buttonVariants({ variant: "ink", size: "lg" }),
                       "px-6"

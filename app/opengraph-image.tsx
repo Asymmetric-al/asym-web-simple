@@ -61,7 +61,6 @@ export default function openGraphImage() {
         gap: "44px",
       }}
     >
-      {/* Left column: Warm Charcoal Night Maia proposition */}
       <div
         style={{
           display: "flex",
@@ -221,7 +220,6 @@ export default function openGraphImage() {
         </div>
       </div>
 
-      {/* Right column: soft Maia Warm Charcoal Night sculptural asym planes */}
       <div
         style={{
           display: "flex",
